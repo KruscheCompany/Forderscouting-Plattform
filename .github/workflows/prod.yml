@@ -1,0 +1,23 @@
+name: PRODUCTION DEPLOYMENT
+
+on:
+  push:
+    branches: ["prod"]
+
+jobs:
+  build:
+    runs-on:
+      - self-hosted
+      - prod
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.17.0
+      - name: Install Dependencies
+        run: yarn
+      - name: Build PWA
+        run: npx quasar build -m pwa
+      - name: Move Build Files to Directory
+        run: cp -a dist/pwa/. /var/www/amtviol/

@@ -1,0 +1,212 @@
+.container {
+  width: calc(100% - 80px);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.dimmed:after {
+  background: rgba(22, 66, 139, 0.5) !important;
+}
+@media (max-width: 1027px) {
+  .container {
+    width: calc(100% - 30px);
+  }
+}
+/* Opacity Classes */
+.opacity-10 {
+  opacity: 0.1;
+}
+.opacity-50 {
+  opacity: 0.5;
+}
+/* End Opacity Classes */
+/* radius classes */
+.radius-6 {
+  border-radius: 6px !important;
+}
+.radius-10 {
+  border-radius: 10px !important;
+}
+.radius-16 {
+  border-radius: 16px !important;
+}
+.radius-20 {
+  border-radius: 20px !important;
+}
+.radius-top-20,
+.tableHead .q-table__top {
+  border-radius: 20px 20px 0 0 !important;
+}
+/* End radius classes */
+/* table borders */
+.q-table thead,
+.q-table th {
+  border-color: rgba(18, 54, 115, 0.5) !important;
+}
+.q-table td {
+  border-color: rgba(18, 54, 115, 0.1);
+}
+/* End table borders */
+/* Input Border radius */
+.input-radius-4 .q-field__inner .q-field__control {
+  border-radius: 4px !important;
+}
+.input-radius-6 .q-field__inner .q-field__control {
+  border-radius: 6px !important;
+}
+
+.tableSearchInput .q-field__inner .q-field__control {
+  border-radius: 6px !important;
+  width: 350px;
+}
+/* End Input Border radius */
+.q-field--dense .q-field__control,
+.q-field--dense .q-field__marginal {
+  height: 48px;
+}
+.q-field--auto-height .q-field__control {
+  height: auto;
+}
+.icon-white {
+  filter: invert(100%) sepia(0%) saturate(6403%) hue-rotate(213deg)
+    brightness(108%) contrast(100%);
+}
+
+.icon-blue {
+  filter: invert(8%) sepia(67%) saturate(5653%) hue-rotate(242deg)
+    brightness(73%) contrast(123%);
+}
+
+/* font sizes */
+.font-10 {
+  font-size: 10px;
+}
+.font-11 {
+  font-size: 11px;
+}
+.font-12 {
+  font-size: 12px;
+}
+.font-13 {
+  font-size: 13px;
+}
+.font-14 {
+  font-size: 14px !important;
+}
+.font-15 {
+  font-size: 15px;
+}
+.font-16 {
+  font-size: 16px !important;
+}
+.font-18 {
+  font-size: 18px !important;
+}
+.font-20 {
+  font-size: 20px;
+}
+.font-21 {
+  font-size: 21px !important;
+}
+.font-22 {
+  font-size: 22px;
+}
+.font-24 {
+  font-size: 24px;
+}
+.font-26 {
+  font-size: 26px;
+}
+.font-28 {
+  font-size: 28px;
+}
+.font-36 {
+  font-size: 36px;
+}
+.font-38 {
+  font-size: 38.89px;
+}
+.font-50 {
+  font-size: 50px;
+}
+/* End font sizes */
+/* Text Overflow */
+.text-overflow {
+  overflow-wrap: break-word;
+}
+.text-underline {
+  text-decoration: underline;
+}
+/* shadows */
+.shadow-1,
+.q-layout__shadow:after,
+.tableHead .q-table__top {
+  box-shadow: 0px 2px 16px rgba(16, 88, 208, 0.05);
+}
+.shadow-2 {
+  box-shadow: 0px 2px 16px rgba(16, 88, 208, 0.1);
+}
+.dropshadow-1 {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.1)) !important;
+}
+.shadow-input {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05) !important;
+}
+.q-field__control {
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12);
+}
+.no-shadow .q-field__inner .q-field__control {
+  box-shadow: none !important;
+}
+.no-shadow .q-field__inner .q-field__control {
+  box-shadow: none !important;
+}
+.pagination-no-shadow .q-field__control {
+  box-shadow: none;
+}
+.q-field__control.bg-transparent {
+  box-shadow: none !important;
+}
+/* end shadows */
+.text-weight-600 {
+  font-weight: 600;
+}
+.light-blue {
+  background-color: #bfd3ff;
+  color: black;
+}
+
+@font-face {
+  font-family: "PPeditorial";
+  src: url("../fonts/PPEditorialNew-Ultralight.otf") format("opentype");
+}
+
+.ppeditorial {
+  font-family: "PPEditorial", sans-serif !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "PPEditorial", sans-serif !important;
+}
+
+h1 {
+  /* line-height on mobile screens is 3rem */
+  @media (max-width: 480px) {
+    line-height: 3rem;
+  }
+}
+
+html,
+body {
+  font-family: "Open Sans", sans-serif;
+  /* font-family: "PPEditorial", sans-serif !important; */
+  background-color: #eff2f7;
+  font-size: 16px;
+}
+
+/* End font import */
