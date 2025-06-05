@@ -17,25 +17,25 @@
         </div>
         <div class="row q-mb-md">
           <div class="col-4 text-blue-grey-10 text-overflow">
-            <p class="no-margin">Administration:</p>
+            <p class="no-margin">{{ $t("personalData.administration") }}:</p>
           </div>
           <div class="col-7 q-ml-md">Municipality name</div>
         </div>
         <div class="row q-mb-md">
           <div class="col-4 font-16 text-blue-grey-10 text-overflow">
-            <p class="no-margin">Location:</p>
+            <p class="no-margin">{{ $t("personalData.location") }}:</p>
           </div>
           <div class="col-7 q-ml-md">Erlangen</div>
         </div>
         <div class="row q-mb-md">
           <div class="col-4 font-16 text-blue-grey-10 text-overflow">
-            <p class="no-margin">Email:</p>
+            <p class="no-margin">{{ $t("projectIdeaPlaceholder.email") }}:</p>
           </div>
           <div class="col-7 q-ml-md">talan.herwitz@mail.com</div>
         </div>
         <div class="row q-mb-md">
           <div class="col-4 font-16 text-blue-grey-10 text-overflow">
-            <p class="no-margin">Telefon:</p>
+            <p class="no-margin">{{ $t("personalData.telephone") }}:</p>
           </div>
           <div class="col-7 q-ml-md">0251 7764-113</div>
         </div>

@@ -8,7 +8,7 @@
         <q-form ref="signupForm" class="q-gutter-lg">
           <div class="row">
             <div class="col-12">
-              <p class="q-mb-sm font-16">Name</p>
+              <p class="q-mb-sm font-16">{{ $t("projectIdeaPlaceholder.name") }}</p>
               <q-input
                 outlined
                 dense
@@ -20,7 +20,7 @@
           </div>
           <div class="row q-mt-none">
             <div class="col-12">
-              <p class="q-mb-sm font-16">Email</p>
+              <p class="q-mb-sm font-16">{{ $t("projectIdeaPlaceholder.email") }}</p>
               <q-input
                 @keyup.enter="signup"
                 outlined

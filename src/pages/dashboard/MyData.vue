@@ -9,11 +9,11 @@ import overview from "components/data/overview.vue";
 export default {
   name: "myData",
   components: {
-    overview
+    overview,
   },
   data() {
     return {};
-  }
+  },
 };
 </script>
 

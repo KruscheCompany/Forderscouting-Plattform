@@ -3,10 +3,10 @@
     <div class="container">
       <div class="row">
         <div class="col-12 text-center">
-          <h1 class="font-36 text-weight-600">Dokumente</h1>
+          <h1 class="font-36 text-weight-600">{{ $t("documents") }}</h1>
         </div>
         <div class="col-12 q-mb-xl">
-          <p>Suchergebnis: {{ documentsLength }} Dokumente</p>
+          <p>{{ $t("searchResult") }}: {{ documentsLength }} {{ $t("documents") }}</p>
           <DocumentsTable @update-data="setDocumentNumbers" />
         </div>
       </div>
@@ -19,11 +19,11 @@ import DocumentsTable from "components/projects/search/DocumentsTable.vue";
 export default {
   name: "documents",
   components: {
-    DocumentsTable
+    DocumentsTable,
   },
   data() {
     return {
-      documentsLength: 0
+      documentsLength: 0,
     };
   },
   methods: {
@@ -33,8 +33,8 @@ export default {
       } else {
         this.documentsLength = 0;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

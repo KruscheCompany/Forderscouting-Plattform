@@ -1,17 +1,12 @@
 <template>
   <q-page class="bg-white q-pa-md flex flex-center">
-    <q-card class="q-pa-lg radius-10 shadow-1" style="width: 600px;">
+    <q-card class="q-pa-lg radius-10 shadow-1" style="width: 600px">
       <div>
-        <h6 class="text-center font-24 q-mt-md">Passwort zurücksetzen</h6>
-        <q-form
-          @submit.prevent.stop="resetPassword"
-          class="q-gutter-md q-px-md q-mb-md "
-        >
+        <h6 class="text-center font-24 q-mt-md">{{ $t("resetPassword") }}</h6>
+        <q-form @submit.prevent.stop="resetPassword" class="q-gutter-md q-px-md q-mb-md">
           <div class="row items-baseline">
             <div class="col-3">
-              <p class="font-14 no-margin">
-                Passwort
-              </p>
+              <p class="font-14 no-margin">{{ $t("password") }}</p>
             </div>
             <div class="col-9">
               <q-input
@@ -19,56 +14,53 @@
                 class="no-shadow input-radius-6"
                 v-model="form.password"
                 :rules="[
-                  val =>
-                    validatePassword(val) ||
-                    'Passwort muss alle Kriterien erfüllen'
+                  (val) =>
+                    validatePassword(val) || $t('passwordMustMeetCriteria'),
                 ]"
-                placeholder="Passwort"
+                :placeholder="$t('password')"
                 type="password"
                 ref="password"
               />
             </div>
           </div>
-          <div class="row ">
+          <div class="row">
             <div class="col-12">
               <div class="password-criteria q-pa-sm">
-                <div class="text-subtitle2 q-mb-sm">Passwort-Kriterien:</div>
+                <div class="text-subtitle2 q-mb-sm">{{ $t("passwordCriteria") }}:</div>
                 <div>
                   <q-icon
                     :name="validPassword.length ? 'check_circle' : 'cancel'"
                     :color="validPassword.length ? 'positive' : 'negative'"
                   ></q-icon>
-                  Muss mindestens 8 Zeichen lang sein.
+                  {{ $t("mustBeAtLeast8Characters") }}
                 </div>
                 <div>
                   <q-icon
                     :name="validPassword.capital ? 'check_circle' : 'cancel'"
                     :color="validPassword.capital ? 'positive' : 'negative'"
                   ></q-icon>
-                  Muss mindestens einen Großbuchstaben enthalten.
+                  {{ $t("mustContainUppercase") }}
                 </div>
                 <div>
                   <q-icon
                     :name="validPassword.number ? 'check_circle' : 'cancel'"
                     :color="validPassword.number ? 'positive' : 'negative'"
                   ></q-icon>
-                  Muss mindestens eine Zahl enthalten.
+                  {{ $t("mustContainNumber") }}
                 </div>
                 <div>
                   <q-icon
                     :name="validPassword.symbol ? 'check_circle' : 'cancel'"
                     :color="validPassword.symbol ? 'positive' : 'negative'"
                   ></q-icon>
-                  Muss mindestens ein Sonderzeichen enthalten: !@#$%^&*()-_+=
+                  {{ $t("mustContainSpecialCharacter") }}
                 </div>
               </div>
             </div>
           </div>
           <div class="row items-start">
             <div class="col-3">
-              <p class="font-14 no-margin q-pr-md">
-                Passwort bestätigen
-              </p>
+              <p class="font-14 no-margin q-pr-md">{{ $t("confirmPassword") }}</p>
             </div>
             <div class="col-9">
               <q-input
@@ -76,20 +68,20 @@
                 class="no-shadow input-radius-6"
                 v-model="form.passwordConfirm"
                 :rules="[
-                  val =>
+                  (val) =>
                     (!!val && val === form.password) ||
-                    'Passwörter stimmen nicht überein'
+                    $t('passwordsDoNotMatch'),
                 ]"
-                placeholder="Passwort bestätigen"
+                :placeholder="$t('confirmPassword')"
                 type="password"
                 ref="passwordConfirm"
               />
             </div>
           </div>
 
-          <div class="row justify-center q-ml-lg ">
+          <div class="row justify-center q-ml-lg">
             <q-btn
-              label="Passwort zurücksetzen"
+              :label="$t('resetPassword')"
               type="submit"
               unelevated
               size="16px"
@@ -112,15 +104,15 @@ export default {
     return {
       form: {
         password: "",
-        passwordConfirm: ""
+        passwordConfirm: "",
       },
       isLoading: false,
       validPassword: {
         length: false,
         capital: false,
         number: false,
-        symbol: false
-      }
+        symbol: false,
+      },
     };
   },
   methods: {
@@ -148,8 +140,8 @@ export default {
           data: {
             password: this.form.password,
             passwordConfirmation: this.form.passwordConfirm,
-            code
-          }
+            code,
+          },
         });
         this.isLoading = false;
         if (res !== false) {
@@ -157,8 +149,8 @@ export default {
           this.$refs.passwordConfirm.resetValidation();
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
