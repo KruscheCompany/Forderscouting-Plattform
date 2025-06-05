@@ -10,7 +10,7 @@ import categoriesKeyword from "src/components/categoriesKeywords/categoriesKeywo
 export default {
   name: "CategoriesKeywords",
   components: {
-    categoriesKeyword
-  }
+    categoriesKeyword,
+  },
 };
 </script>

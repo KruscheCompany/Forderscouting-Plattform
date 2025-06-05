@@ -8,7 +8,7 @@ import MunicipalityDetail from "src/components/Municipality/municipalityDetail.v
 export default {
   name: "MunicipalityDetailPage",
   components: {
-    MunicipalityDetail
-  }
+    MunicipalityDetail,
+  },
 };
 </script>

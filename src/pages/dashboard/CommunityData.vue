@@ -9,11 +9,11 @@ import myCommunityData from "components/data/myCommunityData.vue";
 export default {
   name: "CommunityData",
   components: {
-    myCommunityData
+    myCommunityData,
   },
   data() {
     return {};
-  }
+  },
 };
 </script>
 

@@ -10,7 +10,7 @@
             <q-form ref="loginForm" class="q-gutter-lg">
               <div class="row">
                 <div class="col-12">
-                  <p class="q-mb-sm font-16">Email</p>
+                  <p class="q-mb-sm font-16">{{ $t("projectIdeaPlaceholder.email") }}</p>
                   <q-input
                     @keyup.enter="login"
                     outlined
@@ -21,7 +21,7 @@
                   />
                 </div>
                 <div class="col-12 q-mt-lg">
-                  <p class="q-mb-sm font-16">Passwort</p>
+                  <p class="q-mb-sm font-16">{{ $t("password") }}</p>
                   <q-input
                     @keyup.enter="login"
                     outlined
@@ -70,7 +70,7 @@
                         text-color="grey-7"
                         unelevated
                       >
-                        Passwort vergessen
+                        {{ $t("generalData.forgotPassword") }}
                       </q-btn>
                     </div>
                   </div>
@@ -98,7 +98,7 @@
             >
               <div class="row">
                 <div class="col-12">
-                  <p class="q-mb-sm font-16">Email</p>
+                  <p class="q-mb-sm font-16">{{ $t("projectIdeaPlaceholder.email") }}</p>
                   <q-input
                     outlined
                     dense
@@ -124,7 +124,7 @@
                     text-color="black"
                     unelevated
                     :loading="isLoading"
-                    >Passwort zurücksetzen</q-btn
+                    >{{ $t("generalData.resetPassword") }}</q-btn
                   >
                 </div>
               </div>

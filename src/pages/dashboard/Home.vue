@@ -40,7 +40,7 @@
               icon="add"
               unelevated
               outline
-              class="mr-0 radius-6  text-weight-600"
+              class="mr-0 radius-6 text-weight-600"
               :class="{ 'full-width': $q.screen.lt.md }"
               no-caps
               @click="$router.push({ path: '/user/newFunding' })"
@@ -73,7 +73,7 @@
     <div>
       <fundingInfo />
     </div>
-    <div class="row q-col-gutter-md ">
+    <div class="row q-col-gutter-md">
       <div class="col-12 col-md-6">
         <myCommunityData v-if="isGuest" />
         <dataOverview v-else />
@@ -101,7 +101,7 @@ export default {
     dataOverview,
     myCommunityData,
     watchlist,
-    network
+    network,
   },
   data() {
     return {};
@@ -112,7 +112,7 @@ export default {
     },
     isGuest() {
       return this.$store.getters["userCenter/isGuest"];
-    }
-  }
+    },
+  },
 };
 </script>

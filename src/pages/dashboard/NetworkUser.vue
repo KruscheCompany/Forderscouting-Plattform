@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-mx-xl q-mt-lg ">
+  <q-page class="q-mx-xl q-mt-lg">
     <div class="row justify-center">
       <div class="col-12 col-lg-5">
         <!-- User Info -->
@@ -20,13 +20,13 @@ export default {
   name: "networkPage",
   components: {
     overview,
-    UserCard
+    UserCard,
   },
   data() {
     return {
-      search: ""
+      search: "",
     };
-  }
+  },
 };
 </script>
 

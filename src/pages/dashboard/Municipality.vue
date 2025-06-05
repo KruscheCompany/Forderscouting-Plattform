@@ -10,7 +10,7 @@ import municipality from "components/Municipality/municipality.vue";
 export default {
   name: "MunicipalityPage",
   components: {
-    municipality
-  }
+    municipality,
+  },
 };
 </script>
