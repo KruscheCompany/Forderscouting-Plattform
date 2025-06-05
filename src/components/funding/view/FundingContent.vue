@@ -83,19 +83,19 @@
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">Besitzer*in</p>
+                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("Owner") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{ (!!funding.owner && funding.owner.username) || "" }}
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">Typ</p>
+                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.type") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
-                        Förderinfo
+                        {{ $t("fundingsColsHome.fundInfo") }}
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">Sichtbarkeit</p>
+                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.visibility") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{
                           funding.visibility === "only for me"
@@ -242,15 +242,15 @@
                       </p>
                     </div>
                     <div class="col-4">
-                      <p class="font-14 no-margin text-blue-grey-10">Besitzer*in</p>
+                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("Owner") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{ (!!funding.owner && funding.owner.username) || "" }}
                       </p>
                     </div>
                     <div class="col-4">
-                      <p class="font-14 no-margin text-blue-grey-10">Typ</p>
+                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.type") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
-                        Förderinfo
+                        {{ $t("fundingsColsHome.fundInfo") }}
                       </p>
                     </div>
                   </div>
