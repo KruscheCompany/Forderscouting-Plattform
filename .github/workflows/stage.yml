@@ -20,4 +20,4 @@ jobs:
       - name: Build PWA
         run: npx quasar build -m pwa
       - name: Move Build Files to Directory
-        run: cp -a dist/pwa/. /var/www/amtviol/
+        run: cp -a dist/pwa/. ${{ secrets.STAGE_DEPLOY_PATH }}
