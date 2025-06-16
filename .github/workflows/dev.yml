@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Create .env file from secret
-        run: echo "${{ secrets.DEV_ENV }}" > .env.dev
+        run: echo "${{ secrets.DEV_ENV }}" > .env
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
