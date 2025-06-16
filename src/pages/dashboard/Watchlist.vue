@@ -9,10 +9,10 @@ import overview from "components/watchlist/overview.vue";
 export default {
   name: "watchlist",
   components: {
-    overview
+    overview,
   },
   data() {
     return {};
-  }
+  },
 };
 </script>

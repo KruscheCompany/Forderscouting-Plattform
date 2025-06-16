@@ -222,6 +222,19 @@ const routes = [
         },
         icon: "/icons/Archive.svg",
         component: () => import("pages/dashboard/Stats.vue")
+      },
+      {
+        path: "/translations",
+        name: "translations",
+        meta: {
+          title: "Translations",
+          titleDE: "Translations",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: true
+        },
+        icon: "/icons/Archive.svg",
+        component: () => import("pages/dashboard/Translations.vue")
       }
     ]
   },

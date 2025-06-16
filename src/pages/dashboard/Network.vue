@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-mx-xl q-mt-lg ">
+  <q-page class="q-mx-xl q-mt-lg">
     <network />
   </q-page>
 </template>
@@ -10,13 +10,13 @@ import network from "components/network/overview.vue";
 export default {
   name: "networkPage",
   components: {
-    network
+    network,
   },
   data() {
     return {
-      search: ""
+      search: "",
     };
-  }
+  },
 };
 </script>
 

@@ -1,8 +1,5 @@
 <template>
-  <q-page
-    class="q-mt-lg q-pb-md"
-    :class="$q.screen.lt.md ? 'q-mx-md' : 'q-mx-xl'"
-  >
+  <q-page class="q-mt-lg q-pb-md" :class="$q.screen.lt.md ? 'q-mx-md' : 'q-mx-xl'">
     <q-card
       v-if="Object.keys(data).length === 0"
       class="full-height full-width bg-white radius-20 shadow-1"
@@ -91,8 +88,8 @@
               @click="view(noti)"
               v-if="
                 noti.typeOfNoti == 'fundingComments' ||
-                  noti.typeOfNoti == 'fundingExpirey' ||
-                  noti.typeOfNoti == 'requests'
+                noti.typeOfNoti == 'fundingExpirey' ||
+                noti.typeOfNoti == 'requests'
               "
               color="
               blue"
@@ -161,12 +158,7 @@
               no-caps
             >
               <p class="q-mb-none q-mx-md q-my-sm">
-                <q-icon
-                name="check"
-                size="xs"
-                >
-                  
-                </q-icon>
+                <q-icon name="check" size="xs"> </q-icon>
                 {{ $t("notificationsUser.markAsRead") }}
               </p>
             </q-btn>
@@ -178,9 +170,7 @@
       <q-card>
         <q-card-section>
           <div class="text-h6">
-            {{ $t("New Comment on Funding") }} "{{
-              currentFundingComment.funding.title
-            }}"
+            {{ $t("New Comment on Funding") }} "{{ currentFundingComment.funding.title }}"
           </div>
         </q-card-section>
 
@@ -195,12 +185,12 @@
       </q-card>
     </q-dialog>
     <RequestAccessDialog
-        :id="itemId"
-        :tab="tab"
-        :type="itemType"
-        :dialogState="requestDialog"
-        @update="(requestDialog = $event), (itemId = null), (itemType = null)"
-      />
+      :id="itemId"
+      :tab="tab"
+      :type="itemType"
+      :dialogState="requestDialog"
+      @update="(requestDialog = $event), (itemId = null), (itemType = null)"
+    />
     <InviteUser
       :dialogState="inviteUserDialog"
       @update="inviteUserDialog = $event"
@@ -246,10 +236,9 @@ export default {
   computed: {
     loggedInUser() {
       return (
-        !!this.$store.state.userCenter.user &&
-        this.$store.state.userCenter.user.user
+        !!this.$store.state.userCenter.user && this.$store.state.userCenter.user.user
       );
-    }
+    },
   },
   methods: {
     getIndex(index) {
@@ -260,19 +249,19 @@ export default {
       var data = [];
       for (const item in this.data) {
         if (item === "fundingComments") {
-          this.data[item].forEach(funding => {
+          this.data[item].forEach((funding) => {
             data.push({ ...funding, typeOfNoti: "fundingComments" });
           });
         } else if (item === "guest") {
-          this.data[item].forEach(funding => {
+          this.data[item].forEach((funding) => {
             data.push({ ...funding, typeOfNoti: "guest" });
           });
         } else if (item === "requests") {
-          this.data[item].forEach(funding => {
+          this.data[item].forEach((funding) => {
             data.push({ ...funding, typeOfNoti: "requests" });
           });
         } else if (item === "fundingExpirey") {
-          this.data[item].forEach(funding => {
+          this.data[item].forEach((funding) => {
             var plannedEnd = new Date(funding.plannedEnd);
             plannedEnd.setDate(plannedEnd.getDate() - 30);
             funding.createdAt = plannedEnd;
@@ -285,7 +274,7 @@ export default {
         return new Date(b.createdAt) - new Date(a.createdAt);
       });
       var byDate = {};
-      data.forEach(item => {
+      data.forEach((item) => {
         if (byDate[item.createdAt.split("T")[0]] == undefined) {
           byDate[item.createdAt.split("T")[0]] = [];
           byDate[item.createdAt.split("T")[0]].push(item);
@@ -295,9 +284,9 @@ export default {
       this.data = byDate;
     },
     getData() {
-      this.$api.get("/api/user/notification").then(response => {
-      this.data = response.data;
-      this.prepData();
+      this.$api.get("/api/user/notification").then((response) => {
+        this.data = response.data;
+        this.prepData();
       });
     },
     getIcon(type) {
@@ -324,7 +313,7 @@ export default {
             this.requestDialog = true;
           } else {
             this.$router.push({
-              path: `/user/newProjectIdea/${noti.project.id}`
+              path: `/user/newProjectIdea/${noti.project.id}`,
             });
           }
         } else if (noti.funding != null) {
@@ -344,7 +333,7 @@ export default {
             this.requestDialog = true;
           } else {
             this.$router.push({
-              path: `/user/newChecklist/${noti.checklist.id}`
+              path: `/user/newChecklist/${noti.checklist.id}`,
             });
           }
         }
@@ -354,7 +343,7 @@ export default {
       if (noti.typeOfNoti == "requests") {
         this.$store.dispatch("userCenter/manageRequest", {
           id: noti.id,
-          val: true
+          val: true,
         });
         this.updateNotifications(noti, index);
       } else {
@@ -372,11 +361,11 @@ export default {
       if (noti.typeOfNoti == "requests")
         this.$store.dispatch("userCenter/manageRequest", {
           id: noti.id,
-          val: false
+          val: false,
         });
       else {
         this.$store.dispatch("userCenter/deleteGuestRequest", {
-          id: noti.id
+          id: noti.id,
         });
       }
       this.updateNotifications(noti, index);
@@ -386,18 +375,18 @@ export default {
       switch (notificationType) {
         case "fundingExpirey":
           await this.$api.post("/api/read-notifications", {
-            data : {
+            data: {
               user: this.loggedInUser.id,
-              funding_expirey: noti.id
-            }
+              funding_expirey: noti.id,
+            },
           });
           break;
         case "fundingComments":
-         await this.$api.post("/api/read-notifications", {
-            data : {
+          await this.$api.post("/api/read-notifications", {
+            data: {
               user: this.loggedInUser.id,
-              funding_comment: noti.id
-            }
+              funding_comment: noti.id,
+            },
           });
           this.getData();
           break;
@@ -405,8 +394,8 @@ export default {
           await this.$api.post("/api/read-notifications", {
             data: {
               user: this.loggedInUser.id,
-              guest_request: noti.id
-            }
+              guest_request: noti.id,
+            },
           });
           this.getData();
           break;
@@ -414,8 +403,8 @@ export default {
           await this.$api.post("/api/read-notifications", {
             data: {
               user: this.loggedInUser.id,
-              request: noti.id
-            }
+              request: noti.id,
+            },
           });
           this.getData();
           break;
@@ -425,7 +414,7 @@ export default {
     },
     updateNotifications(noti, index) {
       this.data[noti.createdAt.split("T")[0]].splice(index, 1);
-    }
+    },
   },
   mounted() {
     this.getData();

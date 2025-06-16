@@ -1,8 +1,5 @@
 <template>
-  <q-page
-    class="q-mt-lg bg-blue-1"
-    :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'"
-  >
+  <q-page class="q-mt-lg bg-blue-1" :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'">
     <ProjectContent />
   </q-page>
 </template>
@@ -12,12 +9,12 @@ import ProjectContent from "components/projects/view/ProjectContent.vue";
 export default {
   name: "projectView",
   components: {
-    ProjectContent
+    ProjectContent,
   },
   data() {
     return {};
   },
-  methods: {}
+  methods: {},
 };
 </script>
 

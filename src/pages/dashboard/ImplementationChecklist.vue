@@ -8,7 +8,7 @@ import newCheckList from "src/components/implementationChecklist/newCheckList.vu
 export default {
   name: "newImplementationChecklist",
   components: {
-    newCheckList
-  }
+    newCheckList,
+  },
 };
 </script>

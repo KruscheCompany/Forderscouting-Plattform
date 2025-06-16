@@ -8,7 +8,7 @@ import newFund from "src/components/funding/newFund.vue";
 export default {
   name: "newFunding",
   components: {
-    newFund
-  }
+    newFund,
+  },
 };
 </script>

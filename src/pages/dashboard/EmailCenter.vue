@@ -624,9 +624,9 @@ export default {
       const savedPagination = JSON.parse(localStorage.getItem("pagination"));
 
       this.$refs.table.setPagination({
-          page: savedPagination.emailCenterPage || 1,
-          rowsPerPage: savedPagination.emailCenterRowsPerPage || 10,
-        });
+        page: savedPagination.emailCenterPage || 1,
+        rowsPerPage: savedPagination.emailCenterRowsPerPage || 10,
+      });
     }
   },
   beforeDestroy() {

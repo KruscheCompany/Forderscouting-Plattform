@@ -83,19 +83,19 @@
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">Besitzer*in</p>
+                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("Owner") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{ (!!project.owner && project.owner.username) || "" }}
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">Typ</p>
+                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.type") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
-                        Projektidee
+                        {{ $t("dashboard.projectIdeaBtn") }}
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">Sichtbarkeit</p>
+                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.visibility") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{
                           project.visibility === "only for me"
@@ -336,12 +336,12 @@
               </h4>
             </div>
             </div>
-            
+
             <div class="row q-col-gutter-lg">
-            
+
               <div class="col-12 col-md-4">
                 <div class="row">
-                  
+
                   <div class="col-12 q-mb-md" >
                     <q-card class="shadow-1 radius-20">
                       <q-card-section>
@@ -360,7 +360,7 @@
                           </p>
                         </div>
                       </q-card-section>
-                      
+
                       <q-card-section>
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("projectContent.contactDetails") }}
@@ -389,7 +389,7 @@
                       </p> -->
                         </div>
                       </q-card-section>
-                      
+
                       <div>
                         <q-card-section
                           v-if="!!project.info && !!project.info.location"
@@ -405,7 +405,7 @@
                             </p>
                           </div>
                         </q-card-section>
-                        
+
                       </div>
 
                       <q-card-section
@@ -427,14 +427,14 @@
                             </p>
                           </div>
                           <div v-else>
-                            <p class="q-mb-sm">No editors Invited</p>
+                            <p class="q-mb-sm">{{ $t("projectContent.noEditorsInvited") }}</p>
                           </div>
                         </div>
                       </q-card-section>
                     </q-card>
                   </div>
-                  
-                  
+
+
                   <div class="col-12 q-mb-md">
                     <q-card class="shadow-1 radius-20">
                       <q-card-section>
@@ -463,7 +463,7 @@
                           </div>
                         </div>
                       </q-card-section>
-                      
+
                       <q-card-section>
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("projectContent.tags") }}
@@ -481,13 +481,13 @@
                               {{ tag.title }}
                             </q-chip>
                           </div>
-                          <div v-else>No Tags Set</div>
+                          <div v-else>{{ $t("projectContent.noTagsSet") }}</div>
                         </div>
                       </q-card-section>
                     </q-card>
                   </div>
-                  
-                  
+
+
                   <div class="col-12 q-mb-md">
                     <q-card class="shadow-1 radius-20">
                       <q-card-section>
@@ -508,7 +508,7 @@
                           </p>
                         </div>
                       </q-card-section>
-                      
+
                       <div v-if="project.duplications > 0">
                         <q-card-section>
                           <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
@@ -520,7 +520,7 @@
                             </p>
                           </div>
                         </q-card-section>
-                        
+
                       </div>
                       <div
                         v-if="
@@ -541,7 +541,7 @@
                             </p>
                           </div>
                         </q-card-section>
-                        
+
                       </div>
 
                       <q-card-section
@@ -588,8 +588,8 @@
                       </q-card-section>
                     </q-card>
                   </div>
-                  
-                  
+
+
                   <div class="col-12 q-mb-md">
                     <q-card class="shadow-1 radius-20">
                       <div
@@ -631,7 +631,7 @@
                             </p>
                           </div>
                         </q-card-section>
-                        
+
                       </div>
                       <!-- If checklist(s) selected -->
 
@@ -668,7 +668,7 @@
                             </p>
                           </div>
                         </q-card-section>
-                        
+
                       </div>
 
                       <q-card-section>
@@ -700,7 +700,7 @@
                           </div>
                         </div>
                       </q-card-section>
-                      
+
                       <div v-if="project.links && project.links.length > 0">
                         <q-card-section>
                           <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
@@ -734,11 +734,11 @@
                               </div>
                             </div>
                             <div v-else>
-                              <p class="col-12 q-mb-none">No links set</p>
+                              <p class="col-12 q-mb-none">{{ $t("projectContent.noLinksSet") }}</p>
                             </div>
                           </div>
                         </q-card-section>
-                        
+
                       </div>
                       <q-card-section
                         v-if="project.files && project.files.length > 0"
@@ -769,10 +769,10 @@
                       </q-card-section>
                     </q-card>
                   </div>
-          
+
                 </div>
               </div>
-            
+
               <div class="col-12 col-md-8">
                 <div class="row">
                   <div class="col-12 q-mb-md" v-if="project.media">
@@ -883,12 +883,12 @@
                   </div>
                   <div class="col-12 q-mb-md">
                     <q-card class="shadow-1 radius-20">
-                      
+
                       <q-card-section>
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("newProjectIdeaForm.projectStartingCondition") }}
                         </h4>
-                        
+
                         <div class="q-ml-md font-16">
                           <p
                             class="q-mb-sm text-block"
@@ -901,7 +901,7 @@
                           ></p>
                         </div>
                       </q-card-section>
-                      
+
                       <q-card-section>
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("projectContent.projectContent") }}
@@ -917,8 +917,8 @@
                           ></p>
                         </div>
                       </q-card-section>
-                      
-                      
+
+
                       <q-card-section>
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("projectContent.projectGoals") }}
@@ -931,9 +931,9 @@
                           </p>
                         </div>
                       </q-card-section>
-                     
-                      
-                      
+
+
+
                       <q-card-section>
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("projectContent.projectValue&Benefits") }}
@@ -949,8 +949,8 @@
                           ></p>
                         </div>
                       </q-card-section>
-                      
-                      
+
+
                       <div v-if="!!project.details && project.details.partner">
                         <q-card-section>
                           <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
@@ -965,7 +965,7 @@
                             </p>
                           </div>
                         </q-card-section>
-                        
+
                       </div>
                     </q-card>
                   </div>
@@ -1065,7 +1065,7 @@
                       </p>
                     </div>
                     <div v-else>
-                      <p class="q-mb-sm">No editors Invited</p>
+                      <p class="q-mb-sm">{{ $t("projectContent.noEditorsInvited") }}</p>
                     </div>
                   </div>
                 </q-card-section>
@@ -1115,7 +1115,7 @@
                         {{ tag.title }}
                       </q-chip>
                     </div>
-                    <div v-else>No Tags Set</div>
+                    <div v-else>{{ $t("projectContent.noTagsSet") }}</div>
                   </div>
                 </q-card-section>
               </q-card>
@@ -1353,7 +1353,7 @@
                         </div>
                       </div>
                       <div v-else>
-                        <p class="col-12 q-mb-none">No links set</p>
+                        <p class="col-12 q-mb-none">{{ $t("projectContent.noLinksSet") }}</p>
                       </div>
                     </div>
                   </q-card-section>
@@ -1397,11 +1397,11 @@
                     href="http://link.to.page"
                     >Förderinfo name</a
                   >
-                  <p class="q-mb-none">Umsetzungscheckliste</p>
+                  <p class="q-mb-none">{{ $t("category&Keyword.implementationChecklist") }}</p>
                   <a
                     class="q-mb-sm text-blue block text-weight-600"
                     href="http://link.to.page"
-                    >Umsetzungscheckliste name</a
+                    >{{ $t("category&Keyword.implementationChecklist") }} name</a
                   >
                 </div>
               </q-card-section>
