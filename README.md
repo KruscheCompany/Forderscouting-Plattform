@@ -6,17 +6,17 @@ This project, "Interkommunale Förderscouting-Plattform Nordfriesland," is a mod
 ## Deployment Info
 
 ### Development Environment
-[![Dev Deployment](https://github.com/KruscheCompany/Forderscouting-Plattform/actions/workflows/dev.yml/badge.svg)](https://github.com/AlameenAzad/amt-viol/actions/workflows/dev.yml)
+[![Dev Deployment](https://github.com/KruscheCompany/Forderscouting-Plattform/actions/workflows/dev.yml/badge.svg)](https://github.com/KruscheCompany/Forderscouting-Plattform/actions/workflows/dev.yml)
 
 ---
 
 ### Staging Environment
-[![Stage Deployment](https://github.com/KruscheCompany/Forderscouting-Plattform/actions/workflows/stage.yml/badge.svg)](https://github.com/AlameenAzad/amt-viol/actions/workflows/stage.yml)
+[![Stage Deployment](https://github.com/KruscheCompany/Forderscouting-Plattform/actions/workflows/stage.yml/badge.svg)](https://github.com/KruscheCompany/Forderscouting-Plattform/actions/workflows/stage.yml)
 
 ---
 
 ### Production Environment
-[![Production Deployment](https://github.com/KruscheCompany/Forderscouting-Plattform/actions/workflows/stage.yml/badge.svg)](https://github.com/AlameenAzad/amt-viol/actions/workflows/stage.yml)
+[![Production Deployment](https://github.com/KruscheCompany/Forderscouting-Plattform/actions/workflows/stage.yml/badge.svg)](https://github.com/KruscheCompany/Forderscouting-Plattform/actions/workflows/prod.yml)
 
 ---
 
