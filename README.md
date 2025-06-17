@@ -16,7 +16,7 @@ This project, "Interkommunale Förderscouting-Plattform Nordfriesland," is a mod
 ---
 
 ### Production Environment
-[![Production Deployment](https://github.com/KruscheCompany/Forderscouting-Plattform/actions/workflows/prod.yml/badge.svg)](https://github.com/AlameenAzad/amt-viol/actions/workflows/prod.yml)
+[![Production Deployment](https://github.com/KruscheCompany/Forderscouting-Plattform/actions/workflows/prod.yml/badge.svg)](https://github.com/AlameenAzad/amt-viol/actions/workflows/stage.yml)
 
 ---
 
