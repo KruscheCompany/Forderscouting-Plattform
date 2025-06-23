@@ -59,8 +59,8 @@ export default {
           field: "key",
           sortable: true,
         },
-        { name: "en", align: "left", label: "English", field: "en", sortable: true },
-        { name: "de", align: "left", label: "German", field: "de", sortable: true },
+        { name: "en", align: "left", label: "English", field: "en", sortable: false },
+        { name: "de", align: "left", label: "German", field: "de", sortable: false },
       ],
     };
   },
@@ -72,6 +72,7 @@ export default {
   },
 
   methods: {
+
     async loadTranslations() {
       this.loading = true;
       try {
@@ -318,6 +319,8 @@ export default {
   mounted() {
     this.loadTranslations();
   },
+
+
 };
 </script>
 

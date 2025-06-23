@@ -11,6 +11,8 @@
     :rows-per-page-label="$t('Records per page')"
     :no-data-label="$t('No data')"
     :no-results-label="$t('No results')"
+    :pagination="pagination"
+    ref="table"
   >
     <template v-slot:top>
       <slot name="search"></slot>
@@ -59,7 +61,14 @@
 <script>
 export default {
   name: "TranslationTable",
-
+  data() {
+    return {
+      pagination: {
+        page: 1,
+        rowsPerPage: 10,
+      },
+    };
+  },
   props: {
     loading: {
       type: Boolean,
@@ -76,7 +85,7 @@ export default {
     columns: {
       type: Array,
       required: true
-    }
+    },
   },
 
   computed: {
@@ -108,8 +117,28 @@ export default {
   methods: {
     updateTranslation(key, locale, value) {
       this.$emit('update-translation', { key, locale, value });
+    },
+  },
+
+  mounted() {
+    if (localStorage.getItem("pagination")) {
+      const savedPagination = JSON.parse(localStorage.getItem("pagination"));
+
+      this.$refs.table.setPagination({
+          page: savedPagination.translationsPage || 1,
+          rowsPerPage: savedPagination.translationsRowsPerPage || 15,
+        });
     }
-  }
+  },
+  beforeDestroy() {
+    const pagination = JSON.parse(localStorage.getItem("pagination"));
+    const localPagination = {
+      translationsPage: this.$refs.table.computedPagination.page,
+      translationsRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
+    };
+    const filters = { ...pagination, ...localPagination };
+    localStorage.setItem("pagination", JSON.stringify(filters));
+  },
 };
 </script>
 
