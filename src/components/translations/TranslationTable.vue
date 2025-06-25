@@ -5,7 +5,6 @@
     :columns="columns"
     row-key="key"
     :loading="loading"
-    :filter="filter"
     :rows-per-page-options="[15, 50, 100, 0]"
     class="radius-20 shadow-1 pagination-no-shadow"
     :rows-per-page-label="$t('Records per page')"
@@ -67,6 +66,7 @@ export default {
         page: 1,
         rowsPerPage: 10,
       },
+      initialDeValues: {}, // Store initial DE values to prevent reactivity
     };
   },
   props: {
@@ -94,6 +94,7 @@ export default {
         key,
         en: this.translations[key].en,
         de: this.translations[key].de,
+        deCurrent: this.initialDeValues[key] || '',
         id_en: this.translations[key].id_en,
         id_de: this.translations[key].id_de,
       }));
@@ -108,8 +109,7 @@ export default {
       return this.translationData.filter(
         (row) =>
           row.key.toLowerCase().includes(searchLower) ||
-          (row.en && row.en.toLowerCase().includes(searchLower)) ||
-          (row.de && row.de.toLowerCase().includes(searchLower))
+          (row.deCurrent && row.deCurrent.toLowerCase().includes(searchLower))
       );
     }
   },
@@ -117,6 +117,26 @@ export default {
   methods: {
     updateTranslation(key, locale, value) {
       this.$emit('update-translation', { key, locale, value });
+    },
+
+    initializeDeValues() {
+      // Capture initial DE values to prevent reactivity with current translations
+      this.initialDeValues = {};
+      Object.keys(this.translations).forEach((key) => {
+        const deValue = this.translations[key].de;
+        this.initialDeValues[key] = deValue
+          ? `${deValue.slice(0, 30)}...`
+          : '';
+      });
+    },
+  },
+
+  watch: {
+    translations: {
+      handler() {
+        this.initializeDeValues();
+      },
+      immediate: true,
     },
   },
 
@@ -127,7 +147,8 @@ export default {
       this.$refs.table.setPagination({
           page: savedPagination.translationsPage || 1,
           rowsPerPage: savedPagination.translationsRowsPerPage || 15,
-        });
+      });
+      this.$emit('update-filter', savedPagination.translationsSearchTerm || '');
     }
   },
   beforeDestroy() {
@@ -135,6 +156,7 @@ export default {
     const localPagination = {
       translationsPage: this.$refs.table.computedPagination.page,
       translationsRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
+      translationsSearchTerm: this.filter,
     };
     const filters = { ...pagination, ...localPagination };
     localStorage.setItem("pagination", JSON.stringify(filters));
