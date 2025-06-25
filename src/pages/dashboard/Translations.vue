@@ -10,6 +10,7 @@
       :translations="translations"
       :filter="searchText"
       @update-translation="updateTranslation"
+      @update-filter="searchText = $event"
     >
       <template v-slot:search>
         <TranslationSearch v-model="searchText" />
@@ -58,6 +59,13 @@ export default {
           label: "Translation Key",
           field: "key",
           sortable: true,
+        },
+        {
+          name: "deCurrent",
+          align: "left",
+          label: "German ( Current Before Update )",
+          field: "deCurrent",
+          sortable: false,
         },
         { name: "en", align: "left", label: "English", field: "en", sortable: false },
         { name: "de", align: "left", label: "German", field: "de", sortable: false },
