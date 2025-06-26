@@ -33,7 +33,7 @@
                   :to="{ path: '/impressum' }"
                   target="_blank"
                 >
-                  Impressum
+                  {{ $t("imprint") }}
                 </router-link>
                 <router-link
                   style="text-decoration: none"
@@ -41,7 +41,7 @@
                   :to="{ path: '/datenschutzerklaerung' }"
                   target="_blank"
                 >
-                  Datenschutzerklaerung
+                  {{ $t("dataProtectionDeclaration") }}
                 </router-link>
               </q-card-section>
             </div>

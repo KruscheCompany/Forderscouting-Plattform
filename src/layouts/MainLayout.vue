@@ -28,7 +28,7 @@
             flat
             size="md"
             :to="{ name: 'landing' }"
-            aria-label="Home"
+            :aria-label="$t('home')"
           />
         </q-toolbar-title>
         <q-btn
@@ -41,7 +41,7 @@
           <p class="q-mb-none text-blue q-mx-sm q-my-xs"
           :style="$q.screen.lt.sm ? 'font-size: 11px;' : ''"
           >
-            Login
+            {{ $t("login") }}
           </p>
         </q-btn>
         <q-btn
@@ -51,7 +51,7 @@
             class="mr-0 radius-6"
             no-caps
           >
-            <p class="q-mb-none text-blue q-my-xs" :style="$q.screen.lt.sm ? 'font-size: 11px;' : ''">Registrierung Gastzugang</p>
+            <p class="q-mb-none text-blue q-my-xs" :style="$q.screen.lt.sm ? 'font-size: 11px;' : ''">{{ $t("guestRegistration") }}</p>
         </q-btn>
       </q-toolbar>
     </q-header>
@@ -72,8 +72,7 @@
             :class="$q.screen.lt.md ? 'text-center' : ''"
           >
             <p>
-              Wenn Sie weitere Dokumente sowie Checklisten sehen möchten, dann
-              registrieren Sie sich.
+              {{ $t("ifYouWantToSeeMoreDocuments") }}
             </p>
             <q-btn
               @click="signupDialogState = true"
@@ -82,30 +81,30 @@
               class="mr-0 radius-6"
               no-caps
             >
-              <p class="q-mb-none q-my-xs">Registrierung Gastzugang</p>
+              <p class="q-mb-none q-my-xs">{{ $t("guestRegistration") }}</p>
             </q-btn>
           </div>
         </div>
       </div>
       <div class="text-center text-white font-16 q-py-md"  style="background-color: #40407B;">
-        {{ currentYear }} © Amt Viöl. All rights reserved
+        {{ currentYear }} © {{ $t("amtViol") }}. {{ $t("allRightsReserved") }}
         <p
           @click="showCookieBox"
           class="q-ml-md inline-block cursor-pointer text-blue-grey-1"
         >
-          Cookie-Einstellungen ändern
+          {{ $t("Change Cookie settings") }}
         </p>
         <p
           @click="$router.push({ path: '/impressum' })"
           class="q-ml-md inline-block cursor-pointer text-blue-grey-1"
         >
-          Impressum
+          {{ $t("imprint") }}
         </p>
         <p
           @click="$router.push({ path: '/datenschutzerklaerung' })"
           class="q-ml-md inline-block cursor-pointer text-blue-grey-1"
         >
-          Datenschutzerklaerung
+          {{ $t("dataProtectionDeclaration") }}
         </p>
       </div>
     </q-page-container>

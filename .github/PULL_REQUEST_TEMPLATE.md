@@ -4,11 +4,7 @@
 
 Please include a summary of the changes and the motivation behind them. If this fixes an issue, please reference it here.
 
-Fixes # (issue)
-
 ## Type of Change
-
-Please delete options that are not relevant:
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
@@ -23,7 +19,3 @@ Please delete options that are not relevant:
 - [ ] I have added tests that prove my fix is effective or that my feature works.
 - [ ] New and existing unit tests pass locally with my changes.
 - [ ] I have checked my code and corrected any misspellings.
-
-## Screenshots (if applicable)
-
-Add screenshots to help explain your changes if applicable.

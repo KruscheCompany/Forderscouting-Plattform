@@ -4,10 +4,7 @@
       <p class="text-center font-36 text-weight-regular q-my-lg ppeditorial">
         {{ $t("newProjectIdeaForm.title") }}
       </p>
-      <div
-        class="bg-white radius-20 q-py-lg"
-        :class="{ 'q-px-md': $q.screen.gt.sm }"
-      >
+      <div class="bg-white radius-20 q-py-lg" :class="{ 'q-px-md': $q.screen.gt.sm }">
         <q-form
           @validation-error="scrollToInvalidElement"
           ref="newProjectIdeaForm"
@@ -26,11 +23,11 @@
                 class="no-shadow input-radius-6"
                 :placeholder="$t('projectIdeaPlaceholder.title')"
                 v-model="form.title"
-                :rules="[val => !!val || $t('Required')]"
+                :rules="[(val) => !!val || $t('Required')]"
               />
             </div>
           </div>
-          <div class="row items-center ">
+          <div class="row items-center">
             <div class="col-12 col-md-4">
               <p class="font-16 no-margin">
                 {{ $t("newProjectIdeaForm.contactPerson") }}
@@ -79,9 +76,7 @@
             <div class="col-12 col-md-8">
               <div
                 class="row q-col-gutter-x-md"
-                :class="
-                  $q.screen.gt.sm ? 'q-col-gutter-y-lg' : 'q-col-gutter-y-md'
-                "
+                :class="$q.screen.gt.sm ? 'q-col-gutter-y-lg' : 'q-col-gutter-y-md'"
               >
                 <div class="col-12 col-md-6">
                   <q-input
@@ -118,9 +113,7 @@
                     class="no-shadow input-radius-6 disabledClass"
                     :placeholder="$t('projectIdeaPlaceholder.telephone')"
                     :value="
-                      !!project
-                        ? form.info.phone
-                        : !!userDetails && userDetails.phone
+                      !!project ? form.info.phone : !!userDetails && userDetails.phone
                     "
                     disable
                   />
@@ -136,10 +129,10 @@
                   />
                 </div>
                 <div class="col-12">
-                <MunicipalityCities
-                :currentMunicipality="form.info.location"
-                @update:city="form.info.location = $event"
-                />
+                  <MunicipalityCities
+                    :currentMunicipality="form.info.location"
+                    @update:city="form.info.location = $event"
+                  />
                 </div>
               </div>
             </div>
@@ -170,7 +163,7 @@
                 v-model="form.visibility"
                 :options="visibilityOptions"
                 emit-value
-                :rules="[val => !!val || $t('Required')]"
+                :rules="[(val) => !!val || $t('Required')]"
                 class="no-shadow input-radius-6"
                 options-selected-class="text-primary"
               >
@@ -250,9 +243,17 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                :placeholder="$t('projectIdeaPlaceholder.descripeProjectStartingCondition')" v-model="form.details.startingCondition"
-                :rules="[val => !!val || $t('Required')]" />
+              <q-input
+                outlined
+                type="textarea"
+                rows="10"
+                class="no-shadow input-radius-6"
+                :placeholder="
+                  $t('projectIdeaPlaceholder.descripeProjectStartingCondition')
+                "
+                v-model="form.details.startingCondition"
+                :rules="[(val) => !!val || $t('Required')]"
+              />
             </div>
           </div>
           <!-- Project Starting Condition End -->
@@ -270,7 +271,7 @@
                 class="no-shadow input-radius-6"
                 :placeholder="$t('projectIdeaPlaceholder.descripeProject')"
                 v-model="form.details.content"
-                :rules="[val => !!val || $t('Required')]"
+                :rules="[(val) => !!val || $t('Required')]"
               />
             </div>
           </div>
@@ -288,7 +289,7 @@
                 class="no-shadow input-radius-6"
                 :placeholder="$t('projectIdeaPlaceholder.describeProjectGoals')"
                 v-model="form.details.goals"
-                :rules="[val => !!val || $t('Required')]"
+                :rules="[(val) => !!val || $t('Required')]"
               />
             </div>
           </div>
@@ -306,7 +307,7 @@
                 class="no-shadow input-radius-6"
                 :placeholder="$t('newProjectIdeaForm.projectValue&Benefits')"
                 v-model="form.details.valuesAndBenefits"
-                :rules="[val => !!val || $t('Required')]"
+                :rules="[(val) => !!val || $t('Required')]"
               />
             </div>
           </div>
@@ -343,7 +344,7 @@
                 v-model="form.details.investive"
                 spread
                 no-caps
-                :rules="[val => !!val || $t('Required')]"
+                :rules="[(val) => !!val || $t('Required')]"
                 toggle-color="yellow"
                 padding="12px 10px"
                 color="transparent"
@@ -421,8 +422,11 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <Checklists :requiresValidation="false" :editing="!!project ? project.checklists : []"
-                @update:linkToProject="form.checklists = $event" />
+              <Checklists
+                :requiresValidation="false"
+                :editing="!!project ? project.checklists : []"
+                @update:linkToProject="form.checklists = $event"
+              />
             </div>
           </div>
           <div class="row">
@@ -449,14 +453,10 @@
                     bg-color="white"
                     :placeholder="$t('projectIdeaPlaceholder.plannedStartDate')"
                     @click="$refs.qPlannedStartDateProxy.show()"
-                    :rules="[val => !!val || $t('Required')]"
+                    :rules="[(val) => !!val || $t('Required')]"
                   >
                     <template v-slot:append>
-                      <q-icon
-                        name="event"
-                        color="blue-5"
-                        class="cursor-pointer"
-                      >
+                      <q-icon name="event" color="blue-5" class="cursor-pointer">
                         <q-popup-proxy
                           ref="qPlannedStartDateProxy"
                           transition-show="scale"
@@ -496,14 +496,10 @@
                     bg-color="white"
                     :placeholder="$t('projectIdeaPlaceholder.plannedEndDate')"
                     @click="$refs.qPlannedEndDateProxy.show()"
-                    :rules="[val => !!val || $t('Required')]"
+                    :rules="[(val) => !!val || $t('Required')]"
                   >
                     <template v-slot:append>
-                      <q-icon
-                        name="event"
-                        color="blue-5"
-                        class="cursor-pointer"
-                      >
+                      <q-icon name="event" color="blue-5" class="cursor-pointer">
                         <q-popup-proxy
                           ref="qPlannedEndDateProxy"
                           transition-show="scale"
@@ -560,9 +556,7 @@
           </div>
           <div class="row items-baseline">
             <div class="col-12 col-md-4">
-              <p class="font-16 no-margin">
-                Uploads
-              </p>
+              <p class="font-16 no-margin">{{ $t("projectIdeaPlaceholder.uploads") }}</p>
             </div>
             <div class="col-12 col-md-8">
               <div class="row q-col-gutter-md">
@@ -587,10 +581,7 @@
                       <q-icon color="white" class="on-right" name="upload" />
                     </template>
                   </q-file>
-                  <div
-                    class="q-mt-sm"
-                    v-if="form.media && form.media.length > 0"
-                  >
+                  <div class="q-mt-sm" v-if="form.media && form.media.length > 0">
                     <div
                       class="q-col-gutter-x-sm row radius-6 shadow-1 q-mt-sm items-center q-pa-sm"
                       v-for="(image, index) in form.media"
@@ -598,11 +589,7 @@
                     >
                       <div class="col-auto">
                         <q-avatar rounded size="48px">
-                          <q-img
-                            :ratio="1"
-                            contain
-                            :src="imgPreview(image).url"
-                          />
+                          <q-img :ratio="1" contain :src="imgPreview(image).url" />
                         </q-avatar>
                       </div>
                       <div class="col-8">
@@ -631,7 +618,7 @@
                           @click.prevent.stop="addCaption(image, index)"
                           text-color="primary"
                           dense
-                          class="radius-6 "
+                          class="radius-6"
                           no-caps
                           flat
                         >
@@ -661,10 +648,7 @@
                       <q-icon color="white" class="on-right" name="upload" />
                     </template>
                   </q-file>
-                  <div
-                    class="q-mt-sm"
-                    v-if="form.files && form.files.length > 0"
-                  >
+                  <div class="q-mt-sm" v-if="form.files && form.files.length > 0">
                     <q-item
                       class="radius-6"
                       v-for="(file, index) in form.files"
@@ -673,9 +657,7 @@
                     >
                       <q-item-section side>
                         <q-avatar rounded size="48px">
-                          <small>{{
-                            imgPreview(file).name.split(".")[1]
-                          }}</small>
+                          <small>{{ imgPreview(file).name.split(".")[1] }}</small>
                         </q-avatar>
                       </q-item-section>
                       <q-item-section>
@@ -709,9 +691,7 @@
             <div class="col-5 col-md-3 q-ml-sm">
               <q-btn
                 :label="$t('publishButton.publish')"
-                @click="
-                  project ? editProjectIdea(true) : submitNewProjectIdea(true)
-                "
+                @click="project ? editProjectIdea(true) : submitNewProjectIdea(true)"
                 size="16px"
                 color="primary"
                 :loading="isLoading"
@@ -760,7 +740,7 @@ export default {
     Links,
     Checklists,
     Fundings,
-    ImageDialog
+    ImageDialog,
   },
   data() {
     return {
@@ -778,7 +758,7 @@ export default {
           email: "",
           location: "",
           streetNo: "",
-          postalCode: ""
+          postalCode: "",
         },
         details: {
           startingCondition: "",
@@ -787,7 +767,7 @@ export default {
           valuesAndBenefits: "",
           partner: "",
           investive: true,
-          status: ""
+          status: "",
         },
         fundingGuideline: [],
         checklists: [],
@@ -798,10 +778,10 @@ export default {
         estimatedCosts: [],
         links: [],
         media: null,
-        files: null
+        files: null,
       },
       isLoading: false,
-      dataLoaded: true
+      dataLoaded: true,
     };
   },
   methods: {
@@ -834,7 +814,7 @@ export default {
       return {
         url: !!val.id ? `${this.appUrl}${val.url}` : URL.createObjectURL(val),
         name: val.name,
-        caption: val.caption
+        caption: val.caption,
       };
     },
     removeImg(index) {
@@ -852,39 +832,34 @@ export default {
     },
     submitNewProjectIdea(val) {
       const published = val;
-      this.$refs.newProjectIdeaForm.validate().then(async success => {
+      this.$refs.newProjectIdeaForm.validate().then(async (success) => {
         if (success) {
           this.isLoading = true;
           await this.checkOptionalParameters();
-          const res = await this.$store.dispatch(
-            "project/createNewProjectIdea",
-            {
-              data: {
-                ...this.form,
-                published: published,
-                info: {
-                  ...this.form.info,
-                  contactName: this.userDetails.fullName,
-                  phone: this.userDetails.phone,
-                  email: this.user.email,
-                  streetNo: this.userDetails.streetNo,
-                  postalCode: this.userDetails.postalCode
-                },
-                municipality: {
-                  id:
-                    this.userDetails.municipality &&
-                    this.userDetails.municipality.id
-                },
-                owner: {
-                  id: this.user && this.user.id
-                }
-              }
-            }
-          );
+          const res = await this.$store.dispatch("project/createNewProjectIdea", {
+            data: {
+              ...this.form,
+              published: published,
+              info: {
+                ...this.form.info,
+                contactName: this.userDetails.fullName,
+                phone: this.userDetails.phone,
+                email: this.user.email,
+                streetNo: this.userDetails.streetNo,
+                postalCode: this.userDetails.postalCode,
+              },
+              municipality: {
+                id: this.userDetails.municipality && this.userDetails.municipality.id,
+              },
+              owner: {
+                id: this.user && this.user.id,
+              },
+            },
+          });
           this.isLoading = false;
         } else {
           const elements = this.$refs.newProjectIdeaForm.getValidationComponents();
-          elements.map(el => {
+          elements.map((el) => {
             if (el.validate) {
               el.validate();
             }
@@ -894,10 +869,7 @@ export default {
     },
     async checkOptionalParameters() {
       if (!this.project) {
-        if (
-          !!this.form.fundingGuideline &&
-          this.form.fundingGuideline.length < 1
-        ) {
+        if (!!this.form.fundingGuideline && this.form.fundingGuideline.length < 1) {
           delete this.form.fundingGuideline;
         }
         if (!this.form.details.status) {
@@ -907,20 +879,20 @@ export default {
     },
     editProjectIdea(val) {
       const published = val;
-      this.$refs.newProjectIdeaForm.validate().then(async success => {
+      this.$refs.newProjectIdeaForm.validate().then(async (success) => {
         if (success) {
           this.isLoading = true;
           await this.checkOptionalParameters();
           const res = await this.$store.dispatch("project/editProjectIdea", {
             data: {
               ...this.form,
-              published: published
-            }
+              published: published,
+            },
           });
           this.isLoading = false;
         } else {
           const elements = this.$refs.newProjectIdeaForm.getValidationComponents();
-          elements.map(el => {
+          elements.map((el) => {
             if (el.validate) {
               el.validate();
             }
@@ -933,7 +905,7 @@ export default {
         this.dataLoaded = false;
         this.$q.loading.show();
         await this.$store.dispatch("project/getSpecificProject", {
-          id: Number(this.$route.params.id)
+          id: Number(this.$route.params.id),
         });
         this.form = {
           ...this.form,
@@ -941,15 +913,15 @@ export default {
             JSON.stringify({
               ...this.project,
               files: this.project.files,
-              media: this.project.media
+              media: this.project.media,
             })
-          )
+          ),
         };
         this.$q.loading.hide();
         this.dataLoaded = true;
       }
       this.$store.dispatch("userCenter/getUsers");
-    }
+    },
   },
   computed: {
     datepickerLocale() {
@@ -961,7 +933,7 @@ export default {
           this.$t("Wednesday"),
           this.$t("Thursday"),
           this.$t("Friday"),
-          this.$t("Saturday")
+          this.$t("Saturday"),
         ],
         daysShort: [
           this.$t("Sun"),
@@ -970,7 +942,7 @@ export default {
           this.$t("Wed"),
           this.$t("Thu"),
           this.$t("Fri"),
-          this.$t("Sat")
+          this.$t("Sat"),
         ],
         months: [
           this.$t("January"),
@@ -984,7 +956,7 @@ export default {
           this.$t("September"),
           this.$t("October"),
           this.$t("November"),
-          this.$t("December")
+          this.$t("December"),
         ],
         monthsShort: [
           this.$t("Jan"),
@@ -998,8 +970,8 @@ export default {
           this.$t("Sep"),
           this.$t("Oct"),
           this.$t("Nov"),
-          this.$t("Dec")
-        ]
+          this.$t("Dec"),
+        ],
       };
     },
     appUrl() {
@@ -1007,8 +979,7 @@ export default {
     },
     userDetails() {
       return (
-        this.$store.state.userCenter.user &&
-        this.$store.state.userCenter.user.userDetails
+        this.$store.state.userCenter.user && this.$store.state.userCenter.user.userDetails
       );
     },
     user() {
@@ -1024,22 +995,22 @@ export default {
       return [
         {
           value: "only for me",
-          label: this.$t("visibility.onlyMe")
+          label: this.$t("visibility.onlyMe"),
         },
         {
           value: "all users",
-          label: this.$t("visibility.allUsers")
+          label: this.$t("visibility.allUsers"),
         },
         {
           value: "listed only",
-          label: this.$t("visibility.listedOnly")
-        }
+          label: this.$t("visibility.listedOnly"),
+        },
       ];
     },
     investiveNoninvestiveOptions() {
       return [
         { label: this.$t("Investive"), value: true },
-        { label: this.$t("Non-Investive"), value: false }
+        { label: this.$t("Non-Investive"), value: false },
       ];
     },
     projectStatuses() {
@@ -1047,25 +1018,25 @@ export default {
         { label: this.$t("projectStatusesOptions.idea"), value: "Idea" },
         {
           label: this.$t("projectStatusesOptions.development"),
-          value: "Development"
+          value: "Development",
         },
         {
           label: this.$t("projectStatusesOptions.pre-planning"),
-          value: "Pre-Planning"
+          value: "Pre-Planning",
         },
         {
           label: this.$t("projectStatusesOptions.detailedPlanning"),
-          value: "Detailed-Planning"
-        }
+          value: "Detailed-Planning",
+        },
       ];
-    }
+    },
   },
   mounted() {
     this.setData();
   },
   beforeDestroy() {
     this.$q.loading.hide();
-  }
+  },
 };
 </script>
 

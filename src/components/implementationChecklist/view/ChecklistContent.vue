@@ -85,7 +85,7 @@
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">Besitzer*in</p>
+                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("Owner") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{
                           (!!checklist.owner && checklist.owner.username) || ""
@@ -93,13 +93,13 @@
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">Typ</p>
+                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.type") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
-                        Umsetzungscheckliste
+                        {{ $t("category&Keyword.implementationChecklist") }}
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">Sichtbarkeit</p>
+                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.visibility") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{
                           checklist.visibility === "only for me"
@@ -4593,7 +4593,7 @@ export default {
       })
       if(progress === 100) {
         setTimeout(() => {
-          this.$q.loading.hide() 
+          this.$q.loading.hide()
         }, 500);
       }
     }

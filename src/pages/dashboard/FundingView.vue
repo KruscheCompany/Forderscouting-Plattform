@@ -1,8 +1,5 @@
 <template>
-  <q-page
-    class=" q-mt-lg bg-blue-1"
-    :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'"
-  >
+  <q-page class="q-mt-lg bg-blue-1" :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'">
     <FundingContent />
   </q-page>
 </template>
@@ -12,12 +9,12 @@ import FundingContent from "components/funding/view/FundingContent.vue";
 export default {
   name: "FundingView",
   components: {
-    FundingContent
+    FundingContent,
   },
   data() {
     return {};
   },
-  methods: {}
+  methods: {},
 };
 </script>
 

@@ -6,25 +6,34 @@
           <div class="row">
             <div class="col-12 q-mb-md">
               <h1 class="font-50 text-weight-600 q-mb-none ppeditorial">
-                Förderscouting-Plattform
+                {{ $t("fundingScoutingPlatform") }}
               </h1>
               <p class="ppeditorial">
-                Das Projekt „Interkommunale Förderscouting-Plattform
-                Nordfriesland“ ist ein Modellvorhaben im Rahmen der
-                Förderinitiative „Heimat 2.0“ des Bundesministeriums für Wohnen,
-                Stadtentwicklung und Bauwesen (BMWSB) in Zusammenarbeit mit dem
-                Bundesinstitut für Bau-, Stadt- und Raumforschung (BBSR).
+                {{ $t("projectDescriptionDetailed") }}
               </p>
-              <br>
+              <br />
               <strong class="ppeditorial">
-                Um sich als Nutzer (Verwaltung) zu registrieren, kontaktieren Sie bitte foerderscouting-plattform@amt-vioel.de
+                {{ $t("contactForRegistration") }}
               </strong>
             </div>
             <div class="col-12 col-md-6 q-mx-auto">
-              <q-input class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
-                placeholder="Dokument finden" filled v-model="documentSearch" @keyup.enter="searchForDocument" role="searcbox">
+              <q-input
+                class="no-shadow q-mb-lg input-radius-4"
+                color="primary"
+                bg-color="white"
+                :placeholder="$t('findDocument')"
+                filled
+                v-model="documentSearch"
+                @keyup.enter="searchForDocument"
+                role="searcbox"
+              >
                 <template v-slot:append>
-                  <q-icon class="cursor-pointer" @click="searchForDocument" color="primary" name="search" />
+                  <q-icon
+                    class="cursor-pointer"
+                    @click="searchForDocument"
+                    color="primary"
+                    name="search"
+                  />
                 </template>
               </q-input>
             </div>
@@ -41,16 +50,25 @@
                 <q-card class="full-height full-width bg-white radius-20 shadow-1">
                   <q-card-section>
                     <div class="row">
-                      <div class="col-12 text-center" style="position: absolute; top: -20px; right: 10px;">
-                        <q-img spinner-color="primary" src="../assets/Idea.svg" style="height: 100%; max-width: 60px" />
+                      <div
+                        class="col-12 text-center"
+                        style="position: absolute; top: -20px; right: 10px"
+                      >
+                        <q-img
+                          spinner-color="primary"
+                          src="../assets/Idea.svg"
+                          style="height: 100%; max-width: 60px"
+                        />
                       </div>
                       <div class="col-12 text-center">
-                        <div class="font-16 text-weight-bold q-mb-none textColor ppeditorial" style="margin-top: 60px">
-                          Projektideen
+                        <div
+                          class="font-16 text-weight-bold q-mb-none textColor ppeditorial"
+                          style="margin-top: 60px"
+                        >
+                          {{ $t("projectIdeas") }}
                         </div>
                         <p class="q-mb-none textColor">
-                          Nutzer*innen haben die Möglichkeit eigene Projektideen
-                          anzulegen und im Netzwerk zu teilen.
+                          {{ $t("projectIdeasDescription") }}
                         </p>
                       </div>
                     </div>
@@ -61,17 +79,25 @@
                 <q-card class="full-height full-width radius-20 shadow-1">
                   <q-card-section>
                     <div class="row">
-                      <div class="col-12 text-center" style="position: absolute; top: -20px; right: 10px;">
-                        <q-img spinner-color="primary" src="../assets/Fundings.svg"
-                          style="height: 100%; max-width: 60px;" />
+                      <div
+                        class="col-12 text-center"
+                        style="position: absolute; top: -20px; right: 10px"
+                      >
+                        <q-img
+                          spinner-color="primary"
+                          src="../assets/Fundings.svg"
+                          style="height: 100%; max-width: 60px"
+                        />
                       </div>
                       <div class="col-12 text-center">
-                        <div class="font-16 text-weight-bold q-mb-none textColor ppeditorial" style="margin-top: 60px;">
-                          Fördermittel-Kurzinfos
+                        <div
+                          class="font-16 text-weight-bold q-mb-none textColor ppeditorial"
+                          style="margin-top: 60px"
+                        >
+                          {{ $t("fundingShortInfos") }}
                         </div>
                         <p class="q-mb-none textColor">
-                          Kurze und übersichtliche Beschreibung aktueller
-                          Fördermöglichkeiten.
+                          {{ $t("fundingShortInfosDescription") }}
                         </p>
                       </div>
                     </div>
@@ -82,17 +108,25 @@
                 <q-card class="full-height full-width radius-20 shadow-1">
                   <q-card-section>
                     <div class="row">
-                      <div class="col-12 text-center" style="position: absolute; top: -20px; right: 10px;">
-                        <q-img spinner-color="primary" src="../assets/Checklists.svg"
-                          style="height: 100%; max-width: 80px" />
+                      <div
+                        class="col-12 text-center"
+                        style="position: absolute; top: -20px; right: 10px"
+                      >
+                        <q-img
+                          spinner-color="primary"
+                          src="../assets/Checklists.svg"
+                          style="height: 100%; max-width: 80px"
+                        />
                       </div>
                       <div class="col-12 text-center">
-                        <div class="font-16 text-weight-bold q-mb-none textColor ppeditorial" style="margin-top: 60px;">
-                          Umsetzungschecklisten
+                        <div
+                          class="font-16 text-weight-bold q-mb-none textColor ppeditorial"
+                          style="margin-top: 60px"
+                        >
+                          {{ $t("implementationChecklists") }}
                         </div>
                         <p class="q-mb-none textColor">
-                          Förderprojekte von der Projektidee bis zum
-                          Zuwendungsbescheid ansehen und nachnutzen.
+                          {{ $t("implementationChecklistsDescription") }}
                         </p>
                       </div>
                     </div>
@@ -105,64 +139,61 @@
         <div class="row q-mt-lg justify-center">
           <div class="col-12 col-md-8 q-mt-lg textColor">
             <p class="font-16 text-left textColor">
-              Ziel der Plattform ist die langfristige Stärkung der
-              Handlungsfähigkeit der Kommunen im Rahmen des allgemeinen
-              Entwicklungsprozesses „von der Idee zum Projekt“. Vor dem
-              Hintergrund der Entwicklung lebenswerter Kommunen und der
-              Sicherung von Daseinsvorsorgeinfrastrukturen wird es für
-              strukturschwache Regionen immer essenzieller, vorhandene
-              Entwicklungsressourcen (Projektwissen, Personal und Fördermittel)
-              in einem Wissensnetzwerk zu bündeln und zu teilen.
+              {{ $t("platformGoal") }}
             </p>
             <p class="font-16 text-left">
-              Die Plattform bildet ein digitales Assistenzsystem für die
-              Entwicklung, Förderung und Umsetzung von kommunalen Projekten. Im
-              Ergebnis entsteht eine Wissensplattform, die
+              {{ $t("platformDescription") }}
             </p>
             <ul class="homepageList">
               <li class="font-16 text-left q-mb-md">
-                das jeweilige Projektideen-Management der Kommunen vereinfacht
+                {{ $t("simplifyProjectManagement") }}
               </li>
               <li class="font-16 text-left q-mb-md">
-                unterschiedliche Projektideen und geeigneten Fördermöglichkeiten
-                direkter verbindet und
+                {{ $t("connectProjectsAndFunding") }}
               </li>
               <li class="font-16 text-left q-mb-md">
-                Erfahrungen zu Projektumsetzungen in Form von Checklisten als
-                „Kurzer Dienstweg 2.0“ bereithält.
+                {{ $t("provideImplementationChecklists") }}
               </li>
             </ul>
             <p class="font-16 text-left">
-              Zur weiteren Verstetigung werden die nordfriesischen Kommunen
-              Nutzungsbedingungen definieren, die den Zugang nach der Testphase
-              für weitere Kommunen ermöglicht.
+              {{ $t("sustainabilityNote") }}
             </p>
             <p class="font-16 text-left">
-              Der Zugang zur Plattform ist daher aktuell begrenzt. Um einen
-              User-Account zu beantragen klicken Sie zu einem späteren Zeitpunkt
-              bitte auf das entsprechende Feld im Login-Fenster.
+              {{ $t("limitedAccessNote") }}
             </p>
           </div>
         </div>
         <!-- Videos -->
         <div class="row q-mt-lg">
           <div class="col-12 col-md-6 q-mt-lg textColor">
-
             <div class="flex justify-center">
-              <span class="q-pa-xl font-18 ppeditorial">Wie kann
-                mich die
-                Förderscouting-Plattform bei der
-                Projektarbeit unterstützen?</span>
-              <video controls poster="../assets/image1.png" style=" width: 75%; height: auto;">
-                <source src="https://api.foerderscouting-plattform.de/uploads/Plattformpotentiale_d0f41f78dd.mp4">
+              <span class="q-pa-xl font-18 ppeditorial">{{
+                $t("howCanPlatformSupportProject")
+              }}</span>
+              <video
+                controls
+                poster="../assets/image1.png"
+                style="width: 75%; height: auto"
+              >
+                <source
+                  src="https://api.foerderscouting-plattform.de/uploads/Plattformpotentiale_d0f41f78dd.mp4"
+                />
               </video>
             </div>
           </div>
           <div class="col-12 col-md-6 q-mt-lg textColor">
             <div class="flex justify-center">
-              <span class="q-pa-xl font-18 ppeditorial">Wie funktioniert die Förderscouting-Plattform?</span>
-              <video controls poster="../assets/image2.png" style="width: 75%; height: auto;">
-                <source src="https://api.foerderscouting-plattform.de/uploads/Projektarbeit_acbd6b13eb.mp4">
+              <span class="q-pa-xl font-18 ppeditorial">{{
+                $t("howDoesPlatformWork")
+              }}</span>
+              <video
+                controls
+                poster="../assets/image2.png"
+                style="width: 75%; height: auto"
+              >
+                <source
+                  src="https://api.foerderscouting-plattform.de/uploads/Projektarbeit_acbd6b13eb.mp4"
+                />
               </video>
             </div>
           </div>
@@ -174,23 +205,38 @@
         <div class="col-12 col-md-8">
           <div class="row q-col-gutter-xl">
             <div class="col-12 col-md-4">
-              <q-card class="full-height full-width  shadow-0">
+              <q-card class="full-height full-width shadow-0">
                 <q-card-section class="full-height flex flex-center">
-                  <q-img spinner-color="primary" src="logo-2.svg" height="150px" contain />
+                  <q-img
+                    spinner-color="primary"
+                    src="logo-2.svg"
+                    height="150px"
+                    contain
+                  />
                 </q-card-section>
               </q-card>
             </div>
             <div class="col-12 col-md-4">
               <q-card class="full-height full-width shadow-0">
                 <q-card-section class="full-height flex center">
-                  <q-img spinner-color="primary" src="logo-1.svg" height="150px" contain />
+                  <q-img
+                    spinner-color="primary"
+                    src="logo-1.svg"
+                    height="150px"
+                    contain
+                  />
                 </q-card-section>
               </q-card>
             </div>
             <div class="col-12 col-md-4">
-              <q-card class="full-height full-width  shadow-0">
+              <q-card class="full-height full-width shadow-0">
                 <q-card-section class="full-height flex flex-center">
-                  <q-img spinner-color="primary" src="logo-3.svg" height="150px" contain />
+                  <q-img
+                    spinner-color="primary"
+                    src="logo-3.svg"
+                    height="150px"
+                    contain
+                  />
                 </q-card-section>
               </q-card>
             </div>
@@ -206,17 +252,17 @@ export default {
   name: "index",
   data() {
     return {
-      documentSearch: ""
+      documentSearch: "",
     };
   },
   methods: {
     searchForDocument() {
       this.$router.push({
         name: "documents",
-        query: { q: this.documentSearch }
+        query: { q: this.documentSearch },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

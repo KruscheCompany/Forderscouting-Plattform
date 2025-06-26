@@ -40,11 +40,7 @@
     <div class="overflow-hidden">
       <div class="row justify-center">
         <div class="col-12 col-lg-8 col-xl-7">
-          <q-tab-panels
-            class="radius-20 shadow-1 q-mb-xl"
-            v-model="tab"
-            animated
-          >
+          <q-tab-panels class="radius-20 shadow-1 q-mb-xl" v-model="tab" animated>
             <q-tab-panel name="generalData">
               <GeneralData />
             </q-tab-panel>
@@ -71,26 +67,26 @@ export default {
   components: {
     GeneralData,
     PersonalData,
-    Notifications
+    Notifications,
   },
   data() {
     return {
-      tab: this.$router.currentRoute.query.tab || "generalData"
+      tab: this.$router.currentRoute.query.tab || "generalData",
     };
   },
   watch: {
     tab() {
       this.getData();
-    }
+    },
   },
   methods: {
     getData() {
       this.$store.dispatch("userCenter/getUserDetails");
-    }
+    },
   },
   mounted() {
     this.getData();
-  }
+  },
 };
 </script>
 
