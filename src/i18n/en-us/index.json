@@ -77,7 +77,8 @@
     "SearchBtn": "Search Documents",
     "projectBtn": "Project Ideas",
     "fundingsBtn": "Fundings",
-    "checkListBtn": "Implementation Checklist"
+    "checkListBtn": "Implementation Checklist",
+    "importFundingBtn": "Import Funding"
   },
   "fundingsInfo": {
     "current": "Current funding information",
@@ -94,6 +95,31 @@
     "bookmark": "Bookmark",
     "archive": "Archive",
     "delete": "Delete"
+  },
+  "importFunding": {
+    "title": "Import Funding",
+    "selectFile": "Select files to import funding information from documents.",
+    "clickToUpload": "Click to upload or drag and drop",
+    "chooseFile": "Choose Files",
+    "fileTypes": "PDF, DOC, DOCX",
+    "maxFileSize": "Max 20 MB per file",
+    "uploadedFiles": "Uploaded Files",
+    "uploading": "Uploading...",
+    "complete": "Complete",
+    "fundingTitle": "Funding Title",
+    "titlePlaceholder": "Enter a custom title for this funding",
+    "import": "Import",
+    "rejectedFiles": "Some files were rejected. Please check file type and size restrictions.",
+    "selectAtLeastOneFile": "Please select at least one file to import.",
+    "importSuccess": "Files imported successfully!",
+    "importError": "Import failed. Please try again.",
+    "uploadError": "Failed to upload {fileName}: {error}",
+    "fileSizes": {
+      "bytes": "Bytes",
+      "kb": "KB",
+      "mb": "MB",
+      "gb": "GB"
+    }
   },
   "myDataHome": {
     "myData": "My Data",

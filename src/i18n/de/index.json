@@ -77,7 +77,8 @@
     "SearchBtn": "Dokumentensuche",
     "projectBtn": "Projektideen",
     "fundingsBtn": "Fördermittel",
-    "checkListBtn": "Umsetzungscheckliste"
+    "checkListBtn": "Umsetzungscheckliste",
+    "importFundingBtn": "Förderung importieren"
   },
   "fundingsInfo": {
     "current": "Aktuelle Förder-Kurzinfos",
@@ -94,6 +95,31 @@
     "bookmark": "Merken",
     "archive": "Archivieren",
     "delete": "Löschen"
+  },
+  "importFunding": {
+    "title": "Förderung importieren",
+    "selectFile": "Wählen Sie Dateien aus, um Förderinformationen aus Dokumenten zu importieren.",
+    "clickToUpload": "Klicken Sie zum Hochladen oder ziehen Sie Dateien hierher",
+    "chooseFile": "Dateien auswählen",
+    "fileTypes": "PDF, DOC, DOCX",
+    "maxFileSize": "Max. 20 MB pro Datei",
+    "uploadedFiles": "Hochgeladene Dateien",
+    "uploading": "Wird hochgeladen...",
+    "complete": "Abgeschlossen",
+    "fundingTitle": "Förderungstitel",
+    "titlePlaceholder": "Geben Sie einen benutzerdefinierten Titel für diese Förderung ein",
+    "import": "Importieren",
+    "rejectedFiles": "Einige Dateien wurden abgelehnt. Bitte überprüfen Sie Dateityp und Größenbeschränkungen.",
+    "selectAtLeastOneFile": "Bitte wählen Sie mindestens eine Datei zum Importieren aus.",
+    "importSuccess": "Dateien erfolgreich importiert!",
+    "importError": "Import fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "uploadError": "Fehler beim Hochladen von {fileName}: {error}",
+    "fileSizes": {
+      "bytes": "Bytes",
+      "kb": "KB",
+      "mb": "MB",
+      "gb": "GB"
+    }
   },
   "myDataHome": {
     "myData": "Meine Daten",
