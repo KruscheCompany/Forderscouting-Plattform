@@ -53,7 +53,7 @@ const routes = [
       },
       {
         path: "/application/process/",
-        name: "ProjectDashboard",
+        name: "ApplicationProcess",
         meta: {
           title: "Project Dashboard",
           titleDE: "Projekt Dashboard",
@@ -62,7 +62,7 @@ const routes = [
           requireAdmin: false
         },
         icon: "/icons/Documents.svg",
-        component: () => import("pages/dashboard/ProjectDashboard.vue")
+        component: () => import("pages/dashboard/ApplicationProcess.vue")
       },
       {
         path: "/application/process/edit/:projectId",
@@ -75,7 +75,7 @@ const routes = [
           requireAdmin: false
         },
         icon: "/icons/Documents.svg",
-        component: () => import("pages/dashboard/ProjectDashboard.vue")
+        component: () => import("pages/dashboard/ApplicationProcess.vue")
       },
       {
         path: "/application/process/view/:projectId",
