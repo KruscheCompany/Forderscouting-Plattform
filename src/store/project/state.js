@@ -3,6 +3,7 @@ export default function() {
     projects: [],
     project: null,
     tempCategories: [],
-    tempTags: []
+    tempTags: [],
+    createdProjectIdea: null
   };
 }
