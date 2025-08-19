@@ -10,6 +10,7 @@ import tag from "./tag";
 import municipality from "./municipality";
 import funding from "./funding";
 import implementationChecklist from "./implementationChecklist";
+import ai from "./ai";
 
 Vue.use(Vuex);
 /*
@@ -32,7 +33,8 @@ export default function(/* { ssrContext } */) {
       tag,
       municipality,
       funding,
-      implementationChecklist
+      implementationChecklist,
+      ai
     },
     plugins: [
       createPersistedState({
