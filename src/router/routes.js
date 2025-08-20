@@ -52,6 +52,44 @@ const routes = [
         component: () => import("pages/dashboard/Home.vue")
       },
       {
+        path: "/application/process/",
+        name: "ApplicationProcess",
+        meta: {
+          title: "Project Dashboard",
+          titleDE: "Projekt Dashboard",
+          showInNavigation: false,
+          requireAuth: true,
+          requireAdmin: false
+        },
+        icon: "/icons/Documents.svg",
+        component: () => import("pages/dashboard/ApplicationProcess.vue")
+      },
+      {
+        path: "/application/process/edit/:projectId",
+        name: "EditApplicationProcess",
+        meta: {
+          title: "Edit Project Dashboard",
+          titleDE: "Edit Projekt Dashboard",
+          showInNavigation: false,
+          requireAuth: true,
+          requireAdmin: false
+        },
+        icon: "/icons/Documents.svg",
+        component: () => import("pages/dashboard/ApplicationProcess.vue")
+      },
+      {
+        path: "/application/process/view/:projectId",
+        name: "ViewApplicationProcess",
+        meta: {
+          title: "Details of the project Idea",
+          titleDE: "Details zur Projektidee",
+          backLink: "/user/data",
+          requireAuth: true,
+          requireAdmin: false
+        },
+        component: () => import("pages/dashboard/ProjectView.vue")
+      },
+      {
         path: "/overview",
         name: "DataOverview",
         meta: {

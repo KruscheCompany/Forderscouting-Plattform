@@ -183,11 +183,9 @@ export default {
     isValidFile(file) {
       const validTypes = [
         'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
       ];
 
-      const maxSize = 20 * 1024 * 1024; // 20MB
+      const maxSize = 32 * 1024 * 1024; // 32MB
 
       return validTypes.includes(file.type) && file.size <= maxSize;
     },
@@ -252,58 +250,43 @@ export default {
     },
 
     async uploadFile(fileData, index) {
-      return new Promise((resolve, reject) => {
+      try {
         // Mark as uploading
         this.$set(this.uploadedFiles[index], 'uploading', true);
         this.$set(this.uploadedFiles[index], 'progress', 0);
 
-        // Create FormData
-        const formData = new FormData();
-        formData.append('data', fileData.file);
-
-        // Add title - use custom title if provided, otherwise use filename without extension
-        const title = fileData.title.trim() || fileData.name.replace(/\.[^/.]+$/, '');
-        formData.append('title', title);
-
-        // Make API request
-        this.$axios.post(
-          'https://kifo-ai-backend-674940847176.europe-west1.run.app/funding/file',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            },
-            onUploadProgress: (progressEvent) => {
-              const progress = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              this.$set(this.uploadedFiles[index], 'progress', progress);
-            }
+        // Call store action with progress callback
+        const response = await this.$store.dispatch('ai/uploadFundingFile', {
+          fileData,
+          onUploadProgress: (progressEvent) => {
+            const progress = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            this.$set(this.uploadedFiles[index], 'progress', progress);
           }
-        )
-          .then(response => {
-            // Mark as completed
-            this.$set(this.uploadedFiles[index], 'uploading', false);
-            this.$set(this.uploadedFiles[index], 'uploaded', true);
-            this.$set(this.uploadedFiles[index], 'progress', 100);
-            this.$set(this.uploadedFiles[index], 'response', response.data);
-            resolve(response);
-          })
-          .catch(error => {
-            // Mark as failed
-            this.$set(this.uploadedFiles[index], 'uploading', false);
-            this.$set(this.uploadedFiles[index], 'uploaded', false);
-            this.$set(this.uploadedFiles[index], 'progress', 0);
+        });
 
-            this.$q.notify({
-              type: 'negative',
-              message: this.$t('importFunding.uploadError', { fileName: fileData.name, error: error.message }),
-              position: 'top'
-            });
+        // Mark as completed
+        this.$set(this.uploadedFiles[index], 'uploading', false);
+        this.$set(this.uploadedFiles[index], 'uploaded', true);
+        this.$set(this.uploadedFiles[index], 'progress', 100);
+        this.$set(this.uploadedFiles[index], 'response', response.data);
 
-            reject(error);
-          });
-      });
+        return response;
+      } catch (error) {
+        // Mark as failed
+        this.$set(this.uploadedFiles[index], 'uploading', false);
+        this.$set(this.uploadedFiles[index], 'uploaded', false);
+        this.$set(this.uploadedFiles[index], 'progress', 0);
+
+        this.$q.notify({
+          type: 'negative',
+          message: this.$t('importFunding.uploadError', { fileName: fileData.name, error: error.message }),
+          position: 'top'
+        });
+
+        throw error;
+      }
     }
   }
 };
