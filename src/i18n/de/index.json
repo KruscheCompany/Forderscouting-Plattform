@@ -24,7 +24,8 @@
     "acceptBtn": "Annehmen",
     "declineBtn": "Ablehnen",
     "viewFundingBtn": "Förderung ansehen",
-    "markAsRead": "Als gelesen markieren"
+    "markAsRead": "Als gelesen markieren",
+    "documentAccessRequest": "möchte auf das Dokument zugreifen"
   },
   "personalData": {
     "personalData": "Persönliche Daten",
@@ -78,7 +79,8 @@
     "projectBtn": "Projektideen",
     "fundingsBtn": "Fördermittel",
     "checkListBtn": "Umsetzungscheckliste",
-    "importFundingBtn": "Förderung importieren"
+    "importFundingBtn": "Förderung importieren",
+    "applicationProcessBtn": "Antragsprozess"
   },
   "fundingsInfo": {
     "current": "Aktuelle Förder-Kurzinfos",
@@ -298,7 +300,8 @@
     "uploads": "Uploads",
     "saveDraft": "Entwurf speichern",
     "editDraft": "Entwurf bearbeiten",
-    "publish": "Speichern"
+    "publish": "Speichern",
+    "financialPlan": "Finanzplan"
   },
   "userSelector": {
     "title": "Benutzer*in auswählen"
@@ -830,6 +833,92 @@
     "activeMindAttribution": "Die Datenschutzerklärung wurde mithilfe der activeMind AG erstellt, den Experten für",
     "externalDataProtectionOfficer": "externe Datenschutzbeauftragte",
     "activeMindLink": "https://www.activemind.de/datenschutz/datenschutzbeauftragter/",
-    "versionInfo": "(Version #2020-09-30)."
+    "versionInfo": "(Version #2020-09-30).",
+    "warningMessage": "Die Änderungen, die Sie vorgenommen haben, führen zu einem Reset.",
+    "warningMessageDetail": "Die Änderungen, die Sie vorgenommen haben, führen zu einem Reset aller nachfolgenden Schritte.",
+    "warningMessageAction": "Diese Aktion kann nicht rückgängig gemacht werden.",
+    "Cancel": "Abbrechen",
+    "Continue": "Fortfahren",
+    "Projektidee erfolgreich bearbeitet": "Projektidea erfolgreich bearbeitet",
+    "projectView": {
+      "tabs": {
+        "aiFundingCheck": "KI-Förderprüfung",
+        "projectDevelopment": "Projektentwicklung",
+        "application": "Antrag"
+      },
+      "steps": {
+        "projectDescription": "Projektbeschreibung",
+        "fundingCheck": "Förderprüfung",
+        "openQuestions": "Offene Fragen",
+        "aptitude": "Eignung",
+        "basicDecision": "Grundsatzbeschluss"
+      }
+    },
+    "projectComponents": {
+      "fundingCheck": {
+        "title": "Förderrichtlinien - Vorschläge",
+        "refreshing": "Aktualisiere Förderungen...",
+        "refresh": "Förderungen aktualisieren",
+        "fehlanzeige": "Fehlanzeige - Keine passende Förderung",
+        "noFundingData": "Keine Förderinformationen verfügbar",
+        "noProjectData": "Keine Projektdaten für die Fördersuche verfügbar",
+        "successRefresh": "Förderungen erfolgreich aktualisiert",
+        "errorRefresh": "Fehler beim Aktualisieren der Förderungen",
+        "errorSaving": "Fehler beim Speichern der Förderauswahl",
+        "pleaseSelect": "Bitte wählen Sie mindestens eine Förderung aus oder markieren Sie \"Fehlanzeige\""
+      },
+      "qAndA": {
+        "title": "Offene Fragen & Antworten",
+        "noQuestions": "Keine offenen Fragen vorhanden.",
+        "noAnswer": "Keine Antwort verfügbar"
+      },
+      "aptitude": {
+        "title": "Empfehlung für politische Gremien",
+        "noRecommendation": "Keine Empfehlung verfügbar"
+      },
+      "decision": {
+        "title": "Grundsatzbeschluss",
+        "noDecisionAvailable": "Keine Entscheidung verfügbar"
+      },
+      "generalInfo": {
+        "municipalityPlaceholder": "Gemeinde/Verwaltung"
+      },
+      "contentDetails": {
+        "startingConditionDescription": "Kurzer Aufgabentext (Wer hatte die Idee? Wie wurde die Idee entwickelt? Was ist der Kontext in der Gemeinde/ Stadt?)",
+        "financingOverview": "Finanzierungsübersicht",
+        "financialPlanTitle": "Finanzplan (Kosten & Finanzierung)",
+        "timelineTitle": "Projektlaufzeit und Meilensteine",
+        "documentationTitle": "Projektdokumentation",
+        "costs": {
+          "Gesamtkosten": "Gesamtkosten",
+          "Personalkosten": "Personalkosten",
+          "Sachkosten": "Sachkosten",
+          "Investitionskosten": "Investitionskosten"
+        }
+      },
+      "contentDetailsView": {
+        "briefTaskText": "Kurzer Aufgabentext",
+        "files": "Dateien",
+        "noStartingCondition": "Keine Ausgangssituation verfügbar",
+        "noProjectContent": "Kein Projektinhalt verfügbar",
+        "noProjectGoals": "Keine Projektziele verfügbar",
+        "noValuesAndBenefits": "Kein Nutzen/Wirkung verfügbar",
+        "noFinancialPlan": "Keine Finanzplan-Beschreibung verfügbar",
+        "noTimeline": "Kein Zeitplan verfügbar",
+        "noDocumentation": "Keine Dokumentation verfügbar",
+        "noFilesUploaded": "Keine Dateien hochgeladen",
+        "notSpecified": "Nicht angegeben",
+        "tabs": {
+          "Ausgangssituation": "Ausgangssituation",
+          "Projektziele": "Projektziele",
+          "Projektinhalt": "Projektinhalt",
+          "Nutzen/Wirkung": "Nutzen/ Wirkung",
+          "Finanzplan": "Finanzplan",
+          "Zeitplan": "Zeitplan",
+          "Uploads": "Uploads",
+          "Links": "Links"
+        }
+      }
+    }
   }
 }

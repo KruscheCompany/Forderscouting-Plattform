@@ -24,7 +24,8 @@
     "acceptBtn": "Accept",
     "declineBtn": "Decline",
     "viewFundingBtn": "View Funding",
-    "markAsRead": "Mark as read"
+    "markAsRead": "Mark as read",
+    "documentAccessRequest": "would like to access document"
   },
   "personalData": {
     "personalData": "Personal Data",
@@ -295,7 +296,8 @@
     "links": "Links",
     "uploads": "Uploads",
     "saveDraft": "Save Draft",
-    "publish": "Publish"
+    "publish": "Publish",
+    "financialPlan": "Financial Plan"
   },
   "userSelector": {
     "title": "Select User"
@@ -778,5 +780,85 @@
   },
   "limitedAccessNote": "Access to the platform is therefore currently limited. To apply for a user account, please click on the corresponding field in the login window at a later time.",
   "howCanPlatformSupportProject": "How can the funding scouting platform support me in project work?",
-  "howDoesPlatformWork": "How does the funding scouting platform work?"
+  "howDoesPlatformWork": "How does the funding scouting platform work?",
+  "projectView": {
+    "tabs": {
+      "aiFundingCheck": "AI funding check",
+      "projectDevelopment": "Project development",
+      "application": "Application"
+    },
+    "steps": {
+      "projectDescription": "Project Description",
+      "fundingCheck": "Funding Check",
+      "openQuestions": "Open Questions",
+      "aptitude": "Aptitude",
+      "basicDecision": "Basic decision"
+    }
+  },
+  "projectComponents": {
+    "fundingCheck": {
+      "title": "Funding Guidelines - Suggestions",
+      "refreshing": "Updating funding options...",
+      "refresh": "Update funding options",
+      "fehlanzeige": "No match - No suitable funding",
+      "noFundingData": "No funding information available",
+      "noProjectData": "No project data available for funding search",
+      "successRefresh": "Funding options successfully updated",
+      "errorRefresh": "Error updating funding options",
+      "errorSaving": "Error saving funding selection",
+      "pleaseSelect": "Please select at least one funding option or mark \"No match\""
+    },
+    "qAndA": {
+      "title": "Open Questions & Answers",
+      "noQuestions": "No open questions available.",
+      "noAnswer": "No answer available"
+    },
+    "aptitude": {
+      "title": "Recommendation for political committees",
+      "noRecommendation": "No recommendation available"
+    },
+    "decision": {
+      "title": "Basic decision",
+      "noDecisionAvailable": "No decision available"
+    },
+    "generalInfo": {
+      "municipalityPlaceholder": "Municipality/Administration"
+    },
+    "contentDetails": {
+      "startingConditionDescription": "Brief task description (Who had the idea? How was the idea developed? What is the context in the municipality/city?)",
+      "financingOverview": "Financing Overview",
+      "financialPlanTitle": "Financial Plan (Costs & Financing)",
+      "timelineTitle": "Project Duration and Milestones",
+      "documentationTitle": "Project Documentation",
+      "costs": {
+        "Gesamtkosten": "Total Costs",
+        "Personalkosten": "Personnel Costs",
+        "Sachkosten": "Material Costs",
+        "Investitionskosten": "Investment Costs"
+      }
+    },
+    "contentDetailsView": {
+      "briefTaskText": "Brief task description",
+      "files": "Files",
+      "noStartingCondition": "No starting condition available",
+      "noProjectContent": "No project content available",
+      "noProjectGoals": "No project goals available",
+      "noValuesAndBenefits": "No benefits/impact available",
+      "noFinancialPlan": "No financial plan description available",
+      "noTimeline": "No timeline available",
+      "noDocumentation": "No documentation available",
+      "noFilesUploaded": "No files uploaded",
+      "notSpecified": "Not specified",
+      "tabs": {
+        "Ausgangssituation": "Starting Situation",
+        "Projektziele": "Project Goals",
+        "Projektinhalt": "Project Content",
+        "Nutzen/Wirkung": "Benefits/Impact",
+        "Finanzplan": "Financial Plan",
+        "Zeitplan": "Timeline",
+        "Uploads": "Uploads",
+        "Links": "Links"
+      }
+    }
+  }
 }
