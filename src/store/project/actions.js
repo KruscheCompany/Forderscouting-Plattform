@@ -7,7 +7,6 @@ export async function getProjectIdeas(context) {
     context.commit("setProjectIdeas", res.data);
   } catch (error) {
     Notify.create({
-      // position: "top-right",
       type: "negative",
       message: error.response.data.error.message
     });
@@ -15,45 +14,34 @@ export async function getProjectIdeas(context) {
 }
 
 export async function createNewProjectIdea(context, payload) {
-  const { data } = payload;
-  console.log("data :>> ", data);
-  // delete property 'files' and 'media'
-  const { files, media, ...dataWithoutFiles } = data;
-  console.log("dataWithoutFiles", dataWithoutFiles);
-  if (!!data) {
+  const { projectData } = payload;
+  const { files, media, ...dataWithoutFiles } = projectData;
+
+  if (!!projectData) {
     try {
-      const res = await api.post("/api/projects", { data: dataWithoutFiles });
-      console.log("res :>> ", res);
-      if (data.files !== null && data.files.length > 0) {
+      const res = await api.post("/api/projects?populate[0]=details", { data: dataWithoutFiles });
+
+      if (projectData.files !== null && projectData.files.length > 0) {
         const fileUploadRes = await context.dispatch("uploadFiles", {
-          files: data.files,
+          files: projectData.files,
           id: res.data.data.id
         });
-        console.log("fileUploadRes", fileUploadRes);
       }
-      if (data.media !== null && data.media.length > 0) {
+      if (projectData.media !== null && projectData.media.length > 0) {
         const mediaUploadRes = await context.dispatch("uploadMedia", {
-          media: data.media,
+          media: projectData.media,
           id: res.data.data.id
         });
         console.log("mediaUploadRes", mediaUploadRes);
       }
       context.commit("addNewProjectIdea", res.data.data);
-      Notify.create({
-        message: "Neue Projektidee erfolgreich hinzugefügt",
-        type: "positive"
-      });
-      // context.dispatch("getProjectIdeas");
-      // this.$router.push({ path: "/user/data?tab=projectIdeas" });
-      this.$router.go(-1);
+      context.commit("setCreatedProjectIdea", res.data.data);
+      // Return the response data for the component to handle
+      return res.data;
     } catch (error) {
       console.log("error.response", error.response);
-      Notify.create({
-        // position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
-      return false;
+      // Re-throw the error so the component can handle it
+      throw error;
     }
   }
 }
@@ -148,18 +136,16 @@ export async function deleteFilesAndMedia(context, payload) {
 
 export async function editProjectIdea(context, payload) {
   console.log("context.state.project", context.state.project);
-  const { data } = payload;
+  const { projectData: data} = payload;
   console.log("data :>> ", data);
   // delete property 'files' and 'media'
   const { files, media, ...dataWithoutFiles } = data;
   console.log("dataWithoutFiles", dataWithoutFiles);
   if (!!data) {
     try {
-      const res = await api.put(`/api/projects/${data.id}`, {
+      const res = await api.put(`/api/projects/${data.id}?populate[0]=details`, {
         data: dataWithoutFiles
       });
-      console.log("res :>> ", res);
-      // context.commit("editProjectIdea", res.data.data);
       if (data.media !== null) {
         let added = [];
         if (context.state.project.media === null) {
@@ -235,15 +221,31 @@ export async function editProjectIdea(context, payload) {
         message: "Projektidee erfolgreich bearbeitet",
         type: "positive"
       });
-      // context.dispatch("getProjectIdeas");
-      // this.$router.push({
-      //   path: "/user/data?tab=projectIdeas"
-      // });
-      this.$router.go(-1);
+      context.commit("setCreatedProjectIdea", res.data.data);
+      return res.data
     } catch (error) {
       console.error("error", error);
       Notify.create({
-        // position: "top-right",
+        type: "negative",
+        message: error.response.data.error.message
+      });
+      return false;
+    }
+  }
+}
+
+export async function simpleUpdateProjectIdea(context, payload) {
+  const { data } = payload;
+  if (!!data) {
+    try {
+      const res = await api.put(`/api/projects/${data.id}`, {
+        data: data
+      });
+      return res.data;
+    }
+    catch (error) {
+      console.error("error", error);
+      Notify.create({
         type: "negative",
         message: error.response.data.error.message
       });
@@ -259,7 +261,6 @@ export async function getSpecificProject(context, payload) {
     try {
       const res = await api.get(`/api/projects/${id}`);
       context.commit("setSpecificProject", res.data);
-      // return res.data.id;
     } catch (error) {
       console.log("error", error);
       Notify.create({

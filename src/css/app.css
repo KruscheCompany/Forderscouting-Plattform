@@ -32,6 +32,12 @@
 .radius-20 {
   border-radius: 20px !important;
 }
+.radius-top-20 {
+  border-radius: 20px 20px 0 0 !important;
+}
+.radius-bottom-20 {
+  border-radius: 0 0 20px 20px !important;
+}
 .radius-top-20,
 .tableHead .q-table__top {
   border-radius: 20px 20px 0 0 !important;

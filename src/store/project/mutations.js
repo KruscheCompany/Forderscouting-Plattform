@@ -18,10 +18,6 @@ export function addNewProjectIdea(state, payload) {
   }
 }
 
-export function editProjectIdea(state, payload) {
-  console.log("edit project idea payload", payload);
-}
-
 export function deleteProjectIdea(state, payload) {
   if (!!payload) {
     state.projects = state.projects.filter(project => project.id !== payload);
@@ -45,4 +41,8 @@ export function archiveProject(state, payload) {
   if (state.project) {
     state.project.archived = true;
   }
+}
+
+export function setCreatedProjectIdea(state, payload) {
+  state.createdProjectIdea = payload;
 }

@@ -1,24 +1,9 @@
 <template>
   <div>
-    <q-select
-      clearable
-      outlined
-      dense
-      v-model="model"
-      :options="options"
-      use-input
-      hide-selected
-      fill-input
-      input-debounce="0"
-      @filter="filterFn"
-      behavior="menu"
-      @focus="municipalityChanged"
-      :label="$t('personalData.location')"
-      :rules="isRequired ? [(val) => !!val || $t('Required')] : []"
-      options-selected-class="text-primary text-weight-600"
-      class="no-shadow input-radius-6"
-      @input="onSelect"
-    >
+    <q-select clearable outlined dense v-model="model" :options="options" use-input hide-selected fill-input
+      input-debounce="0" @filter="filterFn" behavior="menu" @focus="municipalityChanged"
+      :label="$t('personalData.location')" :rules="isRequired ? [(val) => !!val || $t('Required')] : []"
+      options-selected-class="text-primary text-weight-600" class="no-shadow input-radius-6" @input="onSelect">
       <template v-slot:selected>
         <template v-if="model">
           <span>
@@ -60,6 +45,14 @@ export default {
       options: [],
       selectedMunicipality: null,
     };
+  },
+  watch: {
+    currentMunicipality: {
+      immediate: true,
+      handler(newVal) {
+        this.model = newVal;
+      },
+    },
   },
   methods: {
     getGroupedStates() {

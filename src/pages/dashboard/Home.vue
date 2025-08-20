@@ -29,9 +29,10 @@
           </div>
           <div class="col-12 col-md-auto" v-if="!isGuest">
             <q-btn color="blue" icon="add" unelevated outline class="mr-0 radius-6 text-weight-600"
-              :class="{ 'full-width': $q.screen.lt.md }" no-caps @click="$router.push({ path: '/user/newChecklist' })">
+              :class="{ 'full-width': $q.screen.lt.md }" no-caps
+              @click="$router.push({ path: '/application/process/' })">
               <p class="q-mb-none q-mx-md q-my-sm">
-                {{ $t("homeBtns.checkListBtn") }}
+                {{ $t("homeBtns.applicationProcess") }}
               </p>
             </q-btn>
           </div>
