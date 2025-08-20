@@ -66,7 +66,7 @@ const routes = [
       },
       {
         path: "/application/process/edit/:projectId",
-        name: "EditProject",
+        name: "EditApplicationProcess",
         meta: {
           title: "Edit Project Dashboard",
           titleDE: "Edit Projekt Dashboard",
@@ -79,7 +79,7 @@ const routes = [
       },
       {
         path: "/application/process/view/:projectId",
-        name: "ViewProject",
+        name: "ViewApplicationProcess",
         meta: {
           title: "Details of the project Idea",
           titleDE: "Details zur Projektidee",
