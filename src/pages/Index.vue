@@ -17,23 +17,11 @@
               </strong>
             </div>
             <div class="col-12 col-md-6 q-mx-auto">
-              <q-input
-                class="no-shadow q-mb-lg input-radius-4"
-                color="primary"
-                bg-color="white"
-                :placeholder="$t('findDocument')"
-                filled
-                v-model="documentSearch"
-                @keyup.enter="searchForDocument"
-                role="searcbox"
-              >
+              <q-input class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
+                :placeholder="$t('findDocument')" filled v-model="documentSearch" @keyup.enter="searchForDocument"
+                role="searcbox">
                 <template v-slot:append>
-                  <q-icon
-                    class="cursor-pointer"
-                    @click="searchForDocument"
-                    color="primary"
-                    name="search"
-                  />
+                  <q-icon class="cursor-pointer" @click="searchForDocument" color="primary" name="search" />
                 </template>
               </q-input>
             </div>
@@ -50,21 +38,11 @@
                 <q-card class="full-height full-width bg-white radius-20 shadow-1">
                   <q-card-section>
                     <div class="row">
-                      <div
-                        class="col-12 text-center"
-                        style="position: absolute; top: -20px; right: 10px"
-                      >
-                        <q-img
-                          spinner-color="primary"
-                          src="../assets/Idea.svg"
-                          style="height: 100%; max-width: 60px"
-                        />
+                      <div class="col-12 text-center" style="position: absolute; top: -20px; right: 10px">
+                        <q-img spinner-color="primary" src="../assets/Idea.svg" style="height: 100%; max-width: 60px" />
                       </div>
                       <div class="col-12 text-center">
-                        <div
-                          class="font-16 text-weight-bold q-mb-none textColor ppeditorial"
-                          style="margin-top: 60px"
-                        >
+                        <div class="font-16 text-weight-bold q-mb-none textColor ppeditorial" style="margin-top: 60px">
                           {{ $t("projectIdeas") }}
                         </div>
                         <p class="q-mb-none textColor">
@@ -79,21 +57,12 @@
                 <q-card class="full-height full-width radius-20 shadow-1">
                   <q-card-section>
                     <div class="row">
-                      <div
-                        class="col-12 text-center"
-                        style="position: absolute; top: -20px; right: 10px"
-                      >
-                        <q-img
-                          spinner-color="primary"
-                          src="../assets/Fundings.svg"
-                          style="height: 100%; max-width: 60px"
-                        />
+                      <div class="col-12 text-center" style="position: absolute; top: -20px; right: 10px">
+                        <q-img spinner-color="primary" src="../assets/Fundings.svg"
+                          style="height: 100%; max-width: 60px" />
                       </div>
                       <div class="col-12 text-center">
-                        <div
-                          class="font-16 text-weight-bold q-mb-none textColor ppeditorial"
-                          style="margin-top: 60px"
-                        >
+                        <div class="font-16 text-weight-bold q-mb-none textColor ppeditorial" style="margin-top: 60px">
                           {{ $t("fundingShortInfos") }}
                         </div>
                         <p class="q-mb-none textColor">
@@ -108,21 +77,12 @@
                 <q-card class="full-height full-width radius-20 shadow-1">
                   <q-card-section>
                     <div class="row">
-                      <div
-                        class="col-12 text-center"
-                        style="position: absolute; top: -20px; right: 10px"
-                      >
-                        <q-img
-                          spinner-color="primary"
-                          src="../assets/Checklists.svg"
-                          style="height: 100%; max-width: 80px"
-                        />
+                      <div class="col-12 text-center" style="position: absolute; top: -20px; right: 10px">
+                        <q-img spinner-color="primary" src="../assets/Checklists.svg"
+                          style="height: 100%; max-width: 80px" />
                       </div>
                       <div class="col-12 text-center">
-                        <div
-                          class="font-16 text-weight-bold q-mb-none textColor ppeditorial"
-                          style="margin-top: 60px"
-                        >
+                        <div class="font-16 text-weight-bold q-mb-none textColor ppeditorial" style="margin-top: 60px">
                           {{ $t("implementationChecklists") }}
                         </div>
                         <p class="q-mb-none textColor">
@@ -169,15 +129,9 @@
             <div class="flex justify-center">
               <span class="q-pa-xl font-18 ppeditorial">{{
                 $t("howCanPlatformSupportProject")
-              }}</span>
-              <video
-                controls
-                poster="../assets/image1.png"
-                style="width: 75%; height: auto"
-              >
-                <source
-                  src="https://api.foerderscouting-plattform.de/uploads/Plattformpotentiale_d0f41f78dd.mp4"
-                />
+                }}</span>
+              <video controls poster="../assets/image1.png" style="width: 75%; height: auto">
+                <source src="https://api.foerderscouting-plattform.de/uploads/Plattformpotentiale_d0f41f78dd.mp4" />
               </video>
             </div>
           </div>
@@ -185,15 +139,9 @@
             <div class="flex justify-center">
               <span class="q-pa-xl font-18 ppeditorial">{{
                 $t("howDoesPlatformWork")
-              }}</span>
-              <video
-                controls
-                poster="../assets/image2.png"
-                style="width: 75%; height: auto"
-              >
-                <source
-                  src="https://api.foerderscouting-plattform.de/uploads/Projektarbeit_acbd6b13eb.mp4"
-                />
+                }}</span>
+              <video controls poster="../assets/image2.png" style="width: 75%; height: auto">
+                <source src="https://api.foerderscouting-plattform.de/uploads/Projektarbeit_acbd6b13eb.mp4" />
               </video>
             </div>
           </div>
@@ -207,36 +155,21 @@
             <div class="col-12 col-md-4">
               <q-card class="full-height full-width shadow-0">
                 <q-card-section class="full-height flex flex-center">
-                  <q-img
-                    spinner-color="primary"
-                    src="logo-2.svg"
-                    height="150px"
-                    contain
-                  />
+                  <q-img spinner-color="primary" src="logo-2.svg" height="150px" contain />
                 </q-card-section>
               </q-card>
             </div>
             <div class="col-12 col-md-4">
               <q-card class="full-height full-width shadow-0">
                 <q-card-section class="full-height flex center">
-                  <q-img
-                    spinner-color="primary"
-                    src="logo-1.svg"
-                    height="150px"
-                    contain
-                  />
+                  <q-img spinner-color="primary" src="logo-1.svg" height="150px" contain />
                 </q-card-section>
               </q-card>
             </div>
             <div class="col-12 col-md-4">
               <q-card class="full-height full-width shadow-0">
                 <q-card-section class="full-height flex flex-center">
-                  <q-img
-                    spinner-color="primary"
-                    src="logo-3.svg"
-                    height="150px"
-                    contain
-                  />
+                  <q-img spinner-color="primary" src="logo-3.png" height="130px" contain />
                 </q-card-section>
               </q-card>
             </div>
