@@ -15,6 +15,20 @@ export async function getMunicipalities(context) {
   }
 }
 
+export async function getSimplifiedMunicipalities(context) {
+  try {
+    const res = await api.get("/api/municipalities/simple");
+    context.commit("setMunicipalitiesSimplified", res.data);
+  } catch (error) {
+    console.error("error :>> ", error);
+    Notify.create({
+      position: "top-right",
+      type: "negative",
+      message: error.response.data.error.message
+    });
+  }
+}
+
 export async function getStates(context) {
   try {
     const res = await api.get("/api/locations?populate=municipality");

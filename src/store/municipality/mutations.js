@@ -2,6 +2,10 @@ export function setMunicipalities(state, payload) {
   state.municipalities = payload;
 }
 
+export function setMunicipalitiesSimplified(state, payload) {
+  state.municipalitiesSimplified = payload;
+}
+
 export function addMunicipality(state, payload) {
   if (!!payload) {
     state.municipalities.push(payload);
