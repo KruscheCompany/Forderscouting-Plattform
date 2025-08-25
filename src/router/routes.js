@@ -90,6 +90,19 @@ const routes = [
         component: () => import("pages/dashboard/ProjectView.vue")
       },
       {
+        path: "/project/dashboard",
+        name: "ProjectDashboard",
+        meta: {
+          title: "Project Dashboard",
+          titleDE: "Projekte Dashboard",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: false
+        },
+        icon: "/icons/Documents.svg",
+        component: () => import("pages/dashboard/ProjectDashboard.vue")
+      },
+      {
         path: "/overview",
         name: "DataOverview",
         meta: {
