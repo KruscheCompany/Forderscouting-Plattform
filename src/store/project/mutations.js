@@ -46,3 +46,11 @@ export function archiveProject(state, payload) {
 export function setCreatedProjectIdea(state, payload) {
   state.createdProjectIdea = payload;
 }
+
+export function setProjectDashboardStats(state, payload) {
+  state.projectDashboardStats = payload;
+}
+
+export function setApplicationProcess(state, payload) {
+  state.applicationProcess = payload;
+}

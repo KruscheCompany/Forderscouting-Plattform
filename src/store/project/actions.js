@@ -13,6 +13,36 @@ export async function getProjectIdeas(context) {
   }
 }
 
+export async function getApplicationProcess(context, filters = {}) {
+  try {
+    // Build query string for filters
+    let queryParams = '';
+
+    if (Object.keys(filters).length > 0) {
+      queryParams = '?';
+      const params = [];
+
+      // Add each filter to the params array if it exists
+      if (filters.search) params.push(`search=${encodeURIComponent(filters.search)}`);
+      if (filters.municipality) params.push(`municipality=${filters.municipality}`);
+      if (filters.status) params.push(`status=${filters.status}`);
+      if (filters.investive) params.push(`investive=${filters.investive}`);
+      if (filters.categories) params.push(`categories=${filters.categories}`);
+      if (filters.tags) params.push(`tags=${filters.tags}`);
+
+      queryParams += params.join('&');
+    }
+
+    const res = await api.get(`/api/application/process${queryParams}`);
+    context.commit("setApplicationProcess", res.data);
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+  }
+}
+
 export async function createNewProjectIdea(context, payload) {
   const { projectData } = payload;
   const { files, media, ...dataWithoutFiles } = projectData;
@@ -420,5 +450,36 @@ export async function deleteProjectIdea(context, payload) {
       });
       return false;
     }
+  }
+}
+
+export async function getProjectDashboardStats(context, filters = {}) {
+  try {
+    // Build query string for filters
+    let queryParams = '';
+    
+    if (Object.keys(filters).length > 0) {
+      queryParams = '?';
+      const params = [];
+      
+      // Add each filter to the params array if it exists
+      if (filters.search) params.push(`search=${encodeURIComponent(filters.search)}`);
+      if (filters.municipality) params.push(`municipality=${filters.municipality}`);
+      if (filters.status) params.push(`status=${filters.status}`);
+      if (filters.investive) params.push(`investive=${filters.investive}`);
+      if (filters.categories) params.push(`categories=${filters.categories}`);
+      if (filters.tags) params.push(`tags=${filters.tags}`);
+      
+      queryParams += params.join('&');
+    }
+    
+    const res = await api.get(`/api/project/dashboard/stat${queryParams}`);
+    context.commit("setProjectDashboardStats", res.data);
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    return false;
   }
 }
