@@ -1,5 +1,6 @@
 export default function() {
   return {
-    categories: []
+    categories: [],
+    categoriesSimplified: []
   };
 }

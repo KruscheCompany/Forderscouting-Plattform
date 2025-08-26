@@ -1,7 +1,7 @@
 <template>
   <q-card class="shadow-1 radius-20">
     <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t(
-      'projectContent.generalInformation')" header-class="bg-white text-black" v-model="expanded">
+      'projectContent.projectDescription')" header-class="bg-white text-black" v-model="expanded">
       <q-form @validation-error="scrollToInvalidElement" ref="contentDetailsForm">
         <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify"
           narrow-indicator>
@@ -113,7 +113,7 @@
                         <div class="col-8">
                           <q-item-label class="ellipsis" caption>{{
                             imgPreview(image).name
-                          }}</q-item-label>
+                            }}</q-item-label>
                         </div>
                         <div class="col-auto text-right">
                           <q-btn icon="delete" @click.prevent.stop="removeImg(index)" size="sm" round text-color="red"
@@ -151,7 +151,7 @@
                         <q-item-section>
                           <q-item-label class="ellipsis" caption>{{
                             imgPreview(file).name
-                          }}</q-item-label>
+                            }}</q-item-label>
                         </q-item-section>
                         <q-item-section side>
                           <q-btn icon="delete" @click.prevent.stop="removeFile(index)" size="sm" round text-color="red"

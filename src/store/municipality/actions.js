@@ -15,10 +15,45 @@ export async function getMunicipalities(context) {
   }
 }
 
+export async function getSimplifiedMunicipalities(context) {
+  try {
+    const res = await api.get("/api/municipalities/simple");
+    context.commit("setMunicipalitiesSimplified", res.data);
+  } catch (error) {
+    console.error("error :>> ", error);
+    Notify.create({
+      position: "top-right",
+      type: "negative",
+      message: error.response.data.error.message
+    });
+  }
+}
+
 export async function getStates(context) {
   try {
     const res = await api.get("/api/locations?populate=municipality");
     context.commit("setStates", res.data);
+  } catch (error) {
+    console.error("error :>> ", error);
+    Notify.create({
+      position: "top-right",
+      type: "negative",
+      message: error.response.data.error.message
+    });
+  }
+}
+
+export async function getLocationsByMunicipality(context, { skipAdminPrivileges = false } = {}) {
+  try {
+    const res = await api.get("/api/locations/by-municipality", {
+      params: { skipAdminPrivileges }
+    });
+
+    const simplifiedLocations = res.data
+
+    context.commit("setLocationsSimplified", simplifiedLocations);
+
+    return res.data;
   } catch (error) {
     console.error("error :>> ", error);
     Notify.create({

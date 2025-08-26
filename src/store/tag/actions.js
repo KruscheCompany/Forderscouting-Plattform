@@ -15,6 +15,20 @@ export async function getTags(context) {
   }
 }
 
+export async function getSimplifiedTags(context, payload) {
+  try {
+    const res = await api.get("/api/tags/simple");
+    context.commit("setTagsSimplified", res.data);
+  } catch (error) {
+    Notify.create({
+      position: "top-right",
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    return false;
+  }
+}
+
 export async function addTag(context, payload) {
   const { name } = payload;
   if (!!name) {
