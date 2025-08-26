@@ -6,6 +6,7 @@ export default function() {
     tempTags: [],
     createdProjectIdea: null,
     projectDashboardStats: null,
-    applicationProcess: null
+    applicationProcess: null,
+    financialPlan: null
   };
 }

@@ -54,3 +54,7 @@ export function setProjectDashboardStats(state, payload) {
 export function setApplicationProcess(state, payload) {
   state.applicationProcess = payload;
 }
+
+export function setFinancialPlan(state, payload) {
+  state.financialPlan = payload;
+}
