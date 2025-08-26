@@ -4,5 +4,6 @@ export default function() {
     states: [],
     groupedStates: [],
     municipalitiesSimplified: [],
+    locationsSimplified: [],
   };
 }

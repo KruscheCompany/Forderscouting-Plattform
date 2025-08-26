@@ -81,4 +81,8 @@ export function editState(state, payload) {
   }
 }
 
+export function setLocationsSimplified(state, payload) {
+  state.locationsSimplified = payload;
+}
+
 

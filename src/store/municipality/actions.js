@@ -43,6 +43,27 @@ export async function getStates(context) {
   }
 }
 
+export async function getLocationsByMunicipality(context, { skipAdminPrivileges = false } = {}) {
+  try {
+    const res = await api.get("/api/locations/by-municipality", {
+      params: { skipAdminPrivileges }
+    });
+
+    const simplifiedLocations = res.data
+
+    context.commit("setLocationsSimplified", simplifiedLocations);
+
+    return res.data;
+  } catch (error) {
+    console.error("error :>> ", error);
+    Notify.create({
+      position: "top-right",
+      type: "negative",
+      message: error.response.data.error.message
+    });
+  }
+}
+
 export async function getGroupedStates(context) {
   try {
     const res = await api.get("/api/locations/grouped/municipality");
