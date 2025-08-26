@@ -24,18 +24,11 @@
             <div class="row">
               <div class="col row">
                 <p class="label">{{ $t("DetailsAdministration.users") }}</p>
-                <div
-                  v-if="
-                    !!municipality.users &&
-                    municipality.users.split(', ').length > 0
-                  "
-                  class="q-ml-xl"
-                >
-                  <p
-                    v-for="(user, index) in municipality.users.split(', ')"
-                    :key="index"
-                    class="q-mb-xs"
-                  >
+                <div v-if="
+                  !!municipality.users &&
+                  municipality.users.split(', ').length > 0
+                " class="q-ml-xl">
+                  <p v-for="(user, index) in municipality.users.split(', ')" :key="index" class="q-mb-xs">
                     {{ user }}
                   </p>
                 </div>
@@ -48,18 +41,11 @@
               <div class="col">
                 <div class="row justify-end">
                   <p class="label">{{ $t("DetailsAdministration.guests") }}</p>
-                  <div
-                    v-if="
-                      !!municipality.guests &&
-                      municipality.guests.split(', ').length > 0
-                    "
-                    class="q-ml-xl"
-                  >
-                    <p
-                      v-for="(guest, index) in municipality.guests.split(', ')"
-                      :key="index"
-                      class="q-mb-xs"
-                    >
+                  <div v-if="
+                    !!municipality.guests &&
+                    municipality.guests.split(', ').length > 0
+                  " class="q-ml-xl">
+                    <p v-for="(guest, index) in municipality.guests.split(', ')" :key="index" class="q-mb-xs">
                       {{ guest }}
                     </p>
                   </div>
@@ -71,41 +57,20 @@
                 </div>
               </div>
             </div>
-            <q-btn
-              v-if="isAdmin"
-              class="more"
-              size="md"
-              color="primary"
-              round
-              flat
-              dense
-              icon="more_vert"
-              aria-label="Optionen"
-            >
+            <q-btn v-if="isAdmin" class="more" size="md" color="primary" round flat dense icon="more_vert"
+              aria-label="Optionen">
               <q-menu transition-show="jump-down" transition-hide="jump-up">
                 <q-list style="min-width: 140px">
                   <q-item clickable v-close-popup @click="editMunicipality">
-                    <q-item-section
-                      ><span class="text-right font-14">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("DetailsAdministration.edit") }}
-                        <q-icon
-                          size="sm"
-                          class="text-blue"
-                          name="edit"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" class="text-blue" name="edit" /> </span></q-item-section>
                   </q-item>
 
                   <q-item clickable v-close-popup @click="deleteMunicipality">
-                    <q-item-section
-                      ><span class="text-right text-red font-14">
+                    <q-item-section><span class="text-right text-red font-14">
                         {{ $t("DetailsAdministration.delete") }}
-                        <q-icon
-                          size="sm"
-                          class="text-red"
-                          name="delete"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" class="text-red" name="delete" /> </span></q-item-section>
                   </q-item>
                 </q-list>
               </q-menu>
@@ -114,31 +79,18 @@
         </q-card>
       </div>
     </div>
-    <q-table
-      class="radius-20 shadow-1 q-mt-md pagination-no-shadow"
-      :title="$t('DetailsAdministration.data')"
-      :data="!!municipality && municipality.data"
-      :columns="columns"
-      row-key="name"
-      :visible-columns="visibleColumns"
+    <q-table class="radius-20 shadow-1 q-mt-md pagination-no-shadow" :title="$t('DetailsAdministration.data')"
+      :data="!!municipality && municipality.data" :columns="columns" row-key="name" :visible-columns="visibleColumns"
       :pagination="{
         sortBy: 'id',
         descending: true,
         page: 1,
         rowsPerPage: 10,
-      }"
-      :rows-per-page-label="$t('Records per page')"
-      :no-data-label="$t('No data')"
-      :no-results-label="$t('No results')"
-    >
+      }" :rows-per-page-label="$t('Records per page')" :no-data-label="$t('No data')"
+      :no-results-label="$t('No results')">
       <template v-slot:header="props">
         <q-tr class="tableHeader" :props="props">
-          <q-th
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            class="font-14 text-black"
-          >
+          <q-th v-for="col in props.cols" :key="col.name" :props="props" class="font-14 text-black">
             {{ col.label }}
           </q-th>
           <q-th auto-width />
@@ -146,14 +98,8 @@
       </template>
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td
-            @click="view(props.row)"
-            auto-width
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            class="font-14 cursor-pointer"
-          >
+          <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
+            class="font-14 cursor-pointer">
             {{
               col.value && col.value.length > 48
                 ? col.value.substring(0, 48) + "..."
@@ -165,79 +111,39 @@
               <q-menu transition-show="jump-down" transition-hide="jump-up">
                 <q-list style="min-width: 140px">
                   <q-item clickable v-close-popup @click="view(props.row)">
-                    <q-item-section
-                      ><span class="text-right font-14">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("DetailsAdministration.view") }}
-                        <q-icon
-                          size="sm"
-                          class="text-blue"
-                          name="visibility"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" class="text-blue" name="visibility" /> </span></q-item-section>
                   </q-item>
 
                   <q-item clickable v-close-popup @click="editItem(props.row)">
-                    <q-item-section
-                      ><span class="text-right font-14">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("DetailsAdministration.edit") }}
 
-                        <q-icon
-                          size="sm"
-                          class="text-blue"
-                          name="edit"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" class="text-blue" name="edit" /> </span></q-item-section>
                   </q-item>
-                  <q-item
-                    clickable
-                    v-close-popup
-                    @click="addToWatchlist(props.row)"
-                  >
-                    <q-item-section
-                      ><span class="text-right font-14">
+                  <q-item clickable v-close-popup @click="addToWatchlist(props.row)">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("DetailsAdministration.bookmark") }}
 
-                        <q-icon
-                          size="sm"
-                          class="text-blue"
-                          name="star"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" class="text-blue" name="star" /> </span></q-item-section>
                   </q-item>
-                  <q-item
-                    clickable
-                    v-close-popup
-                    @click="archiveItem(props.row)"
-                    v-if="
-                      isAdmin ||
-                      (props.row &&
-                        props.row.type !== 'funding' &&
-                        (!!props.row.owner && props.row.owner.id) ===
-                          (!!loggedInUser && loggedInUser.id))
-                    "
-                  >
-                    <q-item-section
-                      ><span class="text-right font-14">
+                  <q-item clickable v-close-popup @click="archiveItem(props.row)" v-if="
+                    isAdmin ||
+                    (props.row &&
+                      props.row.type !== 'funding' &&
+                      (!!props.row.owner && props.row.owner.id) ===
+                      (!!loggedInUser && loggedInUser.id))
+                  ">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("DetailsAdministration.archive") }}
-                        <q-icon
-                          size="sm"
-                          class="text-blue"
-                          name="archive"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" class="text-blue" name="archive" /> </span></q-item-section>
                   </q-item>
 
-                  <q-item
-                    v-if="isAdmin"
-                    clickable
-                    v-close-popup
-                    @click="deleteItem(props.row)"
-                  >
-                    <q-item-section
-                      ><span class="text-right font-14 text-red">
+                  <q-item v-if="isAdmin" clickable v-close-popup @click="deleteItem(props.row)">
+                    <q-item-section><span class="text-right font-14 text-red">
                         {{ $t("DetailsAdministration.delete") }}
-                        <q-icon size="sm" name="delete" /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" name="delete" /> </span></q-item-section>
                   </q-item>
                 </q-list>
               </q-menu>
@@ -246,37 +152,20 @@
         </q-tr>
       </template>
     </q-table>
-    <MunicipalityDeleteDialog
-      :dialogState="deleteMunicipalityDialog"
-      :id="municipalityId"
-      @update="
-        (deleteMunicipalityDialog = $event),
-          (municipalityId = null),
-          getMunicipalityData()
-      "
-    />
-    <EditMunicipalityDialog
-      :dialogState="editMunicipalityDialog"
-      :editingId="municipalityId"
-      @update="
-        (editMunicipalityDialog = $event),
-          (municipalityId = null),
-          getMunicipalityData()
-      "
-    />
-    <DeleteDialog
-      :id="itemId"
-      :tab="tab"
-      :dialogState="deleteDialog"
-      @update="closeDialog($event), (itemId = null), (tab = null)"
-    />
-    <RequestAccessDialog
-      :id="itemId"
-      :tab="tab"
-      :type="itemType"
-      :dialogState="requestDialog"
-      @update="(requestDialog = $event), (itemId = null), (itemType = null)"
-    />
+    <MunicipalityDeleteDialog :dialogState="deleteMunicipalityDialog" :id="municipalityId" @update="
+      (deleteMunicipalityDialog = $event),
+      (municipalityId = null),
+      getMunicipalityData()
+      " />
+    <EditMunicipalityDialog :dialogState="editMunicipalityDialog" :editingId="municipalityId" @update="
+      (editMunicipalityDialog = $event),
+      (municipalityId = null),
+      getMunicipalityData()
+      " />
+    <DeleteDialog :id="itemId" :tab="tab" :dialogState="deleteDialog"
+      @update="closeDialog($event), (itemId = null), (tab = null)" />
+    <RequestAccessDialog :id="itemId" :tab="tab" :type="itemType" :dialogState="requestDialog"
+      @update="(requestDialog = $event), (itemId = null), (itemType = null)" />
   </div>
 </template>
 
@@ -336,7 +225,7 @@ export default {
         if (
           row.visibility === "listed only" &&
           (!!row.owner && row.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasReaderAccess =
@@ -352,21 +241,21 @@ export default {
                 user.id === (!!this.loggedInUser && this.loggedInUser.id)
             );
           if (hasReaderAccess.length > 0 || hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newProjectIdea/${id}` });
+            this.$router.push({ path: `/application/process/view/${id}` });
           } else {
             this.itemId = row && row.id;
             this.itemType = "view";
             this.requestDialog = true;
           }
         } else {
-          this.$router.push({ path: `/user/newProjectIdea/${id}` });
+          this.$router.push({ path: `/application/process/view/${id}` });
         }
       } else if (row.type === "funding") {
         this.tab = "fundings";
         if (
           row.visibility === "listed only" &&
           (!!row.owner && row.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasReaderAccess =
@@ -396,7 +285,7 @@ export default {
         if (
           row.visibility === "listed only" &&
           (!!row.owner && row.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasReaderAccess =
@@ -433,7 +322,7 @@ export default {
         this.tab = "projectIdeas";
         if (
           (!!row.owner && row.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasEditorAccess =
@@ -443,20 +332,20 @@ export default {
                 user.id === (!!this.loggedInUser && this.loggedInUser.id)
             );
           if (hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newProjectIdea/edit/${id}` });
+            this.$router.push({ path: `/application/process/edit/${id}` });
           } else {
             this.itemId = row && row.id;
             this.itemType = "edit";
             this.requestDialog = true;
           }
         } else {
-          this.$router.push({ path: `/user/newProjectIdea/edit/${id}` });
+          this.$router.push({ path: `/application/process/edit/${id}` });
         }
       } else if (row.type === "funding") {
         this.tab = "fundings";
         if (
           (!!row.owner && row.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasEditorAccess =
@@ -479,7 +368,7 @@ export default {
         this.tab = "implementationChecklist";
         if (
           (!!row.owner && row.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasEditorAccess =
@@ -652,6 +541,7 @@ export default {
   height: auto;
   max-width: 100%;
 }
+
 .label {
   color: rgba(22, 66, 139, 0.5);
 }

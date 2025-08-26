@@ -2,8 +2,9 @@
   <div class="q-my-lg ">
     <q-tabs v-if="isInPage" v-model="tab" align="justify" indicator-color="transparent" class="q-mb-lg text-black"
       active-bg-color="yellow" no-caps>
-      <q-route-tab :to="{ query: { tab: 'projectIdeas' } }" exact replace class="q-py-xs q-mr-lg radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="projectIdeas">
+      <q-route-tab :to="{ query: { tab: 'projectIdeas' } }" exact replace
+        class="q-py-xs q-mr-lg radius-10 border-yellow" :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'"
+        name="projectIdeas">
         <p class="font-20 no-margin">{{ $t("myData.projectIdeas") }}</p>
       </q-route-tab>
       <q-route-tab :to="{ query: { tab: 'fundings' } }" exact replace class="q-mr-lg radius-10 border-yellow"
@@ -25,8 +26,7 @@
         page: 1,
         rowsPerPage: isInPage ? 10 : 5
       }" :rows-per-page-label="$t('Records per page')" :no-data-label="$t('No data')"
-      :no-results-label="$t('No results')"
-      ref="table">
+      :no-results-label="$t('No results')" ref="table">
       <template v-slot:top>
         <div v-if="!isInPage" class="row full-width">
           <div class="col-12">
@@ -75,10 +75,10 @@
               <p v-if="$q.screen.gt.sm" class="q-mb-none q-mx-md q-my-sm">
                 {{
                   tab == "projectIdeas"
-                  ? $t("myData.createProjectIdea")
-                  : tab == "fundings"
-                    ? $t("fundingsCol.createFunding")
-                    : $t("checkListCols.createImplementationChecklist")
+                    ? $t("myData.createProjectIdea")
+                    : tab == "fundings"
+                      ? $t("fundingsCol.createFunding")
+                      : $t("checkListCols.createImplementationChecklist")
                 }}
               </p>
             </q-btn>
@@ -99,8 +99,8 @@
             class="font-14 cursor-pointer">
             {{
               col.value && col.value.length > 48
-              ? col.value.substring(0, 48) + "..."
-              : col.value
+                ? col.value.substring(0, 48) + "..."
+                : col.value
             }}
 
           </q-td>
@@ -132,7 +132,7 @@
                     (tab !== 'fundings' &&
                       (!!props.row.owner && props.row.owner.id) ===
                       (!!loggedInUser && loggedInUser.id))
-                    " clickable v-close-popup @click="archiveItem(props.row)">
+                  " clickable v-close-popup @click="archiveItem(props.row)">
                     <q-item-section><span class="text-right font-14">
                         {{ $t("myDataTableOptions.archive") }}
 
@@ -256,14 +256,14 @@ export default {
           console.log("hasReaderAccess", hasReaderAccess.length);
           console.log("hasEditorAccess", hasEditorAccess.length);
           if (hasReaderAccess.length > 0 || hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newProjectIdea/${id}` });
+            this.$router.push({ path: `/application/process/view/${id}` });
           } else {
             this.itemId = row && row.id;
             this.type = "view";
             this.requestDialog = true;
           }
         } else {
-          this.$router.push({ path: `/user/newProjectIdea/${id}` });
+          this.$router.push({ path: `/application/process/view/${id}` });
         }
       } else if (this.tab === "fundings") {
         if (
@@ -337,14 +337,14 @@ export default {
               user => user.id === (!!this.loggedInUser && this.loggedInUser.id)
             );
           if (hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newProjectIdea/edit/${id}` });
+            this.$router.push({ path: `/application/process/edit/${id}` });
           } else {
             this.itemId = row && row.id;
             this.type = "edit";
             this.requestDialog = true;
           }
         } else {
-          this.$router.push({ path: `/user/newProjectIdea/edit/${id}` });
+          this.$router.push({ path: `/application/process/edit/${id}` });
         }
       } else if (this.tab === "fundings") {
         if (
@@ -446,7 +446,7 @@ export default {
     goToPage(page) {
       if (page === "projectIdeas") {
         this.$store.commit("project/setSpecificProject", null);
-        this.$router.push({ path: "/user/newProjectIdea" });
+        this.$router.push({ path: "/application/process/" });
       } else if (page === "fundings") {
         this.$store.commit("funding/setSpecificFunding", null);
         this.$router.push({ path: "/user/newFunding" });
@@ -705,9 +705,9 @@ export default {
       const savedPagination = JSON.parse(localStorage.getItem("pagination"));
 
       this.$refs.table.setPagination({
-          page: savedPagination.dataOverviewPage || 1,
-          rowsPerPage: savedPagination.dataOverviewRowsPerPage || 10,
-        });
+        page: savedPagination.dataOverviewPage || 1,
+        rowsPerPage: savedPagination.dataOverviewRowsPerPage || 10,
+      });
     }
   },
   beforeDestroy() {

@@ -675,17 +675,6 @@ export default {
       this.createdAtStart = "";
       this.createdAtEnd = "";
     },
-    // goToPage(page) {
-    //   if (page === "projectIdeas") {
-    //     this.$store.commit("project/setSpecificProject", null);
-    //     this.$router.push({ path: "/user/newProjectIdea" });
-    //   } else if (page === "fundings") {
-    //     this.$store.commit("funding/setSpecificFunding", null);
-    //     this.$router.push({ path: "/user/newFunding" });
-    //   } else {
-    //     this.$router.push({ path: "/user/newChecklist" });
-    //   }
-    // },
     getData() {
       this.$store.dispatch("userCenter/getDataOverview");
     },
