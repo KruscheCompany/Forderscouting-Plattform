@@ -3,13 +3,13 @@
     <div class="">
       <q-toolbar class="bg-blue text-white shadow-2 radius-top-20">
         <q-tabs v-model="tab" shrink stretch active-color="yellow" content-class="custom-borders">
-          <q-tab v-for="tab in tabs" :key="tab.name" :name="tab.name" :label="tab.label" />
+          <q-tab v-for="tab in tabs" :key="tab.name" :name="tab.name" :label="$t(tab.label)" />
         </q-tabs>
       </q-toolbar>
     </div>
     <div>
       <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="radius-bottom-20 shadow-2">
-        <q-step v-for="(step, index) in steps" :key="index" :name="step.name" :title="step.title" :icon="step.icon"
+        <q-step v-for="(step, index) in steps" :key="index" :name="step.name" :title="$t(step.title)" :icon="step.icon"
           :done="step.done && !step.skip" :header-nav="step.done" />
       </q-stepper>
     </div>
@@ -71,7 +71,7 @@ export default {
       tabs: [
         { name: 'tab1', label: 'AI funding check' },
         { name: 'tab2', label: 'Project development' },
-        { name: 'tab3', label: 'Application' }
+        { name: 'tab3', label: 'application' }
       ],
       steps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
