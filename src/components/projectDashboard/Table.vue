@@ -33,11 +33,11 @@
 
               <div class="col-6 col-md-3">
                 <p class="text-black q-mb-xs font-16">
-                  {{ $t("ProjectDashboard.municipalities") }}
+                  {{ $t("ProjectDashboard.locations") }}
                 </p>
                 <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
-                  :label="$t('Search')" multiple filled :options="municipalityOptions" v-model="selectedMunicipalities"
-                  option-value="id" option-label="title">
+                  :label="$t('Search')" multiple filled :options="locationOptions" v-model="selectedLocations"
+                  option-value="title" option-label="title">
                 </q-select>
               </div>
 
@@ -174,7 +174,7 @@ export default {
       selectedCategories: null,
       selectedStatus: null,
       selectedInvestive: null,
-      selectedMunicipalities: null,
+      selectedLocations: null,
       tagsKeywords: null,
       statusOptions: [
         { value: true, title: "Granted" },
@@ -198,9 +198,9 @@ export default {
         filters.search = searchValue.trim();
       }
 
-      // Add municipalities if selected
-      if (this.selectedMunicipalities && this.selectedMunicipalities.length) {
-        filters.municipality = this.selectedMunicipalities.map(item => item.id || item).join(',');
+      // Add locations if selected
+      if (this.selectedLocations && this.selectedLocations.length) {
+        filters.location = this.selectedLocations.map(item => item.title || item).join(',');
       }
 
       // Add status if selected
@@ -232,8 +232,8 @@ export default {
     async getTags() {
       await this.$store.dispatch("tag/getSimplifiedTags");
     },
-    async getMunicipalities() {
-      await this.$store.dispatch("municipality/getSimplifiedMunicipalities");
+    async getLocations() {
+      await this.$store.dispatch("municipality/getLocationsByMunicipality", { skipAdminPrivileges: true });
     },
     getLastCompletedStep(applicationProcessSteps) {
       if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
@@ -278,9 +278,64 @@ export default {
     },
 
     // Track expanded rows using unique IDs
-    toggleExpand(row) {
+    async toggleExpand(row) {
       const rowId = row.id || row.name; // Use ID or name as unique identifier
-      this.$set(this.expandedRows, rowId, !this.expandedRows[rowId]);
+      
+      // If already expanded, just collapse it
+      if (this.expandedRows[rowId]) {
+        this.$set(this.expandedRows, rowId, false);
+        return;
+      }
+      
+      // If not expanded, validate access before expanding
+      try {
+        // Validate access using the API
+        const validationResult = await this.$store.dispatch("project/validateApplicationAccess", rowId);
+        
+        // If access is granted, store the financial data and expand the row
+        if (validationResult.accessGranted) {
+          // Update the row's financial plan with data from API
+          if (validationResult.financialPlan) {
+            // Update financial plan in Vuex store
+            this.$store.commit("project/setFinancialPlan", validationResult.financialPlan);
+            
+            // Update the current row's financial plan data for display
+            // We need to use Vue's reactivity system to ensure the UI updates
+            const updatedRow = {...row, financialPlan: validationResult.financialPlan};
+            
+            // Find index of the row in application process and update it
+            if (this.applicationProcess) {
+              const index = this.applicationProcess.findIndex(item => item.id === rowId);
+              if (index !== -1) {
+                const updatedProcess = [...this.applicationProcess];
+                updatedProcess[index] = updatedRow;
+                this.$store.commit("project/setApplicationProcess", updatedProcess);
+              }
+            }
+          }
+          
+          // Expand the row
+          this.$set(this.expandedRows, rowId, true);
+        } else {
+          // If access is denied, show a notification
+          this.$q.notify({
+            type: "negative",
+            message: this.$t("ProjectDashboard.accessDenied") || "Access denied to financial information"
+          });
+          
+          // Keep row collapsed
+          this.$set(this.expandedRows, rowId, false);
+        }
+      } catch (error) {
+        console.error("Error validating access for financial data:", error);
+        this.$q.notify({
+          type: "negative",
+          message: this.$t("ProjectDashboard.accessError") || "Error checking access permissions"
+        });
+        
+        // Keep row collapsed on error
+        this.$set(this.expandedRows, rowId, false);
+      }
     },
 
     isExpanded(row) {
@@ -318,9 +373,9 @@ export default {
         filters.search = searchValue.trim();
       }
 
-      // Add municipalities if selected
-      if (this.selectedMunicipalities && this.selectedMunicipalities.length) {
-        filters.municipality = this.selectedMunicipalities.map(item => item.id || item).join(',');
+      // Add locations if selected
+      if (this.selectedLocations && this.selectedLocations.length) {
+        filters.location = this.selectedLocations.map(item => item.title || item).join(',');
       }
 
       // Add status if selected
@@ -350,31 +405,53 @@ export default {
       const id = row && row.id;
       this.itemId = row && row.id;
 
-      if (
-        row.visibility === "listed only" &&
-        (!!row.owner && row.owner.id) !==
-        (!!this.loggedInUser && this.loggedInUser.id) &&
-        !this.isAdmin
-      ) {
-        const hasReaderAccess =
-          !!row.readers &&
-          row.readers.filter(
-            (user) => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-          );
-        const hasEditorAccess =
-          !!row.editors &&
-          row.editors.filter(
-            (user) => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-          );
-        if (hasReaderAccess.length > 0 || hasEditorAccess.length > 0) {
+      try {
+        // Validate access using the new API
+        const validationResult = await this.$store.dispatch("project/validateApplicationAccess", id);
+        
+        // Store financial plan from the validation response
+        if (validationResult.financialPlan) {
+          this.$store.commit("project/setFinancialPlan", validationResult.financialPlan);
+        }
+        
+        if (validationResult.accessGranted) {
+          // Access is granted by the API, navigate to the view
           this.$router.push({ path: `/application/process/view/${id}` });
         } else {
-          this.itemId = row && row.id;
+          // Access is denied, show request dialog
+          this.itemId = id;
           this.itemType = "view";
           this.requestDialog = true;
         }
-      } else {
-        this.$router.push({ path: `/application/process/view/${id}` });
+      } catch (error) {
+        console.error("Error in view function:", error);
+        // Default to the old permission check in case of API failure
+        if (
+          row.visibility === "listed only" &&
+          (!!row.owner && row.owner.id) !==
+          (!!this.loggedInUser && this.loggedInUser.id) &&
+          !this.isAdmin
+        ) {
+          const hasReaderAccess =
+            !!row.readers &&
+            row.readers.filter(
+              (user) => user.id === (!!this.loggedInUser && this.loggedInUser.id)
+            );
+          const hasEditorAccess =
+            !!row.editors &&
+            row.editors.filter(
+              (user) => user.id === (!!this.loggedInUser && this.loggedInUser.id)
+            );
+          if (hasReaderAccess.length > 0 || hasEditorAccess.length > 0) {
+            this.$router.push({ path: `/application/process/view/${id}` });
+          } else {
+            this.itemId = id;
+            this.itemType = "view";
+            this.requestDialog = true;
+          }
+        } else {
+          this.$router.push({ path: `/application/process/view/${id}` });
+        }
       }
     },
   },
@@ -423,15 +500,15 @@ export default {
     tagKeywordsOptions() {
       return this.$store.state.tag.tagsSimplified;
     },
-    municipalityOptions() {
-      return this.$store.state.municipality.municipalitiesSimplified;
+    locationOptions() {
+      return this.$store.state.municipality.locationsSimplified;
     },
   },
   mounted() {
     this.getProjects(); // This will now also call getProjectDashboardStats
     this.getCategories();
     this.getTags();
-    this.getMunicipalities();
+    this.getLocations();
 
     if (localStorage.getItem("pagination")) {
       const savedPagination = JSON.parse(localStorage.getItem("pagination"));
@@ -469,7 +546,7 @@ export default {
         }
       }
     },
-    selectedMunicipalities() {
+    selectedLocations() {
       this.getProjects();
       this.updateDashboardStats();
     },
