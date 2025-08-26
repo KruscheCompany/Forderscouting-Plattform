@@ -3,5 +3,7 @@ export default function() {
     municipalities: [],
     states: [],
     groupedStates: [],
+    municipalitiesSimplified: [],
+    locationsSimplified: [],
   };
 }

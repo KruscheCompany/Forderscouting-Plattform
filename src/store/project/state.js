@@ -4,6 +4,9 @@ export default function() {
     project: null,
     tempCategories: [],
     tempTags: [],
-    createdProjectIdea: null
+    createdProjectIdea: null,
+    projectDashboardStats: null,
+    applicationProcess: null,
+    financialPlan: null
   };
 }

@@ -184,6 +184,7 @@
     "projectValue&Benefits": "Projektmehrwert & -nutzen",
     "CooperationPartner": "Kooperationspartner",
     "projectContent": "Projektinhalt",
+    "projectDescription": "Projektbeschreibung",
     "duplications": "Vervielfältigungen",
     "noTagsSet": "Keine Tags gesetzt",
     "noEditorsInvited": "Keine Bearbeiter eingeladen",
@@ -844,13 +845,13 @@
       "tabs": {
         "aiFundingCheck": "KI-Förderprüfung",
         "projectDevelopment": "Projektentwicklung",
-        "application": "Antrag"
+        "application": "Antragsstellung"
       },
       "steps": {
-        "projectDescription": "Projektbeschreibung",
-        "fundingCheck": "Förderprüfung",
+        "projectDescription": "Bedarfserfassung Projektbeschreibung",
+        "fundingCheck": "Förderrichtlinien-Check",
         "openQuestions": "Offene Fragen",
-        "aptitude": "Eignung",
+        "aptitude": "Eignungsprüfung",
         "basicDecision": "Grundsatzbeschluss"
       }
     },
@@ -920,5 +921,38 @@
         }
       }
     }
-  }
+  },
+  "ProjectDashboard": {
+    "activeProjects": "Aktive Projekte",
+    "totalProjects": "Gesamtprojekte",
+    "totalInvestment": "Gesamtinvestition",
+    "grants": "Fördermittel",
+    "ownFunds": "Eigenmittel",
+    "thirdPartyFunds": "Fremdmittel",
+    "title": "Titel",
+    "municipalities": "Gemeinden",
+    "status": "Status",
+    "investive": "Investiv/ nicht investiv",
+    "categories": "Kategorien",
+    "applicationProcess": "Antragsweg",
+    "noFinancialData": "Keine Finanzdaten verfügbar",
+    "financialPlan": "Finanzplan",
+    "accessDenied": "Zugriff auf Finanzinformationen verweigert",
+    "accessError": "Fehler bei der Überprüfung der Zugriffsberechtigungen",
+    "locations": "Ort"
+  },
+  "aiFundingCheck": "KI-Fördermittelcheck",
+  "AI funding check": "KI-Fördermittelcheck",
+  "Zuwendungsbescheid": "Zuwendungsbescheid",
+  "Ablehnungsbescheid": "Ablehnungsbescheid",
+  "In Bearbeitung": "In Bearbeitung",
+  "application": "Antragsstellung",
+  "Application": "Antragsstellung",
+  "projectDevelopment": "Projektentwicklung",
+  "Project development": "Projektentwicklung",
+  "Project Description": "Bedarfserfassung Projektbeschreibung",
+  "Funding Check": "Förderrichtlinien-Check",
+  "Open Questions": "Offene Fragen",
+  "Aptitude": "Eignungsprüfung",
+  "Basic decision": "Grundsatzbeschluss"
 }

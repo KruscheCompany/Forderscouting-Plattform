@@ -2,11 +2,11 @@
   <q-page class="q-mt-lg bg-blue-1" :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'">
     <q-toolbar class="bg-blue text-white shadow-2 radius-top-20">
       <q-tabs v-model="tab" shrink stretch active-color="yellow" content-class="custom-borders">
-        <q-tab v-for="tab in tabs" :key="tab.name" :name="tab.name" :label="tab.label" />
+        <q-tab v-for="tab in tabs" :key="tab.name" :name="tab.name" :label="$t(tab.label)" />
       </q-tabs>
     </q-toolbar>
     <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="radius-bottom-20 shadow-2">
-      <q-step v-for="(step, index) in steps" :key="index" :name="step.name" :title="step.title" :icon="step.icon"
+      <q-step v-for="(step, index) in steps" :key="index" :name="step.name" :title="$t(step.title)" :icon="step.icon"
         :done="step.done" :header-nav="step.done" />
     </q-stepper>
     <ProjectContent :currentTab="step" />
@@ -25,9 +25,9 @@ export default {
       step: 'project',
       tab: 'tab1',
       tabs: [
-        { name: 'tab1', label: this.$t('projectView.tabs.aiFundingCheck') },
-        { name: 'tab2', label: this.$t('projectView.tabs.projectDevelopment') },
-        { name: 'tab3', label: this.$t('projectView.tabs.application') }
+        { name: 'tab1', label: 'AI funding check' },
+        { name: 'tab2', label: 'Project development' },
+        { name: 'tab3', label: 'application' }
       ],
     };
   },
@@ -37,11 +37,11 @@ export default {
     },
     steps() {
       return this.project ? this.project.fundingCheckSteps : [
-        { name: 'project', title: this.$t('projectView.steps.projectDescription'), icon: 'description', done: true },
-        { name: 'fundingCheck', title: this.$t('projectView.steps.fundingCheck'), icon: 'monetization_on', done: false },
-        { name: 'qAndA', title: this.$t('projectView.steps.openQuestions'), icon: 'help_outline', done: false },
-        { name: 'aptitude', title: this.$t('projectView.steps.aptitude'), icon: 'check_circle', done: false },
-        { name: 'decision', title: this.$t('projectView.steps.basicDecision'), icon: 'gavel', done: false }
+        { name: 'project', title: 'Project Description', icon: 'description', done: true },
+        { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: false },
+        { name: 'qAndA', title: 'Open Questions', icon: 'help_outline', done: false },
+        { name: 'aptitude', title: 'Aptitude', icon: 'check_circle', done: false },
+        { name: 'decision', title: 'Basic decision', icon: 'gavel', done: false }
       ];
     }
   },

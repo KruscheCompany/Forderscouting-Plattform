@@ -182,6 +182,7 @@
     "projectValue&Benefits": "Project Value & Benefits",
     "CooperationPartner": "Cooperation Partner",
     "projectContent": "Project Content",
+    "projectDescription": "Project Description",
     "duplications": "Duplications",
     "noTagsSet": "No Tags Set",
     "noEditorsInvited": "No editors Invited",
@@ -860,5 +861,17 @@
         "Links": "Links"
       }
     }
+  },
+  "ProjectDashboard": {
+    "activeProjects": "Active Projects",
+    "totalProjects": "Total Projects",
+    "totalInvestment": "Total Investment",
+    "grants": "Grants",
+    "ownFunds": "Own Funds",
+    "thirdPartyFunds": "Third Party Funds",
+    "accessDenied": "Access denied to financial information",
+    "accessError": "Error checking access permissions",
+    "noFinancialData": "No financial data available",
+    "financialPlan": "Financial Plan"
   }
 }

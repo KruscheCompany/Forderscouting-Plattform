@@ -14,6 +14,20 @@ export async function getCategories(context) {
   }
 }
 
+export async function getSimplifiedCategories(context) {
+  try {
+    const res = await api.get("/api/category/simple");
+    context.commit("setCategoriesSimplified", res.data);
+  } catch (error) {
+    Notify.create({
+      position: "top-right",
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    return false;
+  }
+}
+
 export async function addCategory(context, payload) {
   const { name } = payload;
   if (!!name) {
