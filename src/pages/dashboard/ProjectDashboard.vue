@@ -36,20 +36,20 @@ export default {
           value: this.stats?.activeProjects,
         },
         {
-          title: this.$t("ProjectDashboard.totalInvestment") + " (gesamtkosten)",
-          value: this.formatCurrency(this.stats?.financialSums.gesamtkosten),
+          title: this.$t("ProjectDashboard.totalInvestment"),
+          value: this.formatCurrency(this.stats?.financialSums.gesamtinvestition),
         },
         {
-          title: this.$t("ProjectDashboard.grants") + " (personalkosten)",
-          value: this.formatCurrency(this.stats?.financialSums.personalkosten),
+          title: this.$t("ProjectDashboard.grants"),
+          value: this.formatCurrency(this.stats?.financialSums.foerdermittel),
         },
         {
-          title: this.$t("ProjectDashboard.ownFunds") + " (sachkosten)",
-          value: this.formatCurrency(this.stats?.financialSums.sachkosten),
+          title: this.$t("ProjectDashboard.ownFunds"),
+          value: this.formatCurrency(this.stats?.financialSums.Eigenmittel),
         },
         {
-          title: this.$t("ProjectDashboard.thirdPartyFunds") + " (investitionskosten)",
-          value: this.formatCurrency(this.stats?.financialSums.investitionskosten),
+          title: this.$t("ProjectDashboard.thirdPartyFunds"),
+          value: this.formatCurrency(this.stats?.financialSums.Fremdmittel),
         },
       ];
     },
