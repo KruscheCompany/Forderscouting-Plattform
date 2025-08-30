@@ -286,7 +286,7 @@ export default {
         // Emit success event
         this.$emit('funding-submitted', {
           fundingMatches: fundingMatchesWithSelection,
-          noneSelected: this.selectedCard === 'Fehlanzeige'
+          noneSelected: this.selectedCard === 'fehlanzeige'
         });
 
       } catch (error) {
@@ -312,6 +312,8 @@ export default {
         } else if (step.name === 'qAndA' && nullifyQuestions) {
           // Reset qAndA step when nullifying questions
           return { ...step, done: false };
+        } else if (step.name === 'qAndA') {
+          return { ...step, skip: false };
         }
         // Keep all other steps as they are
         return { ...step };
