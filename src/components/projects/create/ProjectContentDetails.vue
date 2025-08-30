@@ -44,7 +44,7 @@
                 <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                   {{ $t('projectComponents.contentDetails.financingOverview') }}
                 </h4>
-                <q-input outlined type="textarea" rows="15" class="no-shadow input-radius-6"
+                <q-input outlined type="textarea" rows="14" class="no-shadow input-radius-6"
                   :placeholder="$t('newProjectIdeaForm.financialPlan')" v-model="localForm.financialPlan.description" />
               </div>
               <div class="col-4">
@@ -52,7 +52,7 @@
                   {{ $t('projectComponents.contentDetails.financialPlanTitle') }}
                 </h4>
                 <q-input v-for="(plan, index) in localForm.financialPlan.costAndFinance" :key="index" outlined
-                  class="no-shadow input-radius-6 q-mb-xs"
+                  class="no-shadow input-radius-6 q-mb-md"
                   :label="$t(`projectComponents.contentDetails.costs.${plan.title}`)" v-model="plan.value"
                   v-money="money" suffix="€" />
               </div>
