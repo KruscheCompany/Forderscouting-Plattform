@@ -10,7 +10,7 @@
     <div>
       <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="radius-bottom-20 shadow-2">
         <q-step v-for="(step, index) in steps" :key="index" :name="step.name" :title="$t(step.title)" :icon="step.icon"
-          :done="step.done && !step.skip" :header-nav="step.done" />
+          :done="step.done && !step.skip" :header-nav="step.done && !step.skip" />
       </q-stepper>
     </div>
 
@@ -143,6 +143,7 @@ export default {
     },
     async handleFundingSubmitted(data) {
       const { noChange, noneSelected } = data;
+      console.log("🚀 ~ handleFundingSubmitted ~ noneSelected:", noneSelected)
 
       if (!noChange) {
         this.form.fundingMatches = data.fundingMatches;
