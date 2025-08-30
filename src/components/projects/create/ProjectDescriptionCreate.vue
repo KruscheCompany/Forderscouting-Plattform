@@ -61,10 +61,10 @@ export default {
         financialPlan: {
           description: "",
           costAndFinance: [
-            { title: "Gesamtkosten", value: "" },
-            { title: "Personalkosten", value: "" },
-            { title: "Sachkosten", value: "" },
-            { title: "Investitionskosten", value: "" }
+            { title: "Gesamtinvestition", value: "" },
+            { title: "Fördermittel", value: "" },
+            { title: "Eigenmittel", value: "" },
+            { title: "Fremdmittel", value: "" }
           ]
         },
         editors: [],

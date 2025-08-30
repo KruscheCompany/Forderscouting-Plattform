@@ -891,10 +891,10 @@
         "timelineTitle": "Projektlaufzeit und Meilensteine",
         "documentationTitle": "Projektdokumentation",
         "costs": {
-          "Gesamtkosten": "Gesamtkosten",
-          "Personalkosten": "Personalkosten",
-          "Sachkosten": "Sachkosten",
-          "Investitionskosten": "Investitionskosten"
+          "Gesamtinvestition": "Gesamtinvestition",
+          "Fördermittel": "Fördermittel",
+          "Eigenmittel": "Eigenmittel",
+          "Fremdmittel": "Fremdmittel"
         }
       },
       "contentDetailsView": {

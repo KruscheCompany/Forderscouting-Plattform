@@ -832,10 +832,10 @@
       "timelineTitle": "Project Duration and Milestones",
       "documentationTitle": "Project Documentation",
       "costs": {
-        "Gesamtkosten": "Total Costs",
-        "Personalkosten": "Personnel Costs",
-        "Sachkosten": "Material Costs",
-        "Investitionskosten": "Investment Costs"
+        "Gesamtinvestition": "Total Investment",
+        "Fördermittel": "Grants",
+        "Eigenmittel": "Own Funds",
+        "Fremdmittel": "Third Party Funds"
       }
     },
     "contentDetailsView": {

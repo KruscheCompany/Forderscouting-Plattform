@@ -222,10 +222,10 @@ export default {
       }
       // Return default structure if no data is available
       return [
-        { title: this.$t('projectComponents.contentDetails.costs.Gesamtkosten'), value: "" },
-        { title: this.$t('projectComponents.contentDetails.costs.Personalkosten'), value: "" },
-        { title: this.$t('projectComponents.contentDetails.costs.Sachkosten'), value: "" },
-        { title: this.$t('projectComponents.contentDetails.costs.Investitionskosten'), value: "" }
+        { title: this.$t('projectComponents.contentDetails.costs.Gesamtinvestition'), value: "" },
+        { title: this.$t('projectComponents.contentDetails.costs.Fördermittel'), value: "" },
+        { title: this.$t('projectComponents.contentDetails.costs.Eigenmittel'), value: "" },
+        { title: this.$t('projectComponents.contentDetails.costs.Fremdmittel'), value: "" }
       ];
     },
     timeline() {
@@ -263,12 +263,12 @@ export default {
     translateCostTitle(title) {
       // Map known German cost titles to i18n keys
       const costTitleMap = {
-        'Gesamtkosten': this.$t('projectComponents.contentDetails.costs.Gesamtkosten'),
-        'Personalkosten': this.$t('projectComponents.contentDetails.costs.Personalkosten'),
-        'Sachkosten': this.$t('projectComponents.contentDetails.costs.Sachkosten'),
-        'Investitionskosten': this.$t('projectComponents.contentDetails.costs.Investitionskosten')
+        'Gesamtinvestition': this.$t('projectComponents.contentDetails.costs.Gesamtinvestition'),
+        'Fördermittel': this.$t('projectComponents.contentDetails.costs.Fördermittel'),
+        'Eigenmittel': this.$t('projectComponents.contentDetails.costs.Eigenmittel'),
+        'Fremdmittel': this.$t('projectComponents.contentDetails.costs.Fremdmittel')
       };
-      
+
       return costTitleMap[title] || title; // Return translation or original if not found
     },
     formatCurrency(value) {
@@ -287,7 +287,7 @@ export default {
       return new Intl.NumberFormat('de-DE', {
         style: 'currency',
         currency: 'EUR',
-        minimumFractionDigits: 0,
+        minimumFractionDigits: 2,
         maximumFractionDigits: 2
       }).format(numValue);
     },
