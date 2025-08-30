@@ -69,7 +69,7 @@ export default {
         data: {
           id: this.createdProjectId,
           details: {
-            id: this.$store.state.project.createdProjectIdea.attributes.details.id,
+            id: this.projectData.details.id,
             aptitude: this.aptitude
           },
           fundingCheckSteps: this.getUpdatedSteps()
