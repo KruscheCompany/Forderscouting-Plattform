@@ -1,8 +1,7 @@
 <template>
   <div class="q-my-lg">
-    <q-table v-if="applicationProcess && applicationProcess.length" class="radius-20 shadow-1 pagination-no-shadow"
-      :class="expanded ? 'yellowBg' : ''" :data="applicationProcess" :columns="columns" row-key="name"
-      :visible-columns="visibleColumns" :pagination="{
+    <q-table class="radius-20 shadow-1 pagination-no-shadow" :class="expanded ? 'yellowBg' : ''"
+      :data="applicationProcess" :columns="columns" row-key="name" :visible-columns="visibleColumns" :pagination="{
         sortBy: 'title',
         descending: true,
         page: 1,
@@ -31,6 +30,16 @@
             </template>
 
             <div class="row q-px-xs q-mt-md q-col-gutter-x-lg">
+
+              <div class="col-6 col-md-3" v-if="isAdmin">
+                <p class="text-black q-mb-xs font-16">
+                  {{ $t("ProjectDashboard.municipalities") }}
+                </p>
+                <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
+                  :label="$t('Search')" multiple filled :options="municipalityOptions" v-model="selectedMunicipalities"
+                  option-value="id" option-label="title">
+                </q-select>
+              </div>
 
               <div class="col-6 col-md-3">
                 <p class="text-black q-mb-xs font-16">
@@ -175,6 +184,7 @@ export default {
       selectedCategories: null,
       selectedStatus: null,
       selectedInvestive: null,
+      selectedMunicipalities: null,
       selectedLocations: null,
       tagsKeywords: null,
       statusOptions: [
@@ -197,6 +207,11 @@ export default {
       const searchValue = this.search || '';
       if (searchValue.trim() && searchValue.trim().length >= 3) {
         filters.search = searchValue.trim();
+      }
+
+      // Add municipalities if selected (admin only)
+      if (this.isAdmin && this.selectedMunicipalities && this.selectedMunicipalities.length) {
+        filters.municipality = this.selectedMunicipalities.map(item => item.id || item).join(',');
       }
 
       // Add locations if selected
@@ -233,8 +248,19 @@ export default {
     async getTags() {
       await this.$store.dispatch("tag/getSimplifiedTags");
     },
+    async getMunicipalities() {
+      await this.$store.dispatch("municipality/getMunicipalities");
+    },
     async getLocations() {
-      await this.$store.dispatch("municipality/getLocationsByMunicipality", { skipAdminPrivileges: true });
+      // Only send municipality ID if a municipality is selected
+      const params = {};
+
+      // If admin has selected municipalities, send all as comma-separated
+      if (this.isAdmin && this.selectedMunicipalities && this.selectedMunicipalities.length) {
+        params.municipalityId = this.selectedMunicipalities.map(item => item.id || item).join(',');
+      }
+
+      await this.$store.dispatch("municipality/getLocationsByMunicipality", params);
     },
     getLastCompletedStep(applicationProcessSteps) {
       if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
@@ -374,6 +400,11 @@ export default {
         filters.search = searchValue.trim();
       }
 
+      // Add municipalities if selected (admin only)
+      if (this.isAdmin && this.selectedMunicipalities && this.selectedMunicipalities.length) {
+        filters.municipality = this.selectedMunicipalities.map(item => item.id || item).join(',');
+      }
+
       // Add locations if selected
       if (this.selectedLocations && this.selectedLocations.length) {
         filters.location = this.selectedLocations.map(item => item.title || item).join(',');
@@ -504,30 +535,114 @@ export default {
     locationOptions() {
       return this.$store.state.municipality.locationsSimplified;
     },
+    municipalityOptions() {
+      return this.$store.state.municipality.municipalitiesSimplified;
+    },
   },
   mounted() {
-    this.getProjects(); // This will now also call getProjectDashboardStats
+    // Load saved filters from localStorage
+    try {
+      const savedFilters = JSON.parse(localStorage.getItem("projectDashboardFilters") || "{}");
+
+      // Apply saved filters if they exist
+      if (savedFilters) {
+        if (savedFilters.search) this.search = savedFilters.search;
+
+        if (savedFilters.selectedCategories) {
+          this.selectedCategories = savedFilters.selectedCategories;
+        }
+
+        if (savedFilters.selectedStatus) {
+          this.selectedStatus = savedFilters.selectedStatus;
+        }
+
+        if (savedFilters.selectedInvestive) {
+          this.selectedInvestive = savedFilters.selectedInvestive;
+        }
+
+        if (savedFilters.selectedLocations) {
+          this.selectedLocations = savedFilters.selectedLocations;
+        }
+
+        if (this.isAdmin && savedFilters.selectedMunicipalities) {
+          this.selectedMunicipalities = savedFilters.selectedMunicipalities;
+        }
+
+        if (savedFilters.tagsKeywords) {
+          this.tagsKeywords = savedFilters.tagsKeywords;
+        }
+
+        if (savedFilters.expanded !== undefined) {
+          this.expanded = savedFilters.expanded;
+        }
+      }
+    } catch (error) {
+      console.error("Error loading saved filters:", error);
+    }
+
+    // Load required data
     this.getCategories();
     this.getTags();
-    this.getLocations();
 
-    if (localStorage.getItem("pagination")) {
-      const savedPagination = JSON.parse(localStorage.getItem("pagination"));
-
-      this.$refs.table.setPagination({
-        page: savedPagination.projectDashboardPage || 1,
-        rowsPerPage: savedPagination.projectDashboardRowsPerPage || 10,
-      });
+    // Only fetch municipalities for admin users
+    if (this.isAdmin) {
+      this.getMunicipalities();
     }
+
+    // Get locations and projects after loading municipalities
+    this.$nextTick(() => {
+      this.getLocations();
+      this.getProjects(); // This will also update dashboard stats
+    });
+
+    // Apply saved pagination settings
+    this.$nextTick(() => {
+      if (localStorage.getItem("pagination") && this.$refs.table) {
+        try {
+          const savedPagination = JSON.parse(localStorage.getItem("pagination"));
+          this.$refs.table.setPagination({
+            page: savedPagination.projectDashboardPage || 1,
+            rowsPerPage: savedPagination.projectDashboardRowsPerPage || 10,
+          });
+        } catch (error) {
+          console.error("Error applying saved pagination:", error);
+        }
+      }
+    });
   },
   beforeDestroy() {
-    const pagination = JSON.parse(localStorage.getItem("pagination"));
-    const localPagination = {
-      projectDashboardPage: this.$refs.table.computedPagination.page,
-      projectDashboardRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
-    };
-    const filters = { ...pagination, ...localPagination };
-    localStorage.setItem("pagination", JSON.stringify(filters));
+    // Save filter selections
+    try {
+      const filtersToSave = {
+        search: this.search || "",
+        selectedCategories: this.selectedCategories || null,
+        selectedStatus: this.selectedStatus || null,
+        selectedInvestive: this.selectedInvestive || null,
+        selectedLocations: this.selectedLocations || null,
+        selectedMunicipalities: this.selectedMunicipalities || null,
+        tagsKeywords: this.tagsKeywords || null,
+        expanded: this.expanded
+      };
+
+      localStorage.setItem("projectDashboardFilters", JSON.stringify(filtersToSave));
+    } catch (error) {
+      console.error("Error saving filters:", error);
+    }
+
+    // Save pagination settings
+    if (this.$refs.table) {
+      try {
+        const pagination = JSON.parse(localStorage.getItem("pagination") || "{}");
+        const localPagination = {
+          projectDashboardPage: this.$refs.table.computedPagination.page,
+          projectDashboardRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
+        };
+        const paginationToSave = { ...pagination, ...localPagination };
+        localStorage.setItem("pagination", JSON.stringify(paginationToSave));
+      } catch (error) {
+        console.error("Error saving pagination:", error);
+      }
+    }
   },
   watch: {
     search: {
@@ -546,6 +661,11 @@ export default {
           }, 500); // Wait for 500ms after typing stops
         }
       }
+    },
+    selectedMunicipalities() {
+      this.getLocations();
+      this.getProjects();
+      this.updateDashboardStats();
     },
     selectedLocations() {
       this.getProjects();
