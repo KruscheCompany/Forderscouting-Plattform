@@ -1,7 +1,8 @@
 <template>
   <div class="q-my-lg">
-    <q-table class="radius-20 shadow-1 pagination-no-shadow" :class="expanded ? 'yellowBg' : ''"
-      :data="applicationProcess" :columns="columns" row-key="name" :visible-columns="visibleColumns" :pagination="{
+    <q-table v-if="applicationProcess && applicationProcess.length" class="radius-20 shadow-1 pagination-no-shadow"
+      :class="expanded ? 'yellowBg' : ''" :data="applicationProcess" :columns="columns" row-key="name"
+      :visible-columns="visibleColumns" :pagination="{
         sortBy: 'title',
         descending: true,
         page: 1,
@@ -280,29 +281,29 @@ export default {
     // Track expanded rows using unique IDs
     async toggleExpand(row) {
       const rowId = row.id || row.name; // Use ID or name as unique identifier
-      
+
       // If already expanded, just collapse it
       if (this.expandedRows[rowId]) {
         this.$set(this.expandedRows, rowId, false);
         return;
       }
-      
+
       // If not expanded, validate access before expanding
       try {
         // Validate access using the API
         const validationResult = await this.$store.dispatch("project/validateApplicationAccess", rowId);
-        
+
         // If access is granted, store the financial data and expand the row
         if (validationResult.accessGranted) {
           // Update the row's financial plan with data from API
           if (validationResult.financialPlan) {
             // Update financial plan in Vuex store
             this.$store.commit("project/setFinancialPlan", validationResult.financialPlan);
-            
+
             // Update the current row's financial plan data for display
             // We need to use Vue's reactivity system to ensure the UI updates
-            const updatedRow = {...row, financialPlan: validationResult.financialPlan};
-            
+            const updatedRow = { ...row, financialPlan: validationResult.financialPlan };
+
             // Find index of the row in application process and update it
             if (this.applicationProcess) {
               const index = this.applicationProcess.findIndex(item => item.id === rowId);
@@ -313,7 +314,7 @@ export default {
               }
             }
           }
-          
+
           // Expand the row
           this.$set(this.expandedRows, rowId, true);
         } else {
@@ -322,7 +323,7 @@ export default {
             type: "negative",
             message: this.$t("ProjectDashboard.accessDenied") || "Access denied to financial information"
           });
-          
+
           // Keep row collapsed
           this.$set(this.expandedRows, rowId, false);
         }
@@ -332,7 +333,7 @@ export default {
           type: "negative",
           message: this.$t("ProjectDashboard.accessError") || "Error checking access permissions"
         });
-        
+
         // Keep row collapsed on error
         this.$set(this.expandedRows, rowId, false);
       }
@@ -358,7 +359,7 @@ export default {
       return new Intl.NumberFormat('de-DE', {
         style: 'currency',
         currency: 'EUR',
-        minimumFractionDigits: 0,
+        minimumFractionDigits: 2,
         maximumFractionDigits: 2
       }).format(numValue);
     },
@@ -408,12 +409,12 @@ export default {
       try {
         // Validate access using the new API
         const validationResult = await this.$store.dispatch("project/validateApplicationAccess", id);
-        
+
         // Store financial plan from the validation response
         if (validationResult.financialPlan) {
           this.$store.commit("project/setFinancialPlan", validationResult.financialPlan);
         }
-        
+
         if (validationResult.accessGranted) {
           // Access is granted by the API, navigate to the view
           this.$router.push({ path: `/application/process/view/${id}` });
