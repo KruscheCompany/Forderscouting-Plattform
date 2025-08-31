@@ -1,7 +1,7 @@
 <template>
   <q-card class="shadow-1 radius-20">
-    <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t('Task Plan')"
-      header-class="bg-white text-black" v-model="expandedAptitude">
+    <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t('projectComponents.taskPlan.title')"
+      header-class="bg-white text-black" v-model="expandedTaskPlan">
       <q-card-section class="q-pt-none">
         <div>
           <q-list>
@@ -36,7 +36,7 @@
               <q-item-section>
                 <div class="row items-center">
                   <q-input v-model="newTaskTitle" outlined class="no-shadow input-radius-6 col-grow"
-                    placeholder="Enter new task" @keyup.enter="addCustomTask">
+                    :placeholder="$t('projectComponents.taskPlan.newTaskPlaceholder')" @keyup.enter="addCustomTask">
                     <template v-slot:append>
                       <q-btn class="q-ml-sm" round color="primary" icon="add" @click="addCustomTask"
                         :disabled="!newTaskTitle.trim()" />
@@ -72,7 +72,7 @@ export default {
   },
   data() {
     return {
-      expandedAptitude: this.currentTab === "taskPlan",
+      expandedTaskPlan: this.currentTab === "taskPlan",
       newTaskTitle: '',
       taskPlan: this.projectData.taskPlan || {
         tasks: [
@@ -105,7 +105,7 @@ export default {
   watch: {
     currentTab(newTab) {
       // Expand the section if the current tab is 'taskPlan'
-      this.expandedAptitude = newTab === "taskPlan";
+      this.expandedTaskPlan = newTab === "taskPlan";
     }
   },
   methods: {
