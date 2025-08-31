@@ -64,7 +64,7 @@ export default {
             { title: "Gesamtinvestition", value: "" },
             { title: "Fördermittel", value: "" },
             { title: "Eigenmittel", value: "" },
-            { title: "Fremdmittel", value: "" }
+            { title: "Drittmittel", value: "" }
           ]
         },
         editors: [],
