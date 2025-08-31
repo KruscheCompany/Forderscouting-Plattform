@@ -1,7 +1,7 @@
 <template>
   <q-card class="shadow-1 radius-20">
     <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t(
-      'projectContent.generalInformation')" header-class="bg-white text-black" v-model="expanded">
+      'projectContent.projectDescription')" header-class="bg-white text-black" v-model="expanded">
       <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify"
         narrow-indicator>
         <q-tab v-for="tab in tabs" :key="tab.name" :name="tab.name" :label="tab.label" />
@@ -222,10 +222,10 @@ export default {
       }
       // Return default structure if no data is available
       return [
-        { title: this.$t('projectComponents.contentDetails.costs.Gesamtkosten'), value: "" },
-        { title: this.$t('projectComponents.contentDetails.costs.Personalkosten'), value: "" },
-        { title: this.$t('projectComponents.contentDetails.costs.Sachkosten'), value: "" },
-        { title: this.$t('projectComponents.contentDetails.costs.Investitionskosten'), value: "" }
+        { title: this.$t('ProjectDashboard.totalInvestment'), value: "" },
+        { title: this.$t('ProjectDashboard.grants'), value: "" },
+        { title: this.$t('ProjectDashboard.ownFunds'), value: "" },
+        { title: this.$t('ProjectDashboard.thirdPartyFunds'), value: "" }
       ];
     },
     timeline() {
@@ -263,12 +263,12 @@ export default {
     translateCostTitle(title) {
       // Map known German cost titles to i18n keys
       const costTitleMap = {
-        'Gesamtkosten': this.$t('projectComponents.contentDetails.costs.Gesamtkosten'),
-        'Personalkosten': this.$t('projectComponents.contentDetails.costs.Personalkosten'),
-        'Sachkosten': this.$t('projectComponents.contentDetails.costs.Sachkosten'),
-        'Investitionskosten': this.$t('projectComponents.contentDetails.costs.Investitionskosten')
+        'Gesamtinvestition': this.$t('ProjectDashboard.totalInvestment'),
+        'Fördermittel': this.$t('ProjectDashboard.grants'),
+        'Eigenmittel': this.$t('ProjectDashboard.ownFunds'),
+        'Drittmittel': this.$t('ProjectDashboard.thirdPartyFunds')
       };
-      
+
       return costTitleMap[title] || title; // Return translation or original if not found
     },
     formatCurrency(value) {
@@ -287,7 +287,7 @@ export default {
       return new Intl.NumberFormat('de-DE', {
         style: 'currency',
         currency: 'EUR',
-        minimumFractionDigits: 0,
+        minimumFractionDigits: 2,
         maximumFractionDigits: 2
       }).format(numValue);
     },

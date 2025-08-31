@@ -31,6 +31,16 @@
 
             <div class="row q-px-xs q-mt-md q-col-gutter-x-lg">
 
+              <div class="col-6 col-md-3" v-if="isAdmin">
+                <p class="text-black q-mb-xs font-16">
+                  {{ $t("ProjectDashboard.municipalities") }}
+                </p>
+                <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
+                  :label="$t('Search')" multiple filled :options="municipalityOptions" v-model="selectedMunicipalities"
+                  option-value="id" option-label="title">
+                </q-select>
+              </div>
+
               <div class="col-6 col-md-3">
                 <p class="text-black q-mb-xs font-16">
                   {{ $t("ProjectDashboard.locations") }}
@@ -174,6 +184,7 @@ export default {
       selectedCategories: null,
       selectedStatus: null,
       selectedInvestive: null,
+      selectedMunicipalities: null,
       selectedLocations: null,
       tagsKeywords: null,
       statusOptions: [
@@ -196,6 +207,11 @@ export default {
       const searchValue = this.search || '';
       if (searchValue.trim() && searchValue.trim().length >= 3) {
         filters.search = searchValue.trim();
+      }
+
+      // Add municipalities if selected (admin only)
+      if (this.isAdmin && this.selectedMunicipalities && this.selectedMunicipalities.length) {
+        filters.municipality = this.selectedMunicipalities.map(item => item.id || item).join(',');
       }
 
       // Add locations if selected
@@ -232,8 +248,19 @@ export default {
     async getTags() {
       await this.$store.dispatch("tag/getSimplifiedTags");
     },
+    async getMunicipalities() {
+      await this.$store.dispatch("municipality/getMunicipalities");
+    },
     async getLocations() {
-      await this.$store.dispatch("municipality/getLocationsByMunicipality", { skipAdminPrivileges: true });
+      // Only send municipality ID if a municipality is selected
+      const params = {};
+
+      // If admin has selected municipalities, send all as comma-separated
+      if (this.isAdmin && this.selectedMunicipalities && this.selectedMunicipalities.length) {
+        params.municipalityId = this.selectedMunicipalities.map(item => item.id || item).join(',');
+      }
+
+      await this.$store.dispatch("municipality/getLocationsByMunicipality", params);
     },
     getLastCompletedStep(applicationProcessSteps) {
       if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
@@ -280,29 +307,29 @@ export default {
     // Track expanded rows using unique IDs
     async toggleExpand(row) {
       const rowId = row.id || row.name; // Use ID or name as unique identifier
-      
+
       // If already expanded, just collapse it
       if (this.expandedRows[rowId]) {
         this.$set(this.expandedRows, rowId, false);
         return;
       }
-      
+
       // If not expanded, validate access before expanding
       try {
         // Validate access using the API
         const validationResult = await this.$store.dispatch("project/validateApplicationAccess", rowId);
-        
+
         // If access is granted, store the financial data and expand the row
         if (validationResult.accessGranted) {
           // Update the row's financial plan with data from API
           if (validationResult.financialPlan) {
             // Update financial plan in Vuex store
             this.$store.commit("project/setFinancialPlan", validationResult.financialPlan);
-            
+
             // Update the current row's financial plan data for display
             // We need to use Vue's reactivity system to ensure the UI updates
-            const updatedRow = {...row, financialPlan: validationResult.financialPlan};
-            
+            const updatedRow = { ...row, financialPlan: validationResult.financialPlan };
+
             // Find index of the row in application process and update it
             if (this.applicationProcess) {
               const index = this.applicationProcess.findIndex(item => item.id === rowId);
@@ -313,7 +340,7 @@ export default {
               }
             }
           }
-          
+
           // Expand the row
           this.$set(this.expandedRows, rowId, true);
         } else {
@@ -322,7 +349,7 @@ export default {
             type: "negative",
             message: this.$t("ProjectDashboard.accessDenied") || "Access denied to financial information"
           });
-          
+
           // Keep row collapsed
           this.$set(this.expandedRows, rowId, false);
         }
@@ -332,7 +359,7 @@ export default {
           type: "negative",
           message: this.$t("ProjectDashboard.accessError") || "Error checking access permissions"
         });
-        
+
         // Keep row collapsed on error
         this.$set(this.expandedRows, rowId, false);
       }
@@ -358,7 +385,7 @@ export default {
       return new Intl.NumberFormat('de-DE', {
         style: 'currency',
         currency: 'EUR',
-        minimumFractionDigits: 0,
+        minimumFractionDigits: 2,
         maximumFractionDigits: 2
       }).format(numValue);
     },
@@ -371,6 +398,11 @@ export default {
       const searchValue = this.search || '';
       if (searchValue.trim() && searchValue.trim().length >= 3) {
         filters.search = searchValue.trim();
+      }
+
+      // Add municipalities if selected (admin only)
+      if (this.isAdmin && this.selectedMunicipalities && this.selectedMunicipalities.length) {
+        filters.municipality = this.selectedMunicipalities.map(item => item.id || item).join(',');
       }
 
       // Add locations if selected
@@ -408,12 +440,12 @@ export default {
       try {
         // Validate access using the new API
         const validationResult = await this.$store.dispatch("project/validateApplicationAccess", id);
-        
+
         // Store financial plan from the validation response
         if (validationResult.financialPlan) {
           this.$store.commit("project/setFinancialPlan", validationResult.financialPlan);
         }
-        
+
         if (validationResult.accessGranted) {
           // Access is granted by the API, navigate to the view
           this.$router.push({ path: `/application/process/view/${id}` });
@@ -503,30 +535,114 @@ export default {
     locationOptions() {
       return this.$store.state.municipality.locationsSimplified;
     },
+    municipalityOptions() {
+      return this.$store.state.municipality.municipalitiesSimplified;
+    },
   },
   mounted() {
-    this.getProjects(); // This will now also call getProjectDashboardStats
+    // Load saved filters from localStorage
+    try {
+      const savedFilters = JSON.parse(localStorage.getItem("projectDashboardFilters") || "{}");
+
+      // Apply saved filters if they exist
+      if (savedFilters) {
+        if (savedFilters.search) this.search = savedFilters.search;
+
+        if (savedFilters.selectedCategories) {
+          this.selectedCategories = savedFilters.selectedCategories;
+        }
+
+        if (savedFilters.selectedStatus) {
+          this.selectedStatus = savedFilters.selectedStatus;
+        }
+
+        if (savedFilters.selectedInvestive) {
+          this.selectedInvestive = savedFilters.selectedInvestive;
+        }
+
+        if (savedFilters.selectedLocations) {
+          this.selectedLocations = savedFilters.selectedLocations;
+        }
+
+        if (this.isAdmin && savedFilters.selectedMunicipalities) {
+          this.selectedMunicipalities = savedFilters.selectedMunicipalities;
+        }
+
+        if (savedFilters.tagsKeywords) {
+          this.tagsKeywords = savedFilters.tagsKeywords;
+        }
+
+        if (savedFilters.expanded !== undefined) {
+          this.expanded = savedFilters.expanded;
+        }
+      }
+    } catch (error) {
+      console.error("Error loading saved filters:", error);
+    }
+
+    // Load required data
     this.getCategories();
     this.getTags();
-    this.getLocations();
 
-    if (localStorage.getItem("pagination")) {
-      const savedPagination = JSON.parse(localStorage.getItem("pagination"));
-
-      this.$refs.table.setPagination({
-        page: savedPagination.projectDashboardPage || 1,
-        rowsPerPage: savedPagination.projectDashboardRowsPerPage || 10,
-      });
+    // Only fetch municipalities for admin users
+    if (this.isAdmin) {
+      this.getMunicipalities();
     }
+
+    // Get locations and projects after loading municipalities
+    this.$nextTick(() => {
+      this.getLocations();
+      this.getProjects(); // This will also update dashboard stats
+    });
+
+    // Apply saved pagination settings
+    this.$nextTick(() => {
+      if (localStorage.getItem("pagination") && this.$refs.table) {
+        try {
+          const savedPagination = JSON.parse(localStorage.getItem("pagination"));
+          this.$refs.table.setPagination({
+            page: savedPagination.projectDashboardPage || 1,
+            rowsPerPage: savedPagination.projectDashboardRowsPerPage || 10,
+          });
+        } catch (error) {
+          console.error("Error applying saved pagination:", error);
+        }
+      }
+    });
   },
   beforeDestroy() {
-    const pagination = JSON.parse(localStorage.getItem("pagination"));
-    const localPagination = {
-      projectDashboardPage: this.$refs.table.computedPagination.page,
-      projectDashboardRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
-    };
-    const filters = { ...pagination, ...localPagination };
-    localStorage.setItem("pagination", JSON.stringify(filters));
+    // Save filter selections
+    try {
+      const filtersToSave = {
+        search: this.search || "",
+        selectedCategories: this.selectedCategories || null,
+        selectedStatus: this.selectedStatus || null,
+        selectedInvestive: this.selectedInvestive || null,
+        selectedLocations: this.selectedLocations || null,
+        selectedMunicipalities: this.selectedMunicipalities || null,
+        tagsKeywords: this.tagsKeywords || null,
+        expanded: this.expanded
+      };
+
+      localStorage.setItem("projectDashboardFilters", JSON.stringify(filtersToSave));
+    } catch (error) {
+      console.error("Error saving filters:", error);
+    }
+
+    // Save pagination settings
+    if (this.$refs.table) {
+      try {
+        const pagination = JSON.parse(localStorage.getItem("pagination") || "{}");
+        const localPagination = {
+          projectDashboardPage: this.$refs.table.computedPagination.page,
+          projectDashboardRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
+        };
+        const paginationToSave = { ...pagination, ...localPagination };
+        localStorage.setItem("pagination", JSON.stringify(paginationToSave));
+      } catch (error) {
+        console.error("Error saving pagination:", error);
+      }
+    }
   },
   watch: {
     search: {
@@ -545,6 +661,11 @@ export default {
           }, 500); // Wait for 500ms after typing stops
         }
       }
+    },
+    selectedMunicipalities() {
+      this.getLocations();
+      this.getProjects();
+      this.updateDashboardStats();
     },
     selectedLocations() {
       this.getProjects();

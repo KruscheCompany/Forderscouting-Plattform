@@ -24,6 +24,7 @@ export async function getApplicationProcess(context, filters = {}) {
 
       // Add each filter to the params array if it exists
       if (filters.search) params.push(`search=${encodeURIComponent(filters.search)}`);
+      if (filters.municipality) params.push(`municipality=${filters.municipality}`);
       if (filters.location) params.push(`location=${filters.location}`);
       if (filters.status) params.push(`status=${filters.status}`);
       if (filters.investive) params.push(`investive=${filters.investive}`);
@@ -464,6 +465,7 @@ export async function getProjectDashboardStats(context, filters = {}) {
 
       // Add each filter to the params array if it exists
       if (filters.search) params.push(`search=${encodeURIComponent(filters.search)}`);
+      if (filters.municipality) params.push(`municipality=${filters.municipality}`);
       if (filters.location) params.push(`location=${filters.location}`);
       if (filters.status) params.push(`status=${filters.status}`);
       if (filters.investive) params.push(`investive=${filters.investive}`);

@@ -2,7 +2,7 @@
   <q-page class="q-mt-lg bg-blue-1" :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'">
     <q-toolbar class="bg-blue text-white shadow-2 radius-top-20">
       <q-tabs v-model="tab" shrink stretch active-color="yellow" content-class="custom-borders">
-        <q-tab v-for="tab in tabs" :key="tab.name" :name="tab.name" :label="$t(tab.label)" />
+        <q-tab v-for="tab in tabs" :key="tab.name" :name="tab.name" :label="$t(tab.title)" />
       </q-tabs>
     </q-toolbar>
     <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="radius-bottom-20 shadow-2">
@@ -23,20 +23,34 @@ export default {
   data() {
     return {
       step: 'project',
-      tab: 'tab1',
-      tabs: [
-        { name: 'tab1', label: 'AI funding check' },
-        { name: 'tab2', label: 'Project development' },
-        { name: 'tab3', label: 'application' }
-      ],
+      tab: 'aiFundingCheck',
     };
   },
   computed: {
     project() {
       return this.$store.getters["project/getProject"];
     },
+    tabs() {
+      return this.project && this.project.applicationProcessSteps ? this.project.applicationProcessSteps : [
+        {
+          done: false,
+          name: "aiFundingCheck",
+          title: "AI funding check"
+        },
+        {
+          done: false,
+          name: "projectDevelopment",
+          title: "Project development"
+        },
+        {
+          done: false,
+          name: "application",
+          title: "application"
+        }
+      ];
+    },
     steps() {
-      return this.project ? this.project.fundingCheckSteps : [
+      return this.project && this.project.fundingCheckSteps ? this.project.fundingCheckSteps : [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
         { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: false },
         { name: 'qAndA', title: 'Open Questions', icon: 'help_outline', done: false },

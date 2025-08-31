@@ -31,6 +31,23 @@ export default {
     return {
       expandedAptitude: this.currentTab === "decision",
       decision: this.projectData.details.decision || "",
+      tabs: [
+        {
+          done: false,
+          name: "aiFundingCheck",
+          title: "AI funding check"
+        },
+        {
+          done: false,
+          name: "projectDevelopment",
+          title: "Project development"
+        },
+        {
+          done: false,
+          name: "application",
+          title: "application"
+        }
+      ],
       resetSteps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
         { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: true },
@@ -61,16 +78,29 @@ export default {
         return { ...step };
       });
     },
+    getUpdatedTabs() {
+      // Use existing tabs from projectData if available, otherwise use default tabs
+      const currentTabs = this.projectData.applicationProcessSteps || this.tabs;
+
+      return currentTabs.map(tab => {
+        if (tab.name === 'aiFundingCheck') {
+          return { ...tab, done: true };
+        }
+        // Keep all other tabs as they are
+        return { ...tab };
+      });
+    },
 
     async submitDecision() {
       await this.$store.dispatch('project/simpleUpdateProjectIdea', {
         data: {
           id: this.createdProjectId,
           details: {
-            id: this.$store.state.project.createdProjectIdea.attributes.details.id,
+            id: this.projectData.details.id,
             decision: this.decision
           },
-          fundingCheckSteps: this.getUpdatedSteps()
+          fundingCheckSteps: this.getUpdatedSteps(),
+          applicationProcessSteps: this.getUpdatedTabs()
         }
       });
       this.$emit("decision-submitted", this.decision);

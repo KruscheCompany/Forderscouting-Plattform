@@ -23,20 +23,18 @@
 
           <q-tab-panel name="Projektziele">
             <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-              :placeholder="$t('projectIdeaPlaceholder.describeProjectGoals')" v-model="localForm.details.goals"
-              :rules="[(val) => !!val || $t('Required')]" />
+              :placeholder="$t('projectIdeaPlaceholder.describeProjectGoals')" v-model="localForm.details.goals" />
           </q-tab-panel>
 
           <q-tab-panel name="Projektinhalt">
             <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-              :placeholder="$t('projectIdeaPlaceholder.descripeProject')" v-model="localForm.details.content"
-              :rules="[(val) => !!val || $t('Required')]" />
+              :placeholder="$t('projectIdeaPlaceholder.descripeProject')" v-model="localForm.details.content" />
           </q-tab-panel>
 
           <q-tab-panel name="Nutzen/Wirkung">
             <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
               :placeholder="$t('newProjectIdeaForm.projectValue&Benefits')"
-              v-model="localForm.details.valuesAndBenefits" :rules="[(val) => !!val || $t('Required')]" />
+              v-model="localForm.details.valuesAndBenefits" />
           </q-tab-panel>
 
           <q-tab-panel name="Finanzplan">
@@ -46,18 +44,16 @@
                 <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                   {{ $t('projectComponents.contentDetails.financingOverview') }}
                 </h4>
-                <q-input outlined type="textarea" rows="15" class="no-shadow input-radius-6"
-                  :placeholder="$t('newProjectIdeaForm.financialPlan')" v-model="localForm.financialPlan.description"
-                  :rules="[(val) => !!val || $t('Required')]" />
+                <q-input outlined type="textarea" rows="14" class="no-shadow input-radius-6"
+                  :placeholder="$t('newProjectIdeaForm.financialPlan')" v-model="localForm.financialPlan.description" />
               </div>
               <div class="col-4">
                 <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                   {{ $t('projectComponents.contentDetails.financialPlanTitle') }}
                 </h4>
                 <q-input v-for="(plan, index) in localForm.financialPlan.costAndFinance" :key="index" outlined
-                  class="no-shadow input-radius-6 q-mb-xs"
-                  :label="$t(`projectComponents.contentDetails.costs.${plan.title}`)" v-model="plan.value"
-                  v-money="money" suffix="€" :rules="[(val) => !!val || $t('Required')]" />
+                  class="no-shadow input-radius-6 q-mb-md" :label="plan.title" v-model="plan.value" v-money="money"
+                  suffix="€" />
               </div>
             </div>
 
@@ -70,8 +66,8 @@
             </h4>
 
             <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-              :placeholder="$t('projectIdeaPlaceholder.describeProjectTimeline')" v-model="localForm.details.timeline"
-              :rules="[(val) => !!val || $t('Required')]" />
+              :placeholder="$t('projectIdeaPlaceholder.describeProjectTimeline')"
+              v-model="localForm.details.timeline" />
 
           </q-tab-panel>
 
@@ -79,14 +75,14 @@
 
             <div class="row justify-between">
 
-              <div class="col-12">
+              <div class="col-12 q-mb-md">
                 <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                   {{ $t('projectComponents.contentDetails.documentationTitle') }}
                 </h4>
 
                 <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
                   :placeholder="$t('projectIdeaPlaceholder.describeProjectDocumentation')"
-                  v-model="localForm.details.uploadDescription" :rules="[(val) => !!val || $t('Required')]" />
+                  v-model="localForm.details.uploadDescription" />
 
               </div>
 
@@ -113,7 +109,7 @@
                         <div class="col-8">
                           <q-item-label class="ellipsis" caption>{{
                             imgPreview(image).name
-                            }}</q-item-label>
+                          }}</q-item-label>
                         </div>
                         <div class="col-auto text-right">
                           <q-btn icon="delete" @click.prevent.stop="removeImg(index)" size="sm" round text-color="red"
@@ -151,7 +147,7 @@
                         <q-item-section>
                           <q-item-label class="ellipsis" caption>{{
                             imgPreview(file).name
-                            }}</q-item-label>
+                          }}</q-item-label>
                         </q-item-section>
                         <q-item-section side>
                           <q-btn icon="delete" @click.prevent.stop="removeFile(index)" size="sm" round text-color="red"
@@ -248,10 +244,10 @@ export default {
         financialPlan: {
           description: "",
           costAndFinance: [
-            { title: "Gesamtkosten", value: "" },
-            { title: "Personalkosten", value: "" },
-            { title: "Sachkosten", value: "" },
-            { title: "Investitionskosten", value: "" }
+            { title: this.$t('ProjectDashboard.totalInvestment'), value: "" },
+            { title: this.$t('ProjectDashboard.grants'), value: "" },
+            { title: this.$t('ProjectDashboard.ownFunds'), value: "" },
+            { title: this.$t('ProjectDashboard.thirdPartyFunds'), value: "" }
           ]
         },
         links: [],
@@ -401,10 +397,10 @@ export default {
         financialPlan: formData.financialPlan || {
           description: "",
           costAndFinance: [
-            { title: "Gesamtkosten", value: "" },
-            { title: "Personalkosten", value: "" },
-            { title: "Sachkosten", value: "" },
-            { title: "Investitionskosten", value: "" }
+            { title: this.$t('ProjectDashboard.totalInvestment'), value: "" },
+            { title: this.$t('ProjectDashboard.grants'), value: "" },
+            { title: this.$t('ProjectDashboard.ownFunds'), value: "" },
+            { title: this.$t('ProjectDashboard.externalFunds'), value: "" }
           ]
         },
         links: formData.links || [],

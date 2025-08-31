@@ -32,7 +32,7 @@
               :class="{ 'full-width': $q.screen.lt.md }" no-caps
               @click="$router.push({ path: '/application/process/' })">
               <p class="q-mb-none q-mx-md q-my-sm">
-                {{ $t("homeBtns.applicationProcess") }}
+                {{ $t("homeBtns.applicationProcessBtn") }}
               </p>
             </q-btn>
           </div>
