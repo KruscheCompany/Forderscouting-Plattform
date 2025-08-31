@@ -52,9 +52,8 @@
                   {{ $t('projectComponents.contentDetails.financialPlanTitle') }}
                 </h4>
                 <q-input v-for="(plan, index) in localForm.financialPlan.costAndFinance" :key="index" outlined
-                  class="no-shadow input-radius-6 q-mb-md"
-                  :label="$t(`projectComponents.contentDetails.costs.${plan.title}`)" v-model="plan.value"
-                  v-money="money" suffix="€" />
+                  class="no-shadow input-radius-6 q-mb-md" :label="plan.title" v-model="plan.value" v-money="money"
+                  suffix="€" />
               </div>
             </div>
 
@@ -76,7 +75,7 @@
 
             <div class="row justify-between">
 
-              <div class="col-12">
+              <div class="col-12 q-mb-md">
                 <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                   {{ $t('projectComponents.contentDetails.documentationTitle') }}
                 </h4>
@@ -245,10 +244,10 @@ export default {
         financialPlan: {
           description: "",
           costAndFinance: [
-            { title: "Gesamtinvestition", value: "" },
-            { title: "Fördermittel", value: "" },
-            { title: "Eigenmittel", value: "" },
-            { title: "Fremdmittel", value: "" }
+            { title: this.$t('ProjectDashboard.totalInvestment'), value: "" },
+            { title: this.$t('ProjectDashboard.grants'), value: "" },
+            { title: this.$t('ProjectDashboard.ownFunds'), value: "" },
+            { title: this.$t('ProjectDashboard.thirdPartyFunds'), value: "" }
           ]
         },
         links: [],
@@ -398,10 +397,10 @@ export default {
         financialPlan: formData.financialPlan || {
           description: "",
           costAndFinance: [
-            { title: "Gesamtinvestition", value: "" },
-            { title: "Fördermittel", value: "" },
-            { title: "Eigenmittel", value: "" },
-            { title: "Fremdmittel", value: "" }
+            { title: this.$t('ProjectDashboard.totalInvestment'), value: "" },
+            { title: this.$t('ProjectDashboard.grants'), value: "" },
+            { title: this.$t('ProjectDashboard.ownFunds'), value: "" },
+            { title: this.$t('ProjectDashboard.externalFunds'), value: "" }
           ]
         },
         links: formData.links || [],
