@@ -2,8 +2,10 @@
   <q-page class="q-mt-lg bg-blue-1" :class="$q.screen.gt.sm ? 'q-mx-md' : 'q-mx-sm'">
     <div class="">
       <q-toolbar class="bg-blue text-white shadow-2 radius-top-20">
-        <q-tabs v-model="tab" shrink stretch active-color="yellow" content-class="custom-borders">
-          <q-tab v-for="tab in tabs" :key="tab.name" :name="tab.name" :label="$t(tab.label)" />
+        <q-tabs v-model="tab" shrink stretch active-color="yellow" content-class="custom-borders" inline-label
+          @input="setActiveStepBasedOnCompletion">
+          <q-tab v-for="(tab, index) in tabs" :key="tab.name" :name="tab.name" :label="$t(tab.title)"
+            :icon="tab.done ? 'mdi-check-all' : ''" :disable="shouldDisableTab(index)" />
         </q-tabs>
       </q-toolbar>
     </div>
@@ -14,22 +16,35 @@
       </q-stepper>
     </div>
 
-    <ProjectDescriptionCreate ref="projectDescriptionRef" :current-tab="step" @project-created="handleProjectCreated" />
+    <div v-if="tab === 'aiFundingCheck'">
+      <ProjectDescriptionCreate v-if="step === 'project'" ref="projectDescriptionRef" :current-tab="step"
+        @project-created="handleProjectCreated" />
 
-    <ProjectFundingCheckCreate ref="fundingCheckRef" class="q-my-md" :current-tab="step" :project-data="form"
-      :created-project-id="createdProjectId" @funding-submitted="handleFundingSubmitted"
-      v-if="step !== 'project' && step !== 'qAndA'" />
+      <ProjectViewGeneralInfo v-if="step !== 'project'" :project="form" :current-tab="step" />
+      <ProjectViewContentDetails v-if="step !== 'project'" :project="form" :current-tab="step" class="q-my-md" />
 
-    <ProjectQAndACreate ref="qAndARef" v-if="step !== 'project' && step !== 'fundingCheck' && !skipQuestions"
-      :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
-      @q-and-a-submitted="handleQAndASubmitted" />
+      <ProjectFundingCheckCreate ref="fundingCheckRef" class="q-my-md" :current-tab="step" :project-data="form"
+        :created-project-id="createdProjectId" @funding-submitted="handleFundingSubmitted"
+        v-if="step !== 'project' && step !== 'qAndA'" />
 
-    <ProjectAptitudeCreate ref="aptitudeRef" v-if="step !== 'project' && step !== 'fundingCheck' && step !== 'qAndA'"
-      :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
-      @aptitude-submitted="handleAptitudeSubmitted" />
+      <ProjectQAndACreate ref="qAndARef" v-if="step !== 'project' && step !== 'fundingCheck' && !skipQuestions"
+        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
+        @q-and-a-submitted="handleQAndASubmitted" />
 
-    <ProjectDecisionCreate ref="decisionRef" v-if="step === 'decision'" :created-project-id="createdProjectId"
-      :project-data="form" :current-tab="step" class="q-my-md" @decision-submitted="handleDecisionSubmitted" />
+      <ProjectAptitudeCreate ref="aptitudeRef" v-if="step !== 'project' && step !== 'fundingCheck' && step !== 'qAndA'"
+        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
+        @aptitude-submitted="handleAptitudeSubmitted" />
+
+      <ProjectDecisionCreate ref="decisionRef" v-if="step === 'decision'" :created-project-id="createdProjectId"
+        :project-data="form" :current-tab="step" class="q-my-md" @decision-submitted="handleDecisionSubmitted" />
+    </div>
+
+    <div v-if="tab === 'projectDevelopment'">
+      <ProjectViewGeneralInfo :project="form" :current-tab="step" />
+      <ProjectViewContentDetails :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectTaskPlanCreate ref="taskPlanRef" v-if="step === 'taskPlan'" :created-project-id="createdProjectId"
+        :project-data="form" :current-tab="step" class="q-my-md" @taskPlan-submitted="goToNextStep(false)" />
+    </div>
 
     <!-- Submit Button -->
     <div class="q-mt-lg q-mb-xl">
@@ -49,6 +64,10 @@ import ProjectFundingCheckCreate from 'src/components/projects/create/ProjectFun
 import ProjectQAndACreate from 'src/components/projects/create/ProjectQAndACreate.vue';
 import ProjectAptitudeCreate from 'src/components/projects/create/ProjectAptitudeCreate.vue';
 import ProjectDecisionCreate from 'src/components/projects/create/ProjectDecisionCreate.vue';
+import ProjectTaskPlanCreate from 'src/components/projects/create/ProjectTaskPlanCreate.vue';
+
+import ProjectViewGeneralInfo from 'src/components/projects/view/ProjectGeneralInfo.vue';
+import ProjectViewContentDetails from 'src/components/projects/view/ProjectContentDetails.vue';
 
 export default {
   name: "ApplicationProcessPage",
@@ -57,29 +76,33 @@ export default {
     ProjectFundingCheckCreate,
     ProjectQAndACreate,
     ProjectAptitudeCreate,
-    ProjectDecisionCreate
+    ProjectDecisionCreate,
+    ProjectTaskPlanCreate,
+    ProjectViewGeneralInfo,
+    ProjectViewContentDetails
   },
   data() {
     return {
       step: 'project',
-      tab: 'tab1',
+      tab: 'aiFundingCheck',
       secondaryTab: 'project',
       isLoading: false,
       editing: true,
       createdProjectId: null, // Store the project ID after creation
       form: {}, // Store project data for passing to child components
-      tabs: [
-        { name: 'tab1', label: 'AI funding check' },
-        { name: 'tab2', label: 'Project development' },
-        { name: 'tab3', label: 'application' }
-      ],
-      steps: [
+      fundingCheckSteps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
         { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: false },
         { name: 'qAndA', title: 'Open Questions', icon: 'help_outline', done: false },
         { name: 'aptitude', title: 'Aptitude', icon: 'check_circle', done: false },
         { name: 'decision', title: 'Basic decision', icon: 'gavel', done: false }
       ],
+      projectDevelopmentSteps: [
+        { name: 'taskPlan', title: 'task plan', icon: 'mdi-checkbox-multiple-marked', done: false },
+        { name: 'siteVisit', title: 'site visit', icon: 'mdi-map-marker', done: false },
+        { name: 'goals', title: 'goals', icon: 'mdi-target', done: false },
+        { name: 'requirements', title: 'requirements', icon: 'mdi-file-document', done: false }
+      ]
     };
   },
   computed: {
@@ -94,9 +117,55 @@ export default {
     },
     skipQuestions() {
       return this.steps.some(step => step.skip);
+    },
+    steps() {
+      if (this.tab === 'aiFundingCheck') {
+        return this.project && this.project.fundingCheckSteps ? this.project.fundingCheckSteps : this.fundingCheckSteps;
+      } else if (this.tab === 'projectDevelopment') {
+        return this.project && this.project.projectDevelopmentSteps ? this.project.projectDevelopmentSteps : this.projectDevelopmentSteps;
+      } else {
+        return [];
+      }
+    },
+    tabs() {
+      return this.project && this.project.applicationProcessSteps ? this.project.applicationProcessSteps : [
+        {
+          done: false,
+          name: "aiFundingCheck",
+          title: "AI funding check"
+        },
+        {
+          done: false,
+          name: "projectDevelopment",
+          title: "Project development"
+        },
+        {
+          done: false,
+          name: "application",
+          title: "application"
+        }
+      ];
     }
   },
+
   methods: {
+    shouldDisableTab(index) {
+      // First tab is never disabled
+      if (index === 0) return false;
+
+      // Find the previous tab
+      const previousTab = this.tabs[index - 1];
+
+      // If the previous tab is done, this tab should be enabled
+      if (previousTab && previousTab.done) return false;
+
+      // If this tab itself is done, it should be enabled regardless of previous tab
+      if (this.tabs[index].done) return false;
+
+      // Otherwise, disable the tab
+      return true;
+    },
+
     goToPreviousStep() {
       const currentIndex = this.steps.findIndex(s => s.name === this.step);
       if (currentIndex > 0) {
@@ -115,6 +184,24 @@ export default {
         this.step = this.steps[currentIndex + skipper].name;
         // Mark current step as done
         this.steps[currentIndex].done = true;
+      }
+    },
+    goToNextTab() {
+      const currentIndex = this.tabs.findIndex(t => t.name === this.tab);
+
+      // Safety check to ensure we don't go beyond array bounds
+      if (currentIndex < this.tabs.length - 1) {
+        // Mark current tab as done
+        this.tabs = this.tabs.map((tab, index) => {
+          if (index === currentIndex) {
+            return { ...tab, done: true };
+          }
+          return tab;
+        });
+
+        // Move to next tab
+        this.tab = this.tabs[currentIndex + 1].name;
+        this.setActiveStepBasedOnCompletion();
       }
     },
     handleProjectCreated(data) {
@@ -143,7 +230,6 @@ export default {
     },
     async handleFundingSubmitted(data) {
       const { noChange, noneSelected } = data;
-      console.log("🚀 ~ handleFundingSubmitted ~ noneSelected:", noneSelected)
 
       if (!noChange) {
         this.form.fundingMatches = data.fundingMatches;
@@ -173,7 +259,7 @@ export default {
     },
     async handleDecisionSubmitted(decision) {
       // Move to next step
-      // this.goToNextStep();
+      this.goToNextTab();
     },
     async manageSubmit() {
       if (this.step === 'project') {
@@ -190,6 +276,8 @@ export default {
       }
       else if (this.step === 'decision') {
         await this.$refs.decisionRef.submitDecision();
+      } else if (this.step === 'taskPlan') {
+        await this.$refs.taskPlanRef.submitTaskPlan();
       }
     },
     async setData() {
@@ -210,10 +298,59 @@ export default {
           ),
         };
         this.$q.loading.hide();
-        this.$refs.projectDescriptionRef.setData();
+        if (this.$refs.projectDescriptionRef) {
+          this.$refs.projectDescriptionRef.setData();
+        }
+        this.setActiveTabBasedOnCompletion();
       }
       this.$store.dispatch("userCenter/getUsers");
-      this.steps = this.form.fundingCheckSteps || this.steps;
+    },
+
+    setActiveTabBasedOnCompletion() {
+      if (!this.tabs || !this.tabs.length) return;
+
+      // Find the last completed tab
+      let lastCompletedTabIndex = -1;
+      for (let i = 0; i < this.tabs.length; i++) {
+        if (this.tabs[i].done) {
+          lastCompletedTabIndex = i;
+        }
+      }
+
+      // If we found a completed tab, set the next one as active
+      if (lastCompletedTabIndex !== -1) {
+        const nextTabIndex = lastCompletedTabIndex + 1;
+
+        // Make sure we don't go beyond the available tabs
+        if (nextTabIndex < this.tabs.length) {
+          // Set the next tab as the active one
+          this.tab = this.tabs[nextTabIndex].name;
+        } else {
+          // If all tabs are done, just set the last one as active
+          this.tab = this.tabs[lastCompletedTabIndex].name;
+        }
+      } else {
+        // If no tab is done, set the first one as active
+        this.tab = this.tabs[0].name;
+      }
+
+      // After setting the tab, update the step based on current steps
+      this.setActiveStepBasedOnCompletion();
+    },
+
+    setActiveStepBasedOnCompletion() {
+      if (!this.steps || !this.steps.length) return;
+
+      // Find the last done step
+      const lastDoneStep = [...this.steps].reverse().find(step => step.done === true);
+
+      // If found a done step, set it as current
+      if (lastDoneStep) {
+        this.step = lastDoneStep.name;
+      } else {
+        // If no done step is found, set the first step
+        this.step = this.steps[0].name;
+      }
     },
   },
   mounted() {
