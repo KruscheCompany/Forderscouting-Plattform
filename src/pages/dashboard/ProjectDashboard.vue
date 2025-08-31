@@ -49,7 +49,7 @@ export default {
         },
         {
           title: this.$t("ProjectDashboard.thirdPartyFunds"),
-          value: this.formatCurrency(this.stats?.financialSums.Fremdmittel),
+          value: this.formatCurrency(this.stats?.financialSums.Drittmittel),
         },
       ];
     },
