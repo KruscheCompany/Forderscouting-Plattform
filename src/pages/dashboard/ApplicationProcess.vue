@@ -44,6 +44,15 @@
       <ProjectViewContentDetails :project="form" :current-tab="step" class="q-my-md" />
       <ProjectTaskPlanCreate ref="taskPlanRef" v-if="step === 'taskPlan'" :created-project-id="createdProjectId"
         :project-data="form" :current-tab="step" class="q-my-md" @taskPlan-submitted="goToNextStep(false)" />
+
+      <ProjectSiteVisit ref="siteVisitRef" v-if="step === 'siteVisit'" :created-project-id="createdProjectId"
+        :project-data="form" :current-tab="step" class="q-my-md" @siteVisit-submitted="goToNextStep(false)" />
+
+      <ProjectGoals ref="goalsRef" v-if="step === 'goals'" :created-project-id="createdProjectId" :project-data="form"
+        :current-tab="step" class="q-my-md" @goals-submitted="goToNextStep(false)" />
+
+      <ProjectRequirements ref="requirementsRef" v-if="step === 'requirements'" :created-project-id="createdProjectId"
+        :project-data="form" :current-tab="step" class="q-my-md" @requirements-submitted="goToNextTab" />
     </div>
 
     <!-- Submit Button -->
@@ -65,9 +74,13 @@ import ProjectQAndACreate from 'src/components/projects/create/ProjectQAndACreat
 import ProjectAptitudeCreate from 'src/components/projects/create/ProjectAptitudeCreate.vue';
 import ProjectDecisionCreate from 'src/components/projects/create/ProjectDecisionCreate.vue';
 import ProjectTaskPlanCreate from 'src/components/projects/create/ProjectTaskPlanCreate.vue';
+import ProjectSiteVisit from 'src/components/projects/create/ProjectSiteVisit.vue';
+import ProjectGoals from 'src/components/projects/create/ProjectGoals.vue';
+import ProjectRequirements from 'src/components/projects/create/ProjectRequirements.vue';
 
 import ProjectViewGeneralInfo from 'src/components/projects/view/ProjectGeneralInfo.vue';
 import ProjectViewContentDetails from 'src/components/projects/view/ProjectContentDetails.vue';
+
 
 export default {
   name: "ApplicationProcessPage",
@@ -78,6 +91,9 @@ export default {
     ProjectAptitudeCreate,
     ProjectDecisionCreate,
     ProjectTaskPlanCreate,
+    ProjectSiteVisit,
+    ProjectGoals,
+    ProjectRequirements,
     ProjectViewGeneralInfo,
     ProjectViewContentDetails
   },
@@ -186,17 +202,14 @@ export default {
         this.steps[currentIndex].done = true;
       }
     },
-    goToNextTab() {
+    async goToNextTab() {
       const currentIndex = this.tabs.findIndex(t => t.name === this.tab);
 
       // Safety check to ensure we don't go beyond array bounds
       if (currentIndex < this.tabs.length - 1) {
-        // Mark current tab as done
-        this.tabs = this.tabs.map((tab, index) => {
-          if (index === currentIndex) {
-            return { ...tab, done: true };
-          }
-          return tab;
+
+        await this.$store.dispatch("project/getSpecificProject", {
+          id: this.createdProjectId,
         });
 
         // Move to next tab
@@ -278,7 +291,17 @@ export default {
         await this.$refs.decisionRef.submitDecision();
       } else if (this.step === 'taskPlan') {
         await this.$refs.taskPlanRef.submitTaskPlan();
+      } else if (this.step === 'siteVisit') {
+        await this.$refs.siteVisitRef.submitSiteVisit();
+      } else if (this.step === 'goals') {
+        await this.$refs.goalsRef.submitGoals();
+      } else if (this.step === 'requirements') {
+        await this.$refs.requirementsRef.submitRequirements();
       }
+      // else {
+      //   // Final submission logic here
+      //   this.$router.push({ name: 'Dashboard' });
+      // }
     },
     async setData() {
       if (!!this.$route.params && this.$route.params.projectId) {
