@@ -925,6 +925,58 @@
         "Uploads": "Uploads",
         "Links": "Links"
       }
+    },
+    "taskPlan": {
+      "title": "Aufgabenplanung",
+      "newTaskPlaceholder": "Neue Aufgabe eingeben"
+    },
+    "siteVisit": {
+      "title": "Standortbesuch",
+      "descriptionPlaceholder": "Beschreibung des Standortbesuchs eingeben",
+      "description": "Kurzer Aufgabentext"
+    },
+    "goals": {
+      "title": "Ziele definieren",
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Ziele definiert? Welche Ziele wurden definiert?"
+    },
+    "requirements": {
+      "title": "Anforderungen definieren",
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Anforderungen definiert? Welche Anforderungen wurden definiert?"
+    },
+    "guidelineContentCheck": {
+      "title": "Richtlinien-Check (Langfassung)",
+      "description": "Kurzer Aufgabentext - Bitte vergesst den inhaltlichen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren"
+    },
+    "guidelineFormCheck": {
+      "title": "Richtlinien-Check (Langfassung)",
+      "bulletPointTitle": "Infos zur Antragsstellung (Langfassung XFLB - Part Antragstellung)",
+      "description": "Kurzer Aufgabentext - Bitte vergesst den formalen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
+      "documents": "Unterlagen",
+      "procedure": "Verfahrensablauf",
+      "applicationDeadline": "Antragsfrist",
+      "applicationCost": "Beantragungskosten"
+    },
+    "applicationDecision": {
+      "title": "Antragsbeschluss",
+      "description": "Dateien hochladen (Antragsbeschluss, Protokollauszug)",
+      "noFilesUploaded": "Keine Dateien hochgeladen"
+    },
+    "submissionSigning": {
+      "title": "Unterzeichnung & Antragsstellung",
+      "selectionLabel": "Upload Projektantragsunterlagen",
+      "pendingDecision": "Antragsentscheidung ausstehend",
+      "grantNotice": "Zuwendungsbescheid",
+      "rejectionNotice": "Ablehnungsbescheid",
+      "noSelectionError": "Bitte treffen Sie eine Entscheidung über den Antrag",
+      "successMessage": "Bescheid erfolgreich gespeichert",
+      "errorMessage": "Fehler beim Speichern des Bescheids"
+    },
+    "documentsCoordination": {
+      "title": "Abstimmung Projektunterlagen",
+      "description": "Kurzer Aufgabentext"
+    },
+    "financingCheck": {
+      "title": "Finanzierungs-Check"
     }
   },
   "ProjectDashboard": {
@@ -962,5 +1014,17 @@
   "Basic decision": "Grundsatzbeschluss",
   "Publish": "Speichern",
   "Erstelldatum": "Erstelldatum",
-  "Speicherdatum": "Speicherdatum"
+  "Speicherdatum": "Speicherdatum",
+  "task plan": "Aufgabenplan",
+  "site visit": " ggf. Begehung",
+  "goals": "Ziele definieren",
+  "requirements": "Anforderungen definieren",
+  "Guideline Check (Content)": "Richtlinien-Check (Inhalt)",
+  "Guideline Check (Formalities)": "Richtlinien-Check (Formalitäten)",
+  "Financing Check": "Finanzierungs-Check",
+  "Project Documents Coordination": "Abstimmung Projektunterlagenn",
+  "Application Decision": "Antragsbeschluss",
+  "Submission & Signing": "Unterzeichnung/ Antragseinreichung",
+  "Application process completed successfully": "Antragsverfahren erfolgreich abgeschlossen",
+  "No decision was made on the application": "Es wurde keine Entscheidung über den Antrag getroffen"
 }
