@@ -121,19 +121,17 @@
 
           <q-tab-panel name="Links">
             <q-banner rounded class="bg-grey-3 font-16">
-              <div v-if="hasLinks">
-                <div class="font-16">
-                  <div v-if="hasLinks">
-                    <div class="row" v-for="(link, index) in links" :key="index">
-                      <p class="q-mb-none">{{ link.title }}: <a class="q-mb-sm text-blue text-weight-600 text-overflow"
-                          target="_blank" rel="noopener noreferrer" :href="formatLinkUrl(link.link)">
-                          {{ link.link }}
-                        </a></p>
-                    </div>
+              <div class="font-16">
+                <div v-if="hasLinks">
+                  <div class="row" v-for="(link, index) in links" :key="index">
+                    <p class="q-mb-none">{{ link.title }}: <a class="q-mb-sm text-blue text-weight-600 text-overflow"
+                        target="_blank" rel="noopener noreferrer" :href="formatLinkUrl(link.link)">
+                        {{ link.link }}
+                      </a></p>
                   </div>
-                  <div v-else>
-                    <p class="col-12 q-mb-none">{{ $t("projectContent.noLinksSet") }}</p>
-                  </div>
+                </div>
+                <div v-else>
+                  <p class="col-12 q-mb-none">{{ $t("projectContent.noLinksSet") }}</p>
                 </div>
               </div>
             </q-banner>

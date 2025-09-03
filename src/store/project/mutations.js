@@ -58,3 +58,27 @@ export function setApplicationProcess(state, payload) {
 export function setFinancialPlan(state, payload) {
   state.financialPlan = payload;
 }
+
+export function updateFundingCheckSteps(state, payload) {
+  if (state.project) {
+    state.project.fundingCheckSteps = payload;
+  }
+}
+
+export function updateProjectDevelopmentSteps(state, payload) {
+  if (state.project) {
+    state.project.projectDevelopmentSteps = payload;
+  }
+}
+
+export function updateProjectApplicationSteps(state, payload) {
+  if (state.project) {
+    state.project.projectApplicationSteps = payload;
+  }
+}
+
+export function updateApplicationProcessTabs(state, payload) {
+  if (state.project) {
+    state.project.applicationProcessSteps = payload;
+  }
+}
