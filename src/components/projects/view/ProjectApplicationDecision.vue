@@ -88,7 +88,7 @@ export default {
   },
   data() {
     return {
-      expanded: this.currentTab === "submissionSigning",
+      expanded: this.currentTab === "submissionSigning" || this.currentTab === "applicationDecision",
       showPreviewDocumentDialog: false,
       previewDocumentData: null
     };
@@ -106,8 +106,8 @@ export default {
   },
   watch: {
     currentTab(newTab) {
-      // Expand the section if the current tab is 'submissionSigning'
-      this.expanded = newTab === "submissionSigning";
+      // Expand the section if the current tab is 'submissionSigning' or 'applicationDecision'
+      this.expanded = newTab === "submissionSigning" || newTab === "applicationDecision";
     }
   },
   methods: {
