@@ -933,19 +933,23 @@
     "siteVisit": {
       "title": "Standortbesuch",
       "descriptionPlaceholder": "Beschreibung des Standortbesuchs eingeben",
-      "description": "Kurzer Aufgabentext"
+      "description": "Kurzer Aufgabentext",
+      "noContent": "Keine Beschreibung des Standortbesuchs verfügbar"
     },
     "goals": {
       "title": "Ziele definieren",
-      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Ziele definiert? Welche Ziele wurden definiert?"
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Ziele definiert? Welche Ziele wurden definiert?",
+      "noContent": "Keine Ziele definiert"
     },
     "requirements": {
       "title": "Anforderungen definieren",
-      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Anforderungen definiert? Welche Anforderungen wurden definiert?"
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Anforderungen definiert? Welche Anforderungen wurden definiert?",
+      "noContent": "Keine Anforderungen definiert"
     },
     "guidelineContentCheck": {
       "title": "Richtlinien-Check (Langfassung)",
-      "description": "Kurzer Aufgabentext - Bitte vergesst den inhaltlichen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren"
+      "description": "Kurzer Aufgabentext - Bitte vergesst den inhaltlichen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
+      "noContent": "Keine Beschreibung des Richtlinien-Checks verfügbar",
     },
     "guidelineFormCheck": {
       "title": "Richtlinien-Check (Langfassung)",
@@ -973,7 +977,8 @@
     },
     "documentsCoordination": {
       "title": "Abstimmung Projektunterlagen",
-      "description": "Kurzer Aufgabentext"
+      "description": "Kurzer Aufgabentext",
+      "noContent": "Keine Beschreibung der Abstimmung der Projektunterlagen verfügbar"
     },
     "financingCheck": {
       "title": "Finanzierungs-Check"
