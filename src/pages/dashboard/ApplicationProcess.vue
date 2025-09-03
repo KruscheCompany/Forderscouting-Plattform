@@ -55,7 +55,42 @@
         :project-data="form" :current-tab="step" class="q-my-md" @requirements-submitted="goToNextTab" />
     </div>
 
-    <!-- Submit Button -->
+    <div v-if="tab === 'application'">
+      <ProjectViewGeneralInfo :project="form" :current-tab="step" />
+      <ProjectViewContentDetails :project="form" :current-tab="step" class="q-my-md" />
+
+      <ProjectGuidelineContentCheck ref="guidelineContentCheckRef" v-if="step === 'guidelineContentCheck'"
+        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
+        @guidelineContentCheck-submitted="goToNextStep(false)" />
+
+      <ProjectGuidelineFormCheck ref="guidelineFormCheckRef" v-if="step === 'guidelineFormCheck'"
+        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
+        @guidelineFormCheck-submitted="goToNextStep(false)" />
+
+      <ProjectFinancingCheck ref="financingCheckRef" v-if="step === 'financingCheck'"
+        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
+        @financingCheck-submitted="goToNextStep(false)" />
+
+      <ProjectDocumentsCoordination ref="documentsCoordinationRef" v-if="step === 'projectDocumentsCoordination'"
+        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
+        @documentsCoordination-submitted="goToNextStep(false)" />
+
+      <ProjectApplicationDecision ref="applicationDecisionRef" v-if="step === 'applicationDecision'"
+        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
+        @applicationDecision-submitted="goToNextStep(false)" />
+
+      <!-- Always show application decision files in the submissionSigning step -->
+      <ProjectViewApplicationDecision v-if="step === 'submissionSigning'" :project="form" :current-tab="step"
+        class="q-my-md" />
+
+      <!-- Then show the submission signing choices -->
+      <ProjectSubmissionSigning ref="submissionSigningRef" v-if="step === 'submissionSigning'"
+        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
+        @submissionSigning-submitted="handleSubmissionSigningSubmitted" />
+
+
+    </div>
+
     <div class="q-mt-lg q-mb-xl">
       <q-card class="shadow-1 radius-20 bg-white q-pa-lg">
         <div class="row justify-center">
@@ -77,9 +112,16 @@ import ProjectTaskPlanCreate from 'src/components/projects/create/ProjectTaskPla
 import ProjectSiteVisit from 'src/components/projects/create/ProjectSiteVisit.vue';
 import ProjectGoals from 'src/components/projects/create/ProjectGoals.vue';
 import ProjectRequirements from 'src/components/projects/create/ProjectRequirements.vue';
+import ProjectGuidelineContentCheck from 'src/components/projects/create/ProjectGuidelineContentCheck.vue';
+import ProjectGuidelineFormCheck from 'src/components/projects/create/ProjectGuidelineFormCheck.vue';
+import ProjectFinancingCheck from 'src/components/projects/create/ProjectFinancingCheck.vue';
+import ProjectDocumentsCoordination from 'src/components/projects/create/ProjectDocumentsCoordination.vue';
+import ProjectApplicationDecision from 'src/components/projects/create/ProjectApplicationDecision.vue';
+import ProjectSubmissionSigning from 'src/components/projects/create/ProjectSubmissionSigning.vue';
 
 import ProjectViewGeneralInfo from 'src/components/projects/view/ProjectGeneralInfo.vue';
 import ProjectViewContentDetails from 'src/components/projects/view/ProjectContentDetails.vue';
+import ProjectViewApplicationDecision from 'src/components/projects/view/ProjectApplicationDecision.vue';
 
 
 export default {
@@ -94,8 +136,15 @@ export default {
     ProjectSiteVisit,
     ProjectGoals,
     ProjectRequirements,
+    ProjectGuidelineContentCheck,
+    ProjectGuidelineFormCheck,
+    ProjectFinancingCheck,
+    ProjectDocumentsCoordination,
+    ProjectApplicationDecision,
+    ProjectSubmissionSigning,
     ProjectViewGeneralInfo,
-    ProjectViewContentDetails
+    ProjectViewContentDetails,
+    ProjectViewApplicationDecision
   },
   data() {
     return {
@@ -118,6 +167,14 @@ export default {
         { name: 'siteVisit', title: 'site visit', icon: 'mdi-map-marker', done: false },
         { name: 'goals', title: 'goals', icon: 'mdi-target', done: false },
         { name: 'requirements', title: 'requirements', icon: 'mdi-file-document', done: false }
+      ],
+      projectApplicationSteps: [
+        { name: 'guidelineContentCheck', title: 'Guideline Check (Content)', icon: 'mdi-clipboard-check', done: false },
+        { name: 'guidelineFormCheck', title: 'Guideline Check (Formalities)', icon: 'mdi-format-list-checks', done: false },
+        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false },
+        { name: 'projectDocumentsCoordination', title: 'Project Documents Coordination', icon: 'mdi-file-document-multiple', done: false },
+        { name: 'applicationDecision', title: 'Application Decision', icon: 'mdi-gavel', done: false },
+        { name: 'submissionSigning', title: 'Submission & Signing', icon: 'mdi-file-sign', done: false }
       ]
     };
   },
@@ -139,6 +196,8 @@ export default {
         return this.project && this.project.fundingCheckSteps ? this.project.fundingCheckSteps : this.fundingCheckSteps;
       } else if (this.tab === 'projectDevelopment') {
         return this.project && this.project.projectDevelopmentSteps ? this.project.projectDevelopmentSteps : this.projectDevelopmentSteps;
+      } else if (this.tab === 'application') {
+        return this.project && this.project.projectApplicationSteps ? this.project.projectApplicationSteps : this.projectApplicationSteps;
       } else {
         return [];
       }
@@ -188,18 +247,52 @@ export default {
         this.step = this.steps[currentIndex - 1].name;
       }
     },
-    goToNextStep(skip) {
-      const skipper = skip ? 2 : 1
+    async goToNextStep(skip) {
+      const skipper = skip ? 2 : 1;
       const currentIndex = this.steps.findIndex(s => s.name === this.step);
+
       if (currentIndex < this.steps.length - 1) {
+        // Create a deep copy of the steps to avoid direct state mutation
+        const updatedSteps = JSON.parse(JSON.stringify(this.steps));
+
         if (skipper > 1) {
-          this.steps[currentIndex + 1].skip = true;
+          updatedSteps[currentIndex + 1].skip = true;
         } else {
-          this.steps[currentIndex + 1].skip = false;
+          updatedSteps[currentIndex + 1].skip = false;
         }
+
+        // Mark current step as done in our copy
+        updatedSteps[currentIndex].done = true;
+
+        // Update only the local store state using our new action
+        if (this.tab === 'aiFundingCheck') {
+          await this.$store.dispatch('project/updateLocalProjectState', {
+            data: {
+              fundingCheckSteps: updatedSteps
+            }
+          });
+          // Update form with the updated steps
+          this.form = { ...this.form, fundingCheckSteps: updatedSteps };
+        } else if (this.tab === 'projectDevelopment') {
+          await this.$store.dispatch('project/updateLocalProjectState', {
+            data: {
+              projectDevelopmentSteps: updatedSteps
+            }
+          });
+          // Update form with the updated steps
+          this.form = { ...this.form, projectDevelopmentSteps: updatedSteps };
+        } else if (this.tab === 'application') {
+          await this.$store.dispatch('project/updateLocalProjectState', {
+            data: {
+              projectApplicationSteps: updatedSteps
+            }
+          });
+          // Update form with the updated steps
+          this.form = { ...this.form, projectApplicationSteps: updatedSteps };
+        }
+
+        // After store is updated, move to the next step
         this.step = this.steps[currentIndex + skipper].name;
-        // Mark current step as done
-        this.steps[currentIndex].done = true;
       }
     },
     async goToNextTab() {
@@ -207,10 +300,21 @@ export default {
 
       // Safety check to ensure we don't go beyond array bounds
       if (currentIndex < this.tabs.length - 1) {
+        // Create a deep copy of the tabs
+        const updatedTabs = JSON.parse(JSON.stringify(this.tabs));
 
-        await this.$store.dispatch("project/getSpecificProject", {
-          id: this.createdProjectId,
+        // Mark current tab as done
+        updatedTabs[currentIndex].done = true;
+
+        // Update the local state tabs in the store
+        await this.$store.dispatch('project/updateLocalProjectState', {
+          data: {
+            applicationProcessSteps: updatedTabs
+          }
         });
+
+        // Update form with the updated tabs
+        this.form = { ...this.form, applicationProcessSteps: updatedTabs };
 
         // Move to next tab
         this.tab = this.tabs[currentIndex + 1].name;
@@ -249,16 +353,29 @@ export default {
       }
 
       if (noneSelected) {
-        this.steps = this.steps.map(step => {
-          if (step.name === 'qAndA') {
-            return { ...step, skip: true };
-          }
-          return step;
-        });
+        // Create a deep copy of the steps
+        const updatedSteps = JSON.parse(JSON.stringify(this.steps));
+
+        // Mark qAndA step to be skipped
+        const qAndAStepIndex = updatedSteps.findIndex(step => step.name === 'qAndA');
+        if (qAndAStepIndex !== -1) {
+          updatedSteps[qAndAStepIndex].skip = true;
+
+          // Update local store with the modified steps
+          await this.$store.dispatch('project/updateLocalProjectState', {
+            data: {
+              fundingCheckSteps: updatedSteps
+            }
+          });
+
+          // Update form with the modified steps
+          this.form = { ...this.form, fundingCheckSteps: updatedSteps };
+        }
       }
 
       // Move to next step
-      this.goToNextStep(noneSelected);
+      await this.goToNextStep(noneSelected);
+
       if (!noneSelected && (!noChange || this.project.questions === null)) {
         const selectedFunding = data.fundingMatches.find(funding => funding.selected);
         await this.$store.dispatch('ai/getFundingQuestions', { fundingId: selectedFunding._id, idea: this.form.details.startingCondition });
@@ -273,6 +390,24 @@ export default {
     async handleDecisionSubmitted(decision) {
       // Move to next step
       this.goToNextTab();
+    },
+    async handleSubmissionSigningSubmitted(status) {
+      if (status !== null) {
+        // Final step completed successfully with a decision
+        const decisionType = status ? 'Zuwendungsbescheid' : 'Ablehnungsbescheid';
+        this.$q.notify({
+          color: 'positive',
+          message: `${this.$t('Application process completed successfully')} (${decisionType})`
+        });
+
+      } else {
+        // No decision made
+        this.$q.notify({
+          color: 'warning',
+          message: this.$t('No decision was made on the application')
+        });
+        this.form = { ...this.form, ...JSON.parse(JSON.stringify(this.project)) };
+      }
     },
     async manageSubmit() {
       if (this.step === 'project') {
@@ -297,11 +432,19 @@ export default {
         await this.$refs.goalsRef.submitGoals();
       } else if (this.step === 'requirements') {
         await this.$refs.requirementsRef.submitRequirements();
+      } else if (this.step === 'guidelineContentCheck') {
+        await this.$refs.guidelineContentCheckRef.submitGuidelineContentCheck();
+      } else if (this.step === 'guidelineFormCheck') {
+        await this.$refs.guidelineFormCheckRef.submitGuidelineFormCheck();
+      } else if (this.step === 'financingCheck') {
+        await this.$refs.financingCheckRef.submitFinancingCheck();
+      } else if (this.step === 'projectDocumentsCoordination') {
+        await this.$refs.documentsCoordinationRef.submitDocumentsCoordination();
+      } else if (this.step === 'applicationDecision') {
+        await this.$refs.applicationDecisionRef.submitApplicationDecision();
+      } else if (this.step === 'submissionSigning') {
+        await this.$refs.submissionSigningRef.submitSubmissionSigning();
       }
-      // else {
-      //   // Final submission logic here
-      //   this.$router.push({ name: 'Dashboard' });
-      // }
     },
     async setData() {
       if (!!this.$route.params && this.$route.params.projectId) {
@@ -364,8 +507,9 @@ export default {
     setActiveStepBasedOnCompletion() {
       if (!this.steps || !this.steps.length) return;
 
-      // Find the last done step
-      const lastDoneStep = [...this.steps].reverse().find(step => step.done === true);
+      // Find the last done step without modifying the original array
+      const stepsReversed = [...this.steps].reverse();
+      const lastDoneStep = stepsReversed.find(step => step.done === true);
 
       // If found a done step, set it as current
       if (lastDoneStep) {
@@ -375,6 +519,8 @@ export default {
         this.step = this.steps[0].name;
       }
     },
+
+
   },
   mounted() {
     this.setData();
