@@ -152,7 +152,6 @@ export default {
       tab: 'aiFundingCheck',
       secondaryTab: 'project',
       isLoading: false,
-      editing: true,
       createdProjectId: null, // Store the project ID after creation
       form: {}, // Store project data for passing to child components
       fundingCheckSteps: [
@@ -220,6 +219,11 @@ export default {
           title: "application"
         }
       ];
+    }
+  },
+  watch: {
+    step(newStep) {
+      this.refreshData();
     }
   },
 
@@ -450,7 +454,6 @@ export default {
       if (!!this.$route.params && this.$route.params.projectId) {
         const id = Number(this.$route.params.projectId);
         this.createdProjectId = id;
-        this.editing = true;
         this.$q.loading.show();
         await this.$store.dispatch("project/getSpecificProject", {
           id: id,
@@ -470,6 +473,32 @@ export default {
         this.setActiveTabBasedOnCompletion();
       }
       this.$store.dispatch("userCenter/getUsers");
+    },
+
+    refreshData() {
+      if ((!!this.$route.params && this.$route.params.projectId) || this.form.id) {
+        const id = this.form.id || Number(this.$route.params.projectId);
+        this.createdProjectId = id;
+        // this.$q.loading.show();
+        this.$store.dispatch("project/getSpecificProject", {
+          id: id,
+        }).then(() => {
+          this.form = {
+            ...this.form,
+            ...JSON.parse(
+              JSON.stringify({
+                ...this.project,
+              })
+            ),
+          };
+          if (this.$refs.projectDescriptionRef) {
+            this.$refs.projectDescriptionRef.setData();
+          }
+          // this.$q.loading.hide();
+        }).catch(() => {
+          // this.$q.loading.hide();
+        });
+      }
     },
 
     setActiveTabBasedOnCompletion() {
