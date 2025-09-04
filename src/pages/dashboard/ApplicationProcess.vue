@@ -224,6 +224,19 @@ export default {
   watch: {
     step(newStep) {
       this.refreshData();
+    },
+    // Watch for route changes to handle query parameters
+    '$route': {
+      handler(newRoute) {
+        // Check if we have a triggerFundingMatch query param (coming from a redirect)
+        if (newRoute.query.triggerFundingMatch === '1' && this.form && this.form.details) {
+          // Wait for the next tick to ensure form data is fully populated
+          this.$nextTick(() => {
+            this.handleFundingMatch(this.form);
+          });
+        }
+      },
+      immediate: true // Run immediately when component is created
     }
   },
 
@@ -330,6 +343,18 @@ export default {
       this.createdProjectId = data.id;
       this.form = { ...this.form, ...data.projectData };
 
+      // Check if we're creating a new project from scratch (no projectId in URL)
+      if (!this.$route.params.projectId) {
+        // Redirect to edit route with the new project ID and a query param to trigger funding match
+        this.$router.push({
+          name: 'EditApplicationProcess',
+          params: { projectId: data.id },
+          query: { triggerFundingMatch: hasStartingConditionChanged || !this.form.fundingMatches ? '1' : '0' }
+        });
+        return; // Stop execution here as we're redirecting
+      }
+
+      // Original logic for existing projects
       if (hasStartingConditionChanged || !this.form.fundingMatches) {
         this.handleFundingMatch(data.projectData);
       } else {
@@ -403,7 +428,14 @@ export default {
           color: 'positive',
           message: `${this.$t('Application process completed successfully')} (${decisionType})`
         });
-
+        
+        // Redirect to view page after successful completion
+        if (this.createdProjectId) {
+          this.$router.push({
+            name: 'ViewApplicationProcess',
+            params: { projectId: this.createdProjectId }
+          });
+        }
       } else {
         // No decision made
         this.$q.notify({
@@ -470,7 +502,12 @@ export default {
         if (this.$refs.projectDescriptionRef) {
           this.$refs.projectDescriptionRef.setData();
         }
-        this.setActiveTabBasedOnCompletion();
+
+        // If coming from a redirect (has triggerFundingMatch query), let the watcher handle it
+        // Otherwise use the normal behavior
+        if (!this.$route.query.triggerFundingMatch) {
+          this.setActiveTabBasedOnCompletion();
+        }
       }
       this.$store.dispatch("userCenter/getUsers");
     },
