@@ -10,9 +10,6 @@
           </h4>
 
           <div class="col-12 q-mt-md">
-            <h5 class="font-16 text-blue-grey-10 q-mb-md">
-              {{ $t('projectComponents.submissionSigning.selectionLabel') }}
-            </h5>
 
             <div class="row q-col-gutter-md items-center">
               <div class="col-auto">
