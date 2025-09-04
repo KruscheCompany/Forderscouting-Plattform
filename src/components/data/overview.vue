@@ -515,22 +515,6 @@ export default {
           : this.checklistCols;
     },
     data() {
-      // if (this.isGuest) {
-      //   return this.tab == "projectIdeas"
-      //     ? !!this.$store.state.project.projects &&
-      //     this.$store.state.project.projects.filter((item) => {
-      //       return item.owner.user_detail.municipality.title == this.loggedInUserMunicipality.title && item.visibility != "only for me"
-      //     })
-      //     : this.tab == "fundings"
-      //       ? !!this.$store.state.funding.fundings &&
-      //       this.$store.state.funding.fundings.filter((item) => {
-      //         return item.owner.user_detail.municipality.title == this.loggedInUserMunicipality.title && item.visibility != "only for me"
-      //       })
-      //       : !!this.$store.state.implementationChecklist.checklists &&
-      //       this.$store.state.implementationChecklist.checklists.filter((item) => {
-      //         return item.owner.user_detail.municipality.title == this.loggedInUserMunicipality.title && item.visibility != "only for me"
-      //       });
-      // } else {
       return this.tab == "projectIdeas"
         ? !!this.$store.state.project.projects &&
         this.$store.state.project.projects.filter((item) => {
@@ -701,23 +685,37 @@ export default {
   mounted() {
     console.log("this.$router.currentRoute", this.$router.currentRoute);
     this.getData(this.tab);
-    if (localStorage.getItem("pagination")) {
-      const savedPagination = JSON.parse(localStorage.getItem("pagination"));
-
-      this.$refs.table.setPagination({
-        page: savedPagination.dataOverviewPage || 1,
-        rowsPerPage: savedPagination.dataOverviewRowsPerPage || 10,
-      });
-    }
+    
+    // Apply saved pagination settings with proper error handling
+    this.$nextTick(() => {
+      if (localStorage.getItem("pagination") && this.$refs.table) {
+        try {
+          const savedPagination = JSON.parse(localStorage.getItem("pagination") || "{}");
+          this.$refs.table.setPagination({
+            page: savedPagination.dataOverviewPage || 1,
+            rowsPerPage: savedPagination.dataOverviewRowsPerPage || 10,
+          });
+        } catch (error) {
+          console.error("Error applying saved pagination:", error);
+        }
+      }
+    });
   },
   beforeDestroy() {
-    const pagination = JSON.parse(localStorage.getItem("pagination"));
-    const localPagination = {
-      dataOverviewPage: this.$refs.table.computedPagination.page,
-      dataOverviewRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
-    };
-    const filters = { ...pagination, ...localPagination };
-    localStorage.setItem("pagination", JSON.stringify(filters));
+    // Save pagination settings with proper error handling
+    if (this.$refs.table) {
+      try {
+        const pagination = JSON.parse(localStorage.getItem("pagination") || "{}");
+        const localPagination = {
+          dataOverviewPage: this.$refs.table.computedPagination.page,
+          dataOverviewRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
+        };
+        const filters = { ...pagination, ...localPagination };
+        localStorage.setItem("pagination", JSON.stringify(filters));
+      } catch (error) {
+        console.error("Error saving pagination:", error);
+      }
+    }
   },
 };
 </script>

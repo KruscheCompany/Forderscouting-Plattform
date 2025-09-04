@@ -3,9 +3,9 @@
     <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t('projectComponents.qAndA.title')"
       header-class="bg-white text-black" v-model="expandedQAndA">
       <q-card-section class="q-pt-none">
-        <div v-if="questions && questions.length > 0">
+        <div v-if="localQuestions && localQuestions.length > 0">
           <q-list>
-            <q-item v-for="(question, index) in questions" :key="index" class="q-mb-sm q-pa-none">
+            <q-item v-for="(question, index) in localQuestions" :key="index" class="q-mb-sm q-pa-none">
               <q-item-section>
                 <div class="row items-baseline">
                   <div class="col-12 col-md-4">
@@ -51,6 +51,7 @@ export default {
   data() {
     return {
       expandedQAndA: this.currentTab === "qAndA", // Expand by default if currentTab is 'qAndA'
+      localQuestions: [],
       resetSteps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
         { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: true },
@@ -65,22 +66,39 @@ export default {
       // Expand the section if the current tab is 'qAndA'
       this.expandedQAndA = newTab === "qAndA";
     },
-  },
-  computed: {
-    ...mapGetters('ai', ['getFundingQuestions']),
-    questions() {
-      if (!!this.projectData.questions && this.projectData.questions.length > 0) {
-        // If projectId is present, use the projectData to set questions
-        return this.projectData.questions || [];
-      } else {
-        return this.getFundingQuestions.map(question => ({
-          text: question,
-          answer: ''
-        }));
+    'projectData.questions': {
+      immediate: true,
+      handler(newQuestions) {
+        this.initializeQuestions();
+      }
+    },
+    getFundingQuestions: {
+      immediate: true,
+      handler() {
+        this.initializeQuestions();
       }
     }
   },
+  computed: {
+    ...mapGetters('ai', ['getFundingQuestions']),
+  },
   methods: {
+    // Initialize questions from projectData or from getFundingQuestions
+    initializeQuestions() {
+      if (this.projectData.questions && this.projectData.questions.length > 0) {
+        // If project data questions exist, use those
+        this.localQuestions = JSON.parse(JSON.stringify(this.projectData.questions));
+      } else if (this.getFundingQuestions && this.getFundingQuestions.length > 0) {
+        // Otherwise, create from funding questions
+        this.localQuestions = this.getFundingQuestions.map(question => ({
+          text: question,
+          answer: ''
+        }));
+      } else {
+        this.localQuestions = [];
+      }
+    },
+
     // Get updated steps with qAndA marked as done
     getUpdatedSteps() {
       // Use existing steps from projectData if available, otherwise use default steps
@@ -100,12 +118,12 @@ export default {
       await this.$store.dispatch('project/simpleUpdateProjectIdea', {
         data: {
           id: this.createdProjectId,
-          questions: this.questions,
+          questions: this.localQuestions,
           fundingCheckSteps: this.getUpdatedSteps()
         }
       });
       // Emit the Q&A data to the parent component
-      this.$emit('q-and-a-submitted', this.questions);
+      this.$emit('q-and-a-submitted', this.localQuestions);
     }
   }
 }

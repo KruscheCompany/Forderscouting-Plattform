@@ -43,10 +43,10 @@ export async function getStates(context) {
   }
 }
 
-export async function getLocationsByMunicipality(context, { skipAdminPrivileges = false } = {}) {
+export async function getLocationsByMunicipality(context, { municipalityId }) {
   try {
     const res = await api.get("/api/locations/by-municipality", {
-      params: { skipAdminPrivileges }
+      params: { municipalityId }
     });
 
     const simplifiedLocations = res.data
