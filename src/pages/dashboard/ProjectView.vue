@@ -1,34 +1,101 @@
 <template>
   <q-page class="q-mt-lg bg-blue-1" :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'">
     <q-toolbar class="bg-blue text-white shadow-2 radius-top-20">
-      <q-tabs v-model="tab" shrink stretch active-color="yellow" content-class="custom-borders">
-        <q-tab v-for="tab in tabs" :key="tab.name" :name="tab.name" :label="$t(tab.label)" />
+      <q-tabs v-model="tab" shrink stretch active-color="yellow" content-class="custom-borders" inline-label>
+        <q-tab v-for="(tab, index) in tabs" :key="tab.name" :name="tab.name" :label="$t(tab.title)"
+          :icon="tab.done ? 'mdi-check-all' : ''" :disable="shouldDisableTab(index)" />
       </q-tabs>
     </q-toolbar>
     <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="radius-bottom-20 shadow-2">
       <q-step v-for="(step, index) in steps" :key="index" :name="step.name" :title="$t(step.title)" :icon="step.icon"
         :done="step.done" :header-nav="step.done" />
     </q-stepper>
-    <ProjectContent :currentTab="step" />
+    <ProjectContent :currentTab="step" v-if="tab === 'aiFundingCheck'" />
+
+    <div v-if="tab === 'projectDevelopment'">
+      <ProjectViewGeneralInfo :project="project" :current-tab="step" />
+      <ProjectViewContentDetails :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectTaskPlan v-if="step === 'taskPlan'" :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectSiteVisit v-if="step === 'siteVisit'" :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectGoals v-if="step === 'goals'" :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectRequirements v-if="step === 'requirements'" :project="project" :current-tab="step" class="q-my-md" />
+    </div>
+
+    <div v-if="tab === 'application'">
+      <ProjectViewGeneralInfo :project="project" :current-tab="step" />
+      <ProjectViewContentDetails :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectGuidelineContentCheck v-if="step === 'guidelineContentCheck'" :project="project" :current-tab="step"
+        class="q-my-md" />
+      <ProjectGuidelineFormCheck v-if="step === 'guidelineFormCheck'" :project="project" :current-tab="step"
+        class="q-my-md" />
+      <ProjectFinancingCheck v-if="step === 'financingCheck'" :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectDocumentsCoordination v-if="step === 'projectDocumentsCoordination'" :project="project"
+        :current-tab="step" class="q-my-md" />
+      <ProjectApplicationDecision v-if="step === 'applicationDecision' || step === 'submissionSigning'"
+        :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectSubmissionSigning v-if="step === 'submissionSigning'" :project="project" :current-tab="step"
+        class="q-my-md" />
+    </div>
   </q-page>
 </template>
 
 <script>
 import ProjectContent from "components/projects/view/ProjectContent.vue";
+import ProjectViewGeneralInfo from 'src/components/projects/view/ProjectGeneralInfo.vue';
+import ProjectViewContentDetails from 'src/components/projects/view/ProjectContentDetails.vue';
+import ProjectTaskPlan from 'src/components/projects/view/ProjectTaskPlan.vue';
+import ProjectSiteVisit from 'src/components/projects/view/ProjectSiteVisit.vue';
+import ProjectGoals from 'src/components/projects/view/ProjectGoals.vue';
+import ProjectRequirements from 'src/components/projects/view/ProjectRequirements.vue';
+import ProjectGuidelineContentCheck from 'src/components/projects/view/ProjectGuidelineContentCheck.vue';
+import ProjectGuidelineFormCheck from 'src/components/projects/view/ProjectGuidelineFormCheck.vue';
+import ProjectFinancingCheck from 'src/components/projects/view/ProjectFinancingCheck.vue';
+import ProjectDocumentsCoordination from 'src/components/projects/view/ProjectDocumentsCoordination.vue';
+import ProjectApplicationDecision from 'src/components/projects/view/ProjectApplicationDecision.vue';
+import ProjectSubmissionSigning from 'src/components/projects/view/ProjectSubmissionSigning.vue';
+
 export default {
   name: "projectView",
   components: {
     ProjectContent,
+    ProjectViewGeneralInfo,
+    ProjectViewContentDetails,
+    ProjectTaskPlan,
+    ProjectSiteVisit,
+    ProjectGoals,
+    ProjectRequirements,
+    ProjectGuidelineContentCheck,
+    ProjectGuidelineFormCheck,
+    ProjectFinancingCheck,
+    ProjectDocumentsCoordination,
+    ProjectApplicationDecision,
+    ProjectSubmissionSigning
   },
   data() {
     return {
       step: 'project',
-      tab: 'tab1',
-      tabs: [
-        { name: 'tab1', label: 'AI funding check' },
-        { name: 'tab2', label: 'Project development' },
-        { name: 'tab3', label: 'application' }
+      tab: 'aiFundingCheck',
+      fundingCheckSteps: [
+        { name: 'project', title: 'Project Description', icon: 'description', done: true },
+        { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: false },
+        { name: 'qAndA', title: 'Open Questions', icon: 'help_outline', done: false },
+        { name: 'aptitude', title: 'Aptitude', icon: 'check_circle', done: false },
+        { name: 'decision', title: 'Basic decision', icon: 'gavel', done: false }
       ],
+      projectDevelopmentSteps: [
+        { name: 'taskPlan', title: 'task plan', icon: 'mdi-checkbox-multiple-marked', done: false },
+        { name: 'siteVisit', title: 'site visit', icon: 'mdi-map-marker', done: false },
+        { name: 'goals', title: 'goals', icon: 'mdi-target', done: false },
+        { name: 'requirements', title: 'requirements', icon: 'mdi-file-document', done: false }
+      ],
+      projectApplicationSteps: [
+        { name: 'guidelineContentCheck', title: 'Guideline Check (Content)', icon: 'mdi-clipboard-check', done: false },
+        { name: 'guidelineFormCheck', title: 'Guideline Check (Formalities)', icon: 'mdi-format-list-checks', done: false },
+        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false },
+        { name: 'projectDocumentsCoordination', title: 'Project Documents Coordination', icon: 'mdi-file-document-multiple', done: false },
+        { name: 'applicationDecision', title: 'Application Decision', icon: 'mdi-gavel', done: false },
+        { name: 'submissionSigning', title: 'Submission & Signing', icon: 'mdi-file-sign', done: false }
+      ]
     };
   },
   computed: {
@@ -36,16 +103,59 @@ export default {
       return this.$store.getters["project/getProject"];
     },
     steps() {
-      return this.project ? this.project.fundingCheckSteps : [
-        { name: 'project', title: 'Project Description', icon: 'description', done: true },
-        { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: false },
-        { name: 'qAndA', title: 'Open Questions', icon: 'help_outline', done: false },
-        { name: 'aptitude', title: 'Aptitude', icon: 'check_circle', done: false },
-        { name: 'decision', title: 'Basic decision', icon: 'gavel', done: false }
+      if (this.tab === 'aiFundingCheck') {
+        return this.project && this.project.fundingCheckSteps ? this.project.fundingCheckSteps : this.fundingCheckSteps;
+      } else if (this.tab === 'projectDevelopment') {
+        return this.project && this.project.projectDevelopmentSteps ? this.project.projectDevelopmentSteps : this.projectDevelopmentSteps;
+      } else if (this.tab === 'application') {
+        return this.project && this.project.projectApplicationSteps ? this.project.projectApplicationSteps : this.projectApplicationSteps;
+      } else {
+        return [];
+      }
+    },
+    tabs() {
+      return this.project && this.project.applicationProcessSteps ? this.project.applicationProcessSteps : [
+        {
+          done: false,
+          name: "aiFundingCheck",
+          title: "AI funding check"
+        },
+        {
+          done: false,
+          name: "projectDevelopment",
+          title: "Project development"
+        },
+        {
+          done: false,
+          name: "application",
+          title: "application"
+        }
       ];
     }
   },
   methods: {
+    shouldDisableTab(index) {
+      // First tab is never disabled
+      if (index === 0) return false;
+
+      // Find the previous tab
+      const previousTab = this.tabs[index - 1];
+
+      // If the previous tab is done, this tab should be enabled
+      if (previousTab && previousTab.done) return false;
+
+      // If this tab itself is done, it should be enabled regardless of previous tab
+      if (this.tabs[index].done) return false;
+
+      // Otherwise, disable the tab
+      return true;
+    },
+    updateStepToFirstOfTab() {
+      // Set the step to the first step of the current tab
+      if (this.steps && this.steps.length > 0) {
+        this.step = this.steps[0].name;
+      }
+    },
     async getData() {
       this.$q.loading.show();
       await this.$store.dispatch("project/getSpecificProject", {
@@ -53,6 +163,12 @@ export default {
       });
       this.$q.loading.hide();
     },
+  },
+  watch: {
+    tab() {
+      // When tab changes, update the step to the first step of that tab
+      this.updateStepToFirstOfTab();
+    }
   },
   mounted() {
     this.getData();

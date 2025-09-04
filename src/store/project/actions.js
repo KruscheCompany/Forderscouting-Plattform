@@ -24,6 +24,7 @@ export async function getApplicationProcess(context, filters = {}) {
 
       // Add each filter to the params array if it exists
       if (filters.search) params.push(`search=${encodeURIComponent(filters.search)}`);
+      if (filters.municipality) params.push(`municipality=${filters.municipality}`);
       if (filters.location) params.push(`location=${filters.location}`);
       if (filters.status) params.push(`status=${filters.status}`);
       if (filters.investive) params.push(`investive=${filters.investive}`);
@@ -284,6 +285,33 @@ export async function simpleUpdateProjectIdea(context, payload) {
   }
 }
 
+// New action to update local state only
+export function updateLocalProjectState(context, payload) {
+  const { data } = payload;
+  if (!!data) {
+    try {
+      // Update local Vuex state using mutations
+      if (data.fundingCheckSteps) {
+        context.commit("updateFundingCheckSteps", data.fundingCheckSteps);
+      }
+      if (data.projectDevelopmentSteps) {
+        context.commit("updateProjectDevelopmentSteps", data.projectDevelopmentSteps);
+      }
+      if (data.projectApplicationSteps) {
+        context.commit("updateProjectApplicationSteps", data.projectApplicationSteps);
+      }
+      if (data.applicationProcessSteps) {
+        context.commit("updateApplicationProcessTabs", data.applicationProcessSteps);
+      }
+      return true;
+    }
+    catch (error) {
+      console.error("Error updating local project state:", error);
+      return false;
+    }
+  }
+}
+
 export async function getSpecificProject(context, payload) {
   context.commit("setSpecificProject", null);
   const { id } = payload;
@@ -464,6 +492,7 @@ export async function getProjectDashboardStats(context, filters = {}) {
 
       // Add each filter to the params array if it exists
       if (filters.search) params.push(`search=${encodeURIComponent(filters.search)}`);
+      if (filters.municipality) params.push(`municipality=${filters.municipality}`);
       if (filters.location) params.push(`location=${filters.location}`);
       if (filters.status) params.push(`status=${filters.status}`);
       if (filters.investive) params.push(`investive=${filters.investive}`);
