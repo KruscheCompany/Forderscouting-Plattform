@@ -167,6 +167,10 @@
         <q-tr :props="props">
           <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
             class="font-14 cursor-pointer">
+            <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
+              content-style="font-size: 14px">
+              {{ col.value }}
+            </q-tooltip>
             {{
               col.value && col.value.length > 48
                 ? col.value.substring(0, 48) + "..."
@@ -761,20 +765,26 @@ export default {
       return [...new Set(tagsKeywords)].sort();
     },
     projectCoordinatorOptions() {
-      const users = [];
-      this.data.map((item) =>
-        !!item.owner && !!item.owner.username
-          ? users.push({
-            user: item.owner.username,
-            location:
-              !!item.owner &&
-              !!item.owner.user_detail &&
-              !!item.owner.user_detail.municipality &&
-              item.owner.user_detail.municipality.title,
-          })
-          : null
-      );
-      return [...new Map(users.map((item) => [item["user"], item])).values()];
+      // Get owner usernames from the current data
+      const ownerUsernames = this.data
+        .filter(item => !!item.owner && !!item.owner.username)
+        .map(item => item.owner.username);
+
+      // Get pre-sorted users from store and filter only those that are owners in the current data
+      const storeUsers = this.$store.state.userCenter && this.$store.state.userCenter.users;
+
+      if (!storeUsers || !storeUsers.length) {
+        return [];
+      }
+
+      return storeUsers
+        .filter(user => ownerUsernames.includes(user.username))
+        .map(user => ({
+          user: user.username,
+          location: user.user_detail &&
+            user.user_detail.municipality &&
+            user.user_detail.municipality.title || ''
+        }));
     },
     filter() {
       // return object that contains all v-models. This will be passed to the filter method
