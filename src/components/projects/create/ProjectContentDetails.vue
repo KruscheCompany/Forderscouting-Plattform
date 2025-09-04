@@ -109,7 +109,7 @@
                         <div class="col-8">
                           <q-item-label class="ellipsis" caption>{{
                             imgPreview(image).name
-                          }}</q-item-label>
+                            }}</q-item-label>
                         </div>
                         <div class="col-auto text-right">
                           <q-btn icon="delete" @click.prevent.stop="removeImg(index)" size="sm" round text-color="red"
@@ -147,7 +147,7 @@
                         <q-item-section>
                           <q-item-label class="ellipsis" caption>{{
                             imgPreview(file).name
-                          }}</q-item-label>
+                            }}</q-item-label>
                         </q-item-section>
                         <q-item-section side>
                           <q-btn icon="delete" @click.prevent.stop="removeFile(index)" size="sm" round text-color="red"
@@ -400,7 +400,7 @@ export default {
             { title: this.$t('ProjectDashboard.totalInvestment'), value: "" },
             { title: this.$t('ProjectDashboard.grants'), value: "" },
             { title: this.$t('ProjectDashboard.ownFunds'), value: "" },
-            { title: this.$t('ProjectDashboard.externalFunds'), value: "" }
+            { title: this.$t('ProjectDashboard.thirdPartyFunds'), value: "" }
           ]
         },
         links: formData.links || [],
