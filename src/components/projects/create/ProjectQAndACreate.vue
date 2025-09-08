@@ -14,7 +14,14 @@
                     </p>
                   </div>
                   <div class="col-12 col-md-8">
-                    <q-input outlined dense class="no-shadow input-radius-6" v-model="question.answer" />
+                    <q-input outlined dense class="no-shadow input-radius-6" v-model="question.answer">
+                      <template v-slot:append>
+                        <q-btn flat round color="negative" icon="delete" size="md" @click="deleteQuestion(index)"
+                          :aria-label="$t('delete')">
+                          <q-tooltip>{{ $t('delete') }}</q-tooltip>
+                        </q-btn>
+                      </template>
+                    </q-input>
                   </div>
                 </div>
               </q-item-section>
@@ -83,6 +90,10 @@ export default {
     ...mapGetters('ai', ['getFundingQuestions']),
   },
   methods: {
+    // Delete question at the specified index
+    deleteQuestion(index) {
+      this.localQuestions.splice(index, 1);
+    },
     // Initialize questions from projectData or from getFundingQuestions
     initializeQuestions() {
       if (this.projectData.questions && this.projectData.questions.length > 0) {
