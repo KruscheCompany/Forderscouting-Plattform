@@ -1,63 +1,62 @@
 <template>
-  <div class="action-button">
-    <q-fab v-model="actionButton" color="blue" icon="keyboard_arrow_left" direction="left">
-      <q-btn v-if="showTransferButton" @click="transferDocument" color="blue" unelevated
-        class="radius-6 text-weight-600" no-caps icon="send" aria-label="Transfer Ownership">
+  <div class="row items-center q-gutter-md">
+
+    <q-btn v-if="showTransferButton" @click="transferDocument" color="blue" unelevated class="radius-6 text-weight-600"
+      no-caps icon="send" aria-label="Transfer Ownership">
+      <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+        {{ $t("transferOwnership") }}
+      </q-tooltip>
+    </q-btn>
+
+    <q-btn @click="exportToPdf" color="blue" unelevated class="radius-6 text-weight-600" no-caps icon="print"
+      aria-label="Print" :loading="loadingStates.watchlist">
+      <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+        {{ $t("print") }}
+      </q-tooltip>
+    </q-btn>
+
+    <q-btn @click="addToWatchlist" color="blue" unelevated class="radius-6 text-weight-600" no-caps icon="star_outline"
+      aria-label="Bookmark" :loading="loadingStates.watchlist">
+      <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+        {{ $t("bookmark") }}
+      </q-tooltip>
+    </q-btn>
+
+    <div class="col-auto">
+      <q-btn @click="editProject" color="blue" unelevated class="radius-6 text-weight-600" no-caps icon="edit"
+        aria-label="Edit" :loading="loadingStates.edit">
         <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-          {{ $t("transferOwnership") }}
+          {{ $t("edit") }}
         </q-tooltip>
       </q-btn>
+    </div>
 
-      <q-btn @click="exportToPdf" color="blue" unelevated class="radius-6 text-weight-600" no-caps icon="print"
-        aria-label="Print" :loading="loadingStates.watchlist">
+    <div class="col-auto">
+      <q-btn @click="duplicateProject" color="blue" unelevated class="radius-6 text-weight-600" no-caps
+        icon="content_copy" aria-label="Duplicate" :loading="loadingStates.duplicate">
         <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-          {{ $t("print") }}
+          {{ $t("duplicate") }}
         </q-tooltip>
       </q-btn>
+    </div>
 
-      <q-btn @click="addToWatchlist" color="blue" unelevated class="radius-6 text-weight-600" no-caps
-        icon="star_outline" aria-label="Bookmark" :loading="loadingStates.watchlist">
+    <div v-if="showArchiveButton" class="col-auto">
+      <q-btn @click="archiveProject" color="blue" unelevated class="radius-6 text-weight-600" no-caps icon="inventory"
+        aria-label="Archive" :loading="loadingStates.archive">
         <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-          {{ $t("bookmark") }}
+          {{ $t("archive") }}
         </q-tooltip>
       </q-btn>
+    </div>
 
-      <div class="col-auto">
-        <q-btn @click="editProject" color="blue" unelevated class="radius-6 text-weight-600" no-caps icon="edit"
-          aria-label="Edit" :loading="loadingStates.edit">
-          <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-            {{ $t("edit") }}
-          </q-tooltip>
-        </q-btn>
-      </div>
-
-      <div class="col-auto">
-        <q-btn @click="duplicateProject" color="blue" unelevated class="radius-6 text-weight-600" no-caps
-          icon="content_copy" aria-label="Duplicate" :loading="loadingStates.duplicate">
-          <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-            {{ $t("duplicate") }}
-          </q-tooltip>
-        </q-btn>
-      </div>
-
-      <div v-if="showArchiveButton" class="col-auto">
-        <q-btn @click="archiveProject" color="blue" unelevated class="radius-6 text-weight-600" no-caps icon="inventory"
-          aria-label="Archive" :loading="loadingStates.archive">
-          <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-            {{ $t("archive") }}
-          </q-tooltip>
-        </q-btn>
-      </div>
-
-      <div v-if="isAdmin" class="col-auto">
-        <q-btn @click="deleteProject" color="red" unelevated class="radius-6 text-weight-600" no-caps icon="delete"
-          aria-label="Delete" :loading="loadingStates.delete">
-          <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-            {{ $t("delete") }}
-          </q-tooltip>
-        </q-btn>
-      </div>
-    </q-fab>
+    <div v-if="isAdmin" class="col-auto">
+      <q-btn @click="deleteProject" color="red" unelevated class="radius-6 text-weight-600" no-caps icon="delete"
+        aria-label="Delete" :loading="loadingStates.delete">
+        <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+          {{ $t("delete") }}
+        </q-tooltip>
+      </q-btn>
+    </div>
   </div>
 </template>
 
@@ -66,7 +65,6 @@ export default {
   name: "ProjectActionButtons",
   data() {
     return {
-      actionButton: false
     };
   },
   props: {

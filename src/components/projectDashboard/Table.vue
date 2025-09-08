@@ -1,7 +1,7 @@
 <template>
   <div class="q-my-lg">
     <q-table class="radius-20 shadow-1 pagination-no-shadow" :class="expanded ? 'yellowBg' : ''"
-      :data="applicationProcess" :columns="columns" row-key="name" :visible-columns="visibleColumns" :pagination="{
+      :data="applicationProcess || []" :columns="columns" row-key="name" :visible-columns="visibleColumns" :pagination="{
         sortBy: 'title',
         descending: true,
         page: 1,
@@ -125,6 +125,10 @@
               </q-badge>
             </template>
             <template v-else>
+              <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
+                content-style="font-size: 14px">
+                {{ col.value }}
+              </q-tooltip>
               {{
                 col.value && col.value.length > 48
                   ? col.value.substring(0, 48) + "..."

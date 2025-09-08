@@ -35,7 +35,7 @@ export async function getApplicationProcess(context, filters = {}) {
     }
 
     const res = await api.get(`/api/application/process${queryParams}`);
-    context.commit("setApplicationProcess", res.data);
+    context.commit("setApplicationProcess", res.data || []);
   } catch (error) {
     Notify.create({
       type: "negative",
