@@ -1,7 +1,7 @@
 <template>
   <q-card class="col-12 shadow-1 radius-20 q-mb-none q-pa-none">
-    <q-card-section class="row items-center justify-between q-pa-md q-col-gutter-sm">
-      <div class="col-12 col-md-auto">
+    <q-card-section class="row q-pa-md q-col-gutter-sm">
+      <div class="col-12 ">
         <div class="row q-col-gutter-y-sm q-col-gutter-x-xl">
           <div class="col-auto">
             <h4 class="font-24 text-weight-bold q-mb-none q-mt-sm">
@@ -40,7 +40,9 @@
             </p>
           </div>
         </div>
-
+      </div>
+      <div class="col-12">
+        <q-separator class="q-mt-sm q-mb-lg" />
         <ProjectActionButtons :project="project" :logged-in-user="loggedInUser" :is-admin="isAdmin"
           :loading-states="loadingStates" @transfer-document="$emit('transfer-document')"
           @export-to-pdf="$emit('export-to-pdf')" @add-to-watchlist="$emit('add-to-watchlist')"
