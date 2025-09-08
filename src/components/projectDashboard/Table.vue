@@ -1,7 +1,7 @@
 <template>
   <div class="q-my-lg">
     <q-table class="radius-20 shadow-1 pagination-no-shadow" :class="expanded ? 'yellowBg' : ''"
-      :data="applicationProcess" :columns="columns" row-key="name" :visible-columns="visibleColumns" :pagination="{
+      :data="applicationProcess || []" :columns="columns" row-key="name" :visible-columns="visibleColumns" :pagination="{
         sortBy: 'title',
         descending: true,
         page: 1,
