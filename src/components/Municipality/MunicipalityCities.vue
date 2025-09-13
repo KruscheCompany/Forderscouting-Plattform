@@ -41,7 +41,6 @@ export default {
   data() {
     return {
       model: this.currentMunicipality,
-      municipalities: [],
       options: [],
       selectedMunicipality: null,
     };
@@ -115,10 +114,12 @@ export default {
       allStates.sort((a, b) => a.localeCompare(b));
       return allStates;
     },
+    municipalities() {
+      return this.$store.state.municipality.groupedStates;
+    },
   },
   mounted() {
     this.getGroupedStates();
-    this.municipalities = this.$store.state.municipality.groupedStates;
 
     if (this.selectedMunicipality === null) {
       if (this.userDetails && this.userDetails.municipality && !this.isAdmin) {
