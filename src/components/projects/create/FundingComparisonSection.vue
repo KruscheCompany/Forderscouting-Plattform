@@ -1,7 +1,7 @@
 <template>
   <div v-if="isVisible" class="comparison-section q-px-md q-pb-lg">
     <q-card class="shadow-0 radius-20 q-pa-md">
-      <div class="text-h6 q-mb-md">{{ $t('projectComponents.fundingCheck.comparison.title') }}</div>
+      <div class="text-h6 q-mb-md">{{ $t('projectComponents.fundingCheck.Project funding comparison') }}</div>
 
       <!-- Goals Comparison -->
       <div class="row q-col-gutter-md q-mb-lg">
