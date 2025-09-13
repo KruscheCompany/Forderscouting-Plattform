@@ -427,3 +427,7 @@ export async function deleteFunding(context, payload) {
     }
   }
 }
+
+export async function resetSelectedFunding(context) {
+  context.commit("setSpecificFunding", null);
+}

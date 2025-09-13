@@ -362,9 +362,16 @@ export default {
       }
     },
     async handleFundingMatch(projectData) {
+      const { startingCondition, goals, content, valuesAndBenefits } = projectData.details || {};
+      const { financialPlan } = projectData;
+      const finances = `${financialPlan?.description || ''} ${(financialPlan?.costAndFinance || []).map(item => `${item.title}: ${item.value} Euro`).join(', ')}`;
       try {
         await this.$store.dispatch('ai/matchFunding', {
-          projectData: projectData.details.startingCondition
+          startingCondition,
+          goals,
+          content,
+          valuesAndBenefits,
+          finances
         });
 
         this.step = 'fundingCheck';
@@ -428,7 +435,7 @@ export default {
           color: 'positive',
           message: `${this.$t('Application process completed successfully')} (${decisionType})`
         });
-        
+
         // Redirect to view page after successful completion
         if (this.createdProjectId) {
           this.$router.push({
