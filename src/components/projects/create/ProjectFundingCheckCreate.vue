@@ -13,12 +13,22 @@
             <div class="card-content">
               <!-- Top row with index and link button -->
               <div class="row items-center justify-between q-mb-sm">
-                <div class="funding-index text-weight-bold text-primary">
-                  {{ index + 1 }}
+                <div class="col">
+                  <div class="row items-center">
+                    <div class="funding-index text-weight-bold text-primary q-mr-sm">
+                      {{ index + 1 }}
+                    </div>
+                    <div class="funding-score text-weight-bold"
+                      :class="{ 'text-white': selectedCard === index, 'text-primary': selectedCard !== index }">
+                      <q-icon name="star" size="16px" class="q-mr-xs"
+                        :color="selectedCard === index ? 'white' : 'amber'" />
+                      {{ (funding.score * 100).toFixed(2) }}%
+                    </div>
+                  </div>
                 </div>
                 <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
-                  :color="selectedCard === index ? 'white' : 'black'" @click.stop="openFundingLink(funding.link)"
-                  class="funding-link-btn" />
+                  :color="selectedCard === index ? 'white' : 'black'" @click.stop="openFundingLink(funding.external_id)"
+                  class="funding-link-btn" :disabled="!funding.external_id" />
               </div>
 
               <!-- Spacer to push title to bottom -->
@@ -84,6 +94,9 @@
         </div>
       </div>
 
+      <!-- Funding Comparison Section Component -->
+      <FundingComparisonSection :selectedCard="selectedCard" :projectData="projectData" />
+
       <!-- Warning Dialog for Starting Condition Changes -->
       <StartingConditionWarningDialog :modelValue="showWarningDialog" :loading="isLoading"
         @confirm="proceedWithSubmission" @cancel="cancelSubmission" />
@@ -95,11 +108,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import StartingConditionWarningDialog from 'src/components/dialogs/StartingConditionWarningDialog.vue';
+import FundingComparisonSection from 'src/components/projects/create/FundingComparisonSection.vue';
+import { disable } from 'darkreader';
 
 export default {
   name: "ProjectFundingCheckCreate",
   components: {
-    StartingConditionWarningDialog
+    StartingConditionWarningDialog,
+    FundingComparisonSection
   },
   props: {
     currentTab: {
@@ -120,6 +136,7 @@ export default {
     return {
       expandedFundingCheck: this.currentTab === 'fundingCheck',
       selectedCard: null,
+      selectedFunding: null,
       hoveredCard: null,
       isRefreshing: false,
       isSubmitting: false,
@@ -169,6 +186,9 @@ export default {
       const originalIndex = this.originalSelectedFundingIndex;
       return originalIndex === null && this.selectedCard !== null;
     },
+    funding() {
+      return this.$store.state.funding.funding;
+    }
   },
   watch: {
     currentTab(newTab) {
@@ -188,9 +208,13 @@ export default {
     toggleExpansion() {
       this.expanded = !this.expanded;
     },
-    openFundingLink(link) {
-      if (link) {
-        window.open(link, '_blank');
+    openFundingLink(id) {
+      if (
+        !!id &&
+        id !== (!!this.$route.params && Number(this.$route.params.id))
+      ) {
+        // this.$router.push({ path: `/user/newFunding/${id}` });
+        this.$router.push({ path: `/user/newFunding/361` });
       }
     },
     async refreshFundingMatches() {
@@ -319,7 +343,7 @@ export default {
         return { ...step };
       });
     },
-    toggleCard(index) {
+    async toggleCard(index) {
       // Special handling for Fehlanzeige card
       if (index === 'fehlanzeige') {
         this.selectedCard = this.selectedCard === 'fehlanzeige' ? null : 'fehlanzeige';
@@ -327,7 +351,22 @@ export default {
       }
 
       // For regular funding cards, toggle selection
-      this.selectedCard = this.selectedCard === index ? null : index;
+      const wasSelected = this.selectedCard === index;
+      this.selectedCard = wasSelected ? null : index;
+
+      // If a card is being selected (not deselected), fetch specific funding data
+      if (!wasSelected && typeof index === 'number') {
+        await this.$store.dispatch('funding/resetSelectedFunding');
+        // For now, use hardcoded ID 361. Later will use funding.external_id
+        // const fundingId = 361; // Later replace with:
+        const fundingId = this.fundingMatches[index].external_id;
+
+        console.log('Fetching specific funding data for ID:', fundingId);
+
+        // Call the store action to get specific funding data
+        await this.$store.dispatch('funding/getSpecificFunding', { id: fundingId })
+        this.selectedFunding = this.funding;
+      }
     },
     // Get funding matches with selection status property
     getFundingMatchesWithSelection() {
@@ -443,6 +482,10 @@ export default {
       color: white;
     }
 
+    .funding-score {
+      color: white;
+    }
+
     .funding-preview {
       color: rgba(255, 255, 255, 0.8);
     }
@@ -463,6 +506,16 @@ export default {
   align-items: center;
   justify-content: center;
   color: $blue;
+}
+
+.funding-score {
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+
+  .q-icon {
+    margin-top: -2px;
+  }
 }
 
 .funding-link-btn {
