@@ -416,14 +416,20 @@ export default {
       await this.goToNextStep(noneSelected);
 
       if (!noneSelected && (!noChange || this.project.questions === null)) {
-        const selectedFunding = data.fundingMatches.find(funding => funding.selected);
-        await this.$store.dispatch('ai/getFundingQuestions', {
-          fundingId: selectedFunding._id, idea: startingCondition,
-          goals,
-          content,
-          valuesAndBenefits,
-          finances
-        });
+        // Get all selected fundings instead of just one
+        const selectedFundings = data.fundingMatches.filter(funding => funding.selected);
+        
+        // Call the API for each selected funding
+        for (const funding of selectedFundings) {
+          await this.$store.dispatch('ai/getFundingQuestions', {
+            fundingId: funding._id,
+            idea: startingCondition,
+            goals,
+            content,
+            valuesAndBenefits,
+            finances
+          });
+        }
       }
     },
     async handleQAndASubmitted() {
