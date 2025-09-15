@@ -54,14 +54,17 @@ export async function matchFunding(context, payload) {
 }
 
 export async function getFundingQuestions(context, payload) {
-  const { fundingId, idea } = payload;
+  const { fundingId, goals,
+          content,
+          valuesAndBenefits,
+          finances } = payload;
 
   context.commit('setLoadingFundingQuestions', true);
 
   try {
     const response = await api.post(
       `${process.env.VUE_APP_AI}/funding/questions/${fundingId}`,
-      { idea }
+      { goals, content, valuesAndBenefits, finances }
     );
 
     context.commit('setFundingQuestions', response.data.questions);
