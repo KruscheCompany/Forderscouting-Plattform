@@ -2,7 +2,9 @@
   <q-card class="shadow-1 radius-20">
     <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t('projectComponents.qAndA.title')"
       header-class="bg-white text-black" v-model="expandedQAndA">
-      <q-card-section class="q-pt-none">
+      <q-spinner-oval v-if="getLoadingFundingQuestions" color="primary" size="2em"
+        class="q-my-lg full-width text-center" />
+      <q-card-section v-else class="q-pt-none">
         <div v-if="localQuestions && localQuestions.length > 0">
           <q-list>
             <q-item v-for="(question, index) in localQuestions" :key="index" class="q-mb-sm q-pa-none">
@@ -106,7 +108,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('ai', ['getFundingQuestions', 'getFundingQuestionsMap']),
+    ...mapGetters('ai', ['getFundingQuestions', 'getFundingQuestionsMap', 'getLoadingFundingQuestions']),
     // Get all selected fundings from project data
     selectedFundings() {
       if (!this.projectData || !this.projectData.fundingMatches) {

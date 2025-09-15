@@ -17,3 +17,7 @@ export function getFundingQuestionsMap(state) {
 export function getQuestionsForFunding(state) {
   return (fundingId) => state.fundingQuestionsMap[fundingId] || [];
 }
+
+export function getLoadingFundingQuestions(state) {
+  return state.isLoadingFundingQuestions || false;
+}
