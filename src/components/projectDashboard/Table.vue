@@ -141,7 +141,7 @@
               :icon="isExpanded(props.row) ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
           </q-td>
         </q-tr>
-        <q-tr v-show="isExpanded(props.row)" :props="props">
+        <q-tr class="financial-plan-container" v-show="isExpanded(props.row)" :props="props">
           <q-td colspan="100%">
             <div class="text-left q-pa-md">
               <template v-if="props.row.financialPlan && props.row.financialPlan.costAndFinance">
@@ -149,7 +149,7 @@
                 <div class="row q-col-gutter-md">
                   <div v-for="item in props.row.financialPlan.costAndFinance" :key="item.id"
                     class="col-12 col-sm-6 col-md-3">
-                    <div class="radius-20 q-pa-md financial-plan" style="height: 130px">
+                    <div class="radius-20 shadow-2 q-pa-md financial-plan">
                       <p class="font-14 text-blue-grey-10 q-mt-xs q-mb-none">{{ item.title }}</p>
                       <p class="font-24 text-weight-bold text-blue q-mb-sm">{{ formatCurrency(item.value) }}</p>
                     </div>
@@ -192,9 +192,9 @@ export default {
       selectedLocations: null,
       tagsKeywords: null,
       statusOptions: [
-        { value: true, title: "Granted" },
-        { value: false, title: "Rejected" },
-        { value: null, title: "In Progress" }
+        { value: true, title: this.$t('Zuwendungsbescheid') },
+        { value: false, title: this.$t('Ablehnungsbescheid') },
+        { value: null, title: this.$t('In Bearbeitung') }
       ],
       investiveOptions: [
         { value: true, title: "Yes" },
@@ -253,7 +253,7 @@ export default {
       await this.$store.dispatch("tag/getSimplifiedTags");
     },
     async getMunicipalities() {
-      await this.$store.dispatch("municipality/getMunicipalities");
+      await this.$store.dispatch("municipality/getSimplifiedMunicipalities");
     },
     async getLocations() {
       // Only send municipality ID if a municipality is selected
@@ -702,9 +702,12 @@ export default {
 }
 
 .financial-plan {
-  background: #f5f5f5;
-  min-height: 160px;
-  max-height: 160px;
-  border: 2px solid transparent;
+  // background: white;
+  min-height: 105px;
+  max-height: 105px;
+
+  &-container {
+    background-color: #f5f5f5;
+  }
 }
 </style>
