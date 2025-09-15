@@ -242,8 +242,7 @@ export default {
         !!id &&
         id !== (!!this.$route.params && Number(this.$route.params.id))
       ) {
-        // this.$router.push({ path: `/user/newFunding/${id}` });
-        this.$router.push({ path: `/user/newFunding/361` });
+        this.$router.push({ path: `/user/newFunding/${id}` });
       }
     },
     async refreshFundingMatches() {

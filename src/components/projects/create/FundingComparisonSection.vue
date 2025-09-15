@@ -204,7 +204,7 @@ export default {
         const fundingId = this.fundingMatches[index].external_id;
 
         // Call the store action to get specific funding data
-        await this.$store.dispatch('funding/getSpecificFunding', { id: 361 });
+        await this.$store.dispatch('funding/getSpecificFunding', { id: fundingId });
 
         // Store the funding details in our cache
         this.fundingDetails[index] = this.$store.state.funding.funding;
