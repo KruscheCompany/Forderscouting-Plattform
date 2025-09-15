@@ -54,21 +54,33 @@ export async function matchFunding(context, payload) {
 }
 
 export async function getFundingQuestions(context, payload) {
-  const { fundingId, idea } = payload;
+  const { fundingId, idea, goals,
+          content,
+          valuesAndBenefits,
+          finances } = payload;
 
   context.commit('setLoadingFundingQuestions', true);
 
   try {
     const response = await api.post(
       `${process.env.VUE_APP_AI}/funding/questions/${fundingId}`,
-      { idea }
+      { idea, goals, content, valuesAndBenefits, finances }
     );
 
-    context.commit('setFundingQuestions', response.data.questions);
+    // Send both fundingId and questions to the mutation
+    context.commit('setFundingQuestions', {
+      fundingId,
+      questions: response.data.questions
+    });
+    
     return response;
 
   } catch (error) {
-    context.commit('setFundingQuestions', []);
+    // If error, set empty questions for this funding
+    context.commit('setFundingQuestions', {
+      fundingId,
+      questions: []
+    });
     throw error;
   } finally {
     context.commit('setLoadingFundingQuestions', false);

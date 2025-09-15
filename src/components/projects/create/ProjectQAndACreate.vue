@@ -2,16 +2,24 @@
   <q-card class="shadow-1 radius-20">
     <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t('projectComponents.qAndA.title')"
       header-class="bg-white text-black" v-model="expandedQAndA">
-      <q-card-section class="q-pt-none">
+      <q-spinner-oval v-if="getLoadingFundingQuestions" color="primary" size="2em"
+        class="q-my-lg full-width text-center" />
+      <q-card-section v-else class="q-pt-none">
         <div v-if="localQuestions && localQuestions.length > 0">
           <q-list>
             <q-item v-for="(question, index) in localQuestions" :key="index" class="q-mb-sm q-pa-none">
               <q-item-section>
-                <div class="row items-baseline">
+                <div class="row items-baseline q-col-gutter-y-sm">
                   <div class="col-12 col-md-4">
                     <p class="font-16 no-margin">
                       {{ question.text }}
                     </p>
+                    <!-- Show funding source if available -->
+                    <div v-if="question.fundingTitle" class="text-caption text-primary q-mt-xs">
+                      <q-chip size="md" color="primary" text-color="white" dense>
+                        {{ question.fundingTitle }}
+                      </q-chip>
+                    </div>
                   </div>
                   <div class="col-12 col-md-8">
                     <q-input outlined dense class="no-shadow input-radius-6" v-model="question.answer">
@@ -84,23 +92,67 @@ export default {
       handler() {
         this.initializeQuestions();
       }
+    },
+    getFundingQuestionsMap: {
+      immediate: true,
+      handler() {
+        this.initializeQuestions();
+      }
+    },
+    allFundingQuestions: {
+      handler() {
+        if (!this.projectData.questions || this.projectData.questions.length === 0) {
+          this.initializeQuestions();
+        }
+      }
     }
   },
   computed: {
-    ...mapGetters('ai', ['getFundingQuestions']),
+    ...mapGetters('ai', ['getFundingQuestions', 'getFundingQuestionsMap', 'getLoadingFundingQuestions']),
+    // Get all selected fundings from project data
+    selectedFundings() {
+      if (!this.projectData || !this.projectData.fundingMatches) {
+        return [];
+      }
+      return this.projectData.fundingMatches.filter(funding => funding.selected && !funding.isFehlanzeige);
+    },
+    // Combine questions from all selected fundings
+    allFundingQuestions() {
+      const questionsMap = this.getFundingQuestionsMap;
+      const allQuestions = [];
+
+      // For each selected funding, get its questions
+      this.selectedFundings.forEach(funding => {
+        const fundingQuestions = questionsMap[funding._id] || [];
+        // Add funding info to questions to track their source
+        fundingQuestions.forEach(question => {
+          allQuestions.push({
+            text: question,
+            fundingId: funding._id,
+            fundingTitle: funding.title,
+            answer: ''
+          });
+        });
+      });
+
+      return allQuestions;
+    },
   },
   methods: {
     // Delete question at the specified index
     deleteQuestion(index) {
       this.localQuestions.splice(index, 1);
     },
-    // Initialize questions from projectData or from getFundingQuestions
+    // Initialize questions from projectData or from all funding questions
     initializeQuestions() {
       if (this.projectData.questions && this.projectData.questions.length > 0) {
         // If project data questions exist, use those
         this.localQuestions = JSON.parse(JSON.stringify(this.projectData.questions));
+      } else if (this.allFundingQuestions && this.allFundingQuestions.length > 0) {
+        // Use combined questions from all selected fundings
+        this.localQuestions = this.allFundingQuestions;
       } else if (this.getFundingQuestions && this.getFundingQuestions.length > 0) {
-        // Otherwise, create from funding questions
+        // Fallback to old implementation for backward compatibility
         this.localQuestions = this.getFundingQuestions.map(question => ({
           text: question,
           answer: ''

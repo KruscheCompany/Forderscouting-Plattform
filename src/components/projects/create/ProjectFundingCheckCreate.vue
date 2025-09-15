@@ -6,8 +6,8 @@
       <div class="row q-col-gutter-sm q-pa-md">
         <div class="col-12 col-sm-6 col-md-3 col-lg-2" v-for="(funding, index) in fundingMatches" :key="index">
           <div class="funding-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
-            :class="{ 'selected': selectedCard === index }" @click="toggleCard(index)" @mouseenter="hoveredCard = index"
-            @mouseleave="hoveredCard = null">
+            :class="{ 'selected': selectedCards.includes(index) }" @click="toggleCard(index)"
+            @mouseenter="hoveredCard = index" @mouseleave="hoveredCard = null">
 
             <!-- Card content with flex layout -->
             <div class="card-content">
@@ -18,17 +18,15 @@
                     <div class="funding-index text-weight-bold text-primary q-mr-sm">
                       {{ index + 1 }}
                     </div>
-                    <div class="funding-score text-weight-bold"
-                      :class="{ 'text-white': selectedCard === index, 'text-primary': selectedCard !== index }">
-                      <q-icon name="star" size="16px" class="q-mr-xs"
-                        :color="selectedCard === index ? 'white' : 'amber'" />
+                    <div class="funding-score text-weight-bold">
+                      <q-icon name="star" size="16px" class="q-mr-xs" color="amber" />
                       {{ (funding.score * 100).toFixed(2) }}%
                     </div>
                   </div>
                 </div>
-                <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
-                  :color="selectedCard === index ? 'white' : 'black'" @click.stop="openFundingLink(funding.external_id)"
-                  class="funding-link-btn" :disabled="!funding.external_id" />
+                <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline" color="black"
+                  @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
+                  :disabled="!funding.external_id" />
               </div>
 
               <!-- Spacer to push title to bottom -->
@@ -36,7 +34,7 @@
 
               <!-- Title at bottom -->
               <div class="funding-title font-16 text-weight-medium q-mb-md">
-                {{ funding.title }}
+                {{ funding.title.length > 48 ? funding.title.substring(0, 48) + '...' : funding.title }}
               </div>
             </div>
           </div>
@@ -45,8 +43,7 @@
         <!-- Refresh Card -->
         <div class="col-12 col-sm-6 col-md-3 col-lg-2">
           <div class="refresh-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
-            :class="{ 'selected': selectedCard === 'refresh', 'loading': isRefreshing }"
-            @click="refreshFundingMatches()">
+            :class="{ 'loading': isRefreshing }" @click="refreshFundingMatches()">
 
             <div class="card-content">
               <!-- Top row with icon -->
@@ -61,7 +58,7 @@
               <div class="flex-spacer"></div>
 
               <!-- Title at bottom -->
-              <div class="funding-title font-16 text-weight-medium q-mb-md">
+              <div class="funding-title font-16 text-weight-bold q-mb-md">
                 {{ isRefreshing ? $t('projectComponents.fundingCheck.refreshing') :
                   $t('projectComponents.fundingCheck.refresh') }}
               </div>
@@ -72,7 +69,7 @@
         <!-- Fehlanzeige Card -->
         <div class="col-12 col-sm-6 col-md-3 col-lg-2">
           <div class="fehlanzeige-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
-            :class="{ 'selected': selectedCard === 'fehlanzeige' }" @click="toggleCard('fehlanzeige')">
+            :class="{ 'selected': selectedCards.includes('fehlanzeige') }" @click="toggleCard('fehlanzeige')">
 
             <div class="card-content">
               <!-- Top row with icon -->
@@ -95,7 +92,7 @@
       </div>
 
       <!-- Funding Comparison Section Component -->
-      <FundingComparisonSection :selectedCard="selectedCard" :projectData="projectData" />
+      <FundingComparisonSection :selectedCards="selectedCards" :projectData="projectData" />
 
       <!-- Warning Dialog for Starting Condition Changes -->
       <StartingConditionWarningDialog :modelValue="showWarningDialog" :loading="isLoading"
@@ -135,7 +132,7 @@ export default {
   data() {
     return {
       expandedFundingCheck: this.currentTab === 'fundingCheck',
-      selectedCard: null,
+      selectedCards: [], // Array to store multiple selected cards
       selectedFunding: null,
       hoveredCard: null,
       isRefreshing: false,
@@ -160,31 +157,63 @@ export default {
     isLoadingMatches() {
       return this.getLoadingFundingMatches || false;
     },
-    // Computed property to get the originally selected funding index
-    originalSelectedFundingIndex() {
+    // Computed property to get the originally selected funding indices
+    originalSelectedFundingIndices() {
       if (!this.projectData.fundingMatches || this.projectData.fundingMatches.length === 0) {
-        return null;
+        return [];
       }
-      const selectedFundingIndex = this.projectData.fundingMatches.findIndex(funding => funding.selected && !funding.isFehlanzeige);
+
+      const selectedIndices = [];
+
+      // Add indices of selected regular fundings
+      this.projectData.fundingMatches.forEach((funding, index) => {
+        if (funding.selected && !funding.isFehlanzeige) {
+          selectedIndices.push(index);
+        }
+      });
+
+      // Check if fehlanzeige is selected
       const isFehlanzeige = this.projectData.fundingMatches.some(funding => funding.selected && funding.isFehlanzeige);
-      return selectedFundingIndex !== -1 ? selectedFundingIndex : isFehlanzeige ? 'fehlanzeige' : null;
+      if (isFehlanzeige) {
+        selectedIndices.push('fehlanzeige');
+      }
+
+      return selectedIndices;
     },
     // Check if user has changed their funding selection
     hasFundingSelectionChanged() {
-      const originalIndex = this.originalSelectedFundingIndex;
+      const originalIndices = this.originalSelectedFundingIndices;
 
       // If no original selection exists, this is a first-time selection (not a change)
-      if (originalIndex === null) {
+      if (originalIndices.length === 0) {
         return false;
       }
 
-      // If original selection exists, check if current selection is different
-      return this.selectedCard !== originalIndex;
+      // If lengths differ, there's definitely a change
+      if (originalIndices.length !== this.selectedCards.length) {
+        return true;
+      }
+
+      // Check if all original selections are still selected and no new ones added
+      for (const index of originalIndices) {
+        if (!this.selectedCards.includes(index)) {
+          return true;
+        }
+      }
+
+      for (const index of this.selectedCards) {
+        if (!originalIndices.includes(index)) {
+          return true;
+        }
+      }
+
+      // No changes detected
+      return false;
     },
     // Check if this is a first-time funding selection
     isFirstTimeFundingSelection() {
-      const originalIndex = this.originalSelectedFundingIndex;
-      return originalIndex === null && this.selectedCard !== null;
+      const originalIndices = this.originalSelectedFundingIndices;
+      return originalIndices.length === 0 && this.selectedCards.length > 0;
     },
     funding() {
       return this.$store.state.funding.funding;
@@ -194,12 +223,12 @@ export default {
     currentTab(newTab) {
       this.expandedFundingCheck = newTab === "fundingCheck";
     },
-    // Watch for changes in originalSelectedFundingIndex to set initial selection
-    originalSelectedFundingIndex: {
+    // Watch for changes in originalSelectedFundingIndices to set initial selections
+    originalSelectedFundingIndices: {
       immediate: true,
-      handler(newIndex) {
-        if (newIndex !== null && this.selectedCard === null) {
-          this.selectedCard = newIndex;
+      handler(newIndices) {
+        if (newIndices.length > 0 && this.selectedCards.length === 0) {
+          this.selectedCards = [...newIndices];
         }
       }
     }
@@ -213,8 +242,7 @@ export default {
         !!id &&
         id !== (!!this.$route.params && Number(this.$route.params.id))
       ) {
-        // this.$router.push({ path: `/user/newFunding/${id}` });
-        this.$router.push({ path: `/user/newFunding/361` });
+        this.$router.push({ path: `/user/newFunding/${id}` });
       }
     },
     async refreshFundingMatches() {
@@ -236,11 +264,14 @@ export default {
     async performRefresh() {
       this.isRefreshing = true;
       this.isLoading = true;
-      this.selectedCard = 'refresh';
+
+      const { startingCondition, goals, content, valuesAndBenefits } = this.projectData.details || {};
+      const { financialPlan } = this.projectData;
+      const finances = `${financialPlan?.description || ''} ${(financialPlan?.costAndFinance || []).map(item => `${item.title}: ${item.value} Euro`).join(', ')}`;
 
       try {
         // Check if projectData has the required data
-        if (!this.projectData?.details?.startingCondition) {
+        if (!startingCondition || !goals || !content || !valuesAndBenefits || !financialPlan || !financialPlan.costAndFinance) {
           this.$q.notify({
             color: 'negative',
             message: this.$t('projectComponents.fundingCheck.noProjectData'),
@@ -249,8 +280,14 @@ export default {
           return;
         }
 
+
+
         await this.$store.dispatch('ai/matchFunding', {
-          projectData: this.projectData.details.startingCondition
+          startingCondition,
+          goals,
+          content,
+          valuesAndBenefits,
+          finances
         });
 
         this.$q.notify({
@@ -269,7 +306,7 @@ export default {
       } finally {
         this.isRefreshing = false;
         this.isLoading = false;
-        this.selectedCard = null;
+        this.selectedCards = [];
       }
     },
 
@@ -346,27 +383,31 @@ export default {
     async toggleCard(index) {
       // Special handling for Fehlanzeige card
       if (index === 'fehlanzeige') {
-        this.selectedCard = this.selectedCard === 'fehlanzeige' ? null : 'fehlanzeige';
+        // If fehlanzeige is selected, clear all other selections
+        if (this.selectedCards.includes('fehlanzeige')) {
+          this.selectedCards = [];
+        } else {
+          this.selectedCards = ['fehlanzeige'];
+        }
         return;
       }
 
-      // For regular funding cards, toggle selection
-      const wasSelected = this.selectedCard === index;
-      this.selectedCard = wasSelected ? null : index;
+      // For regular funding cards, toggle selection in array
+      const cardIndexInArray = this.selectedCards.indexOf(index);
+      const wasSelected = cardIndexInArray !== -1;
 
-      // If a card is being selected (not deselected), fetch specific funding data
-      if (!wasSelected && typeof index === 'number') {
-        await this.$store.dispatch('funding/resetSelectedFunding');
-        // For now, use hardcoded ID 361. Later will use funding.external_id
-        // const fundingId = 361; // Later replace with:
-        const fundingId = this.fundingMatches[index].external_id;
-
-        console.log('Fetching specific funding data for ID:', fundingId);
-
-        // Call the store action to get specific funding data
-        await this.$store.dispatch('funding/getSpecificFunding', { id: fundingId })
-        this.selectedFunding = this.funding;
+      // If selecting a regular card, clear fehlanzeige if it was selected
+      if (!wasSelected && this.selectedCards.includes('fehlanzeige')) {
+        this.selectedCards = [];
       }
+
+      // Toggle the card in selectedCards array
+      if (wasSelected) {
+        this.selectedCards.splice(cardIndexInArray, 1);
+      } else {
+        this.selectedCards.push(index);
+      }
+
     },
     // Get funding matches with selection status property
     getFundingMatchesWithSelection() {
@@ -375,7 +416,7 @@ export default {
       // Add selected property to all funding matches
       return matches.map((funding, index) => ({
         ...funding,
-        selected: this.selectedCard === index
+        selected: this.selectedCards.includes(index)
       }));
     },
     async submitFundingCheck() {
@@ -384,8 +425,8 @@ export default {
       try {
         let fundingMatchesWithSelection = this.getFundingMatchesWithSelection();
 
-        // Validate that either a funding match is selected OR fehlanzeige is selected
-        const hasSelection = fundingMatchesWithSelection.some(funding => funding.selected) || this.selectedCard === 'fehlanzeige';
+        // Validate that either funding matches are selected OR fehlanzeige is selected
+        const hasSelection = fundingMatchesWithSelection.some(funding => funding.selected) || this.selectedCards.includes('fehlanzeige');
 
         if (!hasSelection) {
           this.$q.notify({
@@ -397,7 +438,7 @@ export default {
         }
 
         // If fehlanzeige is selected, add it as a special object to the funding matches array
-        if (this.selectedCard === 'fehlanzeige') {
+        if (this.selectedCards.includes('fehlanzeige')) {
           const fehlanzeigeFunding = {
             _id: 'fehlanzeige',
             title: this.$t('projectComponents.fundingCheck.fehlanzeige'),
@@ -425,7 +466,7 @@ export default {
         this.$emit('funding-submitted', {
           fundingMatches: fundingMatchesWithSelection,
           noChange: true,
-          noneSelected: this.selectedCard === 'fehlanzeige'
+          noneSelected: this.selectedCards.includes('fehlanzeige')
         });
 
       } catch (error) {
@@ -469,21 +510,20 @@ export default {
   }
 
   &.selected {
-    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    background: #bfd3ff;
     border: 0;
     box-shadow: none;
-    color: white;
 
     .funding-index {
       background: white
     }
 
     .funding-title {
-      color: white;
+      color: black;
     }
 
     .funding-score {
-      color: white;
+      color: black;
     }
 
     .funding-preview {
@@ -635,8 +675,8 @@ export default {
 
 // Fehlanzeige Card Styles
 .fehlanzeige-card {
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-  border: 2px dashed #ff9800;
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  border: 2px dashed #f44336;
   opacity: 0.9;
   min-height: 160px;
   max-height: 160px;
@@ -658,27 +698,27 @@ export default {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: rgba(255, 152, 0, 0.2);
+    background: rgba(244, 67, 54, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ff9800;
+    color: #f44336;
   }
 
   &:hover {
-    border-color: #f57c00;
+    border-color: #d32f2f;
     transform: translateY(-2px);
     opacity: 1;
   }
 
   &.selected {
-    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-    border: 2px solid #ff9800;
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    border: 2px solid #f44336;
     color: white;
 
     .fehlanzeige-icon {
       background: white;
-      color: #ff9800;
+      color: #f44336;
     }
   }
 }

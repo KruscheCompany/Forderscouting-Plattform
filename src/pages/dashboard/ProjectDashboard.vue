@@ -2,7 +2,8 @@
   <q-page class="q-mt-lg" :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'">
     <div class="row q-col-gutter-md">
       <div class="col-6 col-md-2" v-for="(stat, index) in statistics" :key="index">
-        <div class="shadow-2 radius-20 q-pa-md" style="height: 130px" :class="index === 0 ? 'total-projects' : ''">
+        <div class="shadow-2 radius-20 q-pa-md" style="height: 105px"
+          :class="index === 0 ? 'total-projects' : index === 1 ? 'bg-yellow' : ''">
           <p class="font-14 text-blue-grey-10 q-mt-xs q-mb-none">{{ stat.title }}</p>
           <p class="font-24 text-weight-bold text-blue q-mb-sm">{{ stat.value }}</p>
         </div>
@@ -90,10 +91,10 @@ export default {
 
 <style lang="scss">
 .total-projects {
-  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  background: #bfd3ff;
 
   p {
-    color: white !important;
+    color: black !important;
   }
 }
 </style>

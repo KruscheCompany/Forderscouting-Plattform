@@ -88,8 +88,8 @@
                 </div>
                 <div class="col-12 col-md-auto" v-if="!!funding && !funding.archived || isAdmin">
                   <div :class="$q.screen.gt.sm
-                      ? 'q-col-gutter-x-md'
-                      : 'q-col-gutter-x-xs q-mt-md'
+                    ? 'q-col-gutter-x-md'
+                    : 'q-col-gutter-x-xs q-mt-md'
                     " class="row justify-between">
                     <div class="col-auto q-mb-md">
                       <q-btn @click="exportToPdf()" color="blue" unelevated class="radius-6 text-weight-600 q-mr-md"
@@ -194,6 +194,7 @@
           </h1>
         </div>
       </div>
+
       <vue-html2pdf :show-layout="false" :float-layout="true" :enable-download="false" :preview-modal="true"
         :paginate-elements-by-height="18000" :pdf-quality="2" :manual-pagination="true" pdf-format="a4"
         pdf-orientation="landscape" pdf-content-width="1100px" autoPaging="text" :htmlToPdfOptions="{
@@ -212,7 +213,7 @@
             </div>
           </div>
           <div class="row q-col-gutter-lg">
-            <div class="col-12 col-md-4">
+            <div class="col-12">
               <div class="row">
                 <div class="col-12 q-mb-md">
                   <q-card class="shadow-1 radius-20">
@@ -251,13 +252,6 @@
                           <p class="q-mb-sm">
                             {{ (!!funding.info && funding.info.contactName) || "" }}
                           </p>
-                          <!-- <p class="q-mb-sm">
-                            {{
-                              (funding.municipality &&
-                                funding.municipality.location) ||
-                                ""
-                            }}
-                          </p> -->
                         </div>
                       </q-card-section>
                       <q-separator inset class="bg-blue opacity-10" />
@@ -312,61 +306,6 @@
                             {{ editor.username }}
                           </p>
                         </div>
-                      </div>
-                    </q-card-section>
-                  </q-card>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-md-8">
-              <div class="row">
-                <div class="col-12 q-mb-md">
-                  <q-card class="shadow-1 radius-20">
-                    <q-card-section v-if="funding.media">
-                      <q-carousel swipeable animated v-model="slide" infinite class="radius-10" autoplay>
-                        <q-carousel-slide class="imageStyling" v-for="(item, index) in funding.media" :key="index"
-                          :name="index + 1" :img-src="!item.mime.includes('video')
-                              ? `${appUrl}${item.url}`
-                              : ''
-                            ">
-                          <video v-if="item.mime.includes('video')" class="full-width full-height" controls>
-                            <source :src="`${appUrl}${item.url}`" type="video/mp4" />
-                          </video>
-                        </q-carousel-slide>
-                      </q-carousel>
-                      <div class="row justify-center">
-                        <div class="col-9">
-                          <q-tabs swipeable v-model="slide" indicator-color="transparent" outside-arrows inline-label
-                            mobile-arrows align="center" active-class="opacity-50" class="no-padding q-mt-md"
-                            :class="{ carouselThumbnails: $q.screen.gt.sm }">
-                            <q-tab :name="index + 1" @click="slide = index + 1" v-for="(item, index) in funding.media"
-                              :key="index" class="no-padding q-mx-sm radius-10"
-                              content-class="no-padding overflow-hidden">
-                              <div class="no-padding radius-10 overflow-hidden" style="width:100px; height:100px">
-                                <q-card-section class="no-padding">
-                                  <q-img v-if="!item.mime.includes('video')" class="tabStyling"
-                                    :src="`${appUrl}${item.url}`" height="100px" width="100px" />
-                                  <video v-if="item.mime.includes('video')" class="full-width full-height">
-                                    <source :src="`${appUrl}${item.url}`" type="video/mp4" />
-                                  </video>
-                                </q-card-section>
-                              </div>
-                            </q-tab>
-                          </q-tabs>
-                          <p class="q-mt-md q-mb-none font-14 text-center text-grey">
-                            {{
-                              !!funding.media[slide - 1] &&
-                                !!funding.media[slide - 1].caption
-                                ? funding.media[slide - 1].caption
-                                : ""
-                            }}
-                          </p>
-                        </div>
-                      </div>
-                    </q-card-section>
-                    <q-card-section class="flex flex-center" v-else style="height: 548px">
-                      <div>
-                        <h6 class="text-grey">{{ $t("No Images") }}</h6>
                       </div>
                     </q-card-section>
                   </q-card>
@@ -440,8 +379,8 @@
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
                                 <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.goal
-                                    ? funding.details.goal
-                                    : ''
+                                  ? funding.details.goal
+                                  : ''
                                   "></p>
                               </div>
                             </div>
@@ -462,8 +401,8 @@
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
                                 <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.funded
-                                    ? funding.details.funded
-                                    : ''
+                                  ? funding.details.funded
+                                  : ''
                                   "></p>
                               </div>
                             </div>
@@ -484,8 +423,8 @@
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
                                 <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.notFunded
-                                    ? funding.details.notFunded
-                                    : ''
+                                  ? funding.details.notFunded
+                                  : ''
                                   "></p>
                               </div>
                             </div>
@@ -506,8 +445,8 @@
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
                                 <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.willBeFunded
-                                    ? funding.details.willBeFunded
-                                    : ''
+                                  ? funding.details.willBeFunded
+                                  : ''
                                   "></p>
                               </div>
                             </div>
@@ -527,8 +466,8 @@
                           <div class="q-ml-xs">
                             <div class="q-ml-md font-16">
                               <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.condition
-                                  ? funding.details.condition
-                                  : ''
+                                ? funding.details.condition
+                                : ''
                                 "></p>
                             </div>
                           </div>
@@ -552,8 +491,8 @@
                               <div class="q-ml-md font-16">
                                 <div v-if="funding.rates && funding.rates.length > 0">
                                   <div v-for="(rate, index) in funding.rates" :key="index" class="row" :class="$q.screen.gt.sm
-                                      ? 'q-col-gutter-x-xl'
-                                      : 'q-col-gutter-x-sm'
+                                    ? 'q-col-gutter-x-xl'
+                                    : 'q-col-gutter-x-sm'
                                     ">
                                     <div class="col-10 col-md-auto">
                                       <p class="q-mt-sm q-mb-sm inline-block">
@@ -643,7 +582,7 @@
                                   <div class="col-auto">
                                     <a class="q-mb-sm text-blue block text-weight-600 cursor-pointer" target="_blank"
                                       rel="noopener noreferrer" @click.prevent="viewFunding(funding.id)">{{
-                                      funding.title }}</a>
+                                        funding.title }}</a>
                                   </div>
                                 </div>
                               </div>
@@ -757,14 +696,14 @@
                                     <div class="col-auto">
                                       <a class="q-mb-sm text-blue block text-weight-600" target="_blank"
                                         rel="noopener noreferrer" :href="link.link
+                                          .split('://')[0]
+                                          .substring(0, 5) === 'https'
+                                          ? link.link
+                                          : link.link
                                             .split('://')[0]
-                                            .substring(0, 5) === 'https'
+                                            .substring(0, 4) === 'http'
                                             ? link.link
-                                            : link.link
-                                              .split('://')[0]
-                                              .substring(0, 4) === 'http'
-                                              ? link.link
-                                              : `http://${link.link}`
+                                            : `http://${link.link}`
                                           ">{{ link.link }}</a>
                                     </div>
                                   </div>
@@ -829,7 +768,7 @@
                                   <div class="col-auto">
                                     <a class="q-mb-sm text-blue block text-weight-600 cursor-pointer" target="_blank"
                                       rel="noopener noreferrer" @click.prevent="viewProject(project.id)">{{
-                                      project.title }}</a>
+                                        project.title }}</a>
                                   </div>
                                 </div>
                               </div>
@@ -863,10 +802,8 @@
         </section>
       </vue-html2pdf>
 
-
-
       <div class="row q-col-gutter-lg">
-        <div class="col-12 col-md-4">
+        <div class="col-12">
           <div class="row">
             <div class="col-12 q-mb-md">
               <q-card class="shadow-1 radius-20">
@@ -905,13 +842,6 @@
                       <p class="q-mb-sm">
                         {{ (!!funding.info && funding.info.contactName) || "" }}
                       </p>
-                      <!-- <p class="q-mb-sm">
-                        {{
-                          (funding.municipality &&
-                            funding.municipality.location) ||
-                            ""
-                        }}
-                      </p> -->
                     </div>
                   </q-card-section>
                   <q-separator inset class="bg-blue opacity-10" />
@@ -966,60 +896,6 @@
                         {{ editor.username }}
                       </p>
                     </div>
-                  </div>
-                </q-card-section>
-              </q-card>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-8">
-          <div class="row">
-            <div class="col-12 q-mb-md">
-              <q-card class="shadow-1 radius-20">
-                <q-card-section v-if="funding.media">
-                  <q-carousel swipeable animated v-model="slide" infinite class="radius-10" autoplay>
-                    <q-carousel-slide class="imageStyling" v-for="(item, index) in funding.media" :key="index"
-                      :name="index + 1" :img-src="!item.mime.includes('video')
-                          ? `${appUrl}${item.url}`
-                          : ''
-                        ">
-                      <video v-if="item.mime.includes('video')" class="full-width full-height" controls>
-                        <source :src="`${appUrl}${item.url}`" type="video/mp4" />
-                      </video>
-                    </q-carousel-slide>
-                  </q-carousel>
-                  <div class="row justify-center">
-                    <div class="col-9">
-                      <q-tabs swipeable v-model="slide" indicator-color="transparent" outside-arrows inline-label
-                        mobile-arrows align="center" active-class="opacity-50" class="no-padding q-mt-md"
-                        :class="{ carouselThumbnails: $q.screen.gt.sm }">
-                        <q-tab :name="index + 1" @click="slide = index + 1" v-for="(item, index) in funding.media"
-                          :key="index" class="no-padding q-mx-sm radius-10" content-class="no-padding overflow-hidden">
-                          <div class="no-padding radius-10 overflow-hidden" style="width:100px; height:100px">
-                            <q-card-section class="no-padding">
-                              <q-img v-if="!item.mime.includes('video')" class="tabStyling"
-                                :src="`${appUrl}${item.url}`" height="100px" width="100px" />
-                              <video v-if="item.mime.includes('video')" class="full-width full-height">
-                                <source :src="`${appUrl}${item.url}`" type="video/mp4" />
-                              </video>
-                            </q-card-section>
-                          </div>
-                        </q-tab>
-                      </q-tabs>
-                      <p class="q-mt-md q-mb-none font-14 text-center text-grey">
-                        {{
-                          !!funding.media[slide - 1] &&
-                            !!funding.media[slide - 1].caption
-                            ? funding.media[slide - 1].caption
-                            : ""
-                        }}
-                      </p>
-                    </div>
-                  </div>
-                </q-card-section>
-                <q-card-section class="flex flex-center" v-else style="height: 548px">
-                  <div>
-                    <h6 class="text-grey">{{ $t("No Images") }}</h6>
                   </div>
                 </q-card-section>
               </q-card>
@@ -1093,8 +969,8 @@
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.goal
-                                ? funding.details.goal
-                                : ''
+                              ? funding.details.goal
+                              : ''
                               "></p>
                           </div>
                         </div>
@@ -1115,8 +991,8 @@
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.funded
-                                ? funding.details.funded
-                                : ''
+                              ? funding.details.funded
+                              : ''
                               "></p>
                           </div>
                         </div>
@@ -1137,8 +1013,8 @@
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.notFunded
-                                ? funding.details.notFunded
-                                : ''
+                              ? funding.details.notFunded
+                              : ''
                               "></p>
                           </div>
                         </div>
@@ -1159,8 +1035,8 @@
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.willBeFunded
-                                ? funding.details.willBeFunded
-                                : ''
+                              ? funding.details.willBeFunded
+                              : ''
                               "></p>
                           </div>
                         </div>
@@ -1180,8 +1056,8 @@
                       <div class="q-ml-xs">
                         <div class="q-ml-md font-16">
                           <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.condition
-                              ? funding.details.condition
-                              : ''
+                            ? funding.details.condition
+                            : ''
                             "></p>
                         </div>
                       </div>
@@ -1205,8 +1081,8 @@
                           <div class="q-ml-md font-16">
                             <div v-if="funding.rates && funding.rates.length > 0">
                               <div v-for="(rate, index) in funding.rates" :key="index" class="row" :class="$q.screen.gt.sm
-                                  ? 'q-col-gutter-x-xl'
-                                  : 'q-col-gutter-x-sm'
+                                ? 'q-col-gutter-x-xl'
+                                : 'q-col-gutter-x-sm'
                                 ">
                                 <div class="col-10 col-md-auto">
                                   <p class="q-mt-sm q-mb-sm inline-block">
@@ -1410,14 +1286,14 @@
                                 <div class="col-auto">
                                   <a class="q-mb-sm text-blue block text-weight-600" target="_blank"
                                     rel="noopener noreferrer" :href="link.link
+                                      .split('://')[0]
+                                      .substring(0, 5) === 'https'
+                                      ? link.link
+                                      : link.link
                                         .split('://')[0]
-                                        .substring(0, 5) === 'https'
+                                        .substring(0, 4) === 'http'
                                         ? link.link
-                                        : link.link
-                                          .split('://')[0]
-                                          .substring(0, 4) === 'http'
-                                          ? link.link
-                                          : `http://${link.link}`
+                                        : `http://${link.link}`
                                       ">{{ link.link }}</a>
                                 </div>
                               </div>
