@@ -9,3 +9,11 @@ export function getLoadingFundingMatches(state) {
 export function getFundingQuestions(state) {
   return state.fundingQuestions || [];
 }
+
+export function getFundingQuestionsMap(state) {
+  return state.fundingQuestionsMap || {};
+}
+
+export function getQuestionsForFunding(state) {
+  return (fundingId) => state.fundingQuestionsMap[fundingId] || [];
+}
