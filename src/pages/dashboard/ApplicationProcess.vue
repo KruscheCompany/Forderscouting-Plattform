@@ -383,6 +383,9 @@ export default {
     },
     async handleFundingSubmitted(data) {
       const { noChange, noneSelected } = data;
+      const { startingCondition, goals, content, valuesAndBenefits } = this.project.details || {};
+      const { financialPlan } = this.project;
+      const finances = `${financialPlan?.description || ''} ${(financialPlan?.costAndFinance || []).map(item => `${item.title}: ${item.value} Euro`).join(', ')}`;
 
       if (!noChange) {
         this.form.fundingMatches = data.fundingMatches;
@@ -413,8 +416,20 @@ export default {
       await this.goToNextStep(noneSelected);
 
       if (!noneSelected && (!noChange || this.project.questions === null)) {
-        const selectedFunding = data.fundingMatches.find(funding => funding.selected);
-        await this.$store.dispatch('ai/getFundingQuestions', { fundingId: selectedFunding._id, idea: this.form.details.startingCondition });
+        // Get all selected fundings instead of just one
+        const selectedFundings = data.fundingMatches.filter(funding => funding.selected);
+        
+        // Call the API for each selected funding
+        for (const funding of selectedFundings) {
+          await this.$store.dispatch('ai/getFundingQuestions', {
+            fundingId: funding._id,
+            idea: startingCondition,
+            goals,
+            content,
+            valuesAndBenefits,
+            finances
+          });
+        }
       }
     },
     async handleQAndASubmitted() {

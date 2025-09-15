@@ -5,9 +5,6 @@
         :label="$t('projectComponents.submissionSigning.title')" header-class="bg-white text-black"
         v-model="expandedSubmissionSigning">
         <q-card-section class="q-pt-none">
-          <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-            {{ $t('projectComponents.submissionSigning.description') }}
-          </h4>
 
           <div class="col-12 q-mt-md">
 

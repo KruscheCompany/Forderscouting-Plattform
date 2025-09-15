@@ -1,51 +1,32 @@
 <template>
   <div class="q-mt-lg">
-    <q-table
-      class="radius-20 shadow-1  pagination-no-shadow"
-      :title="$t('fundingsInfo.current')"
-      :data="data"
-      :visible-columns="visibleColumns"
-      :columns="columns"
-      row-key="name"
-      :pagination="{
+    <q-table class="radius-20 shadow-1  pagination-no-shadow" :title="$t('fundingsInfo.current')" :data="data"
+      :visible-columns="visibleColumns" :columns="columns" row-key="name" :pagination="{
         sortBy: 'id',
         descending: true,
         page: 1,
         rowsPerPage: 10
-      }"
-      :rows-per-page-label="$t('Records per page')"
-      :no-data-label="$t('No data')"
-      :no-results-label="$t('No results')"
-      ref="table"
-    >
+      }" :rows-per-page-label="$t('Records per page')" :no-data-label="$t('No data')"
+      :no-results-label="$t('No results')" ref="table">
       <template v-slot:top v-if="!isGuest">
         <p class="font-24 ppeditorial">{{ $t("fundingsInfo.current") }}</p>
         <q-space />
-        <p
-          @click="$router.push({ path: '/user/data?tab=fundings' })"
-          class="font-16 text-blue text-underline text-weight-600 cursor-pointer ppeditorial"
-        >
+        <p @click="$router.push({ path: '/user/data?tab=fundings' })"
+          class="font-16 text-blue text-underline text-weight-600 cursor-pointer ppeditorial">
           {{ $t("fundingsInfo.showAll") }}
         </p>
       </template>
       <template v-slot:top v-else>
-          <p class="font-24 ppeditorial">{{ $t("fundingsInfo.current") }}</p>
-          <q-space />
-          <p
-            @click="$router.push({ path: '/community/data?tab=fundings' })"
-            class="font-16 text-blue text-underline text-weight-600 cursor-pointer ppeditorial"
-          >
-            {{ $t("fundingsInfo.showAll") }}
-          </p>
-        </template>
+        <p class="font-24 ppeditorial">{{ $t("fundingsInfo.current") }}</p>
+        <q-space />
+        <p @click="$router.push({ path: '/community/data?tab=fundings' })"
+          class="font-16 text-blue text-underline text-weight-600 cursor-pointer ppeditorial">
+          {{ $t("fundingsInfo.showAll") }}
+        </p>
+      </template>
       <template v-slot:header="props">
         <q-tr class="tableHeader" :props="props">
-          <q-th
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            class="font-14 text-black"
-          >
+          <q-th v-for="col in props.cols" :key="col.name" :props="props" class="font-14 text-black">
             {{ col.label }}
           </q-th>
           <q-th auto-width />
@@ -53,17 +34,11 @@
       </template>
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td
-            @click="view(props.row)"
-            auto-width
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            class="font-14 cursor-pointer"
-          >
+          <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
+            class="font-14 cursor-pointer">
             {{
-              col.value && col.value.length > 48
-                ? col.value.substring(0, 48) + "..."
+              col.value && col.value.length > 96
+                ? col.value.substring(0, 96) + "..."
                 : col.value
             }}
           </q-td>
@@ -72,78 +47,33 @@
               <q-menu transition-show="jump-down" transition-hide="jump-up">
                 <q-list style="min-width: 140px">
                   <q-item clickable v-close-popup @click="view(props.row)">
-                    <q-item-section
-                      ><span class="text-right font-14">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("fundingTableOptions.view") }}
-                        <q-icon
-                          size="sm"
-                          class="text-blue"
-                          name="visibility"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" class="text-blue" name="visibility" /> </span></q-item-section>
                   </q-item>
-                  <q-item
-                    v-if="isAdmin"
-                    clickable
-                    v-close-popup
-                    @click="editItem(props.row)"
-                  >
-                    <q-item-section
-                      ><span class="text-right font-14">
+                  <q-item v-if="isAdmin" clickable v-close-popup @click="editItem(props.row)">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("fundingTableOptions.edit") }}
 
-                        <q-icon
-                          size="sm"
-                          class="text-blue"
-                          name="edit"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" class="text-blue" name="edit" /> </span></q-item-section>
                   </q-item>
-                  <q-item
-                    clickable
-                    v-close-popup
-                    @click="addToWatchlist(props.row)"
-                  >
-                    <q-item-section
-                      ><span class="text-right font-14">
+                  <q-item clickable v-close-popup @click="addToWatchlist(props.row)">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("fundingTableOptions.bookmark") }}
 
-                        <q-icon
-                          size="sm"
-                          class="text-blue"
-                          name="star_rate"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" class="text-blue" name="star_rate" /> </span></q-item-section>
                   </q-item>
-                  <q-item
-                    v-if="isAdmin"
-                    clickable
-                    v-close-popup
-                    @click="archiveItem(props.row)"
-                  >
-                    <q-item-section
-                      ><span class="text-right font-14">
+                  <q-item v-if="isAdmin" clickable v-close-popup @click="archiveItem(props.row)">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("fundingTableOptions.archive") }}
 
-                        <q-icon
-                          size="sm"
-                          class="text-blue"
-                          name="inventory"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" class="text-blue" name="inventory" /> </span></q-item-section>
                   </q-item>
-                  <q-item
-                    v-if="isAdmin"
-                    clickable
-                    v-close-popup
-                    @click="deleteItem(props.row)"
-                  >
-                    <q-item-section
-                      ><span class="text-right font-14 text-red">
+                  <q-item v-if="isAdmin" clickable v-close-popup @click="deleteItem(props.row)">
+                    <q-item-section><span class="text-right font-14 text-red">
                         {{ $t("fundingTableOptions.delete") }}
 
-                        <q-icon size="sm" name="delete" /> </span
-                    ></q-item-section>
+                        <q-icon size="sm" name="delete" /> </span></q-item-section>
                   </q-item>
                 </q-list>
               </q-menu>
@@ -152,31 +82,23 @@
         </q-tr>
       </template>
     </q-table>
-    <DeleteDialog
-      :id="itemId"
-      :tab="tab"
-      :dialogState="deleteDialog"
-      @update="(deleteDialog = $event), (itemId = null)"
-    />
-    <RequestAccessDialog
-      :id="itemId"
-      :tab="tab"
-      :type="type"
-      :dialogState="requestDialog"
-      @update="(requestDialog = $event), (itemId = null), (type = null)"
-    />
+    <DeleteDialog :id="itemId" :tab="tab" :dialogState="deleteDialog"
+      @update="(deleteDialog = $event), (itemId = null)" />
+    <RequestAccessDialog :id="itemId" :tab="tab" :type="type" :dialogState="requestDialog"
+      @update="(requestDialog = $event), (itemId = null), (type = null)" />
   </div>
 </template>
 
 <script>
 import DeleteDialog from "components/data/DeleteDialog.vue";
 import RequestAccessDialog from "components/data/RequestAccessDialog.vue";
+import { dateFormatter } from "src/boot/dateFormatter";
 
 export default {
   name: "fundingInfo",
   data() {
     return {
-      visibleColumns: ["title", "categories", "owner"],
+      visibleColumns: ["title", "plannedStart", "plannedEnd"],
       itemId: null,
       tab: "fundings",
       deleteDialog: false,
@@ -215,21 +137,28 @@ export default {
           sortable: true
         },
         {
-          name: "categories",
-          align: "left",
-          label: this.$t("fundingsColsHome.categories"),
-          field: row =>
-            (!!row.categories &&
-              row.categories.map(category => category.title).join(", ")) ||
-            "No Categories",
-          sortable: true
+          name: "plannedStart",
+          align: "right",
+          label: this.$t("fundingsCol.start"),
+          field: row => dateFormatter(row.plannedStart),
+          sortable: true,
+          sort: (a, b, rowA, rowB) => {
+            const dateA = new Date(rowA.plannedStart);
+            const dateB = new Date(rowB.plannedStart);
+            return dateB - dateA;
+          }
         },
         {
-          name: "owner",
-          align: "left",
-          label: this.$t("Owner"),
-          field: row => (!!row.owner && row.owner.username) || "No Author",
-          sortable: true
+          name: "plannedEnd",
+          align: "right",
+          label: this.$t("fundingsCol.end"),
+          field: row => dateFormatter(row.plannedEnd),
+          sortable: true,
+          sort: (a, b, rowA, rowB) => {
+            const dateA = new Date(rowA.plannedEnd);
+            const dateB = new Date(rowB.plannedEnd);
+            return dateB - dateA;
+          }
         }
       ];
     },
@@ -244,6 +173,7 @@ export default {
     }
   },
   methods: {
+    dateFormatter,
     getData() {
       this.$store.dispatch("funding/getFundings");
     },
@@ -253,7 +183,7 @@ export default {
       if (
         row.visibility === "listed only" &&
         (!!row.owner && row.owner.id) !==
-          (!!this.loggedInUser && this.loggedInUser.id) &&
+        (!!this.loggedInUser && this.loggedInUser.id) &&
         !this.isAdmin
       ) {
         const hasReaderAccess =
@@ -283,7 +213,7 @@ export default {
       const id = row && row.id;
       if (
         (!!row.owner && row.owner.id) !==
-          (!!this.loggedInUser && this.loggedInUser.id) &&
+        (!!this.loggedInUser && this.loggedInUser.id) &&
         !this.isAdmin
       ) {
         const hasEditorAccess =
@@ -330,9 +260,9 @@ export default {
       const savedPagination = JSON.parse(localStorage.getItem("pagination"));
 
       this.$refs.table.setPagination({
-          page: savedPagination.fundingInfoPage || 1,
-          rowsPerPage: savedPagination.fundingInfoRowsPerPage || 10,
-        });
+        page: savedPagination.fundingInfoPage || 1,
+        rowsPerPage: savedPagination.fundingInfoRowsPerPage || 10,
+      });
     }
   },
   beforeDestroy() {
