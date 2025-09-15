@@ -18,17 +18,15 @@
                     <div class="funding-index text-weight-bold text-primary q-mr-sm">
                       {{ index + 1 }}
                     </div>
-                    <div class="funding-score text-weight-bold"
-                      :class="{ 'text-white': selectedCard === index, 'text-primary': selectedCard !== index }">
-                      <q-icon name="star" size="16px" class="q-mr-xs"
-                        :color="selectedCard === index ? 'white' : 'amber'" />
+                    <div class="funding-score text-weight-bold">
+                      <q-icon name="star" size="16px" class="q-mr-xs" color="amber" />
                       {{ (funding.score * 100).toFixed(2) }}%
                     </div>
                   </div>
                 </div>
-                <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
-                  :color="selectedCard === index ? 'white' : 'black'" @click.stop="openFundingLink(funding.external_id)"
-                  class="funding-link-btn" :disabled="!funding.external_id" />
+                <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline" color="black"
+                  @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
+                  :disabled="!funding.external_id" />
               </div>
 
               <!-- Spacer to push title to bottom -->
@@ -61,7 +59,7 @@
               <div class="flex-spacer"></div>
 
               <!-- Title at bottom -->
-              <div class="funding-title font-16 text-weight-medium q-mb-md">
+              <div class="funding-title font-16 text-weight-bold q-mb-md">
                 {{ isRefreshing ? $t('projectComponents.fundingCheck.refreshing') :
                   $t('projectComponents.fundingCheck.refresh') }}
               </div>
@@ -238,9 +236,13 @@ export default {
       this.isLoading = true;
       this.selectedCard = 'refresh';
 
+      const { startingCondition, goals, content, valuesAndBenefits } = this.projectData.details || {};
+      const { financialPlan } = this.projectData;
+      const finances = `${financialPlan?.description || ''} ${(financialPlan?.costAndFinance || []).map(item => `${item.title}: ${item.value} Euro`).join(', ')}`;
+
       try {
         // Check if projectData has the required data
-        if (!this.projectData?.details?.startingCondition) {
+        if (!startingCondition || !goals || !content || !valuesAndBenefits || !financialPlan || !financialPlan.costAndFinance) {
           this.$q.notify({
             color: 'negative',
             message: this.$t('projectComponents.fundingCheck.noProjectData'),
@@ -249,8 +251,14 @@ export default {
           return;
         }
 
+
+
         await this.$store.dispatch('ai/matchFunding', {
-          projectData: this.projectData.details.startingCondition
+          startingCondition,
+          goals,
+          content,
+          valuesAndBenefits,
+          finances
         });
 
         this.$q.notify({
@@ -357,11 +365,7 @@ export default {
       // If a card is being selected (not deselected), fetch specific funding data
       if (!wasSelected && typeof index === 'number') {
         await this.$store.dispatch('funding/resetSelectedFunding');
-        // For now, use hardcoded ID 361. Later will use funding.external_id
-        // const fundingId = 361; // Later replace with:
         const fundingId = this.fundingMatches[index].external_id;
-
-        console.log('Fetching specific funding data for ID:', fundingId);
 
         // Call the store action to get specific funding data
         await this.$store.dispatch('funding/getSpecificFunding', { id: fundingId })
@@ -469,21 +473,20 @@ export default {
   }
 
   &.selected {
-    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    background: #bfd3ff;
     border: 0;
     box-shadow: none;
-    color: white;
 
     .funding-index {
       background: white
     }
 
     .funding-title {
-      color: white;
+      color: black;
     }
 
     .funding-score {
-      color: white;
+      color: black;
     }
 
     .funding-preview {
@@ -635,8 +638,8 @@ export default {
 
 // Fehlanzeige Card Styles
 .fehlanzeige-card {
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-  border: 2px dashed #ff9800;
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  border: 2px dashed #f44336;
   opacity: 0.9;
   min-height: 160px;
   max-height: 160px;
@@ -658,27 +661,27 @@ export default {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: rgba(255, 152, 0, 0.2);
+    background: rgba(244, 67, 54, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ff9800;
+    color: #f44336;
   }
 
   &:hover {
-    border-color: #f57c00;
+    border-color: #d32f2f;
     transform: translateY(-2px);
     opacity: 1;
   }
 
   &.selected {
-    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-    border: 2px solid #ff9800;
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    border: 2px solid #f44336;
     color: white;
 
     .fehlanzeige-icon {
       background: white;
-      color: #ff9800;
+      color: #f44336;
     }
   }
 }
