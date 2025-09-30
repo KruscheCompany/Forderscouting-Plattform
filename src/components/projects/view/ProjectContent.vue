@@ -308,6 +308,7 @@ export default {
 
 .text-block {
   white-space: pre-line;
+  min-height: 144px;
 }
 
 .mobile-row {

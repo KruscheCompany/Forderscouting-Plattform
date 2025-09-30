@@ -4,15 +4,8 @@
       <p class="text-center font-36 text-weight-regular q-my-lg ppeditorial">
         {{ $t("myData.fundings") }}
       </p>
-      <div
-        class="bg-white radius-20 q-py-lg"
-        :class="{ 'q-px-md': $q.screen.gt.sm }"
-      >
-        <q-form
-          @validation-error="scrollToInvalidElement"
-          ref="newFundingForm"
-          class="q-gutter-lg q-px-md q-mb-md"
-        >
+      <div class="bg-white radius-20 q-py-lg" :class="{ 'q-px-md': $q.screen.gt.sm }">
+        <q-form @validation-error="scrollToInvalidElement" ref="newFundingForm" class="q-gutter-lg q-px-md q-mb-md">
           <div class="row items-baseline">
             <div class="col-12 col-md-4">
               <p class="font-16 no-margin">
@@ -20,14 +13,8 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input
-                outlined
-                dense
-                class="no-shadow input-radius-6"
-                :placeholder="$t('official title')"
-                v-model="form.title"
-                :rules="[val => !!val || $t('Required')]"
-              />
+              <q-input outlined dense class="no-shadow input-radius-6" :placeholder="$t('official title')"
+                v-model="form.title" :rules="[val => !!val || $t('Required')]" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -39,14 +26,8 @@
             <div class="col-12 col-md-8">
               <div class="row q-col-gutter-x-md">
                 <div class="col-12">
-                  <q-input
-                    outlined
-                    dense
-                    class="no-shadow input-radius-6"
-                    :placeholder="$t('funding provider')"
-                    v-model="form.provider"
-                    :rules="[val => !!val || $t('Required')]"
-                  />
+                  <q-input outlined dense class="no-shadow input-radius-6" :placeholder="$t('funding provider')"
+                    v-model="form.provider" :rules="[val => !!val || $t('Required')]" />
                 </div>
               </div>
             </div>
@@ -60,13 +41,8 @@
             <div class="col-12 col-md-8">
               <div class="row q-col-gutter-x-md q-col-gutter-y-lg">
                 <div class="col-12">
-                  <q-input
-                    outlined
-                    dense
-                    class="no-shadow input-radius-6"
-                    :placeholder="$t('projectIdeaPlaceholder.nameSurname')"
-                    v-model="form.info.contactName"
-                  />
+                  <q-input outlined dense class="no-shadow input-radius-6"
+                    :placeholder="$t('projectIdeaPlaceholder.nameSurname')" v-model="form.info.contactName" />
                 </div>
               </div>
             </div>
@@ -80,47 +56,25 @@
             <div class="col-12 col-md-8">
               <div class="row q-col-gutter-x-md q-col-gutter-y-lg">
                 <div class="col-6">
-                  <q-input
-                    outlined
-                    dense
-                    class="no-shadow input-radius-6"
-                    :placeholder="$t('projectIdeaPlaceholder.streetNr')"
-                    v-model="form.info.streetNo"
-                  />
+                  <q-input outlined dense class="no-shadow input-radius-6"
+                    :placeholder="$t('projectIdeaPlaceholder.streetNr')" v-model="form.info.streetNo" />
                 </div>
                 <div class="col-6">
-                  <q-input
-                    outlined
-                    dense
-                    class="no-shadow input-radius-6"
-                    :placeholder="$t('projectIdeaPlaceholder.postalCity/place')"
-                    v-model="form.info.postalCode"
-                  />
+                  <q-input outlined dense class="no-shadow input-radius-6"
+                    :placeholder="$t('projectIdeaPlaceholder.postalCity/place')" v-model="form.info.postalCode" />
                 </div>
                 <div class="col-6">
-                  <q-input
-                    outlined
-                    dense
-                    class="no-shadow input-radius-6"
-                    :placeholder="$t('projectIdeaPlaceholder.telephone')"
-                    v-model="form.info.phone"
-                  />
+                  <q-input outlined dense class="no-shadow input-radius-6"
+                    :placeholder="$t('projectIdeaPlaceholder.telephone')" v-model="form.info.phone" />
                 </div>
                 <div class="col-6">
-                  <q-input
-                    outlined
-                    dense
-                    class="no-shadow input-radius-6"
-                    :placeholder="$t('projectIdeaPlaceholder.email')"
-                    v-model="form.info.email"
-                  />
+                  <q-input outlined dense class="no-shadow input-radius-6"
+                    :placeholder="$t('projectIdeaPlaceholder.email')" v-model="form.info.email" />
                 </div>
-                 <div class="col-12">
-                    <MunicipalityCities
-                      :currentMunicipality="form.info.location"
-                      @update:city="form.info.location = $event"
-                      />
-                  </div>
+                <div class="col-12">
+                  <MunicipalityCities :currentMunicipality="form.info.location"
+                    @update:city="form.info.location = $event" />
+                </div>
               </div>
             </div>
           </div>
@@ -131,10 +85,7 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <UserSelect
-                :editing="!!funding ? funding.editors : []"
-                @update:user="form.editors = $event"
-              />
+              <UserSelect :editing="!!funding ? funding.editors : []" @update:user="form.editors = $event" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -144,26 +95,19 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-select
-                outlined
-                dense
-                v-model="form.visibility"
-                emit-value
-                :options="visibilityOptions"
-                :rules="[val => !!val || $t('Required')]"
-                class="no-shadow input-radius-6"
-                options-selected-class="text-primary"
-              >
+              <q-select outlined dense v-model="form.visibility" emit-value :options="visibilityOptions"
+                :rules="[val => !!val || $t('Required')]" class="no-shadow input-radius-6"
+                options-selected-class="text-primary">
                 <template v-slot:selected>
                   <template v-if="form.visibility">
                     {{
                       form.visibility === "only for me"
                         ? $t("visibility.onlyMe")
                         : form.visibility === "all users"
-                        ? $t("visibility.allUsers")
-                        : form.visibility === "listed only"
-                        ? $t("visibility.listedOnly")
-                        : ""
+                          ? $t("visibility.allUsers")
+                          : form.visibility === "listed only"
+                            ? $t("visibility.listedOnly")
+                            : ""
                     }}
                   </template>
                   <template v-else>
@@ -178,10 +122,10 @@
                   form.visibility === "only for me"
                     ? $t("visibility.docOnlyMe")
                     : form.visibility === "all users"
-                    ? $t("visibility.docAllUsers")
-                    : form.visibility === "listed only"
-                    ? $t("visibility.docListedOnly")
-                    : ""
+                      ? $t("visibility.docAllUsers")
+                      : form.visibility === "listed only"
+                        ? $t("visibility.docListedOnly")
+                        : ""
                 }}
               </p>
             </div>
@@ -196,11 +140,8 @@
               <p class="font-16 no-margin">{{ $t("Filter Categories") }}</p>
             </div>
             <div class="col-12 col-md-8">
-              <Categories
-                :requiresValidation="true"
-                :editing="!!funding ? funding.categories : []"
-                @update:category="form.categories = $event"
-              />
+              <Categories :requiresValidation="true" :editing="!!funding ? funding.categories : []"
+                @update:category="form.categories = $event" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -208,11 +149,8 @@
               <p class="font-16 no-margin">{{ $t("Tags") }}</p>
             </div>
             <div class="col-12 col-md-8">
-              <Tags
-                :requiresValidation="true"
-                :editing="!!funding ? funding.tags : []"
-                @update:tag="form.tags = $event"
-              />
+              <Tags :requiresValidation="true" :editing="!!funding ? funding.tags : []"
+                @update:tag="form.tags = $event" />
             </div>
           </div>
           <div class="row">
@@ -227,14 +165,8 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input
-                outlined
-                type="textarea"
-                rows="10"
-                class="no-shadow input-radius-6"
-                placeholder="Förderziel"
-                v-model="form.details.goal"
-              />
+              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" placeholder="Förderziel"
+                v-model="form.details.goal" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -244,14 +176,8 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input
-                outlined
-                type="textarea"
-                rows="10"
-                class="no-shadow input-radius-6"
-                placeholder="Was wird gefördert"
-                v-model="form.details.funded"
-              />
+              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
+                placeholder="Was wird gefördert" v-model="form.details.funded" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -261,14 +187,8 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input
-                outlined
-                type="textarea"
-                rows="10"
-                class="no-shadow input-radius-6"
-                placeholder="Was wird nicht gefördert"
-                v-model="form.details.notFunded"
-              />
+              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
+                placeholder="Was wird nicht gefördert" v-model="form.details.notFunded" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -278,14 +198,8 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input
-                outlined
-                type="textarea"
-                rows="10"
-                class="no-shadow input-radius-6"
-                :placeholder="$t('Who will be funded?')"
-                v-model="form.details.willBeFunded"
-              />
+              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
+                :placeholder="$t('Who will be funded?')" v-model="form.details.willBeFunded" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -295,14 +209,8 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input
-                outlined
-                type="textarea"
-                rows="10"
-                class="no-shadow input-radius-6"
-                placeholder="Rahmenbedingungen für Antragsteller*in"
-                v-model="form.details.condition"
-              />
+              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
+                placeholder="Rahmenbedingungen für Antragsteller*in" v-model="form.details.condition" />
             </div>
           </div>
           <div class="row">
@@ -318,10 +226,7 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <FundingRate
-                :editing="!!funding ? funding.rates : []"
-                @update:fundingRate="form.rates = $event"
-              />
+              <FundingRate :editing="!!funding ? funding.rates : []" @update:fundingRate="form.rates = $event" />
             </div>
           </div>
 
@@ -332,15 +237,8 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input
-                outlined
-                dense
-                class="no-shadow input-radius-6 removeArrow"
-                suffix="%"
-                placeholder="0"
-                v-model="form.ownContribution"
-                :rules="[]"
-              />
+              <q-input outlined dense class="no-shadow input-radius-6 removeArrow" suffix="%" placeholder="0"
+                v-model="form.ownContribution" :rules="[]" />
             </div>
           </div>
           <div class="row items-center">
@@ -350,18 +248,9 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-btn-toggle
-                v-model="form.accumulability"
-                spread
-                no-caps
-                toggle-color="yellow"
-                padding="12px 10px"
-                color="transparent"
-                toggle-text-color="black"
-                text-color="black"
-                class="no-shadow toggleGap"
-                :options="accumulabilityOptions"
-              />
+              <q-btn-toggle v-model="form.accumulability" spread no-caps toggle-color="yellow" padding="12px 10px"
+                color="transparent" toggle-text-color="black" text-color="black" class="no-shadow toggleGap"
+                :options="accumulabilityOptions" />
             </div>
           </div>
           <div v-if="form.accumulability" class="row items-center">
@@ -371,11 +260,8 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <Fundings
-                :requiresValidation="false"
-                :editing="funding.fundingsLinkedTo"
-                @update:linkToFunding="form.fundingsLinkedTo = $event"
-              />
+              <Fundings :requiresValidation="false" :editing="funding.fundingsLinkedTo"
+                @update:linkToFunding="form.fundingsLinkedTo = $event" />
             </div>
           </div>
           <div class="row">
@@ -390,14 +276,8 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input
-                outlined
-                type="textarea"
-                rows="10"
-                class="no-shadow input-radius-6"
-                :placeholder="$t('Basis for assessment')"
-                v-model="form.assessment"
-              />
+              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
+                :placeholder="$t('Basis for assessment')" v-model="form.assessment" />
             </div>
           </div>
           <div class="row">
@@ -414,45 +294,18 @@
             <div class="col-12 col-md-8">
               <div class="row q-col-gutter-x-md">
                 <div class="col-6">
-                  <q-input
-                    outlined
-                    dense
-                    class="no-shadow input-radius-6"
-                    :value="dateFormatter(form.plannedStart)"
-                    readonly
-                    color="primary"
-                    bg-color="white"
+                  <q-input outlined dense class="no-shadow input-radius-6" :value="dateFormatter(form.plannedStart)"
+                    readonly color="primary" bg-color="white"
                     :placeholder="$t('projectIdeaPlaceholder.plannedStartDate')"
-                    @click="$refs.qPlannedStartDateProxy.show()"
-                    :rules="[val => !!val || $t('Required')]"
-                  >
+                    @click="$refs.qPlannedStartDateProxy.show()" :rules="[val => !!val || $t('Required')]">
                     <template v-slot:append>
-                      <q-icon
-                        name="event"
-                        color="blue-5"
-                        class="cursor-pointer"
-                      >
-                        <q-popup-proxy
-                          ref="qPlannedStartDateProxy"
-                          transition-show="scale"
-                          transition-hide="scale"
-                        >
-                          <q-date
-                            :options="plannedStartOptions"
-                            v-model="form.plannedStart"
-                            mask="YYYY-MM-DD"
-                            @input="$refs.qPlannedStartDateProxy.hide()"
-                            first-day-of-week="1"
-                            :locale="datepickerLocale"
-                          >
+                      <q-icon name="event" color="blue-5" class="cursor-pointer">
+                        <q-popup-proxy ref="qPlannedStartDateProxy" transition-show="scale" transition-hide="scale">
+                          <q-date :options="plannedStartOptions" v-model="form.plannedStart" mask="YYYY-MM-DD"
+                            @input="$refs.qPlannedStartDateProxy.hide()" first-day-of-week="1"
+                            :locale="datepickerLocale">
                             <div class="row items-center justify-end">
-                              <q-btn
-                                v-close-popup
-                                no-caps
-                                :label="$t('Close')"
-                                color="primary"
-                                flat
-                              />
+                              <q-btn v-close-popup no-caps :label="$t('Close')" color="primary" flat />
                             </div>
                           </q-date>
                         </q-popup-proxy>
@@ -461,45 +314,16 @@
                   </q-input>
                 </div>
                 <div class="col-6">
-                  <q-input
-                    outlined
-                    dense
-                    class="no-shadow input-radius-6"
-                    :value="dateFormatter(form.plannedEnd)"
-                    color="primary"
-                    readonly
-                    bg-color="white"
-                    :placeholder="$t('projectIdeaPlaceholder.plannedEndDate')"
-                    @click="$refs.qPlannedEndDateProxy.show()"
-                    :rules="[val => !!val || $t('Required')]"
-                  >
+                  <q-input outlined dense class="no-shadow input-radius-6" :value="dateFormatter(form.plannedEnd)"
+                    color="primary" readonly bg-color="white" :placeholder="$t('projectIdeaPlaceholder.plannedEndDate')"
+                    @click="$refs.qPlannedEndDateProxy.show()" :rules="[val => !!val || $t('Required')]">
                     <template v-slot:append>
-                      <q-icon
-                        name="event"
-                        color="blue-5"
-                        class="cursor-pointer"
-                      >
-                        <q-popup-proxy
-                          ref="qPlannedEndDateProxy"
-                          transition-show="scale"
-                          transition-hide="scale"
-                        >
-                          <q-date
-                            :options="plannedEndOptions"
-                            v-model="form.plannedEnd"
-                            mask="YYYY-MM-DD"
-                            @input="$refs.qPlannedEndDateProxy.hide()"
-                            first-day-of-week="1"
-                            :locale="datepickerLocale"
-                          >
+                      <q-icon name="event" color="blue-5" class="cursor-pointer">
+                        <q-popup-proxy ref="qPlannedEndDateProxy" transition-show="scale" transition-hide="scale">
+                          <q-date :options="plannedEndOptions" v-model="form.plannedEnd" mask="YYYY-MM-DD"
+                            @input="$refs.qPlannedEndDateProxy.hide()" first-day-of-week="1" :locale="datepickerLocale">
                             <div class="row items-center justify-end">
-                              <q-btn
-                                v-close-popup
-                                no-caps
-                                :label="$t('Close')"
-                                color="primary"
-                                flat
-                              />
+                              <q-btn v-close-popup no-caps :label="$t('Close')" color="primary" flat />
                             </div>
                           </q-date>
                         </q-popup-proxy>
@@ -519,15 +343,8 @@
             <div class="col-12 col-md-8">
               <div class="row q-col-gutter-x-md">
                 <div class="col-12">
-                  <q-input
-                    outlined
-                    dense
-                    class="no-shadow input-radius-6"
-                    v-model="form.notes"
-                    color="primary"
-                    bg-color="white"
-                    placeholder="Hinweise zum Förderzeitraum"
-                  >
+                  <q-input outlined dense class="no-shadow input-radius-6" v-model="form.notes" color="primary"
+                    bg-color="white" placeholder="Hinweise zum Förderzeitraum">
                   </q-input>
                 </div>
               </div>
@@ -546,10 +363,7 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <Links
-                :editing="!!funding ? funding.links : []"
-                @update:link="form.links = $event"
-              />
+              <Links :editing="!!funding ? funding.links : []" @update:link="form.links = $event" />
             </div>
           </div>
           <div class="row">
@@ -565,131 +379,33 @@
             </div>
             <div class="col-12 col-md-8">
               <div class="row q-col-gutter-md">
-                <div class="col-12 col-md-6">
-                  <q-file
-                    flat
-                    v-model="form.media"
-                    class="uploadInput input-radius-6 text-white"
-                    label-color="white"
-                    dark
-                    bg-color="primary"
-                    :label="
-                      !!form.media && form.media.length > 0
-                        ? $t('Add Images')
-                        : $t('Select Images')
-                    "
-                    multiple
-                    display-value=""
-                    append
-                  >
-                    <template v-slot:prepend>
-                      <q-icon color="white" class="on-right" name="upload" />
-                    </template>
-                  </q-file>
-                  <div
-                    class="q-mt-sm"
-                    v-if="form.media && form.media.length > 0"
-                  >
-                    <div
-                      class="q-col-gutter-x-sm row radius-6 shadow-1 q-mt-sm items-center q-pa-sm"
-                      v-for="(image, index) in form.media"
-                      :key="index"
-                    >
-                      <div class="col-auto">
-                        <q-avatar rounded size="48px">
-                          <q-img
-                            :ratio="1"
-                            contain
-                            :src="imgPreview(image).url"
-                          />
-                        </q-avatar>
-                      </div>
-                      <div class="col-8">
-                        <q-item-label class="ellipsis" caption>{{
-                          imgPreview(image).name
-                        }}</q-item-label>
-                      </div>
-                      <div class="col-auto text-right">
-                        <q-btn
-                          icon="delete"
-                          @click.prevent.stop="removeImg(index)"
-                          size="sm"
-                          round
-                          text-color="red"
-                          dense
-                        >
-                        </q-btn>
-                      </div>
-                      <div class="col-12 q-mt-sm">
-                        <q-btn
-                          :label="
-                            !!imgPreview(image).caption
-                              ? $t('Edit caption')
-                              : $t('Add Caption')
-                          "
-                          @click.prevent.stop="addCaption(image, index)"
-                          text-color="primary"
-                          dense
-                          class="radius-6 "
-                          no-caps
-                          flat
-                        >
-                        </q-btn>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6">
-                  <q-file
-                    flat
-                    v-model="form.files"
-                    class="uploadInput input-radius-6 text-white"
-                    label-color="white"
-                    dark
-                    bg-color="primary"
-                    :label="
-                      !!form.files && form.files.length > 0
+                <div class="col-12">
+                  <q-file flat v-model="form.files" class="uploadInput input-radius-6 text-white" label-color="white"
+                    dark bg-color="primary" :label="!!form.files && form.files.length > 0
                         ? $t('Add Files')
                         : $t('Select Files')
-                    "
-                    multiple
-                    display-value=""
-                    append
-                  >
+                      " multiple display-value="" append>
                     <template v-slot:prepend>
                       <q-icon color="white" class="on-right" name="upload" />
                     </template>
                   </q-file>
-                  <div
-                    class="q-mt-sm"
-                    v-if="form.files && form.files.length > 0"
-                  >
-                    <q-item
-                      v-for="(file, index) in form.files"
-                      :key="index"
-                      clickable
-                    >
+                  <div class="q-mt-sm" v-if="form.files && form.files.length > 0">
+                    <q-item v-for="(file, index) in form.files" :key="index" clickable>
                       <q-item-section side>
                         <q-avatar rounded size="48px">
                           <small>{{
                             imgPreview(file).name.split(".")[1]
-                          }}</small>
+                            }}</small>
                         </q-avatar>
                       </q-item-section>
                       <q-item-section>
                         <q-item-label class="ellipsis" caption>{{
                           imgPreview(file).name
-                        }}</q-item-label>
+                          }}</q-item-label>
                       </q-item-section>
                       <q-item-section side>
-                        <q-btn
-                          icon="delete"
-                          @click.prevent.stop="removeFile(index)"
-                          size="sm"
-                          round
-                          text-color="red"
-                          dense
-                        >
+                        <q-btn icon="delete" @click.prevent.stop="removeFile(index)" size="sm" round text-color="red"
+                          dense>
                         </q-btn>
                       </q-item-section>
                     </q-item>
@@ -710,10 +426,8 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <ProjectIdeas
-                :editing="!!funding ? funding.projects : []"
-                @update:linkToProject="form.projects = $event"
-              />
+              <ProjectIdeas :editing="!!funding ? funding.projects : []"
+                @update:linkToProject="form.projects = $event" />
             </div>
           </div>
           <div class="row">
@@ -723,18 +437,13 @@
           </div>
           <div class="row items-center">
             <div class="col-12 col-md-4">
-              <p
-                class="font-16 no-margin"
-                :class="$q.screen.gt.md ? 'q-pr-xl' : ''"
-              >
+              <p class="font-16 no-margin" :class="$q.screen.gt.md ? 'q-pr-xl' : ''">
                 {{ $t("Link to implementation checklist (optional)") }}
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <ImplementationChecklists
-                :editing="!!funding ? funding.checklist : null"
-                @update:linkToImplementationChecklist="form.checklist = $event"
-              />
+              <ImplementationChecklists :editing="!!funding ? funding.checklist : null"
+                @update:linkToImplementationChecklist="form.checklist = $event" />
             </div>
           </div>
           <div class="row">
@@ -744,30 +453,17 @@
           </div>
           <div class="row justify-center">
             <div class="col-5 col-md-3 q-ml-sm">
-              <q-btn
-                :label="$t('newProjectIdeaForm.publish')"
-                @click="!!funding ? editFunding(true) : submitNewFunding(true)"
-                unelevated
-                size="16px"
-                color="primary"
-                no-caps
-                class="radius-6 q-py-xs full-width"
-                :loading="isLoading"
-              />
+              <q-btn :label="$t('newProjectIdeaForm.publish')"
+                @click="!!funding ? editFunding(true) : submitNewFunding(true)" unelevated size="16px" color="primary"
+                no-caps class="radius-6 q-py-xs full-width" :loading="isLoading" />
             </div>
           </div>
         </q-form>
       </div>
     </div>
-    <ImageDialog
-      :imageIndex="imageIndex"
-      :image="image"
-      type="funding"
-      :document="!!funding ? funding : null"
-      :dialogState="imageDialog"
-      @update="(imageDialog = false), (imageIndex = null), (image = null)"
-      @add-caption="updateCaption"
-    />
+    <ImageDialog :imageIndex="imageIndex" :image="image" type="funding" :document="!!funding ? funding : null"
+      :dialogState="imageDialog" @update="(imageDialog = false), (imageIndex = null), (image = null)"
+      @add-caption="updateCaption" />
   </q-page>
 </template>
 
@@ -1011,7 +707,7 @@ export default {
           position: "top"
         });
         this.$router.go(-1);
-        
+
       }
     }
   },
@@ -1112,11 +808,13 @@ export default {
 <style lang="scss">
 .toggleGap {
   gap: 15px;
-  > button {
+
+  >button {
     border-radius: 10px !important;
     border: 1px solid $yellow;
   }
 }
+
 .removeArrow input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;

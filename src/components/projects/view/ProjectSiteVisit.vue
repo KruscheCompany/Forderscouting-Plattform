@@ -35,8 +35,8 @@ export default {
   },
   computed: {
     siteVisitText() {
-      return this.project && this.project.details && this.project.details.siteVisit 
-        ? this.project.details.siteVisit 
+      return this.project && this.project.details && this.project.details.siteVisit
+        ? this.project.details.siteVisit
         : this.$t('projectComponents.siteVisit.noContent');
     }
   },
@@ -52,5 +52,6 @@ export default {
 <style lang="scss" scoped>
 .text-block {
   white-space: pre-line;
+  min-height: 144px;
 }
 </style>

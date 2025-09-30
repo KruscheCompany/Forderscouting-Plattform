@@ -2,8 +2,6 @@
   <div class="q-mt-lg">
     <q-table class="radius-20 shadow-1  pagination-no-shadow" :title="$t('fundingsInfo.current')" :data="data"
       :visible-columns="visibleColumns" :columns="columns" row-key="name" :pagination="{
-        sortBy: 'id',
-        descending: true,
         page: 1,
         rowsPerPage: 10
       }" :rows-per-page-label="$t('Records per page')" :no-data-label="$t('No data')"
@@ -37,8 +35,8 @@
           <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
             class="font-14 cursor-pointer">
             {{
-              col.value && col.value.length > 96
-                ? col.value.substring(0, 96) + "..."
+              col.value && col.value.length > 145
+                ? col.value.substring(0, 145) + "..."
                 : col.value
             }}
           </q-td>
@@ -138,7 +136,7 @@ export default {
         },
         {
           name: "plannedStart",
-          align: "right",
+          align: "center",
           label: this.$t("fundingsCol.start"),
           field: row => dateFormatter(row.plannedStart),
           sortable: true,
@@ -146,11 +144,11 @@ export default {
             const dateA = new Date(rowA.plannedStart);
             const dateB = new Date(rowB.plannedStart);
             return dateB - dateA;
-          }
+          },
         },
         {
           name: "plannedEnd",
-          align: "right",
+          align: "center",
           label: this.$t("fundingsCol.end"),
           field: row => dateFormatter(row.plannedEnd),
           sortable: true,

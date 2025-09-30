@@ -50,7 +50,7 @@ export default {
   },
   computed: {
     financialPlan() {
-      return this.project && this.project.financialPlan 
+      return this.project && this.project.financialPlan
         ? this.project.financialPlan
         : { description: '', costAndFinance: [] };
     },
@@ -64,10 +64,10 @@ export default {
   methods: {
     formatCurrency(value) {
       if (!value) return '0,00 €';
-      
+
       // Convert to number if it's a string
       const numValue = typeof value === 'string' ? parseFloat(value.replace(/[^\d,]/g, '').replace(',', '.')) : value;
-      
+
       if (isNaN(numValue)) {
         return value; // Return original value if not a number
       }
@@ -93,5 +93,6 @@ export default {
 <style lang="scss" scoped>
 .text-block {
   white-space: pre-line;
+  min-height: 144px;
 }
 </style>

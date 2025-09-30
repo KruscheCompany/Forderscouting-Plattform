@@ -45,8 +45,8 @@ export default {
   },
   computed: {
     guidelineFormCheckText() {
-      return this.project && this.project.details && this.project.details.guidelineFormCheck 
-        ? this.project.details.guidelineFormCheck 
+      return this.project && this.project.details && this.project.details.guidelineFormCheck
+        ? this.project.details.guidelineFormCheck
         : this.$t('projectComponents.guidelineFormCheck.noContent');
     }
   },
@@ -62,5 +62,6 @@ export default {
 <style lang="scss" scoped>
 .text-block {
   white-space: pre-line;
+  min-height: 144px;
 }
 </style>

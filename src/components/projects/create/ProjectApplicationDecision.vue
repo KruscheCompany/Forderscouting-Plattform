@@ -1,11 +1,12 @@
 <template>
   <q-card class="shadow-1 radius-20">
     <q-expansion-item class="shadow-1 overflow-hidden radius-20"
-      :label="$t('projectComponents.applicationDecision.title')" header-class="bg-white text-black"
-      v-model="expandedApplicationDecision">
+      :label="currentTab === 'applicationDecision' ? $t('projectComponents.applicationDecision.title') : $t('projectComponents.guidelineContentCheck.uploadsTitle')"
+      header-class="bg-white text-black" v-model="expandedApplicationDecision">
       <q-card-section class="q-pt-none">
         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-          {{ $t('projectComponents.applicationDecision.description') }}
+          {{ currentTab === 'applicationDecision' ? $t('projectComponents.applicationDecision.description') :
+            $t('projectComponents.guidelineContentCheck.uploadsDescription') }}
         </h4>
 
         <div class="col-12 q-mt-md">
@@ -70,7 +71,7 @@ export default {
   },
   data() {
     return {
-      expandedApplicationDecision: this.currentTab === "applicationDecision",
+      expandedApplicationDecision: this.currentTab === "applicationDecision" || this.currentTab === "guidelineContentCheck",
       // Create a deep copy to avoid direct store mutations
       applicationDecisionFiles: this.projectData && this.projectData.applicationDecisionFiles !== undefined ?
         JSON.parse(JSON.stringify(this.projectData.applicationDecisionFiles)) : null,

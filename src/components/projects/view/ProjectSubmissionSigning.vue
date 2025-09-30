@@ -12,14 +12,19 @@
 
           <div class="row q-col-gutter-md items-center">
             <div class="col-auto">
-              <q-icon :name="submissionStatus === null ? 'help_outline' : (submissionStatus ? 'check' : 'clear')"
-                :color="submissionStatus === null ? 'grey' : (submissionStatus ? 'green' : 'red')" size="xl" />
+              <q-icon
+                :name="submissionStatus === null ? 'help_outline' : (submissionStatus === 'grantNotice' ? 'check' : (submissionStatus === 'sentToFunding' ? 'mdi-send-clock' : 'clear'))"
+                :color="submissionStatus === null ? 'grey' : (submissionStatus === 'rejectionNotice' ? 'red' : 'green')"
+                size="xl" />
             </div>
             <div class="col-auto">
               <span v-if="submissionStatus === null">
                 {{ $t('projectComponents.submissionSigning.pendingDecision') }}
               </span>
-              <span v-else-if="submissionStatus === true">
+              <span v-else-if="submissionStatus === 'sentToFunding'">
+                {{ $t('projectComponents.submissionSigning.sentToFunding') }}
+              </span>
+              <span v-else-if="submissionStatus === 'grantNotice'">
                 {{ $t('projectComponents.submissionSigning.grantNotice') }}
               </span>
               <span v-else>
@@ -71,5 +76,6 @@ export default {
 <style lang="scss" scoped>
 .text-block {
   white-space: pre-line;
+  min-height: 144px;
 }
 </style>

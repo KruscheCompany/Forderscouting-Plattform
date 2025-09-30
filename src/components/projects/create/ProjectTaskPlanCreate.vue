@@ -3,23 +3,12 @@
     <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t('projectComponents.taskPlan.title')"
       header-class="bg-white text-black" v-model="expandedTaskPlan">
       <q-card-section class="q-pt-none">
+        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+          {{ $t('projectComponents.taskPlan.description') }}
+        </h4>
         <div>
           <q-list>
-            <q-item v-for="(task, index) in defaultTasks" :key="`default-${index}`" tag="label" v-ripple
-              class="q-pa-none">
-              <q-item-section avatar>
-                <q-checkbox v-model="task.completed" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{ task.title }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </div>
-
-        <div>
-          <q-list>
-            <q-item v-for="(task, index) in customTasks" :key="`custom-${index}`" tag="label" v-ripple
+            <q-item v-for="(task, index) in taskPlan.tasks" :key="`custom-${index}`" tag="label" v-ripple
               class="q-pa-none">
               <q-item-section avatar>
                 <q-checkbox v-model="task.completed" />
@@ -76,14 +65,14 @@ export default {
       newTaskTitle: '',
       taskPlan: this.projectData.taskPlan || {
         tasks: [
-          { title: 'Organisation Begehung (Teilnehmer*innen, Dokumentation)', completed: false, isDefault: true },
-          { title: 'Organisation Zieldefinition (Arbeitsformat, Teilnehmer*innen, Dokumentation)', completed: false, isDefault: true },
-          { title: 'Organisation Anforderungen definieren (Arbeitsformat, Teilnehmer*innen, Dokumentation)', completed: false, isDefault: true },
-          { title: 'Richtlinien-Check (Inhalt – Durchsicht der Langfassung und Überführung der Projektbeschreibung in das entsprechende Formular)', completed: false, isDefault: true },
-          { title: 'Richtlinien-Check (Antragsweg – Recherche und Dokumentation offener Fragen mit dem Fördermittelgebenden)', completed: false, isDefault: true },
-          { title: 'Finanzierungscheck (Eigenmittel, Darlehen, weitere Fördermittel, Drittmittel/ Spenden)', completed: false, isDefault: true },
-          { title: 'Abstimmung der Projektunterlagen ((Arbeitsformat, Teilnehmer*innen, Dokumentation)', completed: false, isDefault: true },
-          { title: 'Vorbereitung Grundsatzbeschluss (Beschlussvorlage und Projektunterlagen)', completed: false, isDefault: true }
+          { title: 'Organisation Begehung (Teilnehmer*innen, Dokumentation)', completed: false },
+          { title: 'Organisation Zieldefinition (Arbeitsformat, Teilnehmer*innen, Dokumentation)', completed: false },
+          { title: 'Organisation Anforderungen definieren (Arbeitsformat, Teilnehmer*innen, Dokumentation)', completed: false },
+          { title: 'Richtlinien-Check (Inhalt – Durchsicht der Langfassung und Überführung der Projektbeschreibung in das entsprechende Formular)', completed: false },
+          { title: 'Richtlinien-Check (Antragsweg – Recherche und Dokumentation offener Fragen mit dem Fördermittelgebenden)', completed: false },
+          { title: 'Finanzierungscheck (Eigenmittel, Darlehen, weitere Fördermittel, Drittmittel/ Spenden)', completed: false },
+          { title: 'Abstimmung der Projektunterlagen ((Arbeitsformat, Teilnehmer*innen, Dokumentation)', completed: false },
+          { title: 'Vorbereitung Grundsatzbeschluss (Beschlussvorlage und Projektunterlagen)', completed: false }
         ]
       },
       resetSteps: [
@@ -93,14 +82,6 @@ export default {
         { name: 'requirements', title: 'requirements', icon: 'mdi-file-document', done: false }
       ]
     };
-  },
-  computed: {
-    defaultTasks() {
-      return this.taskPlan.tasks.filter(task => task.isDefault);
-    },
-    customTasks() {
-      return this.taskPlan.tasks.filter(task => !task.isDefault);
-    }
   },
   watch: {
     currentTab(newTab) {
@@ -133,8 +114,7 @@ export default {
         // Add a new custom task
         this.taskPlan.tasks.push({
           title: this.newTaskTitle.trim(),
-          completed: false,
-          isDefault: false
+          completed: false
         });
         // Clear the input
         this.newTaskTitle = '';
@@ -143,7 +123,7 @@ export default {
 
     removeCustomTask(index) {
       // Get the actual custom task to remove
-      const taskToRemove = this.customTasks[index];
+      const taskToRemove = this.taskPlan.tasks[index];
 
       // Find its index in the full task list and remove it
       const actualIndex = this.taskPlan.tasks.findIndex(task => task === taskToRemove);
