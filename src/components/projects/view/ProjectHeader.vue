@@ -1,7 +1,7 @@
 <template>
   <q-card class="col-12 shadow-1 radius-20 q-mb-none q-pa-none">
     <q-card-section class="row q-pa-md q-col-gutter-sm">
-      <div class="col-12 ">
+      <div class="col-12 q-my-md">
         <div class="row q-col-gutter-y-sm q-col-gutter-x-xl">
           <div class="col-auto">
             <h4 class="font-24 text-weight-bold q-mb-none q-mt-sm">
