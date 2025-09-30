@@ -124,7 +124,7 @@ export default {
   name: "ProjectContactInfo",
   data() {
     return {
-      expanded: this.currentTab === "project"
+      expanded: false
     };
   },
   props: {
