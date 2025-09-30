@@ -268,12 +268,9 @@ export default {
       createdAtEnd: "",
       visibleColumns: [
         "title",
+        "updatedAt",
         "type",
-        "categories",
         "user",
-        // "plannedStart",
-        // "plannedEnd",
-        "createdAtStart",
       ],
       viewIsLoading: false,
       editIsLoading: false,
@@ -838,61 +835,25 @@ export default {
           sortable: true,
         },
         {
+          name: "updatedAt",
+          label: this.$t("updatedAt"),
+          align: "left",
+          field: (row) => {
+            return dateFormatter(row.updatedAt);
+          },
+          sortable: true,
+          sort: (a, b, rowA, rowB) => {
+            const dateA = new Date(rowA.updatedAt);
+            const dateB = new Date(rowB.updatedAt);
+            return dateB - dateA;
+          },
+        },
+        {
           name: "type",
           label: this.$t("statsTable.type"),
           align: "left",
           field: (row) => this.$t(row.type),
           sortable: true,
-        },
-        {
-          name: "categories",
-          align: "left",
-          label: this.$t("myData.categories"),
-          field: (row) =>
-            (!!row.categories &&
-              row.categories.map((category) => category.title).join(", ")) ||
-            this.$t("NoCategories"),
-          sortable: true,
-        },
-        {
-          name: "plannedStart",
-          label: this.$t("fundingsCol.start"),
-          align: "left",
-          field: (row) => {
-            return dateFormatter(row.plannedStart);
-          },
-          sortable: true,
-          sort: (a, b, rowA, rowB) => {
-            const dateA = new Date(rowA.plannedStart);
-            const dateB = new Date(rowB.plannedStart);
-            return dateB - dateA;
-          },
-        },
-        {
-          name: "plannedEnd",
-          label: this.$t("fundingsCol.end"),
-          align: "left",
-          field: (row) => dateFormatter(row.plannedEnd),
-          sortable: true,
-          sort: (a, b, rowA, rowB) => {
-            const dateA = new Date(rowA.plannedEnd);
-            const dateB = new Date(rowB.plannedEnd);
-            return dateB - dateA;
-          },
-        },
-        {
-          name: "createdAtStart",
-          label: this.$t("fundingsCol.created_at"),
-          align: "left",
-          field: (row) => {
-            return dateFormatter(row.createdAt);
-          },
-          sortable: true,
-          sort: (a, b, rowA, rowB) => {
-            const dateA = new Date(rowA.createdAt);
-            const dateB = new Date(rowB.createdAt);
-            return dateB - dateA;
-          },
         },
         {
           name: "user",
