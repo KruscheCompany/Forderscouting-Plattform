@@ -12,7 +12,7 @@
     <div>
       <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="radius-bottom-20 shadow-2">
         <q-step v-for="(step, index) in steps" :key="index" :name="step.name" :title="$t(step.title)" :icon="step.icon"
-          :done="step.done && !step.skip" :header-nav="step.done && !step.skip" />
+          :done="step.done && !step.skip" :header-nav="step.done && !step.skip" active-color="yellow" />
       </q-stepper>
     </div>
 
@@ -26,6 +26,9 @@
       <ProjectFundingCheckCreate ref="fundingCheckRef" class="q-my-md" :current-tab="step" :project-data="form"
         :created-project-id="createdProjectId" @funding-submitted="handleFundingSubmitted"
         v-if="step !== 'project' && step !== 'qAndA'" />
+
+      <ProjectViewFundingCheck v-if="step !== 'project' && step !== 'fundingCheck'" :project="form" :current-tab="step"
+        class="q-my-md" />
 
       <ProjectQAndACreate ref="qAndARef" v-if="step !== 'project' && step !== 'fundingCheck' && !skipQuestions"
         :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
@@ -42,6 +45,9 @@
     <div v-if="tab === 'projectDevelopment'">
       <ProjectViewGeneralInfo :project="form" :current-tab="step" />
       <ProjectViewContentDetails :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewFundingCheck :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewQAndA v-if="!skipQuestions" :project="form" :current-tab="step" class="q-my-md" />
+
       <ProjectTaskPlanCreate ref="taskPlanRef" v-if="step === 'taskPlan'" :created-project-id="createdProjectId"
         :project-data="form" :current-tab="step" class="q-my-md" @taskPlan-submitted="goToNextStep(false)" />
 
@@ -58,6 +64,21 @@
     <div v-if="tab === 'application'">
       <ProjectViewGeneralInfo :project="form" :current-tab="step" />
       <ProjectViewContentDetails :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewFundingCheck :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewQAndA v-if="!skipQuestions" :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewGoals :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewRequirements :project="form" :current-tab="step" class="q-my-md" />
+
+      <ProjectViewGuidelineContentCheck v-if="step !== 'guidelineContentCheck'" :project="form" :current-tab="step"
+        class="q-my-md" />
+      <ProjectViewGuidelineFormCheck v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck'"
+        :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewFinancingCheck
+        v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck' && step !== 'financingCheck'"
+        :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewDocumentsCoordination
+        v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck' && step !== 'financingCheck' && step !== 'projectDocumentsCoordination'"
+        :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectGuidelineContentCheck ref="guidelineContentCheckRef" v-if="step === 'guidelineContentCheck'"
         :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
@@ -75,9 +96,9 @@
         :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
         @documentsCoordination-submitted="goToNextStep(false)" />
 
-      <ProjectApplicationDecision ref="applicationDecisionRef" v-if="step === 'applicationDecision'"
-        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
-        @applicationDecision-submitted="goToNextStep(false)" />
+      <ProjectApplicationDecision ref="applicationDecisionRef"
+        v-if="step === 'applicationDecision' || step === 'guidelineContentCheck'" :created-project-id="createdProjectId"
+        :project-data="form" :current-tab="step" class="q-my-md" @applicationDecision-submitted="goToNextStep(false)" />
 
       <!-- Always show application decision files in the submissionSigning step -->
       <ProjectViewApplicationDecision v-if="step === 'submissionSigning'" :project="form" :current-tab="step"
@@ -122,6 +143,14 @@ import ProjectSubmissionSigning from 'src/components/projects/create/ProjectSubm
 import ProjectViewGeneralInfo from 'src/components/projects/view/ProjectGeneralInfo.vue';
 import ProjectViewContentDetails from 'src/components/projects/view/ProjectContentDetails.vue';
 import ProjectViewApplicationDecision from 'src/components/projects/view/ProjectApplicationDecision.vue';
+import ProjectViewFundingCheck from 'src/components/projects/view/ProjectFundingCheck.vue';
+import ProjectViewQAndA from 'src/components/projects/view/ProjectQAndA.vue';
+import ProjectViewGoals from 'src/components/projects/view/ProjectGoals.vue';
+import ProjectViewRequirements from 'src/components/projects/view/ProjectRequirements.vue';
+import ProjectViewGuidelineContentCheck from 'src/components/projects/view/ProjectGuidelineContentCheck.vue';
+import ProjectViewGuidelineFormCheck from 'src/components/projects/view/ProjectGuidelineFormCheck.vue';
+import ProjectViewFinancingCheck from 'src/components/projects/view/ProjectFinancingCheck.vue';
+import ProjectViewDocumentsCoordination from 'src/components/projects/view/ProjectDocumentsCoordination.vue';
 
 
 export default {
@@ -144,7 +173,15 @@ export default {
     ProjectSubmissionSigning,
     ProjectViewGeneralInfo,
     ProjectViewContentDetails,
-    ProjectViewApplicationDecision
+    ProjectViewApplicationDecision,
+    ProjectViewFundingCheck,
+    ProjectViewQAndA,
+    ProjectViewGoals,
+    ProjectViewRequirements,
+    ProjectViewGuidelineContentCheck,
+    ProjectViewGuidelineFormCheck,
+    ProjectViewFinancingCheck,
+    ProjectViewDocumentsCoordination
   },
   data() {
     return {
@@ -418,7 +455,7 @@ export default {
       if (!noneSelected && (!noChange || this.project.questions === null)) {
         // Get all selected fundings instead of just one
         const selectedFundings = data.fundingMatches.filter(funding => funding.selected);
-        
+
         // Call the API for each selected funding
         for (const funding of selectedFundings) {
           await this.$store.dispatch('ai/getFundingQuestions', {
@@ -444,11 +481,9 @@ export default {
     },
     async handleSubmissionSigningSubmitted(status) {
       if (status !== null) {
-        // Final step completed successfully with a decision
-        const decisionType = status ? 'Zuwendungsbescheid' : 'Ablehnungsbescheid';
         this.$q.notify({
           color: 'positive',
-          message: `${this.$t('Application process completed successfully')} (${decisionType})`
+          message: `${this.$t('Application process completed successfully')}`
         });
 
         // Redirect to view page after successful completion
@@ -702,5 +737,13 @@ export default {
   .q-field__inner .q-field__control:before {
     border-color: $primary;
   }
+}
+
+.text-yellow .q-stepper__title {
+  color: $blue !important;
+}
+
+.text-yellow .q-stepper__dot span i {
+  color: $blue !important;
 }
 </style>
