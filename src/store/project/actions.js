@@ -30,6 +30,7 @@ export async function getApplicationProcess(context, filters = {}) {
       if (filters.investive) params.push(`investive=${filters.investive}`);
       if (filters.categories) params.push(`categories=${filters.categories}`);
       if (filters.tags) params.push(`tags=${filters.tags}`);
+      if (filters.applicationStep) params.push(`applicationStep=${filters.applicationStep}`);
 
       queryParams += params.join('&');
     }
@@ -498,6 +499,7 @@ export async function getProjectDashboardStats(context, filters = {}) {
       if (filters.investive) params.push(`investive=${filters.investive}`);
       if (filters.categories) params.push(`categories=${filters.categories}`);
       if (filters.tags) params.push(`tags=${filters.tags}`);
+      if (filters.applicationStep) params.push(`applicationStep=${filters.applicationStep}`);
 
       queryParams += params.join('&');
     }
