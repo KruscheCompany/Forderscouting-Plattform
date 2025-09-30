@@ -1,7 +1,8 @@
 <template>
   <q-card class="shadow-1 radius-20">
-    <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t('projectComponents.guidelineContentCheck.title')"
-      header-class="bg-white text-black" v-model="expandedGuidelineContentCheck">
+    <q-expansion-item class="shadow-1 overflow-hidden radius-20"
+      :label="$t('projectComponents.guidelineContentCheck.title')" header-class="bg-white text-black"
+      v-model="expandedGuidelineContentCheck">
       <q-card-section class="q-pt-none">
         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
           {{ $t('projectComponents.guidelineContentCheck.description') }}
@@ -35,8 +36,8 @@ export default {
   },
   computed: {
     guidelineContentCheckText() {
-      return this.project && this.project.details && this.project.details.guidelineContentCheck 
-        ? this.project.details.guidelineContentCheck 
+      return this.project && this.project.details && this.project.details.guidelineContentCheck
+        ? this.project.details.guidelineContentCheck
         : this.$t('projectComponents.guidelineContentCheck.noContent');
     }
   },
@@ -52,5 +53,6 @@ export default {
 <style lang="scss" scoped>
 .text-block {
   white-space: pre-line;
+  min-height: 144px;
 }
 </style>

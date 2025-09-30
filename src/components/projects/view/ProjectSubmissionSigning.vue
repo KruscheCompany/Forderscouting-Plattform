@@ -71,5 +71,6 @@ export default {
 <style lang="scss" scoped>
 .text-block {
   white-space: pre-line;
+  min-height: 144px;
 }
 </style>

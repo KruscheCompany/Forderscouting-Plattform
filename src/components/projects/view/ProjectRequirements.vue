@@ -35,8 +35,8 @@ export default {
   },
   computed: {
     requirementsText() {
-      return this.project && this.project.details && this.project.details.requirements 
-        ? this.project.details.requirements 
+      return this.project && this.project.details && this.project.details.requirements
+        ? this.project.details.requirements
         : this.$t('projectComponents.requirements.noContent');
     }
   },
@@ -52,5 +52,6 @@ export default {
 <style lang="scss" scoped>
 .text-block {
   white-space: pre-line;
+  min-height: 144px;
 }
 </style>
