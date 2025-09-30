@@ -172,8 +172,8 @@
               {{ col.value }}
             </q-tooltip>
             {{
-              col.value && col.value.length > 48
-                ? col.value.substring(0, 48) + "..."
+              col.value && col.value.length > 145
+                ? col.value.substring(0, 145) + "..."
                 : col.value
             }}
           </q-td>
