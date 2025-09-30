@@ -929,7 +929,8 @@
     },
     "taskPlan": {
       "title": "Aufgabenplanung",
-      "newTaskPlaceholder": "Neue Aufgabe eingeben"
+      "newTaskPlaceholder": "Neue Aufgabe eingeben",
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Aufgaben geplant? Welche Aufgaben wurden geplant?"
     },
     "siteVisit": {
       "title": "Standortbesuch",
@@ -950,7 +951,9 @@
     "guidelineContentCheck": {
       "title": "Richtlinien-Check (Langfassung)",
       "description": "Kurzer Aufgabentext - Bitte vergesst den inhaltlichen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
-      "noContent": "Keine Beschreibung des Richtlinien-Checks verfügbar"
+      "noContent": "Keine Beschreibung des Richtlinien-Checks verfügbar",
+      "uploadsTitle": "Uploads",
+      "uploadsDescription": "Hier könnt ihr Dateien hochladen, die ihr im Rahmen des Richtlinien-Checks verwendet habt (z.B. Auszüge aus der Richtlinie, Merkblätter, Antragsformulare etc.)"
     },
     "guidelineFormCheck": {
       "title": "Richtlinien-Check (Langfassung)",
@@ -970,6 +973,7 @@
       "title": "Unterzeichnung & Antragsstellung",
       "selectionLabel": "Upload Projektantragsunterlagen",
       "pendingDecision": "Antragsentscheidung ausstehend",
+      "sentToFundingBody": "Antrag bei der Förderstelle eingereicht",
       "grantNotice": "Zuwendungsbescheid",
       "rejectionNotice": "Ablehnungsbescheid",
       "noSelectionError": "Bitte treffen Sie eine Entscheidung über den Antrag",
@@ -1033,5 +1037,6 @@
   "Submission & Signing": "Unterzeichnung/ Antragseinreichung",
   "Application process completed successfully": "Antragsverfahren erfolgreich abgeschlossen",
   "No decision was made on the application": "Es wurde keine Entscheidung über den Antrag getroffen",
-  "Project successfully created": "Projekt erfolgreich erstellt"
+  "Project successfully created": "Projekt erfolgreich erstellt",
+  "updatedAt": "Speicherdatum"
 }

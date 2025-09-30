@@ -7,25 +7,13 @@
         <q-card-section class="q-pt-none">
 
           <div class="col-12 q-mt-md">
-
-            <div class="row q-col-gutter-md items-center">
-              <div class="col-auto">
-                <q-toggle v-model="status" :checked-icon="status === null ? 'help_outline' : 'check'"
-                  :color="status === null ? 'grey' : (status ? 'green' : 'red')"
-                  :unchecked-icon="status === null ? 'help_outline' : 'clear'" size="xl"
-                  @update:model-value="handleToggleChange" toggle-indeterminate />
-              </div>
-              <div class="col-auto">
-                <span v-if="status === null">
-                  {{ $t('projectComponents.submissionSigning.pendingDecision') }}
-                </span>
-                <span v-else-if="status === true">
-                  {{ $t('projectComponents.submissionSigning.grantNotice') }}
-                </span>
-                <span v-else>
-                  {{ $t('projectComponents.submissionSigning.rejectionNotice') }}
-                </span>
-              </div>
+            <div class="q-gutter-sm">
+              <q-radio v-model="status" checked-icon="task_alt" unchecked-icon="panorama_fish_eye" val="sentToFunding"
+                :label="$t('projectComponents.submissionSigning.sentToFunding')" />
+              <q-radio v-model="status" checked-icon="task_alt" unchecked-icon="panorama_fish_eye" val="grantNotice"
+                :label="$t('projectComponents.submissionSigning.grantNotice')" />
+              <q-radio v-model="status" checked-icon="task_alt" unchecked-icon="panorama_fish_eye" val="rejectionNotice"
+                :label="$t('projectComponents.submissionSigning.rejectionNotice')" />
             </div>
           </div>
         </q-card-section>

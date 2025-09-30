@@ -1,6 +1,15 @@
 <template>
   <div class="row items-center q-gutter-md">
 
+    <div class="col-auto">
+      <q-btn @click="editProject" color="yellow" unelevated class="radius-6 text-weight-600" no-caps icon="edit"
+        aria-label="Edit" :loading="loadingStates.edit" text-color="blue">
+        <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+          {{ $t("edit") }}
+        </q-tooltip>
+      </q-btn>
+    </div>
+
     <q-btn v-if="showTransferButton" @click="transferDocument" color="blue" unelevated class="radius-6 text-weight-600"
       no-caps icon="send" aria-label="Transfer Ownership">
       <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
@@ -21,15 +30,6 @@
         {{ $t("bookmark") }}
       </q-tooltip>
     </q-btn>
-
-    <div class="col-auto">
-      <q-btn @click="editProject" color="blue" unelevated class="radius-6 text-weight-600" no-caps icon="edit"
-        aria-label="Edit" :loading="loadingStates.edit">
-        <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-          {{ $t("edit") }}
-        </q-tooltip>
-      </q-btn>
-    </div>
 
     <div class="col-auto">
       <q-btn @click="duplicateProject" color="blue" unelevated class="radius-6 text-weight-600" no-caps

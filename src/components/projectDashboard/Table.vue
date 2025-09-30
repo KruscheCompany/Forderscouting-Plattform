@@ -2,7 +2,7 @@
   <div class="q-my-lg">
     <q-table class="radius-20 shadow-1 pagination-no-shadow" :class="expanded ? 'yellowBg' : ''"
       :data="applicationProcess || []" :columns="columns" row-key="name" :visible-columns="visibleColumns" :pagination="{
-        sortBy: 'title',
+        sortBy: 'updatedAt',
         descending: true,
         page: 1,
         rowsPerPage: 10,
@@ -31,7 +31,7 @@
 
             <div class="row q-px-xs q-mt-md q-col-gutter-x-lg">
 
-              <div class="col-6 col-md-3" v-if="isAdmin">
+              <div class="col-6 col-md-4" v-if="isAdmin">
                 <p class="text-black q-mb-xs font-16">
                   {{ $t("ProjectDashboard.municipalities") }}
                 </p>
@@ -41,17 +41,17 @@
                 </q-select>
               </div>
 
-              <div class="col-6 col-md-3">
+              <div class="col-6 col-md-4">
                 <p class="text-black q-mb-xs font-16">
-                  {{ $t("ProjectDashboard.locations") }}
+                  {{ $t("ProjectDashboard.applicationProcess") }}
                 </p>
                 <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
-                  :label="$t('Search')" multiple filled :options="locationOptions" v-model="selectedLocations"
-                  option-value="title" option-label="title">
+                  :label="$t('Search')" multiple filled :options="applicationStepOptions"
+                  v-model="selectedApplicationSteps" option-value="value" option-label="title">
                 </q-select>
               </div>
 
-              <div class="col-6 col-md-3">
+              <div class="col-6 col-md-4">
                 <p class="text-black q-mb-xs font-16">
                   {{ $t("ProjectDashboard.status") }}
                 </p>
@@ -61,7 +61,17 @@
                 </q-select>
               </div>
 
-              <div class="col-6 col-md-3">
+              <div class="col-6" :class="isAdmin ? 'col-md-3' : 'col-md-4'">
+                <p class="text-black q-mb-xs font-16">
+                  {{ $t("ProjectDashboard.locations") }}
+                </p>
+                <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
+                  :label="$t('Search')" multiple filled :options="locationOptions" v-model="selectedLocations"
+                  option-value="title" option-label="title">
+                </q-select>
+              </div>
+
+              <div class="col-6" :class="isAdmin ? 'col-md-3' : 'col-md-4'">
                 <p class="text-black q-mb-xs font-16">
                   {{ $t("ProjectDashboard.investive") }}
                 </p>
@@ -71,7 +81,7 @@
                 </q-select>
               </div>
 
-              <div class="col-6 col-md-3">
+              <div class="col-6" :class="isAdmin ? 'col-md-3' : 'col-md-4'">
                 <p class="text-black q-mb-xs font-16">
                   {{ $t("ProjectDashboard.categories") }}
                 </p>
@@ -81,7 +91,7 @@
                 </q-select>
               </div>
 
-              <div class="col-6 col-md-3">
+              <div class="col-6" :class="isAdmin ? 'col-md-3' : 'col-md-4'">
                 <p class="text-black q-mb-xs font-16">
                   {{ $t("Tags") }}
                 </p>
@@ -114,13 +124,16 @@
               <q-badge color="primary" class="text-white q-py-sm q-px-md" v-if="!props.row.applicationProcessSteps">
                 {{ $t("aiFundingCheck") }}
               </q-badge>
-              <q-badge color="primary" class="text-white q-py-sm q-px-md" v-else>
+              <q-badge :color="getLastCompletedStepColor(props.row.applicationProcessSteps)"
+                :text-color="getLastCompletedStepTextColor(props.row.applicationProcessSteps)"
+                class="text-white q-py-sm q-px-md" v-else>
                 {{ getLastCompletedStep(props.row.applicationProcessSteps) }}
               </q-badge>
             </template>
             <template v-else-if="col.name === 'status'">
               <q-badge :color="getStatusColor(props.row.status)"
-                :class="props.row.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md">
+                :class="props.row.status === null || props.row.status === 'sentToFunding' ? 'text-black' : 'text-white'"
+                class="q-py-sm q-px-md">
                 {{ getStatusText(props.row.status) }}
               </q-badge>
             </template>
@@ -130,8 +143,8 @@
                 {{ col.value }}
               </q-tooltip>
               {{
-                col.value && col.value.length > 48
-                  ? col.value.substring(0, 48) + "..."
+                col.value && col.value.length > 125
+                  ? col.value.substring(0, 125) + "..."
                   : col.value
               }}
             </template>
@@ -145,14 +158,17 @@
           <q-td colspan="100%">
             <div class="text-left q-pa-md">
               <template v-if="props.row.financialPlan && props.row.financialPlan.costAndFinance">
-                <div class="text-h6 q-mb-md">{{ $t('ProjectDashboard.financialPlan') }}</div>
-                <div class="row q-col-gutter-md">
-                  <div v-for="item in props.row.financialPlan.costAndFinance" :key="item.id"
-                    class="col-12 col-sm-6 col-md-3">
-                    <div class="radius-20 shadow-2 q-pa-md financial-plan">
-                      <p class="font-14 text-blue-grey-10 q-mt-xs q-mb-none">{{ item.title }}</p>
-                      <p class="font-24 text-weight-bold text-blue q-mb-sm">{{ formatCurrency(item.value) }}</p>
-                    </div>
+                <div v-for="item in props.row.financialPlan.costAndFinance" :key="item.id">
+                  <div class="row">
+                    <p class="font-14 text-weight-bold text-blue q-mb-none">{{ item.title }}: </p>
+                    <p class="font-14 text-blue q-ml-sm q-mb-none">{{ formatCurrency(item.value) }}</p>
+                    <p v-if="item.title === 'Fördermittel'"
+                      class="font-14 text-blue q-ml-sm q-mb-none text-weight-bold">{{
+                        getSelectedFunding(props.row) }}</p>
+                    <q-btn v-if="item.title === 'Fördermittel'" flat dense round size="sm"
+                      icon="mdi-arrow-top-right-thin-circle-outline"
+                      @click.stop="openFundingLink(props.row.external_id)" class="funding-link-btn"
+                      :disabled="!props.row.external_id" />
                   </div>
                 </div>
               </template>
@@ -169,6 +185,7 @@
 </template>
 
 <script>
+import { dateFormatter } from "src/boot/dateFormatter";
 import RequestAccessDialog from "components/data/RequestAccessDialog.vue";
 export default {
   name: "projectDashboardTable",
@@ -181,7 +198,7 @@ export default {
       expandedRows: {}, // To track expanded rows individually
       search: "",
       searchTimeout: null,
-      visibleColumns: ["title", "applicationProcess", "status"],
+      visibleColumns: ["title", "updatedAt", "applicationProcess", "status"],
       requestDialog: false,
       filter: "",
       projectId: null,
@@ -190,6 +207,7 @@ export default {
       selectedInvestive: null,
       selectedMunicipalities: null,
       selectedLocations: null,
+      selectedApplicationSteps: null,
       tagsKeywords: null,
       statusOptions: [
         { value: true, title: this.$t('Zuwendungsbescheid') },
@@ -199,6 +217,11 @@ export default {
       investiveOptions: [
         { value: true, title: "Yes" },
         { value: false, title: "No" },
+      ],
+      applicationStepOptions: [
+        { value: "aiFundingCheck", title: this.$t('aiFundingCheck') },
+        { value: "projectDevelopment", title: this.$t('projectDevelopment') },
+        { value: "application", title: this.$t('application') }
       ],
     };
   },
@@ -243,6 +266,11 @@ export default {
         filters.tags = this.tagsKeywords.map(item => item.id || item).join(',');
       }
 
+      // Add application steps if selected
+      if (this.selectedApplicationSteps && this.selectedApplicationSteps.length) {
+        filters.applicationStep = this.selectedApplicationSteps.map(item => item.value || item).join(',');
+      }
+
       // Get project application process data with filters
       await this.$store.dispatch("project/getApplicationProcess", filters);
     },
@@ -266,6 +294,34 @@ export default {
 
       await this.$store.dispatch("municipality/getLocationsByMunicipality", params);
     },
+    getLastCompletedStepColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'primary'; // Default color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'primary';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'primary'; // Blue
+        case 'projectDevelopment':
+          return 'blue-2'; // Light Blue
+        case 'application':
+          return 'blue-1'; // Green
+        default:
+          return 'primary'; // Default color
+      }
+    },
     getLastCompletedStep(applicationProcessSteps) {
       if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
         return this.$t("aiFundingCheck");
@@ -284,14 +340,45 @@ export default {
 
       // Try to use translation key based on the name property first
       // If not available, use the title directly, and if that's not available either, use a default
-      const translationKey = `ProjectDashboard.${lastCompletedStep.name}`;
-      return this.$te(translationKey) ? this.$t(translationKey) : (lastCompletedStep.title || this.$t("aiFundingCheck"));
+      const translationKey = `${lastCompletedStep.name}`;
+      return this.$t(translationKey) ? this.$t(translationKey) : (lastCompletedStep.title || this.$t("aiFundingCheck"));
+    },
+
+    getLastCompletedStepTextColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'white'; // Default text color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'white';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine text color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'white'; // Blue badge - white text
+        case 'projectDevelopment':
+          return 'black'; // Light Blue badge - black text
+        case 'application':
+          return 'black'; // Green badge - black text
+        default:
+          return 'white'; // Default text color
+      }
     },
 
     getStatusText(status) {
-      if (status === true) {
+      if (status === "sentToFunding") {
+        return this.$t('projectComponents.submissionSigning.sentToFunding');
+      } else if (status === "grantNotice") {
         return this.$t('Zuwendungsbescheid'); // Granted
-      } else if (status === false) {
+      } else if (status === "rejectionNotice") {
         return this.$t('Ablehnungsbescheid'); // Rejected
       } else {
         return this.$t('In Bearbeitung'); // In progress (null)
@@ -299,9 +386,9 @@ export default {
     },
 
     getStatusColor(status) {
-      if (status === true) {
+      if (status === "grantNotice") {
         return 'green'; // Granted - green badge
-      } else if (status === false) {
+      } else if (status === "rejectionNotice") {
         return 'red'; // Rejected - red badge
       } else {
         return 'yellow'; // In progress - yellow badge
@@ -434,6 +521,11 @@ export default {
         filters.tags = this.tagsKeywords.map(item => item.id || item).join(',');
       }
 
+      // Add application steps if selected
+      if (this.selectedApplicationSteps && this.selectedApplicationSteps.length) {
+        filters.applicationStep = this.selectedApplicationSteps.map(item => item.value || item).join(',');
+      }
+
       // Update dashboard stats with current filters
       await this.$store.dispatch("project/getProjectDashboardStats", filters);
     },
@@ -490,6 +582,18 @@ export default {
         }
       }
     },
+    getSelectedFunding(row) {
+      const funding = row.fundingMatches.find(funding => funding.selected);
+      console.log("🚀 ~ getSelectedFunding ~ funding:", funding)
+      return funding ? funding.title : '';
+    },
+    openFundingLink(externalId) {
+      if (externalId) {
+        // Construct URL to funding details page
+        const url = `/user/newFunding/${externalId}`;
+        window.open(url, '_blank');
+      }
+    },
   },
   computed: {
     columns() {
@@ -501,6 +605,14 @@ export default {
           align: "left",
           field: "title",
           sortable: true,
+        },
+        {
+          name: "updatedAt",
+          align: "center",
+          label: this.$t("Speicherdatum"),
+          field: "updatedAt",
+          sortable: true,
+          format: (val) => (val ? dateFormatter(val) : ""),
         },
         {
           name: "applicationProcess",
@@ -576,6 +688,10 @@ export default {
           this.tagsKeywords = savedFilters.tagsKeywords;
         }
 
+        if (savedFilters.selectedApplicationSteps) {
+          this.selectedApplicationSteps = savedFilters.selectedApplicationSteps;
+        }
+
         if (savedFilters.expanded !== undefined) {
           this.expanded = savedFilters.expanded;
         }
@@ -624,6 +740,7 @@ export default {
         selectedInvestive: this.selectedInvestive || null,
         selectedLocations: this.selectedLocations || null,
         selectedMunicipalities: this.selectedMunicipalities || null,
+        selectedApplicationSteps: this.selectedApplicationSteps || null,
         tagsKeywords: this.tagsKeywords || null,
         expanded: this.expanded
       };
@@ -688,6 +805,10 @@ export default {
       this.updateDashboardStats();
     },
     tagsKeywords() {
+      this.getProjects();
+      this.updateDashboardStats();
+    },
+    selectedApplicationSteps() {
       this.getProjects();
       this.updateDashboardStats();
     },

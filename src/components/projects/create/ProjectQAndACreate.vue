@@ -6,35 +6,35 @@
         class="q-my-lg full-width text-center" />
       <q-card-section v-else class="q-pt-none">
         <div v-if="localQuestions && localQuestions.length > 0">
-          <q-list>
-            <q-item v-for="(question, index) in localQuestions" :key="index" class="q-mb-sm q-pa-none">
-              <q-item-section>
-                <div class="row items-baseline q-col-gutter-y-sm">
-                  <div class="col-12 col-md-4">
+          <div v-for="(question, index) in localQuestions" :key="index" class="q-mb-sm q-pa-none">
+            <div class="row items-baseline q-col-gutter-y-sm">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-11">
                     <p class="font-16 no-margin">
                       {{ question.text }}
                     </p>
-                    <!-- Show funding source if available -->
-                    <div v-if="question.fundingTitle" class="text-caption text-primary q-mt-xs">
-                      <q-chip size="md" color="primary" text-color="white" dense>
-                        {{ question.fundingTitle }}
-                      </q-chip>
-                    </div>
                   </div>
-                  <div class="col-12 col-md-8">
-                    <q-input outlined dense class="no-shadow input-radius-6" v-model="question.answer">
-                      <template v-slot:append>
-                        <q-btn flat round color="negative" icon="delete" size="md" @click="deleteQuestion(index)"
-                          :aria-label="$t('delete')">
-                          <q-tooltip>{{ $t('delete') }}</q-tooltip>
-                        </q-btn>
-                      </template>
-                    </q-input>
+                  <div class="col-1 text-right">
+                    <q-btn flat round color="negative" icon="delete" size="md" @click="deleteQuestion(index)"
+                      :aria-label="$t('delete')" style="margin-top:-5px">
+                      <q-tooltip>{{ $t('delete') }}</q-tooltip>
+                    </q-btn>
                   </div>
                 </div>
-              </q-item-section>
-            </q-item>
-          </q-list>
+                <!-- Show funding source if available -->
+                <div v-if="question.fundingTitle" class="text-caption text-primary q-mt-xs">
+                  <q-chip size="md" color="primary" text-color="white" dense>
+                    {{ question.fundingTitle }}
+                  </q-chip>
+                </div>
+              </div>
+              <div class="col-12">
+                <q-input outlined class="no-shadow input-radius-6" v-model="question.answer" autogrow>
+                </q-input>
+              </div>
+            </div>
+          </div>
         </div>
         <div v-else>
           <p class="text-grey">{{ $t('projectComponents.qAndA.noQuestions') }}</p>

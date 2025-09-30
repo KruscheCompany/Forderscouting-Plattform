@@ -85,7 +85,7 @@
               <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                 {{ $t('projectComponents.contentDetailsView.briefTaskText') }}
               </h4>
-              <q-banner rounded class="bg-grey-3 font-16" style="min-height: 100px;">
+              <q-banner rounded class="bg-grey-3 font-16" style="min-height: 144px;">
                 <p class="q-my-sm text-block" v-html="documentation"></p>
               </q-banner>
 
@@ -120,7 +120,7 @@
         <q-tab-panel name="Links">
 
           <q-tab-panel name="Links">
-            <q-banner rounded class="bg-grey-3 font-16">
+            <q-banner rounded class="bg-grey-3 font-16 links-block">
               <div class="font-16">
                 <div v-if="hasLinks">
                   <div class="row" v-for="(link, index) in links" :key="index">
@@ -309,5 +309,11 @@ export default {
 <style lang="scss" scoped>
 .text-block {
   white-space: pre-line;
+  min-height: 144px
+}
+
+.links-block {
+  min-height: 144px;
+  align-items: normal;
 }
 </style>

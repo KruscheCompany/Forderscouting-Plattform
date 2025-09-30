@@ -1,7 +1,8 @@
 <template>
   <q-card class="shadow-1 radius-20">
-    <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t('projectComponents.documentsCoordination.title')"
-      header-class="bg-white text-black" v-model="expandedDocumentsCoordination">
+    <q-expansion-item class="shadow-1 overflow-hidden radius-20"
+      :label="$t('projectComponents.documentsCoordination.title')" header-class="bg-white text-black"
+      v-model="expandedDocumentsCoordination">
       <q-card-section class="q-pt-none">
         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
           {{ $t('projectComponents.documentsCoordination.description') }}
@@ -35,8 +36,8 @@ export default {
   },
   computed: {
     documentsCoordinationText() {
-      return this.project && this.project.details && this.project.details.documentsCoordination 
-        ? this.project.details.documentsCoordination 
+      return this.project && this.project.details && this.project.details.documentsCoordination
+        ? this.project.details.documentsCoordination
         : this.$t('projectComponents.documentsCoordination.noContent');
     }
   },
@@ -52,5 +53,6 @@ export default {
 <style lang="scss" scoped>
 .text-block {
   white-space: pre-line;
+  min-height: 144px;
 }
 </style>

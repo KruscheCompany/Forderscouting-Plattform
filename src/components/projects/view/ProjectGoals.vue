@@ -35,8 +35,8 @@ export default {
   },
   computed: {
     goalsText() {
-      return this.project && this.project.details && this.project.details.projectDevelopmentGoals 
-        ? this.project.details.projectDevelopmentGoals 
+      return this.project && this.project.details && this.project.details.projectDevelopmentGoals
+        ? this.project.details.projectDevelopmentGoals
         : this.$t('projectComponents.goals.noContent');
     }
   },
@@ -52,5 +52,6 @@ export default {
 <style lang="scss" scoped>
 .text-block {
   white-space: pre-line;
+  min-height: 144px;
 }
 </style>
