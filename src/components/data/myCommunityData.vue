@@ -86,8 +86,8 @@
           <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
             class="font-14 cursor-pointer">
             {{
-              col.value && col.value.length > 48
-                ? col.value.substring(0, 48) + "..."
+              col.value && col.value.length > 145
+                ? col.value.substring(0, 145) + "..."
                 : col.value
             }}
 
