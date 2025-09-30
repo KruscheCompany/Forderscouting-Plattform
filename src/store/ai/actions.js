@@ -17,7 +17,8 @@ export async function uploadFundingFile(context, payload) {
     formData,
     {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
+        'X-API-KEY': process.env.VUE_APP_AI_KEY
       },
       onUploadProgress
     }
@@ -39,7 +40,12 @@ export async function matchFunding(context, payload) {
 
     const response = await api.post(
       `${process.env.VUE_APP_AI}/funding/matching`,
-      { startingCondition, goals, content, valuesAndBenefits, finances }
+      { startingCondition, goals, content, valuesAndBenefits, finances },
+      {
+        headers: {
+          'X-API-KEY': process.env.VUE_APP_AI_KEY
+        }
+      }
     );
 
     context.commit('setFundingMatches', response.data);
@@ -64,7 +70,12 @@ export async function getFundingQuestions(context, payload) {
   try {
     const response = await api.post(
       `${process.env.VUE_APP_AI}/funding/questions/${fundingId}`,
-      { idea, goals, content, valuesAndBenefits, finances }
+      { idea, goals, content, valuesAndBenefits, finances },
+      {
+        headers: {
+          'X-API-KEY': process.env.VUE_APP_AI_KEY
+        }
+      }
     );
 
     // Send both fundingId and questions to the mutation
