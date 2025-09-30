@@ -16,6 +16,10 @@
                 <div class="funding-index text-weight-bold text-primary">
                   {{ index + 1 }}
                 </div>
+                <div class="funding-score text-weight-bold">
+                  <q-icon name="star" size="16px" class="q-mr-xs" color="amber" />
+                  {{ (funding.score * 100).toFixed(2) }}%
+                </div>
                 <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
                   :color="selectedFundingIndices.includes(index) ? 'white' : 'black'"
                   @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
