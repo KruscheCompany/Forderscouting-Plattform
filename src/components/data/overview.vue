@@ -21,7 +21,7 @@
     <q-table class="radius-20 shadow-1 pagination-no-shadow" :data="data" :columns="columns" row-key="title"
       :hide-bottom="!isInPage && data.length > 0" :hide-header="!isInPage"
       :visible-columns="isInPage ? visibleColumns : ['title']" :filter="filter" :pagination="{
-        sortBy: 'id',
+        sortBy: 'updatedAt',
         descending: true,
         page: 1,
         rowsPerPage: isInPage ? 10 : 5
@@ -98,8 +98,8 @@
           <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
             class="font-14 cursor-pointer">
             {{
-              col.value && col.value.length > 48
-                ? col.value.substring(0, 48) + "..."
+              col.value && col.value.length > 145
+                ? col.value.substring(0, 145) + "..."
                 : col.value
             }}
 
@@ -588,37 +588,27 @@ export default {
         },
         {
           name: "title",
-          label: this.$t("fundingsCol.title"),
           align: "left",
+          label: this.$t("fundingsColsHome.title"),
           field: row => row.title,
           sortable: true
         },
         {
-          name: "categories",
-          align: "left",
-          label: this.$t("fundingsCol.categories"),
-          field: row =>
-            (!!row.categories &&
-              row.categories.map(category => category.title).join(", ")) ||
-            "No Categories",
-          sortable: true
-        },
-        {
           name: "plannedStart",
+          align: "center",
           label: this.$t("fundingsCol.start"),
-          align: "left",
           field: row => dateFormatter(row.plannedStart),
           sortable: true,
           sort: (a, b, rowA, rowB) => {
             const dateA = new Date(rowA.plannedStart);
             const dateB = new Date(rowB.plannedStart);
             return dateB - dateA;
-          }
+          },
         },
         {
           name: "plannedEnd",
+          align: "center",
           label: this.$t("fundingsCol.end"),
-          align: "left",
           field: row => dateFormatter(row.plannedEnd),
           sortable: true,
           sort: (a, b, rowA, rowB) => {
@@ -626,18 +616,6 @@ export default {
             const dateB = new Date(rowB.plannedEnd);
             return dateB - dateA;
           }
-        },
-        {
-          name: "status",
-          label: "Status",
-          align: "left",
-          field: row =>
-            row.published === true
-              ? this.$t("Published")
-              : row.published === false
-                ? this.$t("Draft")
-                : this.$t("Status Unavailable"),
-          sortable: true
         }
       ];
     },
@@ -685,7 +663,7 @@ export default {
   mounted() {
     console.log("this.$router.currentRoute", this.$router.currentRoute);
     this.getData(this.tab);
-    
+
     // Apply saved pagination settings with proper error handling
     this.$nextTick(() => {
       if (localStorage.getItem("pagination") && this.$refs.table) {
