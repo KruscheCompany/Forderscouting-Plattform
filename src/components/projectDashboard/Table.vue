@@ -124,13 +124,16 @@
               <q-badge color="primary" class="text-white q-py-sm q-px-md" v-if="!props.row.applicationProcessSteps">
                 {{ $t("aiFundingCheck") }}
               </q-badge>
-              <q-badge color="primary" class="text-white q-py-sm q-px-md" v-else>
+              <q-badge :color="getLastCompletedStepColor(props.row.applicationProcessSteps)"
+                :text-color="getLastCompletedStepTextColor(props.row.applicationProcessSteps)"
+                class="text-white q-py-sm q-px-md" v-else>
                 {{ getLastCompletedStep(props.row.applicationProcessSteps) }}
               </q-badge>
             </template>
             <template v-else-if="col.name === 'status'">
               <q-badge :color="getStatusColor(props.row.status)"
-                :class="props.row.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md">
+                :class="props.row.status === null || props.row.status === 'sentToFunding' ? 'text-black' : 'text-white'"
+                class="q-py-sm q-px-md">
                 {{ getStatusText(props.row.status) }}
               </q-badge>
             </template>
@@ -291,6 +294,34 @@ export default {
 
       await this.$store.dispatch("municipality/getLocationsByMunicipality", params);
     },
+    getLastCompletedStepColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'primary'; // Default color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'primary';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'primary'; // Blue
+        case 'projectDevelopment':
+          return 'blue-2'; // Light Blue
+        case 'application':
+          return 'blue-1'; // Green
+        default:
+          return 'primary'; // Default color
+      }
+    },
     getLastCompletedStep(applicationProcessSteps) {
       if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
         return this.$t("aiFundingCheck");
@@ -313,10 +344,41 @@ export default {
       return this.$t(translationKey) ? this.$t(translationKey) : (lastCompletedStep.title || this.$t("aiFundingCheck"));
     },
 
+    getLastCompletedStepTextColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'white'; // Default text color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'white';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine text color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'white'; // Blue badge - white text
+        case 'projectDevelopment':
+          return 'black'; // Light Blue badge - black text
+        case 'application':
+          return 'black'; // Green badge - black text
+        default:
+          return 'white'; // Default text color
+      }
+    },
+
     getStatusText(status) {
-      if (status === true) {
+      if (status === "sentToFunding") {
+        return this.$t('projectComponents.submissionSigning.sentToFunding');
+      } else if (status === "grantNotice") {
         return this.$t('Zuwendungsbescheid'); // Granted
-      } else if (status === false) {
+      } else if (status === "rejectionNotice") {
         return this.$t('Ablehnungsbescheid'); // Rejected
       } else {
         return this.$t('In Bearbeitung'); // In progress (null)
@@ -324,9 +386,9 @@ export default {
     },
 
     getStatusColor(status) {
-      if (status === true) {
+      if (status === "grantNotice") {
         return 'green'; // Granted - green badge
-      } else if (status === false) {
+      } else if (status === "rejectionNotice") {
         return 'red'; // Rejected - red badge
       } else {
         return 'yellow'; // In progress - yellow badge
