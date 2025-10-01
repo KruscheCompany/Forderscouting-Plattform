@@ -115,9 +115,9 @@ module.exports = function (ctx) {
         exclude: []
       }, // only for GenerateSW
       manifest: {
-        name: `Amt-viol`,
-        short_name: `Amt-viol`,
-        description: `Amt-viol web app`,
+        name: `Projektkompass Kommune`,
+        short_name: `Projektkompass`,
+        description: `Das Projekt „Interkommunale Förderscouting-Plattform Nordfriesland" ist ein Modellvorhaben im Rahmen der Förderinitiative „Heimat 2.0" des Bundesministeriums für Wohnen, Stadtentwicklung und Bauwesen (BMWSB) in Zusammenarbeit mit dem Bundesinstitut für Bau-, Stadt- und Raumforschung (BBSR).`,
         display: "standalone",
         orientation: "portrait",
         background_color: "#ffffff",
