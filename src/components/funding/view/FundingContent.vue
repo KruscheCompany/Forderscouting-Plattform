@@ -91,6 +91,13 @@
                     ? 'q-col-gutter-x-md'
                     : 'q-col-gutter-x-xs q-mt-md'
                     " class="row justify-between">
+                    <div class="col-auto">
+                      <q-btn @click="editFunding()" color="yellow" unelevated class="radius-6 text-weight-600" no-caps
+                        icon="edit" aria-label="Edit" :loading="editIsLoading" text-color="blue"><q-tooltip
+                          anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                          {{ $t("edit") }}
+                        </q-tooltip></q-btn>
+                    </div>
                     <div class="col-auto q-mb-md">
                       <q-btn @click="exportToPdf()" color="blue" unelevated class="radius-6 text-weight-600 q-mr-md"
                         no-caps outline icon="print" aria-label="Print" :loading="watchlistIsLoading"><q-tooltip
@@ -101,13 +108,6 @@
                         outline icon="star_outline" aria-label="Bookmark" :loading="watchlistIsLoading"><q-tooltip
                           anchor="top middle" self="bottom middle" :offset="[10, 10]">
                           {{ $t("bookmark") }}
-                        </q-tooltip></q-btn>
-                    </div>
-                    <div class="col-auto">
-                      <q-btn @click="editFunding()" color="blue" unelevated class="radius-6 text-weight-600" no-caps
-                        icon="edit" aria-label="Edit" :loading="editIsLoading"><q-tooltip anchor="top middle"
-                          self="bottom middle" :offset="[10, 10]">
-                          {{ $t("edit") }}
                         </q-tooltip></q-btn>
                     </div>
                     <div class="col-auto">
