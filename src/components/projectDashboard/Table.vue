@@ -132,8 +132,7 @@
             </template>
             <template v-else-if="col.name === 'status'">
               <q-badge :color="getStatusColor(props.row.status)"
-                :class="props.row.status === null || props.row.status === 'sentToFunding' ? 'text-black' : 'text-white'"
-                class="q-py-sm q-px-md">
+                :class="props.row.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md">
                 {{ getStatusText(props.row.status) }}
               </q-badge>
             </template>
@@ -390,6 +389,8 @@ export default {
         return 'green'; // Granted - green badge
       } else if (status === "rejectionNotice") {
         return 'red'; // Rejected - red badge
+      } else if (status === "sentToFunding") {
+        return 'blue'; // Sent to funding - blue badge
       } else {
         return 'yellow'; // In progress - yellow badge
       }
@@ -584,7 +585,6 @@ export default {
     },
     getSelectedFunding(row) {
       const funding = row.fundingMatches.find(funding => funding.selected);
-      console.log("🚀 ~ getSelectedFunding ~ funding:", funding)
       return funding ? funding.title : '';
     },
     openFundingLink(externalId) {
