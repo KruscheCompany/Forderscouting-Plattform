@@ -24,7 +24,8 @@
     "acceptBtn": "Annehmen",
     "declineBtn": "Ablehnen",
     "viewFundingBtn": "Förderung ansehen",
-    "markAsRead": "Als gelesen markieren"
+    "markAsRead": "Als gelesen markieren",
+    "documentAccessRequest": "möchte auf das Dokument zugreifen"
   },
   "personalData": {
     "personalData": "Persönliche Daten",
@@ -77,7 +78,9 @@
     "SearchBtn": "Dokumentensuche",
     "projectBtn": "Projektideen",
     "fundingsBtn": "Fördermittel",
-    "checkListBtn": "Umsetzungscheckliste"
+    "checkListBtn": "Umsetzungscheckliste",
+    "importFundingBtn": "Förderung importieren",
+    "applicationProcessBtn": "Antragsprozess"
   },
   "fundingsInfo": {
     "current": "Aktuelle Förder-Kurzinfos",
@@ -94,6 +97,31 @@
     "bookmark": "Merken",
     "archive": "Archivieren",
     "delete": "Löschen"
+  },
+  "importFunding": {
+    "title": "Förderung importieren",
+    "selectFile": "Wählen Sie Dateien aus, um Förderinformationen aus Dokumenten zu importieren.",
+    "clickToUpload": "Klicken Sie zum Hochladen oder ziehen Sie Dateien hierher",
+    "chooseFile": "Dateien auswählen",
+    "fileTypes": "PDF, DOC, DOCX",
+    "maxFileSize": "Max. 20 MB pro Datei",
+    "uploadedFiles": "Hochgeladene Dateien",
+    "uploading": "Wird hochgeladen...",
+    "complete": "Abgeschlossen",
+    "fundingTitle": "Förderungstitel",
+    "titlePlaceholder": "Geben Sie einen benutzerdefinierten Titel für diese Förderung ein",
+    "import": "Importieren",
+    "rejectedFiles": "Einige Dateien wurden abgelehnt. Bitte überprüfen Sie Dateityp und Größenbeschränkungen.",
+    "selectAtLeastOneFile": "Bitte wählen Sie mindestens eine Datei zum Importieren aus.",
+    "importSuccess": "Dateien erfolgreich importiert!",
+    "importError": "Import fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "uploadError": "Fehler beim Hochladen von {fileName}: {error}",
+    "fileSizes": {
+      "bytes": "Bytes",
+      "kb": "KB",
+      "mb": "MB",
+      "gb": "GB"
+    }
   },
   "myDataHome": {
     "myData": "Meine Daten",
@@ -156,12 +184,14 @@
     "projectValue&Benefits": "Projektmehrwert & -nutzen",
     "CooperationPartner": "Kooperationspartner",
     "projectContent": "Projektinhalt",
+    "projectDescription": "Projektbeschreibung",
     "duplications": "Vervielfältigungen",
     "noTagsSet": "Keine Tags gesetzt",
     "noEditorsInvited": "Keine Bearbeiter eingeladen",
     "noLinksSet": "Keine Links gesetzt",
     "type": "Typ",
-    "visibility": "Sichtbarkeit"
+    "visibility": "Sichtbarkeit",
+    "generalInformation": "Allgemeine Infos"
   },
   "category&Keyword": {
     "category": "Kategorien",
@@ -272,7 +302,9 @@
     "uploads": "Uploads",
     "saveDraft": "Entwurf speichern",
     "editDraft": "Entwurf bearbeiten",
-    "publish": "Speichern"
+    "publish": "Speichern",
+    "financialPlan": "Finanzplan",
+    "timeline": "Zeitplan"
   },
   "userSelector": {
     "title": "Benutzer*in auswählen"
@@ -317,7 +349,9 @@
     "selectGuidelines": "Förderrichtlinien auswählen",
     "link": "Link hinzufügen",
     "plannedStartDate": "Beginn",
-    "plannedEndDate": "Ende"
+    "plannedEndDate": "Ende",
+    "describeProjectTimeline": "Dokumentation Zeitplan",
+    "describeProjectDocumentation": "Dokumentation Projekt"
   },
   "visibility": {
     "onlyMe": "Nur für mich",
@@ -544,6 +578,7 @@
   "Would you like to request a duplication?": "Möchten Sie eine Vervielfältigung anfordern?",
   "Would you like to request view access?": "Möchten Sie den Zugang zur Ansicht beantragen?",
   "Would you like to request edit access?": "Möchten Sie Bearbeitungsrechte beantragen?",
+  "Would you like to request null access?": "Möchten Sie null-Zugriff beantragen?",
   "Select Municipality": "Wählen Sie Verwaltung",
   "No User": "Kein Benutzer",
   "Change Cookie settings": "Cookie-Einstellungen ändern",
@@ -805,5 +840,203 @@
     "externalDataProtectionOfficer": "externe Datenschutzbeauftragte",
     "activeMindLink": "https://www.activemind.de/datenschutz/datenschutzbeauftragter/",
     "versionInfo": "(Version #2020-09-30)."
-  }
+  },
+  "warningMessage": "Die Änderungen, die Sie vorgenommen haben, führen zu einem Reset.",
+  "warningMessageDetail": "Die Änderungen, die Sie vorgenommen haben, führen zu einem Reset aller nachfolgenden Schritte.",
+  "warningMessageAction": "Diese Aktion kann nicht rückgängig gemacht werden.",
+  "Cancel": "Abbrechen",
+  "Continue": "Fortfahren",
+  "Projektidee erfolgreich bearbeitet": "Projektidea erfolgreich bearbeitet",
+  "projectView": {
+    "tabs": {
+      "aiFundingCheck": "KI-Förderprüfung",
+      "projectDevelopment": "Projektentwicklung",
+      "application": "Antragsstellung"
+    },
+    "steps": {
+      "projectDescription": "Bedarfserfassung Projektbeschreibung",
+      "fundingCheck": "Förderrichtlinien-Check",
+      "openQuestions": "Offene Fragen",
+      "aptitude": "Eignungsprüfung",
+      "basicDecision": "Grundsatzbeschluss"
+    }
+  },
+  "projectComponents": {
+    "fundingCheck": {
+      "title": "Förderrichtlinien - Vorschläge",
+      "refreshing": "Aktualisiere Förderungen...",
+      "refresh": "Förderungen aktualisieren",
+      "fehlanzeige": "Fehlanzeige - Keine passende Förderung",
+      "noFundingData": "Keine Förderinformationen verfügbar",
+      "noProjectData": "Keine Projektdaten für die Fördersuche verfügbar",
+      "successRefresh": "Förderungen erfolgreich aktualisiert",
+      "errorRefresh": "Fehler beim Aktualisieren der Förderungen",
+      "errorSaving": "Fehler beim Speichern der Förderauswahl",
+      "pleaseSelect": "Bitte wählen Sie mindestens eine Förderung aus oder markieren Sie \"Fehlanzeige\"",
+      "Project funding comparison": "Projekt-Fördermittel-Abgleich"
+    },
+    "qAndA": {
+      "title": "Offene Fragen & Antworten",
+      "noQuestions": "Keine offenen Fragen vorhanden.",
+      "noAnswer": "Keine Antwort verfügbar"
+    },
+    "aptitude": {
+      "title": "Empfehlung für politische Gremien",
+      "noRecommendation": "Keine Empfehlung verfügbar"
+    },
+    "decision": {
+      "title": "Grundsatzbeschluss",
+      "noDecisionAvailable": "Keine Entscheidung verfügbar"
+    },
+    "generalInfo": {
+      "municipalityPlaceholder": "Gemeinde/Verwaltung"
+    },
+    "contentDetails": {
+      "startingConditionDescription": "Kurzer Aufgabentext (Wer hatte die Idee? Wie wurde die Idee entwickelt? Was ist der Kontext in der Gemeinde/ Stadt?)",
+      "financingOverview": "Finanzierungsübersicht",
+      "financialPlanTitle": "Finanzplan (Kosten & Finanzierung)",
+      "timelineTitle": "Projektlaufzeit und Meilensteine",
+      "documentationTitle": "Projektdokumentation",
+      "costs": {
+        "Gesamtinvestition": "Gesamtinvestition",
+        "Fördermittel": "Fördermittel",
+        "Eigenmittel": "Eigenmittel",
+        "Drittmittel": "Drittmittel"
+      }
+    },
+    "contentDetailsView": {
+      "briefTaskText": "Kurzer Aufgabentext",
+      "files": "Dateien",
+      "noStartingCondition": "Keine Ausgangssituation verfügbar",
+      "noProjectContent": "Kein Projektinhalt verfügbar",
+      "noProjectGoals": "Keine Projektziele verfügbar",
+      "noValuesAndBenefits": "Kein Nutzen/Wirkung verfügbar",
+      "noFinancialPlan": "Keine Finanzplan-Beschreibung verfügbar",
+      "noTimeline": "Kein Zeitplan verfügbar",
+      "noDocumentation": "Keine Dokumentation verfügbar",
+      "noFilesUploaded": "Keine Dateien hochgeladen",
+      "notSpecified": "Nicht angegeben",
+      "tabs": {
+        "Ausgangssituation": "Ausgangssituation",
+        "Projektziele": "Projektziele",
+        "Projektinhalt": "Projektinhalt",
+        "Nutzen/Wirkung": "Nutzen/ Wirkung",
+        "Finanzplan": "Finanzplan",
+        "Zeitplan": "Zeitplan",
+        "Uploads": "Uploads",
+        "Links": "Links"
+      }
+    },
+    "taskPlan": {
+      "title": "Aufgabenplanung",
+      "newTaskPlaceholder": "Neue Aufgabe eingeben",
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Aufgaben geplant? Welche Aufgaben wurden geplant?"
+    },
+    "siteVisit": {
+      "title": "Standortbesuch",
+      "descriptionPlaceholder": "Beschreibung des Standortbesuchs eingeben",
+      "description": "Kurzer Aufgabentext",
+      "noContent": "Keine Beschreibung des Standortbesuchs verfügbar"
+    },
+    "goals": {
+      "title": "Ziele definieren",
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Ziele definiert? Welche Ziele wurden definiert?",
+      "noContent": "Keine Ziele definiert"
+    },
+    "requirements": {
+      "title": "Anforderungen definieren",
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Anforderungen definiert? Welche Anforderungen wurden definiert?",
+      "noContent": "Keine Anforderungen definiert"
+    },
+    "guidelineContentCheck": {
+      "title": "Richtlinien-Check (Langfassung)",
+      "description": "Kurzer Aufgabentext - Bitte vergesst den inhaltlichen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
+      "noContent": "Keine Beschreibung des Richtlinien-Checks verfügbar",
+      "uploadsTitle": "Uploads",
+      "uploadsDescription": "Hier könnt ihr Dateien hochladen, die ihr im Rahmen des Richtlinien-Checks verwendet habt (z.B. Auszüge aus der Richtlinie, Merkblätter, Antragsformulare etc.)"
+    },
+    "guidelineFormCheck": {
+      "title": "Richtlinien-Check (Langfassung)",
+      "bulletPointTitle": "Infos zur Antragsstellung (Langfassung XFLB - Part Antragstellung)",
+      "description": "Kurzer Aufgabentext - Bitte vergesst den formalen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
+      "documents": "Unterlagen",
+      "procedure": "Verfahrensablauf",
+      "applicationDeadline": "Antragsfrist",
+      "applicationCost": "Beantragungskosten"
+    },
+    "applicationDecision": {
+      "title": "Antragsbeschluss",
+      "description": "Dateien hochladen (Antragsbeschluss, Protokollauszug)",
+      "noFilesUploaded": "Keine Dateien hochgeladen"
+    },
+    "submissionSigning": {
+      "title": "Unterzeichnung & Antragsstellung",
+      "selectionLabel": "Upload Projektantragsunterlagen",
+      "pendingDecision": "Antragsentscheidung ausstehend",
+      "sentToFundingBody": "Antrag bei der Förderstelle eingereicht",
+      "grantNotice": "Zuwendungsbescheid",
+      "rejectionNotice": "Ablehnungsbescheid",
+      "noSelectionError": "Bitte treffen Sie eine Entscheidung über den Antrag",
+      "successMessage": "Bescheid erfolgreich gespeichert",
+      "errorMessage": "Fehler beim Speichern des Bescheids"
+    },
+    "documentsCoordination": {
+      "title": "Abstimmung Projektunterlagen",
+      "description": "Kurzer Aufgabentext",
+      "noContent": "Keine Beschreibung der Abstimmung der Projektunterlagen verfügbar"
+    },
+    "financingCheck": {
+      "title": "Finanzierungs-Check"
+    }
+  },
+  "ProjectDashboard": {
+    "activeProjects": "Aktive Projekte",
+    "totalProjects": "Gesamtprojekte",
+    "totalInvestment": "Gesamtinvestition",
+    "grants": "Fördermittel",
+    "ownFunds": "Eigenmittel",
+    "thirdPartyFunds": "Drittmittel",
+    "title": "Titel",
+    "municipalities": "Verwaltungsbereiche",
+    "status": "Status",
+    "investive": "Investiv/ nicht investiv",
+    "categories": "Kategorien",
+    "applicationProcess": "Antragsweg",
+    "noFinancialData": "Keine Finanzdaten verfügbar",
+    "financialPlan": "Finanzplan",
+    "accessDenied": "Zugriff auf Finanzinformationen verweigert",
+    "accessError": "Fehler bei der Überprüfung der Zugriffsberechtigungen",
+    "locations": "Ort"
+  },
+  "aiFundingCheck": "KI-Fördermittelcheck",
+  "AI funding check": "KI-Fördermittelcheck",
+  "Zuwendungsbescheid": "Zuwendungsbescheid",
+  "Ablehnungsbescheid": "Ablehnungsbescheid",
+  "In Bearbeitung": "In Bearbeitung",
+  "application": "Antragsstellung",
+  "Application": "Antragsstellung",
+  "projectDevelopment": "Projektentwicklung",
+  "Project development": "Projektentwicklung",
+  "Project Description": "Bedarfserfassung Projektbeschreibung",
+  "Funding Check": "Förderrichtlinien-Check",
+  "Open Questions": "Offene Fragen",
+  "Aptitude": "Eignungsprüfung",
+  "Basic decision": "Grundsatzbeschluss",
+  "Publish": "Speichern",
+  "Erstelldatum": "Erstelldatum",
+  "Speicherdatum": "Speicherdatum",
+  "task plan": "Aufgabenplan",
+  "site visit": " ggf. Begehung",
+  "goals": "Ziele definieren",
+  "requirements": "Anforderungen definieren",
+  "Guideline Check (Content)": "Richtlinien-Check (Inhalt)",
+  "Guideline Check (Formalities)": "Richtlinien-Check (Formalitäten)",
+  "Financing Check": "Finanzierungs-Check",
+  "Project Documents Coordination": "Abstimmung Projektunterlagenn",
+  "Application Decision": "Antragsbeschluss",
+  "Submission & Signing": "Unterzeichnung/ Antragseinreichung",
+  "Application process completed successfully": "Antragsverfahren erfolgreich abgeschlossen",
+  "No decision was made on the application": "Es wurde keine Entscheidung über den Antrag getroffen",
+  "Project successfully created": "Projekt erfolgreich erstellt",
+  "updatedAt": "Speicherdatum"
 }

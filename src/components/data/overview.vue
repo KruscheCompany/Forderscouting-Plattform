@@ -2,31 +2,25 @@
   <div class="q-my-lg ">
     <q-tabs v-if="isInPage" v-model="tab" align="justify" indicator-color="transparent" class="q-mb-lg text-black"
       active-bg-color="yellow" no-caps>
-      <q-route-tab :to="{ query: { tab: 'projectIdeas' } }" exact replace class="q-py-xs q-mr-lg radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="projectIdeas">
+      <q-route-tab :to="{ query: { tab: 'projectIdeas' } }" exact replace
+        class="q-py-xs q-mr-lg radius-10 border-yellow" :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'"
+        name="projectIdeas">
         <p class="font-20 no-margin">{{ $t("myData.projectIdeas") }}</p>
       </q-route-tab>
       <q-route-tab :to="{ query: { tab: 'fundings' } }" exact replace class="q-mr-lg radius-10 border-yellow"
         :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="fundings">
         <p class="font-20 no-margin">{{ $t("myData.fundings") }}</p>
       </q-route-tab>
-      <q-route-tab :to="{ query: { tab: 'implementationChecklist' } }" exact replace class=" radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="implementationChecklist">
-        <p class="font-20 no-margin">
-          {{ $t("myData.implementationChecklist") }}
-        </p>
-      </q-route-tab>
     </q-tabs>
     <q-table class="radius-20 shadow-1 pagination-no-shadow" :data="data" :columns="columns" row-key="title"
       :hide-bottom="!isInPage && data.length > 0" :hide-header="!isInPage"
       :visible-columns="isInPage ? visibleColumns : ['title']" :filter="filter" :pagination="{
-        sortBy: 'id',
+        sortBy: 'updatedAt',
         descending: true,
         page: 1,
         rowsPerPage: isInPage ? 10 : 5
       }" :rows-per-page-label="$t('Records per page')" :no-data-label="$t('No data')"
-      :no-results-label="$t('No results')"
-      ref="table">
+      :no-results-label="$t('No results')" ref="table">
       <template v-slot:top>
         <div v-if="!isInPage" class="row full-width">
           <div class="col-12">
@@ -75,10 +69,10 @@
               <p v-if="$q.screen.gt.sm" class="q-mb-none q-mx-md q-my-sm">
                 {{
                   tab == "projectIdeas"
-                  ? $t("myData.createProjectIdea")
-                  : tab == "fundings"
-                    ? $t("fundingsCol.createFunding")
-                    : $t("checkListCols.createImplementationChecklist")
+                    ? $t("myData.createProjectIdea")
+                    : tab == "fundings"
+                      ? $t("fundingsCol.createFunding")
+                      : $t("checkListCols.createImplementationChecklist")
                 }}
               </p>
             </q-btn>
@@ -97,13 +91,36 @@
         <q-tr :props="props">
           <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
             class="font-14 cursor-pointer">
-            {{
-              col.value && col.value.length > 48
-              ? col.value.substring(0, 48) + "..."
-              : col.value
-            }}
+            <template v-if="col.name === 'applicationProcess'">
+              <q-badge color="primary" class="text-white q-py-sm q-px-md" v-if="!props.row.applicationProcessSteps">
+                {{ $t("aiFundingCheck") }}
+              </q-badge>
+              <q-badge :color="getLastCompletedStepColor(props.row.applicationProcessSteps)"
+                :text-color="getLastCompletedStepTextColor(props.row.applicationProcessSteps)"
+                class="text-white q-py-sm q-px-md" v-else>
+                {{ getLastCompletedStep(props.row.applicationProcessSteps) }}
+              </q-badge>
+            </template>
+            <template v-else-if="col.name === 'status'">
+              <q-badge :color="getStatusColor(props.row.status)"
+                :class="props.row.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md">
+                {{ getStatusText(props.row.status) }}
+              </q-badge>
+            </template>
+            <template v-else>
+              <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
+                content-style="font-size: 14px">
+                {{ col.value }}
+              </q-tooltip>
+              {{
+                col.value && col.value.length > 125
+                  ? col.value.substring(0, 125) + "..."
+                  : col.value
+              }}
+            </template>
 
           </q-td>
+
           <q-td class="text-right" auto-width>
             <q-btn size="md" color="primary" round flat dense icon="more_vert" aria-label="Optionen">
               <q-menu transition-show="jump-down" transition-hide="jump-up">
@@ -132,7 +149,7 @@
                     (tab !== 'fundings' &&
                       (!!props.row.owner && props.row.owner.id) ===
                       (!!loggedInUser && loggedInUser.id))
-                    " clickable v-close-popup @click="archiveItem(props.row)">
+                  " clickable v-close-popup @click="archiveItem(props.row)">
                     <q-item-section><span class="text-right font-14">
                         {{ $t("myDataTableOptions.archive") }}
 
@@ -179,7 +196,10 @@ export default {
         "categories",
         "status",
         "plannedStart",
-        "plannedEnd"
+        "plannedEnd",
+        "updatedAt",
+        "applicationProcess",
+        "owner"
       ],
       deleteDialog: false,
       requestDialog: false,
@@ -256,14 +276,14 @@ export default {
           console.log("hasReaderAccess", hasReaderAccess.length);
           console.log("hasEditorAccess", hasEditorAccess.length);
           if (hasReaderAccess.length > 0 || hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newProjectIdea/${id}` });
+            this.$router.push({ path: `/application/process/view/${id}` });
           } else {
             this.itemId = row && row.id;
             this.type = "view";
             this.requestDialog = true;
           }
         } else {
-          this.$router.push({ path: `/user/newProjectIdea/${id}` });
+          this.$router.push({ path: `/application/process/view/${id}` });
         }
       } else if (this.tab === "fundings") {
         if (
@@ -337,14 +357,14 @@ export default {
               user => user.id === (!!this.loggedInUser && this.loggedInUser.id)
             );
           if (hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newProjectIdea/edit/${id}` });
+            this.$router.push({ path: `/application/process/edit/${id}` });
           } else {
             this.itemId = row && row.id;
             this.type = "edit";
             this.requestDialog = true;
           }
         } else {
-          this.$router.push({ path: `/user/newProjectIdea/edit/${id}` });
+          this.$router.push({ path: `/application/process/edit/${id}` });
         }
       } else if (this.tab === "fundings") {
         if (
@@ -446,7 +466,7 @@ export default {
     goToPage(page) {
       if (page === "projectIdeas") {
         this.$store.commit("project/setSpecificProject", null);
-        this.$router.push({ path: "/user/newProjectIdea" });
+        this.$router.push({ path: "/application/process/" });
       } else if (page === "fundings") {
         this.$store.commit("funding/setSpecificFunding", null);
         this.$router.push({ path: "/user/newFunding" });
@@ -472,7 +492,109 @@ export default {
           null
         );
       }
-    }
+    },
+    getLastCompletedStepColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'primary'; // Default color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'primary';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'primary'; // Blue
+        case 'projectDevelopment':
+          return 'blue-2'; // Light Blue
+        case 'application':
+          return 'blue-1'; // Green
+        default:
+          return 'primary'; // Default color
+      }
+    },
+    getLastCompletedStep(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return this.$t("aiFundingCheck");
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return this.$t("aiFundingCheck");
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Try to use translation key based on the name property first
+      // If not available, use the title directly, and if that's not available either, use a default
+      const translationKey = `${lastCompletedStep.name}`;
+      return this.$t(translationKey) ? this.$t(translationKey) : (lastCompletedStep.title || this.$t("aiFundingCheck"));
+    },
+
+    getLastCompletedStepTextColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'white'; // Default text color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'white';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine text color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'white'; // Blue badge - white text
+        case 'projectDevelopment':
+          return 'black'; // Light Blue badge - black text
+        case 'application':
+          return 'black'; // Green badge - black text
+        default:
+          return 'white'; // Default text color
+      }
+    },
+
+    getStatusText(status) {
+      if (status === "sentToFunding") {
+        return this.$t('projectComponents.submissionSigning.sentToFunding');
+      } else if (status === "grantNotice") {
+        return this.$t('Zuwendungsbescheid'); // Granted
+      } else if (status === "rejectionNotice") {
+        return this.$t('Ablehnungsbescheid'); // Rejected
+      } else {
+        return this.$t('In Bearbeitung'); // In progress (null)
+      }
+    },
+
+    getStatusColor(status) {
+      if (status === "grantNotice") {
+        return 'green'; // Granted - green badge
+      } else if (status === "rejectionNotice") {
+        return 'red'; // Rejected - red badge
+      } else if (status === "sentToFunding") {
+        return 'blue'; // Sent to funding - blue badge
+      } else {
+        return 'yellow'; // In progress - yellow badge
+      }
+    },
   },
   watch: {
     tab(val) {
@@ -515,22 +637,6 @@ export default {
           : this.checklistCols;
     },
     data() {
-      // if (this.isGuest) {
-      //   return this.tab == "projectIdeas"
-      //     ? !!this.$store.state.project.projects &&
-      //     this.$store.state.project.projects.filter((item) => {
-      //       return item.owner.user_detail.municipality.title == this.loggedInUserMunicipality.title && item.visibility != "only for me"
-      //     })
-      //     : this.tab == "fundings"
-      //       ? !!this.$store.state.funding.fundings &&
-      //       this.$store.state.funding.fundings.filter((item) => {
-      //         return item.owner.user_detail.municipality.title == this.loggedInUserMunicipality.title && item.visibility != "only for me"
-      //       })
-      //       : !!this.$store.state.implementationChecklist.checklists &&
-      //       this.$store.state.implementationChecklist.checklists.filter((item) => {
-      //         return item.owner.user_detail.municipality.title == this.loggedInUserMunicipality.title && item.visibility != "only for me"
-      //       });
-      // } else {
       return this.tab == "projectIdeas"
         ? !!this.$store.state.project.projects &&
         this.$store.state.project.projects.filter((item) => {
@@ -568,29 +674,35 @@ export default {
           align: "left",
           field: row => row.title,
           sortable: true
+        }, {
+          name: "updatedAt",
+          align: "center",
+          label: this.$t("Speicherdatum"),
+          field: "updatedAt",
+          sortable: true,
+          format: (val) => (val ? dateFormatter(val) : ""),
         },
         {
-          name: "categories",
+          name: "applicationProcess",
           align: "left",
-          label: this.$t("myData.categories"),
-          field: row =>
-            (!!row.categories &&
-              row.categories.map(category => category.title).join(", ")) ||
-            this.$t("NoCategories"),
-          sortable: true
+          label: this.$t("ProjectDashboard.applicationProcess"),
+          field: "applicationProcessSteps",
+          sortable: true,
         },
         {
           name: "status",
-          label: "Status",
           align: "left",
-          field: row =>
-            row.published === true
-              ? this.$t("Published")
-              : row.published === false
-                ? this.$t("Draft")
-                : this.$t("Status Unavailable"),
-          sortable: true
-        }
+          label: this.$t("ProjectDashboard.status"),
+          field: "status",
+          sortable: true,
+        },
+        {
+          name: "owner",
+          align: "left",
+          label: this.$t("statsTable.owners"),
+          field: row => (row.owner ? row.owner.username : this.$t("Unknown")),
+          sortable: true,
+        },
       ];
     },
     fundingCols() {
@@ -604,37 +716,27 @@ export default {
         },
         {
           name: "title",
-          label: this.$t("fundingsCol.title"),
           align: "left",
+          label: this.$t("fundingsColsHome.title"),
           field: row => row.title,
           sortable: true
         },
         {
-          name: "categories",
-          align: "left",
-          label: this.$t("fundingsCol.categories"),
-          field: row =>
-            (!!row.categories &&
-              row.categories.map(category => category.title).join(", ")) ||
-            "No Categories",
-          sortable: true
-        },
-        {
           name: "plannedStart",
+          align: "center",
           label: this.$t("fundingsCol.start"),
-          align: "left",
           field: row => dateFormatter(row.plannedStart),
           sortable: true,
           sort: (a, b, rowA, rowB) => {
             const dateA = new Date(rowA.plannedStart);
             const dateB = new Date(rowB.plannedStart);
             return dateB - dateA;
-          }
+          },
         },
         {
           name: "plannedEnd",
+          align: "center",
           label: this.$t("fundingsCol.end"),
-          align: "left",
           field: row => dateFormatter(row.plannedEnd),
           sortable: true,
           sort: (a, b, rowA, rowB) => {
@@ -642,18 +744,6 @@ export default {
             const dateB = new Date(rowB.plannedEnd);
             return dateB - dateA;
           }
-        },
-        {
-          name: "status",
-          label: "Status",
-          align: "left",
-          field: row =>
-            row.published === true
-              ? this.$t("Published")
-              : row.published === false
-                ? this.$t("Draft")
-                : this.$t("Status Unavailable"),
-          sortable: true
         }
       ];
     },
@@ -701,23 +791,37 @@ export default {
   mounted() {
     console.log("this.$router.currentRoute", this.$router.currentRoute);
     this.getData(this.tab);
-    if (localStorage.getItem("pagination")) {
-      const savedPagination = JSON.parse(localStorage.getItem("pagination"));
 
-      this.$refs.table.setPagination({
-          page: savedPagination.dataOverviewPage || 1,
-          rowsPerPage: savedPagination.dataOverviewRowsPerPage || 10,
-        });
-    }
+    // Apply saved pagination settings with proper error handling
+    this.$nextTick(() => {
+      if (localStorage.getItem("pagination") && this.$refs.table) {
+        try {
+          const savedPagination = JSON.parse(localStorage.getItem("pagination") || "{}");
+          this.$refs.table.setPagination({
+            page: savedPagination.dataOverviewPage || 1,
+            rowsPerPage: savedPagination.dataOverviewRowsPerPage || 10,
+          });
+        } catch (error) {
+          console.error("Error applying saved pagination:", error);
+        }
+      }
+    });
   },
   beforeDestroy() {
-    const pagination = JSON.parse(localStorage.getItem("pagination"));
-    const localPagination = {
-      dataOverviewPage: this.$refs.table.computedPagination.page,
-      dataOverviewRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
-    };
-    const filters = { ...pagination, ...localPagination };
-    localStorage.setItem("pagination", JSON.stringify(filters));
+    // Save pagination settings with proper error handling
+    if (this.$refs.table) {
+      try {
+        const pagination = JSON.parse(localStorage.getItem("pagination") || "{}");
+        const localPagination = {
+          dataOverviewPage: this.$refs.table.computedPagination.page,
+          dataOverviewRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
+        };
+        const filters = { ...pagination, ...localPagination };
+        localStorage.setItem("pagination", JSON.stringify(filters));
+      } catch (error) {
+        console.error("Error saving pagination:", error);
+      }
+    }
   },
 };
 </script>

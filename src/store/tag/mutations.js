@@ -2,6 +2,10 @@ export function setTags(state, payload) {
   state.tags = payload;
 }
 
+export function setTagsSimplified(state, payload) {
+  state.tagsSimplified = payload;
+}
+
 export function addTag(state, payload) {
   if (!!payload) {
     state.tags.push({

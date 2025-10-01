@@ -32,6 +32,12 @@
 .radius-20 {
   border-radius: 20px !important;
 }
+.radius-top-20 {
+  border-radius: 20px 20px 0 0 !important;
+}
+.radius-bottom-20 {
+  border-radius: 0 0 20px 20px !important;
+}
 .radius-top-20,
 .tableHead .q-table__top {
   border-radius: 20px 20px 0 0 !important;
@@ -171,6 +177,7 @@
 .text-weight-600 {
   font-weight: 600;
 }
+
 .light-blue {
   background-color: #bfd3ff;
   color: black;
@@ -184,7 +191,7 @@
 /* Open Sans Font Family - Self-hosted */
 @font-face {
   font-family: "Open Sans";
-  src: url("../fonts/open-sans/OpenSans-Light.woff2") format("woff2");
+  src: url("../fonts/OpenSans-Light.woff") format("woff");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -192,7 +199,7 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("../fonts/open-sans/OpenSans-LightItalic.woff2") format("woff2");
+  src: url("../fonts/OpenSans-LightItalic.woff") format("woff");
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -200,7 +207,7 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("../fonts/open-sans/OpenSans-Regular.woff2") format("woff2");
+  src: url("../fonts/OpenSans-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -208,7 +215,7 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("../fonts/open-sans/OpenSans-Italic.woff2") format("woff2");
+  src: url("../fonts/OpenSans-Italic.woff") format("woff");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -216,7 +223,7 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("../fonts/open-sans/OpenSans-Medium.woff2") format("woff2");
+  src: url("../fonts/OpenSans-Medium.woff") format("woff");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -224,7 +231,7 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("../fonts/open-sans/OpenSans-SemiBold.woff2") format("woff2");
+  src: url("../fonts/OpenSans-SemiBold.woff") format("woff");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -232,7 +239,7 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("../fonts/open-sans/OpenSans-Bold.woff2") format("woff2");
+  src: url("../fonts/OpenSans-Bold.woff") format("woff");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -240,9 +247,9 @@
 
 @font-face {
   font-family: "Open Sans";
-  src: url("../fonts/open-sans/OpenSans-ExtraBold.woff2") format("woff2");
+  src: url("../fonts/OpenSans-ExtraBold.woff") format("woff");
   font-weight: 800;
-  font-style: normal;
+  font-style:normal;
   font-display: swap;
 }
 

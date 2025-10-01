@@ -1,100 +1,44 @@
 <template>
   <div class="q-my-lg ">
-    <q-tabs
-      v-if="isInPage"
-      v-model="tab"
-      align="justify"
-      indicator-color="transparent"
-      class="q-mb-lg text-black"
-      active-bg-color="yellow"
-      no-caps
-    >
-      <q-route-tab
-        :to="{ query: { tab: 'all' } }"
-        exact
-        replace
-        class="q-py-xs q-mr-lg radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'"
-        name="all"
-      >
+    <q-tabs v-if="isInPage" v-model="tab" align="justify" indicator-color="transparent" class="q-mb-lg text-black"
+      active-bg-color="yellow" no-caps>
+      <q-route-tab :to="{ query: { tab: 'all' } }" exact replace class="q-py-xs q-mr-lg radius-10 border-yellow"
+        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="all">
         <p class="font-20 no-margin">{{ $t("watchListHome.allBtn") }}</p>
       </q-route-tab>
-      <q-route-tab
-        :to="{ query: { tab: 'projectIdeas' } }"
-        exact
-        replace
-        class="q-py-xs q-mr-lg radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'"
-        name="projectIdeas"
-      >
+      <q-route-tab :to="{ query: { tab: 'projectIdeas' } }" exact replace
+        class="q-py-xs q-mr-lg radius-10 border-yellow" :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'"
+        name="projectIdeas">
         <p class="font-20 no-margin">{{ $t("myData.projectIdeas") }}</p>
       </q-route-tab>
-      <q-route-tab
-        :to="{ query: { tab: 'fundings' } }"
-        exact
-        replace
-        class="q-mr-lg radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'"
-        name="fundings"
-      >
+      <q-route-tab :to="{ query: { tab: 'fundings' } }" exact replace class="q-mr-lg radius-10 border-yellow"
+        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="fundings">
         <p class="font-20 no-margin">{{ $t("myData.fundings") }}</p>
       </q-route-tab>
-      <q-route-tab
-        :to="{ query: { tab: 'implementationChecklist' } }"
-        exact
-        replace
-        class=" radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'"
-        name="implementationChecklist"
-      >
-        <p class="font-20 no-margin">
-          {{ $t("myData.implementationChecklist") }}
-        </p>
-      </q-route-tab>
     </q-tabs>
-    <q-table
-      class="radius-20 shadow-1 pagination-no-shadow"
-      :data="data"
-      :columns="columns"
-      row-key="name"
-      :hide-bottom="!isInPage && data.length > 0"
-      :hide-header="!isInPage"
-      :visible-columns="isInPage ? visibleColumns : ['title']"
-      :filter="filter"
-      :pagination="{
+    <q-table class="radius-20 shadow-1 pagination-no-shadow" :data="data" :columns="columns" row-key="name"
+      :hide-bottom="!isInPage && data.length > 0" :hide-header="!isInPage"
+      :visible-columns="isInPage ? visibleColumns : ['title']" :filter="filter" :pagination="{
         sortBy: 'id',
         descending: true,
         page: 1,
         rowsPerPage: isInPage ? 10 : 5
-      }"
-      :rows-per-page-label="$t('Records per page')"
-      :no-data-label="$t('No data')"
-      :no-results-label="$t('No results')"
-      ref="table"
-    >
+      }" :rows-per-page-label="$t('Records per page')" :no-data-label="$t('No data')"
+      :no-results-label="$t('No results')" ref="table">
       <template v-slot:top>
         <div v-if="!isInPage" class="row full-width">
           <div class="col-12">
             <p class="font-20 ppeditorial">
               {{ $t("watchListHome.myWatchList") }}
-              <span
-                class="font-14 float-right text-blue text-underline text-weight-600 cursor-pointer"
-                @click="$router.push({ path: `/watchlist?tab=${tab}` })"
-              >
+              <span class="font-14 float-right text-blue text-underline text-weight-600 cursor-pointer"
+                @click="$router.push({ path: `/watchlist?tab=${tab}` })">
                 {{ $t("watchListHome.showMy") }}
               </span>
             </p>
           </div>
           <div class="col-12">
-            <q-tabs
-              v-model="tab"
-              align="justify"
-              indicator-color="transparent"
-              class="text-black"
-              active-bg-color="yellow"
-              no-caps
-              dense
-            >
+            <q-tabs v-model="tab" align="justify" indicator-color="transparent" class="text-black"
+              active-bg-color="yellow" no-caps dense>
               <q-tab class="q-mr-lg radius-6 border-yellow" name="all">
                 <p class="font-14 text-weight-600 no-margin">
                   {{ $t("watchListHome.allBtn") }}
@@ -110,31 +54,13 @@
                   {{ $t("watchListHome.fundingsBtn") }}
                 </p>
               </q-tab>
-              <q-tab
-                class="q-mr-lg radius-6 border-yellow"
-                name="implementationChecklist"
-              >
-                <p class="font-14 text-weight-600 no-margin">
-                  {{ $t("watchListHome.implementationChecklistBtn") }}
-                </p>
-              </q-tab>
             </q-tabs>
           </div>
         </div>
-        <div
-          v-if="isInPage"
-          class="row full-width justify-between items-center"
-        >
+        <div v-if="isInPage" class="row full-width justify-between items-center">
           <div class="col-8 col-md-4">
-            <q-input
-              borderless
-              outlined
-              class="input-radius-6 no-shadow q-mb-sm q-mt-sm"
-              v-model="filter"
-              :placeholder="$t('Search')"
-              dense
-              role="searcbox"
-            >
+            <q-input borderless outlined class="input-radius-6 no-shadow q-mb-sm q-mt-sm" v-model="filter"
+              :placeholder="$t('Search')" dense role="searcbox">
               <template v-slot:prepend>
                 <q-icon color="blue-5" name="search" />
               </template>
@@ -144,12 +70,7 @@
       </template>
       <template v-slot:header="props">
         <q-tr class="tableHeader" :props="props">
-          <q-th
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            class="font-14 text-black"
-          >
+          <q-th v-for="col in props.cols" :key="col.name" :props="props" class="font-14 text-black">
             {{ col.label }}
           </q-th>
           <q-th auto-width />
@@ -157,151 +78,90 @@
       </template>
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td
-            @click="view(props.row)"
-            auto-width
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            class="font-14 cursor-pointer"
-          >
-            {{
-              col.value && col.value.length > 48
-                ? col.value.substring(0, 48) + "..."
-                : col.value
-            }}
+          <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
+            class="font-14 cursor-pointer">
+            <template v-if="col.name === 'applicationProcess'">
+              <q-badge color="primary" class="text-white q-py-sm q-px-md" v-if="!props.row.applicationProcessSteps">
+                {{ $t("aiFundingCheck") }}
+              </q-badge>
+              <q-badge :color="getLastCompletedStepColor(props.row.project.applicationProcessSteps)"
+                :text-color="getLastCompletedStepTextColor(props.row.project.applicationProcessSteps)"
+                class="text-white q-py-sm q-px-md" v-else>
+                {{ getLastCompletedStep(props.row.project.applicationProcessSteps) }}
+              </q-badge>
+            </template>
+            <template v-else-if="col.name === 'status'">
+              <q-badge :color="getStatusColor(props.row.project.status)"
+                :class="props.row.project.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md">
+                {{ getStatusText(props.row.project.status) }}
+              </q-badge>
+            </template>
+            <template v-else>
+              <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
+                content-style="font-size: 14px">
+                {{ col.value }}
+              </q-tooltip>
+              {{
+                col.value && col.value.length > 125
+                  ? col.value.substring(0, 125) + "..."
+                  : col.value
+              }}
+            </template>
+
           </q-td>
           <q-td class="text-right" auto-width>
             <q-btn size="md" color="primary" round flat dense icon="more_vert" aria-label="Optionen">
               <q-menu transition-show="jump-down" transition-hide="jump-up">
                 <q-list style="min-width: 250px">
                   <q-item clickable v-close-popup @click="view(props.row)">
-                    <q-item-section
-                      ><span class="text-right font-14">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("myWatchListTableOptions.view") }}
-                        <q-icon
-                          v-if="!viewIsLoading"
-                          size="sm"
-                          class="text-blue"
-                          name="visibility"
-                        />
-                        <q-spinner
-                          v-else
-                          color="primary"
-                          size="sm"
-                          :thickness="2"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon v-if="!viewIsLoading" size="sm" class="text-blue" name="visibility" />
+                        <q-spinner v-else color="primary" size="sm" :thickness="2" /> </span></q-item-section>
                   </q-item>
-                  <q-item
-                    v-if="isAdmin || (!props.row.hasOwnProperty('funding') && !isGuest)"
-                    clickable
-                    v-close-popup
-                    @click="editItem(props.row)"
-                  >
-                    <q-item-section
-                      ><span class="text-right font-14">
+                  <q-item v-if="isAdmin || (!props.row.hasOwnProperty('funding') && !isGuest)" clickable v-close-popup
+                    @click="editItem(props.row)">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("myWatchListTableOptions.edit") }}
 
-                        <q-icon
-                          v-if="!editIsLoading"
-                          size="sm"
-                          class="text-blue"
-                          name="edit"
-                        />
-                        <q-spinner
-                          v-else
-                          color="primary"
-                          size="sm"
-                          :thickness="2"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon v-if="!editIsLoading" size="sm" class="text-blue" name="edit" />
+                        <q-spinner v-else color="primary" size="sm" :thickness="2" /> </span></q-item-section>
                   </q-item>
-                  <q-item
-                    clickable
-                    v-close-popup
-                    @click="removeFromWatchlist(props.row)"
-                  >
-                    <q-item-section
-                      ><span class="text-right font-14">
+                  <q-item clickable v-close-popup @click="removeFromWatchlist(props.row)">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("myWatchListTableOptions.removeBookmark") }}
 
-                        <q-icon
-                          v-if="!watchlistIsLoading"
-                          size="sm"
-                          class="text-blue"
-                          name="star_rate"
-                        />
-                        <q-spinner
-                          v-else
-                          color="primary"
-                          size="sm"
-                          :thickness="2"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon v-if="!watchlistIsLoading" size="sm" class="text-blue" name="star_rate" />
+                        <q-spinner v-else color="primary" size="sm" :thickness="2" /> </span></q-item-section>
                   </q-item>
-                  <q-item
-                    v-if="
-                      isAdmin ||
-                        (!props.row.hasOwnProperty('funding') &&
-                          (!!props.row.funding &&
-                            !!props.row.funding.owner &&
-                            props.row.funding.owner.id) ===
-                            (!!loggedInUser && loggedInUser.id)) ||
-                        (!!props.row.project &&
-                          !!props.row.project.owner &&
-                          props.row.project.owner.id) ===
-                          (!!loggedInUser && loggedInUser.id) ||
-                        (!!props.row.checklist &&
-                          !!props.row.checklist.owner &&
-                          props.row.checklist.owner.id) ===
-                          (!!loggedInUser && loggedInUser.id)
-                    "
-                    clickable
-                    v-close-popup
-                    @click="archiveItem(props.row)"
-                  >
-                    <q-item-section
-                      ><span class="text-right font-14">
+                  <q-item v-if="
+                    isAdmin ||
+                    (!props.row.hasOwnProperty('funding') &&
+                      (!!props.row.funding &&
+                        !!props.row.funding.owner &&
+                        props.row.funding.owner.id) ===
+                      (!!loggedInUser && loggedInUser.id)) ||
+                    (!!props.row.project &&
+                      !!props.row.project.owner &&
+                      props.row.project.owner.id) ===
+                    (!!loggedInUser && loggedInUser.id) ||
+                    (!!props.row.checklist &&
+                      !!props.row.checklist.owner &&
+                      props.row.checklist.owner.id) ===
+                    (!!loggedInUser && loggedInUser.id)
+                  " clickable v-close-popup @click="archiveItem(props.row)">
+                    <q-item-section><span class="text-right font-14">
                         {{ $t("myWatchListTableOptions.archive") }}
 
-                        <q-icon
-                          v-if="!archiveIsLoading"
-                          size="sm"
-                          class="text-blue"
-                          name="inventory"
-                        />
-                        <q-spinner
-                          v-else
-                          color="red"
-                          size="sm"
-                          :thickness="2"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon v-if="!archiveIsLoading" size="sm" class="text-blue" name="inventory" />
+                        <q-spinner v-else color="red" size="sm" :thickness="2" /> </span></q-item-section>
                   </q-item>
-                  <q-item
-                    v-if="isAdmin"
-                    clickable
-                    v-close-popup
-                    @click="deleteItem(props.row)"
-                  >
-                    <q-item-section
-                      ><span class="text-right font-14 text-red">
+                  <q-item v-if="isAdmin" clickable v-close-popup @click="deleteItem(props.row)">
+                    <q-item-section><span class="text-right font-14 text-red">
                         {{ $t("myWatchListTableOptions.delete") }}
 
-                        <q-icon
-                          v-if="!deleteIsLoading"
-                          size="sm"
-                          class="text-red"
-                          name="delete"
-                        />
-                        <q-spinner
-                          v-else
-                          color="red"
-                          size="sm"
-                          :thickness="2"
-                        /> </span
-                    ></q-item-section>
+                        <q-icon v-if="!deleteIsLoading" size="sm" class="text-red" name="delete" />
+                        <q-spinner v-else color="red" size="sm" :thickness="2" /> </span></q-item-section>
                   </q-item>
                 </q-list>
               </q-menu>
@@ -310,24 +170,14 @@
         </q-tr>
       </template>
     </q-table>
-    <DeleteDialog
-      :id="itemId"
-      :tab="editingType"
-      :dialogState="deleteDialog"
-      @update="closeDialog($event), (itemId = null), (editingType = null)"
-    />
-    <RequestAccessDialog
-      :id="itemId"
-      :tab="itemType"
-      :type="type"
-      :dialogState="requestDialog"
-      @update="
-        (requestDialog = $event),
-          (itemId = null),
-          (type = null),
-          (itemType = null)
-      "
-    />
+    <DeleteDialog :id="itemId" :tab="editingType" :dialogState="deleteDialog"
+      @update="closeDialog($event), (itemId = null), (editingType = null)" />
+    <RequestAccessDialog :id="itemId" :tab="itemType" :type="type" :dialogState="requestDialog" @update="
+      (requestDialog = $event),
+      (itemId = null),
+      (type = null),
+      (itemType = null)
+      " />
   </div>
 </template>
 
@@ -354,7 +204,9 @@ export default {
         "carbs",
         "plannedStart",
         "plannedEnd",
-        "owner"
+        "owner",
+        "applicationProcess",
+        "updatedAt"
       ],
       deleteDialog: false,
       itemId: null,
@@ -382,7 +234,7 @@ export default {
         if (
           row.project.visibility === "listed only" &&
           (!!row.project && !!row.project.owner && row.project.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasReaderAccess =
@@ -398,7 +250,7 @@ export default {
               user => user.id === (!!this.loggedInUser && this.loggedInUser.id)
             );
           if (hasReaderAccess.length > 0 || hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newProjectIdea/${id}` });
+            this.$router.push({ path: `/application/process/view/${id}` });
           } else {
             this.itemId = !!row.project && row.project.id;
             this.type = "view";
@@ -406,14 +258,14 @@ export default {
             this.requestDialog = true;
           }
         } else {
-          this.$router.push({ path: `/user/newProjectIdea/${id}` });
+          this.$router.push({ path: `/application/process/view/${id}` });
         }
       } else if (!!row && row.hasOwnProperty("funding")) {
         const id = !!row.funding && row.funding.id;
         if (
           row.funding.visibility === "listed only" &&
           (!!row.funding && !!row.funding.owner && row.funding.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasReaderAccess =
@@ -446,7 +298,7 @@ export default {
           (!!row.checklist &&
             !!row.checklist.owner &&
             row.checklist.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasReaderAccess =
@@ -482,7 +334,7 @@ export default {
         const id = !!row.project && row.project.id;
         if (
           (!!row.project && !!row.project.owner && row.project.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasEditorAccess =
@@ -492,7 +344,7 @@ export default {
               user => user.id === (!!this.loggedInUser && this.loggedInUser.id)
             );
           if (hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newProjectIdea/edit/${id}` });
+            this.$router.push({ path: `/application/process/edit/${id}` });
           } else {
             this.itemId = !!row.project && row.project.id;
             this.type = "edit";
@@ -500,13 +352,13 @@ export default {
             this.requestDialog = true;
           }
         } else {
-          this.$router.push({ path: `/user/newProjectIdea/edit/${id}` });
+          this.$router.push({ path: `/application/process/edit/${id}` });
         }
       } else if (!!row && row.hasOwnProperty("funding")) {
         const id = !!row.funding && row.funding.id;
         if (
           (!!row.funding && !!row.funding.owner && row.funding.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasEditorAccess =
@@ -532,7 +384,7 @@ export default {
           (!!row.checklist &&
             !!row.checklist.owner &&
             row.checklist.owner.id) !==
-            (!!this.loggedInUser && this.loggedInUser.id) &&
+          (!!this.loggedInUser && this.loggedInUser.id) &&
           !this.isAdmin
         ) {
           const hasEditorAccess =
@@ -627,7 +479,109 @@ export default {
     },
     getData() {
       this.$store.dispatch("userCenter/getWatchlists");
-    }
+    },
+    getLastCompletedStepColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'primary'; // Default color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'primary';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'primary'; // Blue
+        case 'projectDevelopment':
+          return 'blue-2'; // Light Blue
+        case 'application':
+          return 'blue-1'; // Green
+        default:
+          return 'primary'; // Default color
+      }
+    },
+    getLastCompletedStep(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return this.$t("aiFundingCheck");
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return this.$t("aiFundingCheck");
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Try to use translation key based on the name property first
+      // If not available, use the title directly, and if that's not available either, use a default
+      const translationKey = `${lastCompletedStep.name}`;
+      return this.$t(translationKey) ? this.$t(translationKey) : (lastCompletedStep.title || this.$t("aiFundingCheck"));
+    },
+
+    getLastCompletedStepTextColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'white'; // Default text color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'white';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine text color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'white'; // Blue badge - white text
+        case 'projectDevelopment':
+          return 'black'; // Light Blue badge - black text
+        case 'application':
+          return 'black'; // Green badge - black text
+        default:
+          return 'white'; // Default text color
+      }
+    },
+
+    getStatusText(status) {
+      if (status === "sentToFunding") {
+        return this.$t('projectComponents.submissionSigning.sentToFunding');
+      } else if (status === "grantNotice") {
+        return this.$t('Zuwendungsbescheid'); // Granted
+      } else if (status === "rejectionNotice") {
+        return this.$t('Ablehnungsbescheid'); // Rejected
+      } else {
+        return this.$t('In Bearbeitung'); // In progress (null)
+      }
+    },
+
+    getStatusColor(status) {
+      if (status === "grantNotice") {
+        return 'green'; // Granted - green badge
+      } else if (status === "rejectionNotice") {
+        return 'red'; // Rejected - red badge
+      } else if (status === "sentToFunding") {
+        return 'blue'; // Sent to funding - blue badge
+      } else {
+        return 'yellow'; // In progress - yellow badge
+      }
+    },
   },
   watch: {
     tab(newVal, oldVal) {
@@ -709,10 +663,10 @@ export default {
             row.hasOwnProperty("project")
               ? row.project.title
               : row.hasOwnProperty("funding")
-              ? row.funding.title
-              : row.hasOwnProperty("checklist")
-              ? row.checklist.title
-              : "",
+                ? row.funding.title
+                : row.hasOwnProperty("checklist")
+                  ? row.checklist.title
+                  : "",
           sortable: true
         },
         {
@@ -723,10 +677,10 @@ export default {
             row.hasOwnProperty("project")
               ? this.$t(row.project.type)
               : row.hasOwnProperty("funding")
-              ? this.$t(row.funding.type)
-              : row.hasOwnProperty("checklist")
-              ? this.$t(row.checklist.type)
-              : "",
+                ? this.$t(row.funding.type)
+                : row.hasOwnProperty("checklist")
+                  ? this.$t(row.checklist.type)
+                  : "",
           sortable: true
         },
         {
@@ -736,26 +690,26 @@ export default {
           field: row =>
             row.hasOwnProperty("project")
               ? (!!row.project &&
-                  !!row.project.categories &&
-                  row.project.categories
-                    .map(category => category.title)
-                    .join(", ")) ||
-                this.$t("NoCategories")
+                !!row.project.categories &&
+                row.project.categories
+                  .map(category => category.title)
+                  .join(", ")) ||
+              this.$t("NoCategories")
               : row.hasOwnProperty("funding")
-              ? (!!row.funding &&
+                ? (!!row.funding &&
                   !!row.funding.categories &&
                   row.funding.categories
                     .map(category => category.title)
                     .join(", ")) ||
                 this.$t("NoCategories")
-              : row.hasOwnProperty("checklist")
-              ? (!!row.checklist &&
-                  !!row.checklist.categories &&
-                  row.checklist.categories
-                    .map(category => category.title)
-                    .join(", ")) ||
-                this.$t("NoCategories")
-              : "",
+                : row.hasOwnProperty("checklist")
+                  ? (!!row.checklist &&
+                    !!row.checklist.categories &&
+                    row.checklist.categories
+                      .map(category => category.title)
+                      .join(", ")) ||
+                  this.$t("NoCategories")
+                  : "",
           sortable: true
         },
         {
@@ -766,8 +720,8 @@ export default {
             row.hasOwnProperty("project")
               ? dateFormatter(!!row.project && row.project.plannedStart)
               : row.hasOwnProperty("funding")
-              ? dateFormatter(!!row.funding && row.funding.plannedStart)
-              : "",
+                ? dateFormatter(!!row.funding && row.funding.plannedStart)
+                : "",
           sortable: true,
           sort: (a, b, rowA, rowB) => {
             if (
@@ -805,8 +759,8 @@ export default {
             row.hasOwnProperty("project")
               ? dateFormatter(!!row.project && row.project.plannedEnd)
               : row.hasOwnProperty("funding")
-              ? dateFormatter(!!row.funding && row.funding.plannedEnd)
-              : "",
+                ? dateFormatter(!!row.funding && row.funding.plannedEnd)
+                : "",
           sortable: true,
           sort: (a, b, rowA, rowB) => {
             if (
@@ -843,17 +797,17 @@ export default {
           field: row =>
             row.hasOwnProperty("project")
               ? !!row.project &&
-                !!row.project.owner &&
-                row.project.owner.username
+              !!row.project.owner &&
+              row.project.owner.username
               : row.hasOwnProperty("funding")
-              ? !!row.funding &&
+                ? !!row.funding &&
                 !!row.funding.owner &&
                 row.funding.owner.username
-              : row.hasOwnProperty("checklist")
-              ? !!row.checklist &&
-                !!row.checklist.owner &&
-                row.checklist.owner.username
-              : "",
+                : row.hasOwnProperty("checklist")
+                  ? !!row.checklist &&
+                  !!row.checklist.owner &&
+                  row.checklist.owner.username
+                  : "",
 
           sortable: true
         }
@@ -876,49 +830,26 @@ export default {
           sortable: true
         },
         {
-          name: "type",
-          label: this.$t("statsTable.type"),
-          align: "left",
-          field: row => !!row.project && this.$t(row.project.type),
-          sortable: true
-        },
-        {
-          name: "categories",
-          align: "left",
-          label: this.$t("myData.categories"),
-          field: row =>
-            (!!row.project &&
-              !!row.project.categories &&
-              row.project.categories
-                .map(category => category.title)
-                .join(", ")) ||
-            "No Categories",
-          sortable: true
-        },
-        {
-          name: "plannedStart",
-          label: this.$t("fundingsCol.start"),
-          align: "left",
-          field: row =>
-            dateFormatter(!!row.project && row.project.plannedStart),
+          name: "updatedAt",
+          align: "center",
+          label: this.$t("Speicherdatum"),
+          field: "updatedAt",
           sortable: true,
-          sort: (a, b, rowA, rowB) => {
-            const dateA = new Date(!!rowA.project && rowA.project.plannedStart);
-            const dateB = new Date(!!rowB.project && rowB.project.plannedStart);
-            return dateB - dateA;
-          }
+          format: (val) => (val ? dateFormatter(val) : ""),
         },
         {
-          name: "plannedEnd",
-          label: this.$t("fundingsCol.end"),
+          name: "applicationProcess",
           align: "left",
-          field: row => dateFormatter(!!row.project && row.project.plannedEnd),
+          label: this.$t("ProjectDashboard.applicationProcess"),
+          field: "applicationProcessSteps",
           sortable: true,
-          sort: (a, b, rowA, rowB) => {
-            const dateA = new Date(!!rowA.project && rowA.project.plannedEnd);
-            const dateB = new Date(!!rowB.project && rowB.project.plannedEnd);
-            return dateB - dateA;
-          }
+        },
+        {
+          name: "status",
+          align: "left",
+          label: this.$t("ProjectDashboard.status"),
+          field: "status",
+          sortable: true,
         },
         {
           name: "owner",
@@ -947,26 +878,6 @@ export default {
           sortable: true
         },
         {
-          name: "type",
-          label: this.$t("statsTable.type"),
-          align: "left",
-          field: row => !!row.funding && this.$t(row.funding.type),
-          sortable: true
-        },
-        {
-          name: "categories",
-          align: "left",
-          label: this.$t("fundingsCol.categories"),
-          field: row =>
-            (!!row.funding &&
-              !!row.funding.categories &&
-              row.funding.categories
-                .map(category => category.title)
-                .join(", ")) ||
-            this.$t("NoCategories"),
-          sortable: true
-        },
-        {
           name: "plannedStart",
           label: this.$t("fundingsCol.start"),
           align: "left",
@@ -991,14 +902,6 @@ export default {
             return dateB - dateA;
           }
         },
-        {
-          name: "owner",
-          label: this.$t("Owner"),
-          align: "left",
-          field: row =>
-            !!row.funding && !!row.funding.owner && row.funding.owner.username,
-          sortable: true
-        }
       ];
     },
     checklistCols() {
@@ -1056,9 +959,9 @@ export default {
       const savedPagination = JSON.parse(localStorage.getItem("pagination"));
 
       this.$refs.table.setPagination({
-          page: savedPagination.watchListPage || 1,
-          rowsPerPage: savedPagination.watchListRowsPerPage || 10,
-        });
+        page: savedPagination.watchListPage || 1,
+        rowsPerPage: savedPagination.watchListRowsPerPage || 10,
+      });
     }
   },
   beforeDestroy() {

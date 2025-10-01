@@ -1,32 +1,14 @@
 <template>
   <div>
-    <div
-      class="row q-col-gutter-y-lg"
-      :class="users.length > 0 ? 'q-mb-lg' : 'q-mb-lg'"
-    >
-      <div
-        v-for="(user, index) in users"
-        :key="index"
-        class="col-12"
-        :class="index > 0 ? 'q-pt-lg' : ''"
-      >
-        <div
-          class="row items-baseline"
-          :class="{ 'q-col-gutter-x-md': $q.screen.gt.sm }"
-        >
+    <div class="row">
+      <div v-for="(user, index) in users" :key="index" class="col-12">
+        <div class="row items-baseline" :class="{ 'q-col-gutter-x-md': $q.screen.gt.sm }">
           <div class="col-11">
             <div class="row q-col-gutter-x-md">
               <div class="col-12">
-                <q-select
-                  outlined
-                  dense
-                  :value="user.username"
-                  :rules="[(val) => !!val || $t('Required')]"
-                  :options="userOptions"
-                  options-selected-class="text-primary text-weight-600"
-                  class="no-shadow input-radius-6"
-                  @input="onSelect($event, index)"
-                >
+                <q-select outlined dense :value="user.username" :rules="[(val) => !!val || $t('Required')]"
+                  :options="userOptions" options-selected-class="text-primary text-weight-600"
+                  class="no-shadow input-radius-6" @input="onSelect($event, index)">
                   <template v-slot:selected>
                     <template v-if="!!user && !!user.id">
                       {{ user.username }}
@@ -40,16 +22,13 @@
                   <template v-slot:option="scope">
                     <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
                       <q-item-section>
-                        <q-item-label
-                          :class="
-                            scope.opt.username === user.username ||
-                            (!!scope.opt &&
-                              !!scope.opt.user_detail &&
-                              scope.opt.user_detail.fullName === user.username)
-                              ? 'text-primary text-weight-600'
-                              : ''
-                          "
-                        >
+                        <q-item-label :class="scope.opt.username === user.username ||
+                          (!!scope.opt &&
+                            !!scope.opt.user_detail &&
+                            scope.opt.user_detail.fullName === user.username)
+                          ? 'text-primary text-weight-600'
+                          : ''
+                          ">
                           <span class="text-grey-7">{{
                             (!!scope.opt &&
                               !!scope.opt.user_detail &&
@@ -61,8 +40,8 @@
                             -
                             {{
                               !!scope.opt &&
-                              !!scope.opt.user_detail &&
-                              !!scope.opt.user_detail.fullName
+                                !!scope.opt.user_detail &&
+                                !!scope.opt.user_detail.fullName
                                 ? scope.opt.user_detail.fullName
                                 : scope.opt.username
                             }}
@@ -76,29 +55,14 @@
             </div>
           </div>
           <div class="col-1">
-            <q-btn
-              @click="removeUser(index)"
-              icon="delete"
-              flat
-              round
-              color="red"
-              size="md"
-            />
+            <q-btn @click="removeUser(index)" icon="delete" flat round color="red" size="md" />
           </div>
         </div>
       </div>
     </div>
     <div class="row">
-      <q-btn
-        no-caps
-        @click="addUser()"
-        outline
-        class="radius-6"
-        icon="add"
-        size="md"
-        color="primary"
-        :label="$t('addEditors')"
-      />
+      <q-btn no-caps @click="addUser()" outline class="radius-6" icon="add" size="md" color="primary"
+        :label="$t('addEditors')" />
     </div>
   </div>
 </template>
@@ -117,6 +81,11 @@ export default {
       users: this.editing,
     };
   },
+  watch: {
+    editing(newVal) {
+      this.model = newVal;
+    }
+  },
   methods: {
     onSelect(value, selectedIndex) {
       if (!value) {
@@ -127,20 +96,12 @@ export default {
           ? value.user_detail.fullName
           : value.username;
       this.users[selectedIndex].id = value.id;
-      // this.users.forEach((user, index) => {
-      // if (index === selectedIndex) {
-      //   this.users[selectedIndex] = {
-      //     id: value.id,
-      //     username: value.username
-      //   };
-      // }
-      // });
       this.$emit(
         "update:user",
         this.users.length > 0
           ? this.users.map((user) => {
-              return { id: user.id };
-            })
+            return { id: user.id };
+          })
           : []
       );
     },
@@ -167,8 +128,8 @@ export default {
         "update:user",
         this.users.length > 0
           ? this.users.map((user) => {
-              return { id: user.id };
-            })
+            return { id: user.id };
+          })
           : []
       );
     },

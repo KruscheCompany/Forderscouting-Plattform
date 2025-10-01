@@ -2,6 +2,10 @@ export function setCategories(state, payload) {
   state.categories = payload;
 }
 
+export function setCategoriesSimplified(state, payload) {
+  state.categoriesSimplified = payload;
+}
+
 export function addCategory(state, payload) {
   if (!!payload) {
     state.categories.push({

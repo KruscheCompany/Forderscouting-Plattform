@@ -18,10 +18,6 @@ export function addNewProjectIdea(state, payload) {
   }
 }
 
-export function editProjectIdea(state, payload) {
-  console.log("edit project idea payload", payload);
-}
-
 export function deleteProjectIdea(state, payload) {
   if (!!payload) {
     state.projects = state.projects.filter(project => project.id !== payload);
@@ -44,5 +40,45 @@ export function setTempTags(state, payload) {
 export function archiveProject(state, payload) {
   if (state.project) {
     state.project.archived = true;
+  }
+}
+
+export function setCreatedProjectIdea(state, payload) {
+  state.createdProjectIdea = payload;
+}
+
+export function setProjectDashboardStats(state, payload) {
+  state.projectDashboardStats = payload;
+}
+
+export function setApplicationProcess(state, payload) {
+  state.applicationProcess = payload || [];
+}
+
+export function setFinancialPlan(state, payload) {
+  state.financialPlan = payload;
+}
+
+export function updateFundingCheckSteps(state, payload) {
+  if (state.project) {
+    state.project.fundingCheckSteps = payload;
+  }
+}
+
+export function updateProjectDevelopmentSteps(state, payload) {
+  if (state.project) {
+    state.project.projectDevelopmentSteps = payload;
+  }
+}
+
+export function updateProjectApplicationSteps(state, payload) {
+  if (state.project) {
+    state.project.projectApplicationSteps = payload;
+  }
+}
+
+export function updateApplicationProcessTabs(state, payload) {
+  if (state.project) {
+    state.project.applicationProcessSteps = payload;
   }
 }

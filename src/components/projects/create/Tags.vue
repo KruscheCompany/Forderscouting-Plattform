@@ -1,20 +1,10 @@
 <template>
   <div>
-    <q-select
-      outlined
-      dense
-      :rules="
-        requiresValidation === true
-          ? [val => (!!val && val.length > 0) || $t('Required')]
-          : []
-      "
-      v-model="model"
-      multiple
-      :options="tags"
-      options-selected-class="text-primary text-weight-600"
-      class="no-shadow input-radius-6"
-      @input="onSelect"
-    >
+    <q-select outlined dense :rules="requiresValidation === true
+        ? [val => (!!val && val.length > 0) || $t('Required')]
+        : []
+      " v-model="model" multiple :options="tags" options-selected-class="text-primary text-weight-600"
+      class="no-shadow input-radius-6" @input="onSelect">
       <template v-slot:selected>
         <template v-if="model && model.length > 0">
           <span v-for="(tag, index) in model" :key="index">
@@ -57,6 +47,11 @@ export default {
       model: this.editing
     };
   },
+  watch: {
+    editing(newVal) {
+      this.model = newVal;
+    }
+  },
   methods: {
     onSelect(value) {
       const tags = [];
@@ -69,8 +64,8 @@ export default {
 
     setTags() {
       this.model = this.editing
-      ? JSON.parse(JSON.stringify(this.$store.state.project.project.tags))
-      : null;
+        ? JSON.parse(JSON.stringify(this.$store.state.project.project.tags))
+        : null;
     },
 
     //Set the selected tags temporarily in the store to be accessible in other components
