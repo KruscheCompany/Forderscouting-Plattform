@@ -65,6 +65,19 @@ const routes = [
         component: () => import("pages/dashboard/DataOverview.vue")
       },
       {
+        path: "/project/dashboard",
+        name: "ProjectDashboard",
+        meta: {
+          title: "Project Dashboard",
+          titleDE: "Projekte Dashboard",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: false
+        },
+        icon: "/icons/Documents.svg",
+        component: () => import("pages/dashboard/ProjectDashboard.vue")
+      },
+      {
         path: "/watchlist",
         name: "watchlist",
         meta: {
@@ -273,19 +286,6 @@ const routes = [
           requireAdmin: false
         },
         component: () => import("pages/dashboard/ProjectView.vue")
-      },
-      {
-        path: "/project/dashboard",
-        name: "ProjectDashboard",
-        meta: {
-          title: "Project Dashboard",
-          titleDE: "Projekte Dashboard",
-          showInNavigation: true,
-          requireAuth: true,
-          requireAdmin: false
-        },
-        icon: "/icons/Documents.svg",
-        component: () => import("pages/dashboard/ProjectDashboard.vue")
       },
     ]
   },
