@@ -25,18 +25,24 @@
 
       <ProjectFundingCheckCreate ref="fundingCheckRef" class="q-my-md" :current-tab="step" :project-data="form"
         :created-project-id="createdProjectId" @funding-submitted="handleFundingSubmitted"
-        v-if="step !== 'project' && step !== 'qAndA'" />
+        v-if="step === 'fundingCheck'" />
 
       <ProjectViewFundingCheck v-if="step !== 'project' && step !== 'fundingCheck'" :project="form" :current-tab="step"
         class="q-my-md" />
 
-      <ProjectQAndACreate ref="qAndARef" v-if="step !== 'project' && step !== 'fundingCheck' && !skipQuestions"
+      <ProjectQAndACreate ref="qAndARef" v-if="step === 'qAndA' && !skipQuestions"
         :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
         @q-and-a-submitted="handleQAndASubmitted" />
 
-      <ProjectAptitudeCreate ref="aptitudeRef" v-if="step !== 'project' && step !== 'fundingCheck' && step !== 'qAndA'"
-        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
-        @aptitude-submitted="handleAptitudeSubmitted" />
+      <ProjectViewQAndA v-if="step !== 'project' && step !== 'fundingCheck' && step !== 'qAndA' && !skipQuestions"
+        :project="form" :current-tab="step" class="q-my-md" />
+
+      <ProjectAptitudeCreate ref="aptitudeRef" v-if="step === 'aptitude'" :created-project-id="createdProjectId"
+        :project-data="form" :current-tab="step" class="q-my-md" @aptitude-submitted="handleAptitudeSubmitted" />
+
+      <ProjectViewAptitude
+        v-if="step !== 'project' && step !== 'fundingCheck' && step !== 'qAndA' && step !== 'aptitude'" :project="form"
+        :current-tab="step" class="q-my-md" />
 
       <ProjectDecisionCreate ref="decisionRef" v-if="step === 'decision'" :created-project-id="createdProjectId"
         :project-data="form" :current-tab="step" class="q-my-md" @decision-submitted="handleDecisionSubmitted" />
@@ -47,6 +53,7 @@
       <ProjectViewContentDetails :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewFundingCheck :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewQAndA v-if="!skipQuestions" :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewGoals v-if="step === 'requirements'" :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectTaskPlanCreate ref="taskPlanRef" v-if="step === 'taskPlan'" :created-project-id="createdProjectId"
         :project-data="form" :current-tab="step" class="q-my-md" @taskPlan-submitted="goToNextStep(false)" />
@@ -151,6 +158,7 @@ import ProjectViewGuidelineContentCheck from 'src/components/projects/view/Proje
 import ProjectViewGuidelineFormCheck from 'src/components/projects/view/ProjectGuidelineFormCheck.vue';
 import ProjectViewFinancingCheck from 'src/components/projects/view/ProjectFinancingCheck.vue';
 import ProjectViewDocumentsCoordination from 'src/components/projects/view/ProjectDocumentsCoordination.vue';
+import ProjectViewAptitude from 'src/components/projects/view/ProjectAptitude.vue';
 
 
 export default {
@@ -181,7 +189,8 @@ export default {
     ProjectViewGuidelineContentCheck,
     ProjectViewGuidelineFormCheck,
     ProjectViewFinancingCheck,
-    ProjectViewDocumentsCoordination
+    ProjectViewDocumentsCoordination,
+    ProjectViewAptitude
   },
   data() {
     return {
