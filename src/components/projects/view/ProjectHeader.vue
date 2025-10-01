@@ -44,10 +44,11 @@
       <div class="col-12">
         <q-separator class="q-mt-sm q-mb-lg" />
         <ProjectActionButtons :project="project" :logged-in-user="loggedInUser" :is-admin="isAdmin"
-          :loading-states="loadingStates" @transfer-document="$emit('transfer-document')"
+          :loading-states="loadingStates" @transfer-document="(id) => $emit('transfer-document', id)"
           @export-to-pdf="$emit('export-to-pdf')" @add-to-watchlist="$emit('add-to-watchlist')"
           @edit-project="$emit('edit-project')" @duplicate-project="$emit('duplicate-project')"
-          @archive-project="$emit('archive-project')" @delete-project="$emit('delete-project')" />
+          @archive-project="(id) => $emit('archive-project', id)"
+          @delete-project="(id) => $emit('delete-project', id)" />
       </div>
     </q-card-section>
   </q-card>
