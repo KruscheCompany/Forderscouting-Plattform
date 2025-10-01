@@ -15,12 +15,6 @@
         :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="fundings">
         <p class="font-20 no-margin">{{ $t("myData.fundings") }}</p>
       </q-route-tab>
-      <q-route-tab :to="{ query: { tab: 'implementationChecklist' } }" exact replace class=" radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="implementationChecklist">
-        <p class="font-20 no-margin">
-          {{ $t("myData.implementationChecklist") }}
-        </p>
-      </q-route-tab>
     </q-tabs>
     <q-table class="radius-20 shadow-1 pagination-no-shadow" :data="data" :columns="columns" row-key="name"
       :hide-bottom="!isInPage && data.length > 0" :hide-header="!isInPage"
@@ -60,11 +54,6 @@
                   {{ $t("watchListHome.fundingsBtn") }}
                 </p>
               </q-tab>
-              <q-tab class="q-mr-lg radius-6 border-yellow" name="implementationChecklist">
-                <p class="font-14 text-weight-600 no-margin">
-                  {{ $t("watchListHome.implementationChecklistBtn") }}
-                </p>
-              </q-tab>
             </q-tabs>
           </div>
         </div>
@@ -91,11 +80,34 @@
         <q-tr :props="props">
           <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
             class="font-14 cursor-pointer">
-            {{
-              col.value && col.value.length > 145
-                ? col.value.substring(0, 145) + "..."
-                : col.value
-            }}
+            <template v-if="col.name === 'applicationProcess'">
+              <q-badge color="primary" class="text-white q-py-sm q-px-md" v-if="!props.row.applicationProcessSteps">
+                {{ $t("aiFundingCheck") }}
+              </q-badge>
+              <q-badge :color="getLastCompletedStepColor(props.row.project.applicationProcessSteps)"
+                :text-color="getLastCompletedStepTextColor(props.row.project.applicationProcessSteps)"
+                class="text-white q-py-sm q-px-md" v-else>
+                {{ getLastCompletedStep(props.row.project.applicationProcessSteps) }}
+              </q-badge>
+            </template>
+            <template v-else-if="col.name === 'status'">
+              <q-badge :color="getStatusColor(props.row.project.status)"
+                :class="props.row.project.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md">
+                {{ getStatusText(props.row.project.status) }}
+              </q-badge>
+            </template>
+            <template v-else>
+              <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
+                content-style="font-size: 14px">
+                {{ col.value }}
+              </q-tooltip>
+              {{
+                col.value && col.value.length > 125
+                  ? col.value.substring(0, 125) + "..."
+                  : col.value
+              }}
+            </template>
+
           </q-td>
           <q-td class="text-right" auto-width>
             <q-btn size="md" color="primary" round flat dense icon="more_vert" aria-label="Optionen">
@@ -192,7 +204,9 @@ export default {
         "carbs",
         "plannedStart",
         "plannedEnd",
-        "owner"
+        "owner",
+        "applicationProcess",
+        "updatedAt"
       ],
       deleteDialog: false,
       itemId: null,
@@ -465,7 +479,109 @@ export default {
     },
     getData() {
       this.$store.dispatch("userCenter/getWatchlists");
-    }
+    },
+    getLastCompletedStepColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'primary'; // Default color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'primary';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'primary'; // Blue
+        case 'projectDevelopment':
+          return 'blue-2'; // Light Blue
+        case 'application':
+          return 'blue-1'; // Green
+        default:
+          return 'primary'; // Default color
+      }
+    },
+    getLastCompletedStep(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return this.$t("aiFundingCheck");
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return this.$t("aiFundingCheck");
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Try to use translation key based on the name property first
+      // If not available, use the title directly, and if that's not available either, use a default
+      const translationKey = `${lastCompletedStep.name}`;
+      return this.$t(translationKey) ? this.$t(translationKey) : (lastCompletedStep.title || this.$t("aiFundingCheck"));
+    },
+
+    getLastCompletedStepTextColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'white'; // Default text color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'white';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine text color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'white'; // Blue badge - white text
+        case 'projectDevelopment':
+          return 'black'; // Light Blue badge - black text
+        case 'application':
+          return 'black'; // Green badge - black text
+        default:
+          return 'white'; // Default text color
+      }
+    },
+
+    getStatusText(status) {
+      if (status === "sentToFunding") {
+        return this.$t('projectComponents.submissionSigning.sentToFunding');
+      } else if (status === "grantNotice") {
+        return this.$t('Zuwendungsbescheid'); // Granted
+      } else if (status === "rejectionNotice") {
+        return this.$t('Ablehnungsbescheid'); // Rejected
+      } else {
+        return this.$t('In Bearbeitung'); // In progress (null)
+      }
+    },
+
+    getStatusColor(status) {
+      if (status === "grantNotice") {
+        return 'green'; // Granted - green badge
+      } else if (status === "rejectionNotice") {
+        return 'red'; // Rejected - red badge
+      } else if (status === "sentToFunding") {
+        return 'blue'; // Sent to funding - blue badge
+      } else {
+        return 'yellow'; // In progress - yellow badge
+      }
+    },
   },
   watch: {
     tab(newVal, oldVal) {
@@ -714,49 +830,26 @@ export default {
           sortable: true
         },
         {
-          name: "type",
-          label: this.$t("statsTable.type"),
-          align: "left",
-          field: row => !!row.project && this.$t(row.project.type),
-          sortable: true
-        },
-        {
-          name: "categories",
-          align: "left",
-          label: this.$t("myData.categories"),
-          field: row =>
-            (!!row.project &&
-              !!row.project.categories &&
-              row.project.categories
-                .map(category => category.title)
-                .join(", ")) ||
-            "No Categories",
-          sortable: true
-        },
-        {
-          name: "plannedStart",
-          label: this.$t("fundingsCol.start"),
-          align: "left",
-          field: row =>
-            dateFormatter(!!row.project && row.project.plannedStart),
+          name: "updatedAt",
+          align: "center",
+          label: this.$t("Speicherdatum"),
+          field: "updatedAt",
           sortable: true,
-          sort: (a, b, rowA, rowB) => {
-            const dateA = new Date(!!rowA.project && rowA.project.plannedStart);
-            const dateB = new Date(!!rowB.project && rowB.project.plannedStart);
-            return dateB - dateA;
-          }
+          format: (val) => (val ? dateFormatter(val) : ""),
         },
         {
-          name: "plannedEnd",
-          label: this.$t("fundingsCol.end"),
+          name: "applicationProcess",
           align: "left",
-          field: row => dateFormatter(!!row.project && row.project.plannedEnd),
+          label: this.$t("ProjectDashboard.applicationProcess"),
+          field: "applicationProcessSteps",
           sortable: true,
-          sort: (a, b, rowA, rowB) => {
-            const dateA = new Date(!!rowA.project && rowA.project.plannedEnd);
-            const dateB = new Date(!!rowB.project && rowB.project.plannedEnd);
-            return dateB - dateA;
-          }
+        },
+        {
+          name: "status",
+          align: "left",
+          label: this.$t("ProjectDashboard.status"),
+          field: "status",
+          sortable: true,
         },
         {
           name: "owner",
@@ -785,26 +878,6 @@ export default {
           sortable: true
         },
         {
-          name: "type",
-          label: this.$t("statsTable.type"),
-          align: "left",
-          field: row => !!row.funding && this.$t(row.funding.type),
-          sortable: true
-        },
-        {
-          name: "categories",
-          align: "left",
-          label: this.$t("fundingsCol.categories"),
-          field: row =>
-            (!!row.funding &&
-              !!row.funding.categories &&
-              row.funding.categories
-                .map(category => category.title)
-                .join(", ")) ||
-            this.$t("NoCategories"),
-          sortable: true
-        },
-        {
           name: "plannedStart",
           label: this.$t("fundingsCol.start"),
           align: "left",
@@ -829,14 +902,6 @@ export default {
             return dateB - dateA;
           }
         },
-        {
-          name: "owner",
-          label: this.$t("Owner"),
-          align: "left",
-          field: row =>
-            !!row.funding && !!row.funding.owner && row.funding.owner.username,
-          sortable: true
-        }
       ];
     },
     checklistCols() {

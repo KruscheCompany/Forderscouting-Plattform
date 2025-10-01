@@ -1,7 +1,7 @@
 <template>
   <div class="row items-center q-gutter-md">
 
-    <div class="col-auto">
+    <div v-if="showTransferButton" class="col-auto">
       <q-btn @click="editProject" color="yellow" unelevated class="radius-6 text-weight-600" no-caps icon="edit"
         aria-label="Edit" :loading="loadingStates.edit" text-color="blue">
         <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
