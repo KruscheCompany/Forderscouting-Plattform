@@ -11,12 +11,6 @@
         :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="fundings">
         <p class="font-20 no-margin">{{ $t("myData.fundings") }}</p>
       </q-route-tab>
-      <q-route-tab :to="{ query: { tab: 'implementationChecklist' } }" exact replace class=" radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="implementationChecklist">
-        <p class="font-20 no-margin">
-          {{ $t("myData.implementationChecklist") }}
-        </p>
-      </q-route-tab>
     </q-tabs>
     <q-table class="radius-20 shadow-1 pagination-no-shadow" :data="data" :columns="columns" row-key="title"
       :hide-bottom="!isInPage && data.length > 0" :hide-header="!isInPage"
@@ -97,13 +91,36 @@
         <q-tr :props="props">
           <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
             class="font-14 cursor-pointer">
-            {{
-              col.value && col.value.length > 145
-                ? col.value.substring(0, 145) + "..."
-                : col.value
-            }}
+            <template v-if="col.name === 'applicationProcess'">
+              <q-badge color="primary" class="text-white q-py-sm q-px-md" v-if="!props.row.applicationProcessSteps">
+                {{ $t("aiFundingCheck") }}
+              </q-badge>
+              <q-badge :color="getLastCompletedStepColor(props.row.applicationProcessSteps)"
+                :text-color="getLastCompletedStepTextColor(props.row.applicationProcessSteps)"
+                class="text-white q-py-sm q-px-md" v-else>
+                {{ getLastCompletedStep(props.row.applicationProcessSteps) }}
+              </q-badge>
+            </template>
+            <template v-else-if="col.name === 'status'">
+              <q-badge :color="getStatusColor(props.row.status)"
+                :class="props.row.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md">
+                {{ getStatusText(props.row.status) }}
+              </q-badge>
+            </template>
+            <template v-else>
+              <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
+                content-style="font-size: 14px">
+                {{ col.value }}
+              </q-tooltip>
+              {{
+                col.value && col.value.length > 125
+                  ? col.value.substring(0, 125) + "..."
+                  : col.value
+              }}
+            </template>
 
           </q-td>
+
           <q-td class="text-right" auto-width>
             <q-btn size="md" color="primary" round flat dense icon="more_vert" aria-label="Optionen">
               <q-menu transition-show="jump-down" transition-hide="jump-up">
@@ -179,7 +196,10 @@ export default {
         "categories",
         "status",
         "plannedStart",
-        "plannedEnd"
+        "plannedEnd",
+        "updatedAt",
+        "applicationProcess",
+        "owner"
       ],
       deleteDialog: false,
       requestDialog: false,
@@ -472,7 +492,109 @@ export default {
           null
         );
       }
-    }
+    },
+    getLastCompletedStepColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'primary'; // Default color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'primary';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'primary'; // Blue
+        case 'projectDevelopment':
+          return 'blue-2'; // Light Blue
+        case 'application':
+          return 'blue-1'; // Green
+        default:
+          return 'primary'; // Default color
+      }
+    },
+    getLastCompletedStep(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return this.$t("aiFundingCheck");
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return this.$t("aiFundingCheck");
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Try to use translation key based on the name property first
+      // If not available, use the title directly, and if that's not available either, use a default
+      const translationKey = `${lastCompletedStep.name}`;
+      return this.$t(translationKey) ? this.$t(translationKey) : (lastCompletedStep.title || this.$t("aiFundingCheck"));
+    },
+
+    getLastCompletedStepTextColor(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return 'white'; // Default text color
+      }
+
+      // Filter the steps that are done
+      const completedSteps = applicationProcessSteps.filter(step => step.done);
+
+      // If no completed steps, return default
+      if (completedSteps.length === 0) {
+        return 'white';
+      }
+
+      // Get the last completed step
+      const lastCompletedStep = completedSteps[completedSteps.length - 1];
+
+      // Determine text color based on the name of the last completed step
+      switch (lastCompletedStep.name) {
+        case 'aiFundingCheck':
+          return 'white'; // Blue badge - white text
+        case 'projectDevelopment':
+          return 'black'; // Light Blue badge - black text
+        case 'application':
+          return 'black'; // Green badge - black text
+        default:
+          return 'white'; // Default text color
+      }
+    },
+
+    getStatusText(status) {
+      if (status === "sentToFunding") {
+        return this.$t('projectComponents.submissionSigning.sentToFunding');
+      } else if (status === "grantNotice") {
+        return this.$t('Zuwendungsbescheid'); // Granted
+      } else if (status === "rejectionNotice") {
+        return this.$t('Ablehnungsbescheid'); // Rejected
+      } else {
+        return this.$t('In Bearbeitung'); // In progress (null)
+      }
+    },
+
+    getStatusColor(status) {
+      if (status === "grantNotice") {
+        return 'green'; // Granted - green badge
+      } else if (status === "rejectionNotice") {
+        return 'red'; // Rejected - red badge
+      } else if (status === "sentToFunding") {
+        return 'blue'; // Sent to funding - blue badge
+      } else {
+        return 'yellow'; // In progress - yellow badge
+      }
+    },
   },
   watch: {
     tab(val) {
@@ -552,29 +674,35 @@ export default {
           align: "left",
           field: row => row.title,
           sortable: true
+        }, {
+          name: "updatedAt",
+          align: "center",
+          label: this.$t("Speicherdatum"),
+          field: "updatedAt",
+          sortable: true,
+          format: (val) => (val ? dateFormatter(val) : ""),
         },
         {
-          name: "categories",
+          name: "applicationProcess",
           align: "left",
-          label: this.$t("myData.categories"),
-          field: row =>
-            (!!row.categories &&
-              row.categories.map(category => category.title).join(", ")) ||
-            this.$t("NoCategories"),
-          sortable: true
+          label: this.$t("ProjectDashboard.applicationProcess"),
+          field: "applicationProcessSteps",
+          sortable: true,
         },
         {
           name: "status",
-          label: "Status",
           align: "left",
-          field: row =>
-            row.published === true
-              ? this.$t("Published")
-              : row.published === false
-                ? this.$t("Draft")
-                : this.$t("Status Unavailable"),
-          sortable: true
-        }
+          label: this.$t("ProjectDashboard.status"),
+          field: "status",
+          sortable: true,
+        },
+        {
+          name: "owner",
+          align: "left",
+          label: this.$t("statsTable.owners"),
+          field: row => (row.owner ? row.owner.username : this.$t("Unknown")),
+          sortable: true,
+        },
       ];
     },
     fundingCols() {
