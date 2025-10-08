@@ -34,26 +34,7 @@
         <div class="row justify-center">
           <div class="col-12 col-md-8">
             <div class="row q-col-gutter-lg">
-              <div class="col-12 col-md-4">
-                <q-card class="full-height full-width bg-white radius-20 shadow-1">
-                  <q-card-section>
-                    <div class="row">
-                      <div class="col-12 text-center" style="position: absolute; top: -20px; right: 10px">
-                        <q-img spinner-color="primary" src="../assets/Idea.svg" style="height: 100%; max-width: 60px" />
-                      </div>
-                      <div class="col-12 text-center">
-                        <div class="font-16 text-weight-bold q-mb-none textColor ppeditorial" style="margin-top: 60px">
-                          {{ $t("projectIdeas") }}
-                        </div>
-                        <p class="q-mb-none textColor">
-                          {{ $t("projectIdeasDescription") }}
-                        </p>
-                      </div>
-                    </div>
-                  </q-card-section>
-                </q-card>
-              </div>
-              <div class="col-12 col-md-4">
+              <div class="col-12 col-md-6">
                 <q-card class="full-height full-width radius-20 shadow-1">
                   <q-card-section>
                     <div class="row">
@@ -73,7 +54,7 @@
                   </q-card-section>
                 </q-card>
               </div>
-              <div class="col-12 col-md-4">
+              <div class="col-12 col-md-6">
                 <q-card class="full-height full-width radius-20 shadow-1">
                   <q-card-section>
                     <div class="row">

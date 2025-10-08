@@ -39,26 +39,29 @@
         </q-tab-panel>
 
         <q-tab-panel name="Finanzplan">
+          <div class="row">
+            <div class="col-8 q-pr-sm">
+              <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                {{ $t('projectComponents.contentDetailsView.financialPlanDescription') }}
+              </h4>
 
-          <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-            {{ $t('projectComponents.contentDetailsView.briefTaskText') }}
-          </h4>
+              <q-banner rounded class="bg-grey-3 font-16">
+                <p class="q-my-sm text-block" v-html="financialPlanText"></p>
+              </q-banner>
+            </div>
+            <div class="col-4">
 
-          <q-banner rounded class="bg-grey-3 font-16">
-            <p class="q-my-sm text-block" v-html="financialPlanText"></p>
-          </q-banner>
-
-          <h4 class="font-16 text-blue-grey-10 q-mt-md q-mb-none">
-            {{ $t('projectComponents.contentDetails.financialPlanTitle') }}
-          </h4>
-
-          <div class="row q-col-gutter-md">
-            <div class="col-12 col-md-3" v-for="(stat, index) in financialPlan" :key="index">
-              <div class="shadow-0 radius-20 q-pa-md bg-grey-3" style="height: 130px">
-                <p class="font-14 text-blue-grey-10 q-mt-xs q-mb-none">{{ stat.title }}</p>
-                <p class="font-24 text-weight-bold text-blue q-mb-sm">
-                  {{ formatCurrency(stat.value) }}
-                </p>
+              <h4 class="font-16 text-blue-grey-10 q-my-none">
+                {{ $t('projectComponents.contentDetails.financialPlanTitle') }}
+              </h4>
+              <div class="col-12 col-md-4 q-mb-xs" v-for="(stat, index) in financialPlan" :key="index">
+                <div class="q-py-sm q-pl-md bg-grey-3" style="height: 40.5px">
+                  <p class="font-14 text-blue-grey-10 q-my-none">{{ stat.title }}:
+                    <span class="font-16 text-weight-bold text-blue">
+                      {{ formatCurrency(stat.value) }}
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -68,7 +71,7 @@
         <q-tab-panel name="Zeitplan">
 
           <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-            {{ $t('projectComponents.contentDetailsView.briefTaskText') }}
+            {{ $t('projectComponents.contentDetailsView.timelineDescription') }}
           </h4>
 
           <q-banner rounded class="bg-grey-3 font-16">
@@ -83,7 +86,7 @@
 
             <div class="col-4">
               <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                {{ $t('projectComponents.contentDetailsView.briefTaskText') }}
+                {{ $t('projectComponents.contentDetailsView.uploadsDescription') }}
               </h4>
               <q-banner rounded class="bg-grey-3 font-16" style="min-height: 144px;">
                 <p class="q-my-sm text-block" v-html="documentation"></p>
