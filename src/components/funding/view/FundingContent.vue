@@ -189,7 +189,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <h1 class="font-24 text-weight-regular q-my-none" style="line-height: 3rem;">
+          <h1 class="font-24 text-weight-regular q-my-lg" style="line-height: 3rem;">
             {{ funding.title || "" }}
           </h1>
         </div>
@@ -806,45 +806,73 @@
         <div class="col-12">
           <div class="row">
             <div class="col-12 q-mb-md">
-              <q-card class="shadow-1 radius-20">
-                <div v-if="!!funding.title">
-                  <q-card-section>
+              <q-card class="shadow-1 radius-20 row">
+                <div class="col-6">
+                  <div v-if="!!funding.title">
+                    <q-card-section>
+                      <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                        {{ $t("projectContent.fundingGuidelines") }}
+                      </h4>
+                      <div class="q-ml-md font-16">
+                        <p class="q-mb-sm">
+                          {{ funding.title || "" }}
+                        </p>
+                      </div>
+                    </q-card-section>
+                    <q-separator inset class="bg-blue opacity-10" />
+                  </div>
+                  <div v-if="!!funding.provider">
+                    <q-card-section>
+                      <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                        {{ $t("funding provider") }}
+                      </h4>
+                      <div class="q-ml-md font-16">
+                        <p class="q-mb-sm">
+                          {{ funding.provider || "" }}
+                        </p>
+                      </div>
+                    </q-card-section>
+                    <q-separator inset class="bg-blue opacity-10" />
+                  </div>
+                  <div v-if="!!funding.info && funding.info.contactName">
+                    <q-card-section>
+                      <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                        {{ $t("Contact person") }}
+                      </h4>
+                      <div class="q-ml-md font-16">
+                        <p class="q-mb-sm">
+                          {{ (!!funding.info && funding.info.contactName) || "" }}
+                        </p>
+                      </div>
+                    </q-card-section>
+                    <q-separator inset class="bg-blue opacity-10" />
+                  </div>
+
+                  <div>
+                    <q-card-section v-if="!!funding.info && !!funding.info.location">
+                      <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                        {{ $t("personalData.location") }}
+                      </h4>
+                      <div class="q-ml-md font-16">
+                        <p class="q-mb-sm">
+                          {{ (!!funding.info && funding.info.location) || "" }}
+                        </p>
+                      </div>
+                    </q-card-section>
+                    <q-separator inset class="bg-blue opacity-10" />
+                  </div>
+                  <q-card-section v-if="funding.editors && funding.editors.length > 0">
                     <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                      {{ $t("projectContent.fundingGuidelines") }}
+                      {{ $t("Invite Editor") }}
                     </h4>
                     <div class="q-ml-md font-16">
-                      <p class="q-mb-sm">
-                        {{ funding.title || "" }}
-                      </p>
+                      <div v-if="funding.editors && funding.editors.length > 0">
+                        <p v-for="(editor, index) in funding.editors" :key="index" class="q-mb-sm">
+                          {{ editor.username }}
+                        </p>
+                      </div>
                     </div>
                   </q-card-section>
-                  <q-separator inset class="bg-blue opacity-10" />
-                </div>
-                <div v-if="!!funding.provider">
-                  <q-card-section>
-                    <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                      {{ $t("funding provider") }}
-                    </h4>
-                    <div class="q-ml-md font-16">
-                      <p class="q-mb-sm">
-                        {{ funding.provider || "" }}
-                      </p>
-                    </div>
-                  </q-card-section>
-                  <q-separator inset class="bg-blue opacity-10" />
-                </div>
-                <div v-if="!!funding.info && funding.info.contactName">
-                  <q-card-section>
-                    <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                      {{ $t("Contact person") }}
-                    </h4>
-                    <div class="q-ml-md font-16">
-                      <p class="q-mb-sm">
-                        {{ (!!funding.info && funding.info.contactName) || "" }}
-                      </p>
-                    </div>
-                  </q-card-section>
-                  <q-separator inset class="bg-blue opacity-10" />
                 </div>
                 <div v-if="
                   (!!funding.info && funding.info.streetNo) ||
@@ -873,31 +901,7 @@
                   </q-card-section>
                   <q-separator inset class="bg-blue opacity-10" />
                 </div>
-                <div>
-                  <q-card-section v-if="!!funding.info && !!funding.info.location">
-                    <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                      {{ $t("personalData.location") }}
-                    </h4>
-                    <div class="q-ml-md font-16">
-                      <p class="q-mb-sm">
-                        {{ (!!funding.info && funding.info.location) || "" }}
-                      </p>
-                    </div>
-                  </q-card-section>
-                  <q-separator inset class="bg-blue opacity-10" />
-                </div>
-                <q-card-section v-if="funding.editors && funding.editors.length > 0">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("Invite Editor") }}
-                  </h4>
-                  <div class="q-ml-md font-16">
-                    <div v-if="funding.editors && funding.editors.length > 0">
-                      <p v-for="(editor, index) in funding.editors" :key="index" class="q-mb-sm">
-                        {{ editor.username }}
-                      </p>
-                    </div>
-                  </div>
-                </q-card-section>
+
               </q-card>
             </div>
           </div>

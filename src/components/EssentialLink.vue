@@ -1,38 +1,22 @@
 <template>
   <div>
     <q-list>
-      <q-item
-        v-for="link in dashboardRoutes"
-        :key="link.path"
-        clickable
-        v-ripple
-        class="q-px-lg"
-        :class="{ activeMenu: nextRoute === link.path }"
-        v-show="
-          (isAdmin === false &&
+      <q-item v-for="link in dashboardRoutes" :key="link.path" clickable v-ripple class="q-px-lg"
+        :class="{ activeMenu: nextRoute === link.path }" v-show="(isAdmin === false &&
             link.meta.requireAdmin === false &&
             link.meta.showInNavigation === true) ||
-            (isAdmin === true && link.meta.showInNavigation === true)
-        "
-        @click="prevent(link)"
-        role="navigation"
-      >
+          (isAdmin === true && link.meta.showInNavigation === true)
+          " @click="prevent(link)" role="navigation">
         <q-item-section avatar>
           <img class="icon-blue" alt="" :src="link.icon" />
         </q-item-section>
         <q-item-section style="color: #000055">
           <div>
-            {{ $i18n.locale === "en-us" ? link.meta.title : link.meta.titleDE }}
+            {{ $t(link.meta.title) }}
           </div>
         </q-item-section>
       </q-item>
-      <q-item
-        v-if="$q.screen.lt.md"
-        clickable
-        @click="$store.dispatch('userCenter/logout')"
-        v-ripple
-        class="q-px-lg"
-      >
+      <q-item v-if="$q.screen.lt.md" clickable @click="$store.dispatch('userCenter/logout')" v-ripple class="q-px-lg">
         <q-item-section avatar>
           <q-icon name="logout" />
         </q-item-section>
@@ -97,10 +81,12 @@ export default {
 .activeMenu {
   position: relative;
 }
+
 .activeMenu .q-focus-helper {
   background: #0050FF !important;
   opacity: 0.15 !important;
 }
+
 .activeMenu::before {
   position: absolute;
   left: 0;
@@ -110,6 +96,7 @@ export default {
   height: 100%;
   width: 3px;
 }
+
 //TODO: this class is applied to the current active link. made it white for now.
 .q-item--active {
   color: white;

@@ -45,11 +45,6 @@
                   {{ $t("myDataHome.fundingsBtn") }}
                 </p>
               </q-tab>
-              <q-tab class="q-mr-lg radius-6 border-yellow" name="implementationChecklist">
-                <p class="font-14 text-weight-600 no-margin">
-                  {{ $t("myDataHome.implementationChecklistBtn") }}
-                </p>
-              </q-tab>
             </q-tabs>
           </div>
         </div>
