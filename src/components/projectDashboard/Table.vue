@@ -164,8 +164,8 @@
                     <p v-if="item.title === 'Fördermittel'"
                       class="font-14 text-blue q-ml-sm q-mb-none text-weight-bold">{{
                         getSelectedFunding(props.row) }}</p>
-                    <q-btn v-if="item.title === 'Fördermittel'" flat dense round size="sm"
-                      icon="mdi-arrow-top-right-thin-circle-outline"
+                    <q-btn v-if="item.title === 'Fördermittel' && props.row.fundingMatches?.length" flat dense round
+                      size="sm" icon="mdi-arrow-top-right-thin-circle-outline"
                       @click.stop="openFundingLink(props.row.external_id)" class="funding-link-btn"
                       :disabled="!props.row.external_id" />
                   </div>
@@ -584,7 +584,7 @@ export default {
       }
     },
     getSelectedFunding(row) {
-      const funding = row.fundingMatches.find(funding => funding.selected);
+      const funding = row.fundingMatches?.find(funding => funding.selected);
       return funding ? funding.title : '';
     },
     openFundingLink(externalId) {
