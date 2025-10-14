@@ -56,8 +56,8 @@
               </h4>
               <div class="col-12 col-md-4 q-mb-xs" v-for="(stat, index) in financialPlan" :key="index">
                 <div class="q-py-sm q-pl-md bg-grey-3" style="height: 40.5px">
-                  <p class="font-14 text-blue-grey-10 q-my-none">{{ stat.title }}:
-                    <span class="font-16 text-weight-bold text-blue">
+                  <p class="font-14 text-blue text-weight-bold q-my-none">{{ stat.title }}:
+                    <span class="font-16 text-weight-regular">
                       {{ formatCurrency(stat.value) }}
                     </span>
                   </p>
@@ -84,11 +84,12 @@
 
           <div class="row justify-between">
 
-            <div class="col-4">
+            <div :class="hasMedia ? 'col-4' : 'col-12'">
               <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                 {{ $t('projectComponents.contentDetailsView.uploadsDescription') }}
               </h4>
-              <q-banner rounded class="bg-grey-3 font-16" style="min-height: 144px;">
+              <q-banner rounded class="bg-grey-3 font-16" style="align-items: flex-start;"
+                :style="hasMedia ? 'min-height: 400px;' : 'min-height: 144px;'">
                 <p class="q-my-sm text-block" v-html="documentation"></p>
               </q-banner>
 
@@ -113,7 +114,7 @@
               </div>
             </div>
 
-            <div class="col-8 q-pl-md">
+            <div v-if="hasMedia" class="col-8 q-pl-md" style="margin-top:39px">
               <ProjectMediaGallery :project="project" />
             </div>
 
@@ -243,6 +244,12 @@ export default {
     },
     files() {
       return this.project.files || [];
+    },
+    media() {
+      return this.project.media || [];
+    },
+    hasMedia() {
+      return this.media.length > 0;
     },
     hasFiles() {
       return this.files.length > 0;

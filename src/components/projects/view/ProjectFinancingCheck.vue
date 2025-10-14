@@ -5,23 +5,28 @@
       <q-card-section class="q-pt-none">
         <div class="row">
           <div class="col-8 q-pr-sm">
-            <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+            <h4 class="font-16 text-blue-grey-10 q-my-none">
               {{ $t('projectComponents.contentDetails.financingOverview') }}
             </h4>
-            <q-banner rounded class="bg-grey-3 font-16" style="min-height: 200px;">
+            <q-banner rounded class="bg-grey-3 font-16">
               <p class="q-my-sm text-block" v-html="financialPlanDescription"></p>
             </q-banner>
           </div>
           <div class="col-4">
-            <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+
+            <h4 class="font-16 text-blue-grey-10 q-my-none">
               {{ $t('projectComponents.contentDetails.financialPlanTitle') }}
             </h4>
-            <div v-for="(plan, index) in costAndFinance" :key="index" class="q-mb-md">
-              <div class="shadow-0 radius-6 q-pa-md bg-grey-3">
-                <p class="font-14 text-blue-grey-10 q-mt-xs q-mb-none">{{ plan.title }}</p>
-                <p class="font-16 text-weight-bold text-blue q-mb-sm">{{ formatCurrency(plan.value) }}</p>
+            <div class="col-12 col-md-4 q-mb-xs" v-for="(plan, index) in costAndFinance" :key="index">
+              <div class="q-py-sm q-pl-md bg-grey-3" style="height: 40.5px">
+                <p class="font-14 text-weight-bold q-my-none text-blue">{{ plan.title }}:
+                  <span class="font-16 text-weight-regular">
+                    {{ formatCurrency(plan.value) }}
+                  </span>
+                </p>
               </div>
             </div>
+
           </div>
         </div>
       </q-card-section>
@@ -93,5 +98,6 @@ export default {
 <style lang="scss" scoped>
 .text-block {
   white-space: pre-line;
+  min-height: 144px
 }
 </style>
