@@ -343,8 +343,8 @@
             <div class="col-12 col-md-8">
               <div class="row q-col-gutter-x-md">
                 <div class="col-12">
-                  <q-input outlined dense class="no-shadow input-radius-6" v-model="form.notes" color="primary"
-                    bg-color="white" placeholder="Hinweise zum Förderzeitraum">
+                  <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" v-model="form.notes"
+                    color="primary" bg-color="white" placeholder="Hinweise zum Förderzeitraum">
                   </q-input>
                 </div>
               </div>
@@ -382,8 +382,8 @@
                 <div class="col-12">
                   <q-file flat v-model="form.files" class="uploadInput input-radius-6 text-white" label-color="white"
                     dark bg-color="primary" :label="!!form.files && form.files.length > 0
-                        ? $t('Add Files')
-                        : $t('Select Files')
+                      ? $t('Add Files')
+                      : $t('Select Files')
                       " multiple display-value="" append>
                     <template v-slot:prepend>
                       <q-icon color="white" class="on-right" name="upload" />
@@ -395,13 +395,13 @@
                         <q-avatar rounded size="48px">
                           <small>{{
                             imgPreview(file).name.split(".")[1]
-                            }}</small>
+                          }}</small>
                         </q-avatar>
                       </q-item-section>
                       <q-item-section>
                         <q-item-label class="ellipsis" caption>{{
                           imgPreview(file).name
-                          }}</q-item-label>
+                        }}</q-item-label>
                       </q-item-section>
                       <q-item-section side>
                         <q-btn icon="delete" @click.prevent.stop="removeFile(index)" size="sm" round text-color="red"
