@@ -3,6 +3,28 @@
     <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t('projectComponents.fundingCheck.title')"
       header-class="bg-white text-black" v-model="expandedFundingCheck">
 
+      <!-- Error Banner for Missing User Data -->
+      <div v-if="!userDataValidation.isValid" class="q-pa-md">
+        <q-banner class="bg-negative text-black" rounded>
+          <template v-slot:avatar>
+            <q-icon name="warning" color="black" />
+          </template>
+          {{ userDataValidation.errorMessage }}
+        </q-banner>
+      </div>
+
+      <!-- Warning Banner for No Matching Fundings -->
+      <div
+        v-else-if="userDataValidation.isValid && getFundingMatches && getFundingMatches.length > 0 && fundingMatches.length === 0"
+        class="q-pa-md">
+        <q-banner class="bg-warning text-black q-pa-md" rounded>
+          <template v-slot:avatar>
+            <q-icon name="info" color="black" />
+          </template>
+          {{ $t('projectComponents.fundingCheck.noMatchingFundings') }}
+        </q-banner>
+      </div>
+
       <div class="row q-col-gutter-sm q-pa-md">
         <div class="col-12 col-sm-6 col-md-3 col-lg-2" v-for="(funding, index) in fundingMatches" :key="index">
           <div class="funding-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
@@ -151,9 +173,68 @@ export default {
   },
   computed: {
     ...mapGetters('ai', ['getFundingMatches', 'getLoadingFundingMatches']),
-    fundingMatches() {
-      return !!this.projectData.fundingMatches && this.projectData.fundingMatches.length > 0 ? this.projectData.fundingMatches.filter(funding => !funding.isFehlanzeige) : this.getFundingMatches;
+
+    // Get user details from store
+    userDetails() {
+      return this.$store.state.userCenter.user?.userDetails || null;
     },
+
+    // Get user's municipality
+    userMunicipality() {
+      return this.userDetails?.municipality || null;
+    },
+
+    // Get user's federal states from municipality
+    userFederalStates() {
+      return this.userMunicipality?.federalStates || [];
+    },
+
+    // Get all fundings from store
+    allFundings() {
+      const fundings = this.$store.state.funding.fundings;
+      if (fundings && fundings.data) {
+        return fundings.data;
+      }
+      return [];
+    },
+
+    // Check if user has required data
+    userDataValidation() {
+      const hasMunicipality = !!this.userMunicipality;
+      const hasFederalStates = this.userFederalStates && this.userFederalStates.length > 0;
+
+      return {
+        isValid: hasMunicipality && hasFederalStates,
+        hasMunicipality,
+        hasFederalStates,
+        errorMessage: this.getUserDataErrorMessage(hasMunicipality, hasFederalStates)
+      };
+    },
+
+    // Filter funding matches based on user's municipality and federal states
+    fundingMatches() {
+      // If project has saved funding matches, use them
+      if (this.projectData.fundingMatches && this.projectData.fundingMatches.length > 0) {
+        return this.projectData.fundingMatches.filter(funding => !funding.isFehlanzeige);
+      }
+
+      // Get matches from AI
+      const aiMatches = this.getFundingMatches;
+
+      // If no AI matches, return empty array
+      if (!aiMatches || aiMatches.length === 0) {
+        return [];
+      }
+
+      // Validate user data
+      if (!this.userDataValidation.isValid) {
+        return [];
+      }
+
+      // Filter matches
+      return this.filterFundingsByUserData(aiMatches);
+    },
+
     isLoadingMatches() {
       return this.getLoadingFundingMatches || false;
     },
@@ -222,7 +303,30 @@ export default {
   watch: {
     currentTab(newTab) {
       this.expandedFundingCheck = newTab === "fundingCheck";
+
+      // Show error when tab becomes active and user data is invalid
+      if (newTab === "fundingCheck" && !this.userDataValidation.isValid) {
+        this.showUserDataError();
+      }
     },
+
+    // Watch for changes in funding matches to show error if no matches
+    fundingMatches(newMatches) {
+      if (this.expandedFundingCheck && this.userDataValidation.isValid &&
+        this.getFundingMatches && this.getFundingMatches.length > 0 &&
+        newMatches.length === 0) {
+        this.$q.notify({
+          color: 'warning',
+          textColor: 'black',
+          iconColor: 'black',
+          message: this.$t('projectComponents.fundingCheck.noMatchingFundings'),
+          icon: 'info',
+          position: 'top',
+          timeout: 5000
+        });
+      }
+    },
+
     // Watch for changes in originalSelectedFundingIndices to set initial selections
     originalSelectedFundingIndices: {
       immediate: true,
@@ -234,6 +338,76 @@ export default {
     }
   },
   methods: {
+    // Get error message based on missing user data
+    getUserDataErrorMessage(hasMunicipality, hasFederalStates) {
+      if (!hasMunicipality && !hasFederalStates) {
+        return this.$t('projectComponents.fundingCheck.missingBoth');
+      } else if (!hasMunicipality) {
+        return this.$t('projectComponents.fundingCheck.missingMunicipality');
+      } else if (!hasFederalStates) {
+        return this.$t('projectComponents.fundingCheck.missingFederalStates');
+      }
+      return null;
+    },
+
+    // Filter fundings by user's municipality and federal states
+    filterFundingsByUserData(aiMatches) {
+      const userMunicipalityId = this.userMunicipality?.id;
+      const userFederalStateIds = this.userFederalStates.map(fs => fs.id);
+
+      return aiMatches.filter(match => {
+        // 1. Check if match has external_id
+        if (!match.external_id) {
+          return false;
+        }
+
+        // 2. Find the funding in store by external_id
+        const funding = this.allFundings.find(f => f.id === parseInt(match.external_id));
+
+        // If funding not found in store, exclude it
+        if (!funding) {
+          return false;
+        }
+
+        // 3a. Check if funding has municipalities and federalStates
+        const fundingMunicipalities = funding.attributes?.municipalities?.data || [];
+        const fundingFederalStates = funding.attributes?.federalStates?.data || [];
+
+        if (fundingMunicipalities.length === 0 || fundingFederalStates.length === 0) {
+          return false;
+        }
+
+        // 3b. Check if user's municipality is in funding's municipalities
+        const hasMunicipalityMatch = fundingMunicipalities.some(
+          m => m.id === userMunicipalityId
+        );
+
+        if (!hasMunicipalityMatch) {
+          return false;
+        }
+
+        // 3c. Check if ALL user's federal states are in funding's federal states
+        const hasAllFederalStatesMatch = userFederalStateIds.every(userFsId =>
+          fundingFederalStates.some(fundingFs => fundingFs.id === userFsId)
+        );
+
+        return hasAllFederalStatesMatch;
+      });
+    },
+
+    // Show error notification if user data is invalid
+    showUserDataError() {
+      if (!this.userDataValidation.isValid) {
+        this.$q.notify({
+          color: 'negative',
+          message: this.userDataValidation.errorMessage,
+          icon: 'warning',
+          position: 'top',
+          timeout: 5000
+        });
+      }
+    },
+
     toggleExpansion() {
       this.expanded = !this.expanded;
     },
@@ -480,6 +654,16 @@ export default {
         this.isSubmitting = false;
       }
     },
+  },
+
+  mounted() {
+    // Load all fundings when component mounts
+    this.$store.dispatch('funding/getFundings');
+
+    // Show error if user data is invalid and tab is active
+    if (this.expandedFundingCheck && !this.userDataValidation.isValid) {
+      this.showUserDataError();
+    }
   }
 };
 </script>
