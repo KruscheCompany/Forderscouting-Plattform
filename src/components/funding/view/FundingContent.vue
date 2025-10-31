@@ -189,8 +189,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <h1 class="font-24 text-weight-regular q-mt-lg q-mb-none" style="line-height: 3rem;">
-            {{ funding.title || "" }}
+          <h1 class="font-24 text-weight-regular q-mt-lg q-mb-none" style="line-height: 3rem;" v-html="sanitizeHtml(funding.title || '')">
           </h1>
         </div>
       </div>
@@ -207,8 +206,7 @@
         <section slot="pdf-content">
           <div class="row">
             <div class="col-12">
-              <h4 class="font-24 text-weight-regular q-my-none">
-                {{ funding.title || "" }}
+              <h4 class="font-24 text-weight-regular q-my-none" v-html="sanitizeHtml(funding.title || '')">
               </h4>
             </div>
           </div>
@@ -223,8 +221,7 @@
                           {{ $t("projectContent.fundingGuidelines") }}
                         </h4>
                         <div class="q-ml-md font-16">
-                          <p class="q-mb-sm">
-                            {{ funding.title || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.title || '')">
                           </p>
                         </div>
                       </q-card-section>
@@ -236,8 +233,7 @@
                           {{ $t("funding provider") }}
                         </h4>
                         <div class="q-ml-md font-16">
-                          <p class="q-mb-sm">
-                            {{ funding.provider || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.provider || '')">
                           </p>
                         </div>
                       </q-card-section>
@@ -249,8 +245,7 @@
                           {{ $t("Contact person") }}
                         </h4>
                         <div class="q-ml-md font-16">
-                          <p class="q-mb-sm">
-                            {{ (!!funding.info && funding.info.contactName) || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml((funding.info?.contactName) || '')">
                           </p>
                         </div>
                       </q-card-section>
@@ -267,17 +262,13 @@
                           {{ $t("Contact Details") }}
                         </h4>
                         <div class="q-ml-md font-16">
-                          <p class="q-mb-sm">
-                            {{ (!!funding.info && funding.info.streetNo) || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.streetNo || '')">
                           </p>
-                          <p class="q-mb-sm">
-                            {{ (!!funding.info && funding.info.postalCode) || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.postalCode || '')">
                           </p>
-                          <p class="q-mb-sm">
-                            {{ (!!funding.info && funding.info.phone) || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.phone || '')">
                           </p>
-                          <p class="q-mb-sm text-overflow">
-                            {{ (!!funding.info && funding.info.email) || "" }}
+                          <p class="q-mb-sm text-overflow" v-html="sanitizeHtml(funding.info?.email || '')">
                           </p>
                         </div>
                       </q-card-section>
@@ -289,8 +280,7 @@
                           {{ $t("personalData.location") }}
                         </h4>
                         <div class="q-ml-md font-16">
-                          <p class="q-mb-sm">
-                            {{ (!!funding.info && funding.info.location) || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.location || '')">
                           </p>
                         </div>
                       </q-card-section>
@@ -378,10 +368,8 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.goal
-                                  ? funding.details.goal
-                                  : ''
-                                  "></p>
+                                <p class="q-mt-sm q-mb-sm text-block"
+                                  v-html="sanitizeHtml(funding.details?.goal || '')"></p>
                               </div>
                             </div>
                           </div>
@@ -400,10 +388,8 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.funded
-                                  ? funding.details.funded
-                                  : ''
-                                  "></p>
+                                <p class="q-mt-sm q-mb-sm text-block"
+                                  v-html="sanitizeHtml(funding.details?.funded || '')"></p>
                               </div>
                             </div>
                           </div>
@@ -422,10 +408,8 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.notFunded
-                                  ? funding.details.notFunded
-                                  : ''
-                                  "></p>
+                                <p class="q-mt-sm q-mb-sm text-block"
+                                  v-html="sanitizeHtml(funding.details?.notFunded || '')"></p>
                               </div>
                             </div>
                           </div>
@@ -444,10 +428,8 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.willBeFunded
-                                  ? funding.details.willBeFunded
-                                  : ''
-                                  "></p>
+                                <p class="q-mt-sm q-mb-sm text-block"
+                                  v-html="sanitizeHtml(funding.details?.willBeFunded || '')"></p>
                               </div>
                             </div>
                           </div>
@@ -465,10 +447,8 @@
                         <div class="col-12 col-md-8">
                           <div class="q-ml-xs">
                             <div class="q-ml-md font-16">
-                              <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.condition
-                                ? funding.details.condition
-                                : ''
-                                "></p>
+                              <p class="q-mt-sm q-mb-sm text-block"
+                                v-html="sanitizeHtml(funding.details?.condition || '')"></p>
                             </div>
                           </div>
                         </div>
@@ -495,8 +475,7 @@
                                     : 'q-col-gutter-x-sm'
                                     ">
                                     <div class="col-10 col-md-auto">
-                                      <p class="q-mt-sm q-mb-sm inline-block">
-                                        {{ rate.content || "" }}
+                                      <p class="q-mt-sm q-mb-sm inline-block" v-html="sanitizeHtml(rate.content || '')">
                                       </p>
                                     </div>
                                     <div class="col-auto col-md-auto">
@@ -524,8 +503,7 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm">
-                                  {{ funding.ownContribution || "" }}
+                                <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.ownContribution || '')">
                                 </p>
                               </div>
                             </div>
@@ -607,8 +585,8 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.assessment ? funding.assessment : ''
-                                  "></p>
+                                <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.assessment || '')">
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -665,8 +643,7 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm">
-                                  {{ funding.notes || "" }}
+                                <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.notes || '')">
                                 </p>
                               </div>
                             </div>
@@ -814,8 +791,7 @@
                         {{ $t("funding provider") }}
                       </h4>
                       <div class="q-ml-md font-16">
-                        <p class="q-mb-sm">
-                          {{ funding.provider || "" }}
+                        <p class="q-mb-sm" v-html="sanitizeHtml(funding.provider || '')">
                         </p>
                       </div>
                     </q-card-section>
@@ -827,8 +803,7 @@
                         {{ $t("Contact person") }}
                       </h4>
                       <div class="q-ml-md font-16">
-                        <p class="q-mb-sm">
-                          {{ (!!funding.info && funding.info.contactName) || "" }}
+                        <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.contactName || '')">
                         </p>
                       </div>
                     </q-card-section>
@@ -841,8 +816,7 @@
                         {{ $t("personalData.location") }}
                       </h4>
                       <div class="q-ml-md font-16">
-                        <p class="q-mb-sm">
-                          {{ (!!funding.info && funding.info.location) || "" }}
+                        <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.location || '')">
                         </p>
                       </div>
                     </q-card-section>
@@ -872,17 +846,13 @@
                       {{ $t("Contact Details") }}
                     </h4>
                     <div class="q-ml-md font-16">
-                      <p class="q-mb-sm">
-                        {{ (!!funding.info && funding.info.streetNo) || "" }}
+                      <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.streetNo || '')">
                       </p>
-                      <p class="q-mb-sm">
-                        {{ (!!funding.info && funding.info.postalCode) || "" }}
+                      <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.postalCode || '')">
                       </p>
-                      <p class="q-mb-sm">
-                        {{ (!!funding.info && funding.info.phone) || "" }}
+                      <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.phone || '')">
                       </p>
-                      <p class="q-mb-sm text-overflow">
-                        {{ (!!funding.info && funding.info.email) || "" }}
+                      <p class="q-mb-sm text-overflow" v-html="sanitizeHtml(funding.info?.email || '')">
                       </p>
                     </div>
                   </q-card-section>
@@ -1075,8 +1045,7 @@
                                 : 'q-col-gutter-x-sm'
                                 ">
                                 <div class="col-10 col-md-auto">
-                                  <p class="q-mt-sm q-mb-sm inline-block">
-                                    {{ rate.content || "" }}
+                                  <p class="q-mt-sm q-mb-sm inline-block" v-html="sanitizeHtml(rate.content || '')">
                                   </p>
                                 </div>
                                 <div class="col-auto col-md-auto">
@@ -1104,8 +1073,7 @@
                       <div class="col-12 col-md-8">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
-                            <p class="q-mt-sm q-mb-sm">
-                              {{ funding.ownContribution ? funding.ownContribution + " %" : "" }}
+                            <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.ownContribution + ' %' || '')">
                             </p>
                           </div>
                         </div>
@@ -1187,8 +1155,7 @@
                       <div class="col-12 col-md-8">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
-                            <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.assessment ? funding.assessment : ''
-                              "></p>
+                            <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.assessment || '')"></p>
                           </div>
                         </div>
                       </div>
@@ -1245,8 +1212,7 @@
                       <div class="col-12 col-md-8">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
-                            <p class="q-mt-sm q-mb-sm">
-                              {{ funding.notes || "" }}
+                            <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.notes || '')">
                             </p>
                           </div>
                         </div>
@@ -1405,8 +1371,11 @@ import DeleteDialog from "components/data/DeleteDialog.vue";
 import ArchiveDialog from "components/data/ArchiveDialog.vue";
 import CommentDialog from "components/funding/view/CommentDialog.vue";
 import VueHtml2pdf from "vue-html2pdf";
+import htmlSanitizer from "src/mixins/htmlSanitizer.js";
+
 export default {
   name: "FundingViewContent",
+  mixins: [htmlSanitizer],
   data() {
     return {
       slide: 1,
