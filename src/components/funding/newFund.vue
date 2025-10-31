@@ -435,22 +435,6 @@
               <q-separator class="bg-blue opacity-10" />
             </div>
           </div>
-          <div class="row items-center">
-            <div class="col-12 col-md-4">
-              <p class="font-16 no-margin" :class="$q.screen.gt.md ? 'q-pr-xl' : ''">
-                {{ $t("Link to implementation checklist (optional)") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-8">
-              <ImplementationChecklists :editing="!!funding ? funding.checklist : null"
-                @update:linkToImplementationChecklist="form.checklist = $event" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
           <div class="row justify-center">
             <div class="col-5 col-md-3 q-ml-sm">
               <q-btn :label="$t('newProjectIdeaForm.publish')"
@@ -477,7 +461,6 @@ import Tags from "components/projects/create/Tags.vue";
 import FundingRate from "src/components/funding/FundingRate.vue";
 import Links from "src/components/projects/create/Links.vue";
 import ProjectIdeas from "components/funding/ProjectIdeas.vue";
-import ImplementationChecklists from "components/funding/ImplementationChecklists.vue";
 import Fundings from "components/funding/Fundings.vue";
 import ImageDialog from "components/ImageDialog.vue";
 import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
@@ -492,7 +475,6 @@ export default {
     MunicipalityCities,
     Links,
     ProjectIdeas,
-    ImplementationChecklists,
     Fundings,
     ImageDialog
   },
@@ -532,7 +514,6 @@ export default {
         categories: [],
         tags: [],
         projects: [],
-        checklist: null,
         media: null,
         files: null,
         fundingsLinkedTo: []

@@ -116,36 +116,6 @@
                         </q-tooltip></q-btn
                       >
                     </div>
-                    <!-- Redirect to checklist creation page -->
-                    <div
-                      v-if="
-                        isAdmin ||
-                          (!!project && !!project.owner && project.owner.id) ===
-                            (!!loggedInUser && loggedInUser.id)
-                      "
-                      class="col-auto q-mb-md"
-                    >
-                      <q-btn
-                        @click="createChecklist()"
-                        color="blue"
-                        unelevated
-                        class="radius-6 text-weight-600"
-                        no-caps
-                        icon="list"
-                        aria-label="Create Checklist"
-                        :loading="archiveIsLoading"
-                      >
-                        <q-tooltip
-                          anchor="top middle"
-                          self="bottom middle"
-                          :offset="[10, 10]"
-                        >
-                          {{
-                            $t("checkListCols.createImplementationChecklist")
-                          }}
-                        </q-tooltip></q-btn
-                      >
-                    </div>
                     <div class="col-auto q-mb-md">
                       <q-btn
                         @click="editProject()"

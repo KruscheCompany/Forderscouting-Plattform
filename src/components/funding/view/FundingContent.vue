@@ -741,10 +741,7 @@
                   </q-card>
                 </div>
 
-                <div v-if="
-                  (funding.projects && funding.projects.length > 0) ||
-                  (!!funding.checklist && !!funding.checklist.id)
-                " class="col-12 q-mb-md">
+                <div v-if="funding.projects && funding.projects.length > 0" class="col-12 q-mb-md">
                   <q-card class="shadow-1 radius-20">
                     <q-card-section class="q-pa-md items-start">
                       <div class="row">
@@ -773,36 +770,14 @@
                                 </div>
                               </div>
                             </div>
-                            <div v-if="!!funding.checklist && !!funding.checklist.id" class="q-ml-md font-16">
-                              <div class="row">
-                                <p class="q-mt-sm q-mb-xs">
-                                  {{ $t("Statistics.implementationChecklist") }}
-                                </p>
-                              </div>
-                              <div v-if="!!funding.checklist && !!funding.checklist.id">
-                                <div class="row">
-                                  <div class="col-auto">
-                                    <a class="q-mb-sm text-blue block text-weight-600 cursor-pointer" target="_blank"
-                                      rel="noopener noreferrer" @click.prevent="
-                                        viewChecklist(funding.checklist.id)
-                                        ">{{ funding.checklist.title }}</a>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
                           </div>
                         </div>
                       </div>
                     </q-card-section>
                   </q-card>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </vue-html2pdf>
 
-      <div class="row q-col-gutter-lg">
+                <div class="col-12 q-mb-md">
         <div class="col-12">
           <div class="row">
             <div class="col-12 q-mb-md">
@@ -1354,23 +1329,6 @@
                             </div>
                           </div>
                         </div>
-                        <div v-if="!!funding.checklist && !!funding.checklist.id" class="q-ml-md font-16">
-                          <div class="row">
-                            <p class="q-mt-sm q-mb-xs">
-                              {{ $t("Statistics.implementationChecklist") }}
-                            </p>
-                          </div>
-                          <div v-if="!!funding.checklist && !!funding.checklist.id">
-                            <div class="row">
-                              <div class="col-auto">
-                                <a class="q-mb-sm text-blue block text-weight-600 cursor-pointer" target="_blank"
-                                  rel="noopener noreferrer" @click.prevent="
-                                    viewChecklist(funding.checklist.id)
-                                    ">{{ funding.checklist.title }}</a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -1484,11 +1442,6 @@ export default {
     async viewProject(id) {
       if (!!id) {
         this.$router.push({ path: `/application/process/view/${id}` });
-      }
-    },
-    async viewChecklist(id) {
-      if (!!id) {
-        this.$router.push({ path: `/user/newChecklist/${id}` });
       }
     },
     async getNewData(id) {

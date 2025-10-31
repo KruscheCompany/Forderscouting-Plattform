@@ -269,31 +269,6 @@
                       </q-card-section>
 
                     </div>
-                    <!-- If checklist(s) selected -->
-
-                    <div v-if="project.checklists && project.checklists.length > 0">
-                      <q-card-section>
-                        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                          {{ $t("Implementation checklist") }}
-                        </h4>
-                        <div v-if="
-                          project.checklists && project.checklists.length > 0
-                        " class="font-16">
-                          <div class="row" v-for="(checklist, index) in project.checklists" :key="index">
-                            <div class="col-auto q-ml-md">
-                              <a class="q-mb-sm text-blue block text-weight-600 cursor-pointer"
-                                @click.prevent="viewChecklist(checklist.id)">{{ checklist.title }}</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="q-ml-md font-16" v-else>
-                          <p class="q-mb-sm q-mt-xs">
-                            No Implementation Checklists
-                          </p>
-                        </div>
-                      </q-card-section>
-
-                    </div>
 
                     <q-card-section>
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">

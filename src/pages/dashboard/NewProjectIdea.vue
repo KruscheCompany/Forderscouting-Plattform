@@ -285,22 +285,6 @@
               <q-separator class="bg-blue opacity-10" />
             </div>
           </div>
-          <div class="row items-center">
-            <div class="col-12 col-md-4">
-              <p class="font-16 no-margin">
-                {{ $t("homeBtns.checkListBtn") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-8">
-              <Checklists :requiresValidation="false" :editing="!!project ? project.checklists : []"
-                @update:linkToProject="form.checklists = $event" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
           <div class="row items-baseline">
             <div class="col-12 col-md-4">
               <p class="font-16 no-margin">
@@ -480,7 +464,6 @@ import Links from "components/projects/create/Links.vue";
 import Fundings from "components/funding/Fundings.vue";
 import ImageDialog from "components/ImageDialog.vue";
 import { dateFormatter } from "src/boot/dateFormatter";
-import Checklists from "components/projects/implementationChecklists/implementationChecklists.vue";
 import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
 
 export default {
@@ -492,7 +475,6 @@ export default {
     EstimatedCost,
     MunicipalityCities,
     Links,
-    Checklists,
     Fundings,
     ImageDialog,
   },
@@ -524,7 +506,6 @@ export default {
           status: "",
         },
         fundingGuideline: [],
-        checklists: [],
         municipality: "",
         editors: [],
         categories: [],
