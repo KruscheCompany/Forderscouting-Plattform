@@ -8,6 +8,10 @@
         <q-stepper v-model="step" ref="stepper" color="primary" class="shadow-0" :contracted="$q.screen.lt.md" animated>
           <q-step style="min-height: 50vh" :name="1" :title="$t('generalData.selectUser')" icon="person_outline"
             :done="step > 1">
+            <div class="q-mb-md">
+              <q-btn :disable="!form.selectedUser" @click="$refs.stepper.next()" color="primary"
+                :label="$t('Select Data')" :loading="isLoading" class="full-width" />
+            </div>
             <q-input borderless outlined class="input-radius-6 no-shadow q-mb-sm q-mt-sm" v-model="filter"
               :placeholder="$t('Search')" dense role="searcbox">
               <template v-slot:prepend>
@@ -42,6 +46,16 @@
           </q-step>
 
           <q-step style="min-height: 50vh" :name="2" :title="$t('Select Data')" icon="account_tree" :done="step > 2">
+            <div class="row q-col-gutter-sm q-mb-md">
+              <div class="col-6">
+                <q-btn outline color="primary" @click="$refs.stepper.previous()" :label="$t('Back')"
+                  class="full-width" />
+              </div>
+              <div class="col-6">
+                <q-btn :disable="form.data.length === 0" @click="transferData" color="primary" :label="$t('generalData.transferData')" 
+                  class="full-width" />
+              </div>
+            </div>
             <div class="row">
               <div class="col-12">
                 <p class="font-16 ">
@@ -65,17 +79,6 @@
               </div>
             </div>
           </q-step>
-
-          <template v-slot:navigation>
-            <q-stepper-navigation class="flex ">
-              <q-btn v-if="step > 1" outline color="primary" @click="$refs.stepper.previous()" :label="$t('Back')"
-                class="q-ml-sm" />
-              <q-space />
-              <q-btn v-if="step > 1" @click="transferData" color="primary" :label="$t('generalData.transferData')" />
-              <q-btn :disable="!form.selectedUser" v-if="step === 1" @click="$refs.stepper.next()" color="primary"
-                :label="$t('Select Data')" :loading="isLoading" />
-            </q-stepper-navigation>
-          </template>
         </q-stepper>
       </q-card-section>
     </q-card>
