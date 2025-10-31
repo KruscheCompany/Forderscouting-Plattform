@@ -11,12 +11,6 @@
         :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="fundings">
         <p class="font-20 no-margin">{{ $t("myData.fundings") }}</p>
       </q-route-tab>
-      <q-route-tab :to="{ query: { tab: 'implementationChecklist' } }" exact replace class=" radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="implementationChecklist">
-        <p class="font-20 no-margin">
-          {{ $t("myData.implementationChecklist") }}
-        </p>
-      </q-route-tab>
     </q-tabs>
     <q-table class="radius-20 shadow-1 pagination-no-shadow" :data="data" :columns="columns" row-key="title"
       :hide-bottom="!isInPage && data.length > 0" :hide-header="!isInPage"
@@ -51,11 +45,6 @@
               <q-tab class="q-mr-lg radius-6 border-yellow" name="fundings">
                 <p class="font-14 text-weight-600 no-margin">
                   {{ $t("myDataHome.fundingsBtn") }}
-                </p>
-              </q-tab>
-              <q-tab class="q-mr-lg radius-6 border-yellow" name="implementationChecklist">
-                <p class="font-14 text-weight-600 no-margin">
-                  {{ $t("myDataHome.implementationChecklistBtn") }}
                 </p>
               </q-tab>
             </q-tabs>
@@ -275,33 +264,6 @@ export default {
         } else {
           this.$router.push({ path: `/user/newFunding/${id}` });
         }
-      } else {
-        if (
-          row.visibility === "listed only" &&
-          (!!row.owner && row.owner.id) !==
-          (!!this.loggedInUser && this.loggedInUser.id) &&
-          !this.isAdmin
-        ) {
-          const hasReaderAccess =
-            !!row.readers &&
-            row.readers.filter(
-              user => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          const hasEditorAccess =
-            !!row.editors &&
-            row.editors.filter(
-              user => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          if (hasReaderAccess.length > 0 || hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newChecklist/${id}` });
-          } else {
-            this.itemId = row && row.id;
-            this.type = "view";
-            this.requestDialog = true;
-          }
-        } else {
-          this.$router.push({ path: `/user/newChecklist/${id}` });
-        }
       }
       this.viewIsLoading = false;
     },
@@ -350,27 +312,6 @@ export default {
         } else {
           this.$router.push({ path: `/user/newFunding/edit/${id}` });
         }
-      } else {
-        if (
-          (!!row.owner && row.owner.id) !==
-          (!!this.loggedInUser && this.loggedInUser.id) &&
-          !this.isAdmin
-        ) {
-          const hasEditorAccess =
-            !!row.editors &&
-            row.editors.filter(
-              user => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          if (hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newChecklist/edit/${id}` });
-          } else {
-            this.itemId = row && row.id;
-            this.type = "edit";
-            this.requestDialog = true;
-          }
-        } else {
-          this.$router.push({ path: `/user/newChecklist/edit/${id}` });
-        }
       }
       this.editIsLoading = false;
     },
@@ -393,13 +334,6 @@ export default {
           id: id
         });
         this.archiveIsLoading = false;
-      } else {
-        this.archiveIsLoading = true;
-        const id = row && row.id;
-        await this.$store.dispatch("implementationChecklist/archiveChecklist", {
-          id: id
-        });
-        this.archiveIsLoading = false;
       }
     },
     async addToWatchlist(row) {
@@ -417,13 +351,6 @@ export default {
           id: id
         });
         this.watchlistIsLoading = false;
-      } else {
-        this.watchlistIsLoading = true;
-        const id = row && row.id;
-        await this.$store.dispatch("implementationChecklist/addToWatchlist", {
-          id: id
-        });
-        this.watchlistIsLoading = false;
       }
     },
     goToPage(page) {
@@ -433,12 +360,6 @@ export default {
       } else if (page === "fundings") {
         this.$store.commit("funding/setSpecificFunding", null);
         this.$router.push({ path: "/user/newFunding" });
-      } else {
-        this.$store.commit(
-          "implementationChecklist/setSpecificChecklist",
-          null
-        );
-        this.$router.push({ path: "/user/newChecklist" });
       }
     },
     getData(tab) {
@@ -448,12 +369,6 @@ export default {
       } else if (tab == "fundings") {
         this.$store.dispatch("funding/getFundings");
         this.$store.commit("funding/setSpecificFunding", null);
-      } else {
-        this.$store.dispatch("implementationChecklist/getChecklists");
-        this.$store.commit(
-          "implementationChecklist/setSpecificChecklist",
-          null
-        );
       }
     }
   },
@@ -463,8 +378,6 @@ export default {
         this.getData("projectIdeas");
       } else if (val === "fundings") {
         this.getData("fundings");
-      } else {
-        this.getData("implementationChecklist");
       }
     }
   },
@@ -490,9 +403,7 @@ export default {
     columns() {
       return this.tab == "projectIdeas"
         ? this.projectCols
-        : this.tab == "fundings"
-          ? this.fundingCols
-          : this.checklistCols;
+        : this.fundingCols;
     },
     data() {
       return this.tab == "projectIdeas"
@@ -500,15 +411,10 @@ export default {
         this.$store.state.project.projects.filter((item) => {
           return item.visibility != "only for me"
         })
-        : this.tab == "fundings"
-          ? !!this.$store.state.funding.fundings &&
-          this.$store.state.funding.fundings.filter((item) => {
-            return item.visibility != "only for me"
-          })
-          : !!this.$store.state.implementationChecklist.checklists &&
-          this.$store.state.implementationChecklist.checklists.filter((item) => {
-            return item.visibility != "only for me"
-          });
+        : !!this.$store.state.funding.fundings &&
+        this.$store.state.funding.fundings.filter((item) => {
+          return item.visibility != "only for me"
+        });
     },
     projectCols() {
       return [
@@ -599,46 +505,6 @@ export default {
             const dateB = new Date(rowB.plannedEnd);
             return dateB - dateA;
           }
-        },
-        {
-          name: "status",
-          label: "Status",
-          align: "left",
-          field: row =>
-            row.published === true
-              ? this.$t("Published")
-              : row.published === false
-                ? this.$t("Draft")
-                : this.$t("Status Unavailable"),
-          sortable: true
-        }
-      ];
-    },
-    checklistCols() {
-      return [
-        {
-          name: "id",
-          label: "id",
-          align: "left",
-          field: row => row.id,
-          sortable: true
-        },
-        {
-          name: "title",
-          label: this.$t("checkListCols.title"),
-          align: "left",
-          field: row => row.title,
-          sortable: true
-        },
-        {
-          name: "categories",
-          align: "left",
-          label: this.$t("checkListCols.categories"),
-          field: row =>
-            (!!row.categories &&
-              row.categories.map(category => category.title).join(", ")) ||
-            "No Categories",
-          sortable: true
         },
         {
           name: "status",

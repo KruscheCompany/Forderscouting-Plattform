@@ -71,10 +71,6 @@
                 <q-checkbox v-model="form.data" val="Funding" :label="$t('myData.fundings')" color="primary" />
               </div>
               <div class="col-6">
-                <q-checkbox v-model="form.data" val="Checklist" :label="$t('myData.implementationChecklist')"
-                  color="primary" />
-              </div>
-              <div class="col-6">
                 <q-checkbox v-model="form.data" val="Watchlist" :label="$t('Statistics.watchList')" color="primary" />
               </div>
             </div>

@@ -189,7 +189,8 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <h1 class="font-24 text-weight-regular q-mt-lg q-mb-none" style="line-height: 3rem;" v-html="sanitizeHtml(funding.title || '')">
+          <h1 class="font-24 text-weight-regular q-mt-lg q-mb-none" style="line-height: 3rem;"
+            v-html="sanitizeHtml(funding.title || '')">
           </h1>
         </div>
       </div>
@@ -719,8 +720,7 @@
                 </div>
 
                 <div v-if="
-                  (funding.projects && funding.projects.length > 0) ||
-                  (!!funding.checklist && !!funding.checklist.id)
+                  (funding.projects && funding.projects.length > 0)
                 " class="col-12 q-mb-md">
                   <q-card class="shadow-1 radius-20">
                     <q-card-section class="q-pa-md items-start">
@@ -746,23 +746,6 @@
                                     <a class="q-mb-sm text-blue block text-weight-600 cursor-pointer" target="_blank"
                                       rel="noopener noreferrer" @click.prevent="viewProject(project.id)">{{
                                         project.title }}</a>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div v-if="!!funding.checklist && !!funding.checklist.id" class="q-ml-md font-16">
-                              <div class="row">
-                                <p class="q-mt-sm q-mb-xs">
-                                  {{ $t("Statistics.implementationChecklist") }}
-                                </p>
-                              </div>
-                              <div v-if="!!funding.checklist && !!funding.checklist.id">
-                                <div class="row">
-                                  <div class="col-auto">
-                                    <a class="q-mb-sm text-blue block text-weight-600 cursor-pointer" target="_blank"
-                                      rel="noopener noreferrer" @click.prevent="
-                                        viewChecklist(funding.checklist.id)
-                                        ">{{ funding.checklist.title }}</a>
                                   </div>
                                 </div>
                               </div>
@@ -1289,8 +1272,7 @@
             </div>
 
             <div v-if="
-              (funding.projects && funding.projects.length > 0) ||
-              (!!funding.checklist && !!funding.checklist.id)
+              (funding.projects && funding.projects.length > 0)
             " class="col-12 q-mb-md">
               <q-card class="shadow-1 radius-20">
                 <q-card-section class="q-pa-md items-start">
@@ -1316,23 +1298,6 @@
                                 <a class="q-mb-sm text-blue block text-weight-600 cursor-pointer" target="_blank"
                                   rel="noopener noreferrer" @click.prevent="viewProject(project.id)">{{ project.title
                                   }}</a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div v-if="!!funding.checklist && !!funding.checklist.id" class="q-ml-md font-16">
-                          <div class="row">
-                            <p class="q-mt-sm q-mb-xs">
-                              {{ $t("Statistics.implementationChecklist") }}
-                            </p>
-                          </div>
-                          <div v-if="!!funding.checklist && !!funding.checklist.id">
-                            <div class="row">
-                              <div class="col-auto">
-                                <a class="q-mb-sm text-blue block text-weight-600 cursor-pointer" target="_blank"
-                                  rel="noopener noreferrer" @click.prevent="
-                                    viewChecklist(funding.checklist.id)
-                                    ">{{ funding.checklist.title }}</a>
                               </div>
                             </div>
                           </div>
@@ -1453,11 +1418,6 @@ export default {
     async viewProject(id) {
       if (!!id) {
         this.$router.push({ path: `/application/process/view/${id}` });
-      }
-    },
-    async viewChecklist(id) {
-      if (!!id) {
-        this.$router.push({ path: `/user/newChecklist/${id}` });
       }
     },
     async getNewData(id) {
