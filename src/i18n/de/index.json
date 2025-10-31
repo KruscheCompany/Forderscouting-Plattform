@@ -232,7 +232,15 @@
     "delete": "Löschen",
     "createState": "Gemeinde anlegen",
     "stateName": "Gemeinde",
-    "statesOverview": "Gemeindeübersicht"
+    "statesOverview": "Gemeindeübersicht",
+    "selectFederalStates": "Bundesländer auswählen"
+  },
+  "federalStates": {
+    "overview": "Bundesländer-Übersicht",
+    "createFederalState": "Bundesland anlegen",
+    "federalStateName": "Bundesland",
+    "edit": "Bearbeiten",
+    "delete": "Löschen"
   },
   "DetailsAdministration": {
     "location": "Ort",
@@ -442,6 +450,9 @@
   "deleteAdministrationMessage": "Wollen Sie diese Verwaltung wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
   "deleteState": "Gemeinde löschen",
   "deleteStateMessage": "Wollen Sie diesen Gemeinden wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
+  "editFederalState": "Bundesland bearbeiten",
+  "deleteFederalState": "Bundesland löschen",
+  "deleteFederalStateMessage": "Wollen Sie dieses Bundesland wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
   "approve": "Genehmigen",
   "addEditors": "Bearbeiter*innen hinzufügen",
   "Add Images": "Bilder hinzufügen",
@@ -594,6 +605,11 @@
   "Add file": "Datei hinzufügen",
   "Content": " Anmerkung zur Förderquote",
   "Amount": "Höhe der Förderquote",
+  "emailSent": "E-Mail erfolgreich gesendet",
+  "emailNotSent": "E-Mail konnte nicht gesendet werden",
+  "pleaseFillAllFields": "Bitte füllen Sie alle Felder aus",
+  "attachFiles": "Dateien anhängen",
+  "E-Mails": "E-Mails",
   "byAcceptingYouAgree": "Indem Sie auf \"Akzeptieren\" klicken, erklären Sie sich mit unserem Impressum und unseren Datenschutzbestimmungen einverstanden.",
   "Sunday": "Sonntag",
   "Monday": "Montag",
@@ -873,7 +889,11 @@
       "errorRefresh": "Fehler beim Aktualisieren der Förderungen",
       "errorSaving": "Fehler beim Speichern der Förderauswahl",
       "pleaseSelect": "Bitte wählen Sie mindestens eine Förderung aus oder markieren Sie \"Fehlanzeige\"",
-      "Project funding comparison": "Projekt-Fördermittel-Abgleich"
+      "Project funding comparison": "Projekt-Fördermittel-Abgleich",
+      "missingMunicipality": "Ihre Gemeinde ist nicht in Ihrem Profil eingerichtet. Bitte kontaktieren Sie einen Administrator, um dies zu beheben.",
+      "missingFederalStates": "Ihre Bundesländer sind nicht in Ihrem Profil eingerichtet. Bitte kontaktieren Sie einen Administrator, um dies zu beheben.",
+      "missingBoth": "Ihre Gemeinde und Bundesländer sind nicht in Ihrem Profil eingerichtet. Bitte kontaktieren Sie einen Administrator, um dies zu beheben.",
+      "noMatchingFundings": "Keine passenden Förderungen für Ihre Gemeinde und Bundesländer gefunden."
     },
     "qAndA": {
       "title": "Offene Fragen & Antworten",
