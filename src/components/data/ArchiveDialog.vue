@@ -6,11 +6,7 @@
           {{
             tab == "projectIdeas"
               ? $t("Archive Project Idea")
-              : tab === "fundings"
-              ? $t("Archive Funding")
-              : tab === "implementationChecklist"
-              ? $t("Archive Implementation Checklist")
-              : ""
+              : $t("Archive Funding")
           }}
         </h6>
       </q-card-section>
@@ -20,13 +16,7 @@
             {{
               tab == "projectIdeas"
                 ? $t("Are you sure you want to archive this Project Idea?")
-                : tab === "fundings"
-                ? $t("Are you sure you want to archive this Funding?")
-                : tab === "implementationChecklist"
-                ? $t(
-                    "Are you sure you want to archive this Implementation Checklist?"
-                  )
-                : ""
+                : $t("Are you sure you want to archive this Funding?")
             }}
           </p>
         </div></q-card-section
@@ -90,19 +80,6 @@ export default {
         const res = await this.$store.dispatch("funding/archiveFunding", {
           id: id
         });
-        this.isLoading = false;
-        if (res !== false) {
-          this.$_options = false;
-        }
-      } else {
-        this.isLoading = true;
-        const id = this.id;
-        const res = await this.$store.dispatch(
-          "implementationChecklist/archiveChecklist",
-          {
-            id: id
-          }
-        );
         this.isLoading = false;
         if (res !== false) {
           this.$_options = false;

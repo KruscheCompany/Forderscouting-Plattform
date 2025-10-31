@@ -6,11 +6,7 @@
           {{
             tab == "projectIdeas"
               ? $t("Delete Project Idea")
-              : tab === "fundings"
-              ? $t("Delete Funding")
-              : tab === "implementationChecklist"
-              ? $t("Delete Implementation Checklist")
-              : ""
+              : $t("Delete Funding")
           }}
         </h6>
       </q-card-section>
@@ -22,15 +18,9 @@
                 ? $t(
                     "Are you sure you want to delete this Project Idea? It will be removed from all documents"
                   )
-                : tab === "fundings"
-                ? $t(
+                : $t(
                     "Are you sure you want to delete this Funding? It will be removed from all documents"
                   )
-                : tab === "implementationChecklist"
-                ? $t(
-                    "Are you sure you want to delete this Implementation Checklist? It will be removed from all documents"
-                  )
-                : ""
             }}
           </p>
         </div>
@@ -94,19 +84,6 @@ export default {
         const res = await this.$store.dispatch("funding/deleteFunding", {
           id: id
         });
-        this.isLoading = false;
-        if (res !== false) {
-          this.$_options = false;
-        }
-      } else {
-        this.isLoading = true;
-        const id = this.id;
-        const res = await this.$store.dispatch(
-          "implementationChecklist/deleteChecklist",
-          {
-            id: id
-          }
-        );
         this.isLoading = false;
         if (res !== false) {
           this.$_options = false;

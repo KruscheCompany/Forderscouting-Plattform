@@ -6,11 +6,7 @@
           {{
             tab == "projectIdeas"
               ? $t("You don't have access to this Project Idea")
-              : tab === "fundings"
-              ? $t("You don't have access to this Funding")
-              : tab === "implementationChecklist"
-              ? $t("You don't have access to this Checklist")
-              : ""
+              : $t("You don't have access to this Funding")
           }}
         </h6>
       </q-card-section>
@@ -88,21 +84,6 @@ export default {
           type: this.type,
           guest: this.isGuest
         });
-        this.isLoading = false;
-        if (res !== false) {
-          this.$_options = false;
-        }
-      } else {
-        this.isLoading = true;
-        const res = await this.$store.dispatch(
-          "implementationChecklist/requestAccess",
-          {
-            id: this.id,
-            userId: !!this.loggedInUser && this.loggedInUser.id,
-            type: this.type,
-            guest: this.isGuest
-          }
-        );
         this.isLoading = false;
         if (res !== false) {
           this.$_options = false;
