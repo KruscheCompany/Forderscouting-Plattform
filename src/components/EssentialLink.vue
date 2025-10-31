@@ -3,8 +3,8 @@
     <q-list>
       <q-item v-for="link in dashboardRoutes" :key="link.path" clickable v-ripple class="q-px-lg"
         :class="{ activeMenu: nextRoute === link.path }" v-show="(isAdmin === false &&
-            link.meta.requireAdmin === false &&
-            link.meta.showInNavigation === true) ||
+          link.meta.requireAdmin === false &&
+          link.meta.showInNavigation === true) ||
           (isAdmin === true && link.meta.showInNavigation === true)
           " @click="prevent(link)" role="navigation">
         <q-item-section avatar>
@@ -95,10 +95,5 @@ export default {
   background: yellow;
   height: 100%;
   width: 3px;
-}
-
-//TODO: this class is applied to the current active link. made it white for now.
-.q-item--active {
-  color: white;
 }
 </style>

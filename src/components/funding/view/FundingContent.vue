@@ -286,7 +286,7 @@
                       </q-card-section>
                       <q-separator inset class="bg-blue opacity-10" />
                     </div>
-                    <q-card-section v-if="funding.editors && funding.editors.length > 0">
+                    <q-card-section v-if="funding.editors && funding.editors.length > 0 && isAdmin">
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Invite Editor") }}
                       </h4>
@@ -822,7 +822,7 @@
                     </q-card-section>
                     <!-- <q-separator inset class="bg-blue opacity-10" /> -->
                   </div>
-                  <q-card-section v-if="funding.editors && funding.editors.length > 0">
+                  <q-card-section v-if="funding.editors && funding.editors.length > 0 && isAdmin">
                     <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                       {{ $t("Invite Editor") }}
                     </h4>
@@ -1073,7 +1073,7 @@
                       <div class="col-12 col-md-8">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
-                            <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.ownContribution || '')">
+                            <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.ownContribution + ' %' || '')">
                             </p>
                           </div>
                         </div>
@@ -1374,7 +1374,7 @@ import VueHtml2pdf from "vue-html2pdf";
 import htmlSanitizer from "src/mixins/htmlSanitizer.js";
 
 export default {
-  name: "FundingView",
+  name: "FundingViewContent",
   mixins: [htmlSanitizer],
   data() {
     return {

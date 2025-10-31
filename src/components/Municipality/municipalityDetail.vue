@@ -1,16 +1,8 @@
 <template>
   <div class="q-my-lg" :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'">
     <div class="row q-col-gutter-md">
-      <!-- <div class="col-12 col-md-auto"> -->
-      <!-- <q-card class="left-card radius-20 flex flex-center"> -->
-      <!-- <q-card-section> -->
-      <!-- TODO make this q-img -->
-      <!-- <img class="logo" al src="../../assets/Wappen.png" /> -->
-      <!-- </q-card-section> -->
-      <!-- </q-card> -->
-      <!-- </div> -->
       <div class="col-12 col-md-grow">
-        <q-card class="radius-20 bg-blue-1 right-card">
+        <q-card class="radius-20 bg-blue-1 shadow-2 q-pa-md">
           <q-card-section>
             <h6 class="q-mt-none q-mb-sm">
               {{ !!municipality && municipality.title }}
