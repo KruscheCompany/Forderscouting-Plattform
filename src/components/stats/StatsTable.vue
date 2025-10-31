@@ -476,34 +476,6 @@ export default {
         } else {
           this.$router.push({ path: `/user/newFunding/${id}` });
         }
-      } else {
-        this.tab = "implementationChecklist";
-        if (
-          row.visibility === "listed only" &&
-          (!!row.owner && row.owner.id) !==
-          (!!this.loggedInUser && this.loggedInUser.id) &&
-          !this.isAdmin
-        ) {
-          const hasReaderAccess =
-            !!row.readers &&
-            row.readers.filter(
-              (user) => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          const hasEditorAccess =
-            !!row.editors &&
-            row.editors.filter(
-              (user) => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          if (hasReaderAccess.length > 0 || hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newChecklist/${id}` });
-          } else {
-            this.itemId = row && row.id;
-            this.itemType = "view";
-            this.requestDialog = true;
-          }
-        } else {
-          this.$router.push({ path: `/user/newChecklist/${id}` });
-        }
       }
       this.viewIsLoading = false;
     },
@@ -556,28 +528,6 @@ export default {
         } else {
           this.$router.push({ path: `/user/newFunding/edit/${id}` });
         }
-      } else {
-        this.tab = "implementationChecklist";
-        if (
-          (!!row.owner && row.owner.id) !==
-          (!!this.loggedInUser && this.loggedInUser.id) &&
-          !this.isAdmin
-        ) {
-          const hasEditorAccess =
-            !!row.editors &&
-            row.editors.filter(
-              (user) => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          if (hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newChecklist/edit/${id}` });
-          } else {
-            this.itemId = row && row.id;
-            this.itemType = "edit";
-            this.requestDialog = true;
-          }
-        } else {
-          this.$router.push({ path: `/user/newChecklist/edit/${id}` });
-        }
       }
       this.editIsLoading = false;
     },
@@ -588,10 +538,6 @@ export default {
         this.deleteDialog = true;
       } else if (row.type === "funding") {
         this.tab = "fundings";
-        this.itemId = row && row.id;
-        this.deleteDialog = true;
-      } else {
-        this.tab = "implementationChecklist";
         this.itemId = row && row.id;
         this.deleteDialog = true;
       }

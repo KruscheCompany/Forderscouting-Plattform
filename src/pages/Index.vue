@@ -54,6 +54,26 @@
                   </q-card-section>
                 </q-card>
               </div>
+              <div class="col-12 col-md-6">
+                <q-card class="full-height full-width radius-20 shadow-1">
+                  <q-card-section>
+                    <div class="row">
+                      <div class="col-12 text-center" style="position: absolute; top: -20px; right: 10px">
+                        <q-img spinner-color="primary" src="../assets/Checklists.svg"
+                          style="height: 100%; max-width: 80px" />
+                      </div>
+                      <div class="col-12 text-center">
+                        <div class="font-16 text-weight-bold q-mb-none textColor ppeditorial" style="margin-top: 60px">
+                          {{ $t("implementationChecklists") }}
+                        </div>
+                        <p class="q-mb-none textColor">
+                          {{ $t("implementationChecklistsDescription") }}
+                        </p>
+                      </div>
+                    </div>
+                  </q-card-section>
+                </q-card>
+              </div>
             </div>
           </div>
         </div>

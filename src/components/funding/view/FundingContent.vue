@@ -1354,6 +1354,11 @@
                 </q-card>
               </q-dialog>
             </div>
+          </div>
+        </section>
+      </vue-html2pdf>
+    </div>
+  </div>
 </template>
 
 <script>

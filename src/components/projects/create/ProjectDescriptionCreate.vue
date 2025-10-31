@@ -143,7 +143,7 @@ export default {
     async checkOptionalParameters() {
       if (!this.project) {
         // Clean up any deprecated fields that might exist
-        const deprecatedFields = ['plannedStart', 'plannedEnd', 'fundingGuideline', 'checklists', 'municipality', 'estimatedCosts'];
+        const deprecatedFields = ['plannedStart', 'plannedEnd', 'fundingGuideline', 'municipality', 'estimatedCosts'];
         deprecatedFields.forEach(field => {
           if (this.form.hasOwnProperty(field)) {
             delete this.form[field];
