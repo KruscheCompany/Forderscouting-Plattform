@@ -395,13 +395,13 @@
                         <q-avatar rounded size="48px">
                           <small>{{
                             imgPreview(file).name.split(".")[1]
-                          }}</small>
+                            }}</small>
                         </q-avatar>
                       </q-item-section>
                       <q-item-section>
                         <q-item-label class="ellipsis" caption>{{
                           imgPreview(file).name
-                        }}</q-item-label>
+                          }}</q-item-label>
                       </q-item-section>
                       <q-item-section side>
                         <q-btn icon="delete" @click.prevent.stop="removeFile(index)" size="sm" round text-color="red"

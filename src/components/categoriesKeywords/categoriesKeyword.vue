@@ -190,7 +190,7 @@ export default {
       deleteDialog: false,
       itemId: null,
       filter: "",
-      visibleColumns: ["title", "projectIdeas", "fundings", "checklists"]
+      visibleColumns: ["title", "projectIdeas", "fundings"]
     };
   },
   methods: {
@@ -257,13 +257,6 @@ export default {
           align: "left",
           label: this.$t("myData.fundings"),
           field: row => (!!row.dataSet.fundings && row.dataSet.fundings) || 0,
-          sortable: true
-        },
-        {
-          name: "checklists",
-          align: "left",
-          label: this.$t("myData.implementationChecklist"),
-          field: row => (!!row.dataSet.checklist && row.dataSet.checklist) || 0,
           sortable: true
         }
       ];

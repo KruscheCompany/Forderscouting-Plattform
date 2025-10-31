@@ -58,16 +58,14 @@
                       : noti.typeOfNoti == "requests"
                         ? noti.project != null
                           ? noti.project.title
-                          : noti.funding != null
-                            ? noti.funding.title
-                            : noti.checklist.title
+                          : noti.funding.title
                         : ""
               }}
             </p>
           </div>
           <div :class="$q.screen.lt.md
-              ? 'text-center q-mt-md col-md col-12'
-              : 'text-right col-md col-12'
+            ? 'text-center q-mt-md col-md col-12'
+            : 'text-right col-md col-12'
             ">
             <q-btn @click="view(noti)" v-if="
               noti.typeOfNoti == 'fundingComments' ||

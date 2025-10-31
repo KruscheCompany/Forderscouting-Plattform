@@ -411,10 +411,6 @@ export default {
             table[item].forEach((funding) => {
               data.push({ ...funding, type: "project" });
             });
-          } else if (item === "checklists") {
-            table[item].forEach((funding) => {
-              data.push({ ...funding, type: "checklist" });
-            });
           }
           this.data = data;
         }
@@ -628,10 +624,6 @@ export default {
         this.$api.put(`/api/fundings/${row.id}`, data).then((response) => {
           this.getArchivedStats();
         });
-      } else {
-        this.$api.put(`/api/checklists/${row.id}`, data).then((response) => {
-          this.getArchivedStats();
-        });
       }
     },
   },
@@ -695,10 +687,6 @@ export default {
         {
           value: "funding",
           label: this.$t("funding"),
-        },
-        {
-          value: "checklist",
-          label: this.$t("checklist"),
         },
       ];
     },

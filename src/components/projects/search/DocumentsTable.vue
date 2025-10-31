@@ -88,11 +88,7 @@ export default {
           field: row =>
             row.type === "project"
               ? "Projektidee"
-              : row.type === "funding"
-              ? "Förderinfo"
-              : row.type === "checklist"
-              ? "Umsetzungscheckliste"
-              : "",
+              : "Förderinfo",
           sortable: true
         },
         {
@@ -144,10 +140,6 @@ export default {
           } else if (item === "projects") {
             data[item].forEach(funding => {
               this.data.push({ ...funding, type: "project" });
-            });
-          } else if (item === "checklists") {
-            data[item].forEach(funding => {
-              this.data.push({ ...funding, type: "checklist" });
             });
           }
         }

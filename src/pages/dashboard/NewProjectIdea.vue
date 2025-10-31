@@ -28,15 +28,15 @@
                 <div class="col-12 col-md-6">
                   <q-input outlined dense class="no-shadow input-radius-6 disabledClass"
                     :placeholder="$t('projectIdeaPlaceholder.nameSurname')" :value="!!project
-                        ? form.info.contactName
-                        : !!userDetails && userDetails.fullName
+                      ? form.info.contactName
+                      : !!userDetails && userDetails.fullName
                       " disable />
                 </div>
                 <div class="col-12 col-md-6">
                   <q-input outlined dense disable class="no-shadow input-radius-6 disabledClass"
                     placeholder="Gemeinde/Verwaltung" :value="!!project
-                        ? form.municipality.title
-                        : !!userDetails && userDetails.municipality.title
+                      ? form.municipality.title
+                      : !!userDetails && userDetails.municipality.title
                       " :rules="[]" />
                 </div>
               </div>
@@ -53,15 +53,15 @@
                 <div class="col-12 col-md-6">
                   <q-input outlined dense class="no-shadow input-radius-6 disabledClass"
                     :placeholder="$t('projectIdeaPlaceholder.streetNr')" :value="!!project
-                        ? form.info.streetNo
-                        : !!userDetails && userDetails.streetNo
+                      ? form.info.streetNo
+                      : !!userDetails && userDetails.streetNo
                       " disable />
                 </div>
                 <div class="col-12 col-md-6">
                   <q-input outlined dense class="no-shadow input-radius-6 disabledClass"
                     :placeholder="$t('projectIdeaPlaceholder.postalCity/place')" :value="!!project
-                        ? form.info.postalCode
-                        : !!userDetails && userDetails.postalCode
+                      ? form.info.postalCode
+                      : !!userDetails && userDetails.postalCode
                       " disable />
                 </div>
                 <div class="col-12 col-md-6">
@@ -363,8 +363,8 @@
                 <div class="col-12 col-md-6">
                   <q-file flat v-model="form.media" class="uploadInput input-radius-6 text-white" label-color="white"
                     dark bg-color="primary" :label="!!form.media && form.media.length > 0
-                        ? $t('Add Images')
-                        : $t('Select Images')
+                      ? $t('Add Images')
+                      : $t('Select Images')
                       " multiple display-value="" append>
                     <template v-slot:prepend>
                       <q-icon color="white" class="on-right" name="upload" />
@@ -381,7 +381,7 @@
                       <div class="col-8">
                         <q-item-label class="ellipsis" caption>{{
                           imgPreview(image).name
-                          }}</q-item-label>
+                        }}</q-item-label>
                       </div>
                       <div class="col-auto text-right">
                         <q-btn icon="delete" @click.prevent.stop="removeImg(index)" size="sm" round text-color="red"
@@ -390,8 +390,8 @@
                       </div>
                       <div class="col-12 q-mt-sm">
                         <q-btn :label="!!imgPreview(image).caption
-                            ? $t('Edit caption')
-                            : $t('Add Caption')
+                          ? $t('Edit caption')
+                          : $t('Add Caption')
                           " @click.prevent.stop="addCaption(image, index)" text-color="primary" dense class="radius-6"
                           no-caps flat>
                         </q-btn>
@@ -402,8 +402,8 @@
                 <div class="col-12 col-md-6">
                   <q-file flat v-model="form.files" class="uploadInput input-radius-6 text-white" label-color="white"
                     dark bg-color="primary" :label="!!form.files && form.files.length > 0
-                        ? $t('Add Files')
-                        : $t('Select Files')
+                      ? $t('Add Files')
+                      : $t('Select Files')
                       " multiple display-value="" append>
                     <template v-slot:prepend>
                       <q-icon color="white" class="on-right" name="upload" />
@@ -419,7 +419,7 @@
                       <q-item-section>
                         <q-item-label class="ellipsis" caption>{{
                           imgPreview(file).name
-                          }}</q-item-label>
+                        }}</q-item-label>
                       </q-item-section>
                       <q-item-section side>
                         <q-btn icon="delete" @click.prevent.stop="removeFile(index)" size="sm" round text-color="red"
