@@ -36,10 +36,6 @@ export default {
           value: this.statsData.projects,
         },
         {
-          title: this.$t("Statistics.implementationChecklist"),
-          value: this.statsData.checklists,
-        },
-        {
           title: this.$t("Statistics.administration/user"),
           value: this.statsData.users,
         },
@@ -52,10 +48,6 @@ export default {
           value: this.statsData.archivedProjects,
         },
         {
-          title: this.$t("Statistics.checklistArchive"),
-          value: this.statsData.archivedChecklists,
-        },
-        {
           title: this.$t("Statistics.watchList"),
           value: this.statsData.watchlists,
         },
@@ -66,10 +58,6 @@ export default {
         {
           title: this.$t("Statistics.projectTotalDups"),
           value: this.statsData.projectTotalDups,
-        },
-        {
-          title: this.$t("Statistics.checklistTotalDups"),
-          value: this.statsData.checklistTotalDups,
         },
         {
           title: this.$t("Statistics.totalDups"),

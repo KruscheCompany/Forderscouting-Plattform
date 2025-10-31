@@ -259,17 +259,6 @@ export default {
           } else {
             this.$router.push({ path: `/user/newFunding/${noti.funding.id}` });
           }
-        } else if (noti.checklist != null) {
-          if (noti.checklist.owner.id != this.loggedInUser.id) {
-            this.tab = "implementationChecklist";
-            this.itemId = noti.checklist.id;
-            this.itemType = "view";
-            this.requestDialog = true;
-          } else {
-            this.$router.push({
-              path: `/user/newChecklist/${noti.checklist.id}`,
-            });
-          }
         }
       }
     },

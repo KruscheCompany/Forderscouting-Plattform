@@ -34,3 +34,6 @@ yarn-error.log*
 .env
 .env.dev
 yarn.lock
+
+CHECKLIST_REMOVAL_EXECUTION_PLAN.md
+CHECKLIST_REMOVAL_RISK_ASSESSMENT.md
