@@ -192,8 +192,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" placeholder="Förderziel"
-                v-model="form.details.goal" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.goal" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -203,8 +224,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                placeholder="Was wird gefördert" v-model="form.details.funded" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.funded" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -214,8 +256,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                placeholder="Was wird nicht gefördert" v-model="form.details.notFunded" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.notFunded" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -225,8 +288,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                :placeholder="$t('Who will be funded?')" v-model="form.details.willBeFunded" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.willBeFunded" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -236,8 +320,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                placeholder="Rahmenbedingungen für Antragsteller*in" v-model="form.details.condition" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.condition" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row">
@@ -303,8 +408,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                :placeholder="$t('Basis for assessment')" v-model="form.assessment" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.assessment" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row">
@@ -370,9 +496,29 @@
             <div class="col-12 col-md-8">
               <div class="row q-col-gutter-x-md">
                 <div class="col-12">
-                  <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" v-model="form.notes"
-                    color="primary" bg-color="white" placeholder="Hinweise zum Förderzeitraum">
-                  </q-input>
+                  <q-editor outlined class="no-shadow input-radius-6" v-model="form.notes" :toolbar="[
+                    [
+                      {
+                        label: $q.lang.editor.align,
+                        icon: $q.iconSet.editor.align,
+                        fixedLabel: true,
+                        list: 'only-icons',
+                        options: ['left', 'center', 'right', 'justify']
+                      }
+                    ],
+                    ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                    ['hr', 'link'],
+                    ['fullscreen'],
+                    [
+                      {
+                        label: $q.lang.editor.formatting,
+                        icon: $q.iconSet.editor.formatting,
+                        list: 'no-icons',
+                        options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                      }
+                    ],
+                    ['undo', 'redo']
+                  ]" />
                 </div>
               </div>
             </div>
