@@ -655,9 +655,6 @@ export default {
         } else {
           // this.$refs.fundings.validate();
         }
-        if (!this.form.checklist) {
-          delete this.form.checklist;
-        }
         if (!!this.form.projects && this.form.projects.length < 1) {
           delete this.form.projects;
         }
