@@ -81,6 +81,33 @@
           <div class="row items-center">
             <div class="col-12 col-md-4">
               <p class="font-16 no-margin">
+                {{ $t("federalStates.selectFederalStates") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-8">
+              <q-select outlined dense v-model="form.federalStates" multiple use-chips :options="federalStatesList"
+                option-label="title" class="no-shadow input-radius-6"
+                :placeholder="$t('federalStates.selectFederalStates')"
+                :rules="[val => (val && val.length > 0) || $t('Required')]" options-selected-class="text-primary">
+              </q-select>
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-4">
+              <p class="font-16 no-margin">
+                {{ $t("Select Municipalities") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-8">
+              <q-select outlined dense v-model="form.municipalities" multiple use-chips :options="municipalitiesList"
+                option-label="title" class="no-shadow input-radius-6" :placeholder="$t('Select Municipalities')"
+                options-selected-class="text-primary">
+              </q-select>
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-4">
+              <p class="font-16 no-margin">
                 {{ $t("Invite Editor") }}
               </p>
             </div>
@@ -509,6 +536,8 @@ export default {
         plannedEnd: "",
         notes: "",
         editors: [],
+        federalStates: [],
+        municipalities: [],
         rates: [],
         links: [],
         categories: [],
@@ -581,12 +610,9 @@ export default {
           const res = await this.$store.dispatch("funding/createNewFunding", {
             data: {
               ...this.form,
+              federalStates: this.form.federalStates.map(fs => fs.id),
+              municipalities: this.form.municipalities.map(m => m.id),
               published: published,
-              municipality: {
-                id:
-                  this.userDetails.municipality &&
-                  this.userDetails.municipality.id
-              },
               owner: {
                 id: this.user && this.user.id
               }
@@ -615,12 +641,9 @@ export default {
           const res = await this.$store.dispatch("funding/editFunding", {
             data: {
               ...this.form,
-              published: published,
-              municipality: {
-                id:
-                  this.userDetails.municipality &&
-                  this.userDetails.municipality.id
-              }
+              federalStates: this.form.federalStates.map(fs => fs.id),
+              municipalities: this.form.municipalities.map(m => m.id),
+              published: published
               // owner: {
               //   id: this.user && this.user.id
               // }
@@ -677,6 +700,8 @@ export default {
         this.dataLoaded = true;
       }
       this.$store.dispatch("userCenter/getUsers");
+      this.$store.dispatch("federalState/getFederalStates");
+      this.$store.dispatch("municipality/getMunicipalities");
 
       if (this.form.archived && !isAdmin) {
         this.$q.notify({
@@ -773,6 +798,26 @@ export default {
         !!this.$route.params.id &&
         JSON.parse(JSON.stringify(this.$store.state.funding.funding))
       );
+    },
+    federalStatesList() {
+      const federalStates = this.$store.state.federalState.federalStates;
+      if (federalStates && federalStates.data) {
+        return federalStates.data.map(item => ({
+          id: item.id,
+          title: item.attributes.title
+        }));
+      }
+      return [];
+    },
+    municipalitiesList() {
+      const municipalities = this.$store.state.municipality.municipalities;
+      if (municipalities) {
+        return municipalities.map(item => ({
+          id: item.id,
+          title: item.title
+        }));
+      }
+      return [];
     }
   },
   mounted() {

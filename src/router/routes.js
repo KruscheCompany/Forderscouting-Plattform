@@ -197,6 +197,19 @@ const routes = [
         component: () => import("pages/dashboard/States.vue")
       },
       {
+        path: "/federal-states",
+        name: "FederalStates",
+        meta: {
+          title: "Federal States",
+          titleDE: "Bundesländer",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: true
+        },
+        icon: "/icons/Government.svg",
+        component: () => import("pages/dashboard/FederalStates.vue")
+      },
+      {
         path: "/Administation/Areas",
         name: "AdministationAreas",
         meta: {

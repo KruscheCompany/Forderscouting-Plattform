@@ -9,12 +9,9 @@
               : $t("administrativeAreas.createState")
           }}
         </h6>
-        <q-form
-          @submit.prevent="
-            !!editingId ? editState() : createState()
-          "
-          class="q-gutter-sm q-px-md q-mb-md"
-        >
+        <q-form @submit.prevent="
+          !!editingId ? editState() : createState()
+          " class="q-gutter-sm q-px-md q-mb-md">
           <div class="items-center">
             <div class="col-12 col-md-3">
               <p class="font-14 no-margin">
@@ -22,55 +19,45 @@
               </p>
             </div>
             <div class="col-12 col-md-9">
-              <q-input
-                outlined
-                class="no-shadow input-radius-6"
-                v-model="form.title"
-                :rules="[val => !!val || $t('Required')]"
-                :placeholder="$t('administrativeAreas.stateName')"
-              />
+              <q-input outlined class="no-shadow input-radius-6" v-model="form.title"
+                :rules="[val => !!val || $t('Required')]" :placeholder="$t('administrativeAreas.stateName')" />
             </div>
           </div>
-          <div class="items-center">
+          <div class="items-center q-mb-md">
             <div class="col-12 col-md-3 ">
               <p class="font-14 no-margin ">
                 {{ $t("userAdministration.administration") }}
               </p>
             </div>
             <div class="col-12 col-md-9">
-              <MunicipalitySelect
-                :currentMunicipality="form.municipality"
-                @update:municipality="form.municipality = $event"
-              />
+              <MunicipalitySelect :currentMunicipality="form.municipality"
+                @update:municipality="form.municipality = $event" />
             </div>
           </div>
-          <div class="row justify-center">
-            <div class="col-5 q-mr-sm">
-              <q-btn
-                :label="$t('category&Keyword.cancel')"
-                outline
-                v-close-popup
-                size="16px"
-                color="primary"
-                no-caps
-                class="no-shadow q-py-xs full-width radius-6"
-              />
+          <div class="items-center q-mb-lg">
+            <div class="col-12 col-md-3">
+              <p class="font-14 no-margin">
+                {{ $t("administrativeAreas.selectFederalStates") }}
+              </p>
             </div>
-            <div class="col-5 q-ml-sm">
-              <q-btn
-                :label="
-                  !!editingId
-                    ? $t('fundingTableOptions.edit')
-                    : $t('category&Keyword.save')
-                "
-                type="submit"
-                unelevated
-                size="16px"
-                color="primary"
-                no-caps
-                class="no-shadow q-py-xs full-width radius-6"
-                :loading="isLoading"
-              />
+            <div class="col-12 col-md-9">
+              <q-select outlined multiple use-chips class="no-shadow input-radius-6" v-model="form.federalStates"
+                :options="federalStatesOptions" option-value="id"
+                :option-label="opt => opt.attributes ? opt.attributes.title : ''" emit-value map-options
+                :placeholder="$t('administrativeAreas.selectFederalStates')" />
+            </div>
+          </div>
+          <div class="row q-col-gutter-sm">
+            <div class="col">
+              <q-btn :label="$t('category&Keyword.cancel')" outline v-close-popup size="16px" color="primary" no-caps
+                class="no-shadow q-py-xs full-width radius-6" />
+            </div>
+            <div class="col">
+              <q-btn :label="!!editingId
+                ? $t('fundingTableOptions.edit')
+                : $t('category&Keyword.save')
+                " type="submit" unelevated size="16px" color="primary" no-caps
+                class="no-shadow q-py-xs full-width radius-6" :loading="isLoading" />
             </div>
           </div>
         </q-form>
@@ -94,7 +81,8 @@ export default {
     return {
       form: {
         title: "",
-        municipality: { id: null, title: "" }
+        municipality: { id: null, title: "" },
+        federalStates: []
       },
       state: {},
       isLoading: false
@@ -106,13 +94,18 @@ export default {
         this.isLoading = true;
         const res = await this.$store.dispatch(
           "municipality/createState",
-          this.form
+          {
+            title: this.form.title,
+            municipality: this.form.municipality,
+            federalStates: this.form.federalStates
+          }
         );
         this.isLoading = false;
         if (res !== false) {
           this.$_options = false;
           this.form.title = "";
           this.form.municipality = { id: null, title: "" };
+          this.form.federalStates = [];
         }
       } else {
         this.$q.notify({
@@ -125,7 +118,8 @@ export default {
       if (!!this.form.title && this.form.municipality && !!this.editingId) {
         if (
           this.form.title !== this.state.title ||
-          this.form.municipality.id !== this.state.municipality.id
+          this.form.municipality.id !== this.state.municipality.id ||
+          JSON.stringify(this.form.federalStates) !== JSON.stringify(this.state.federalStates)
         ) {
           this.isLoading = true;
           const res = await this.$store.dispatch(
@@ -133,7 +127,8 @@ export default {
             {
               id: this.editingId,
               title: this.form.title,
-              municipality: this.form.municipality.id
+              municipality: this.form.municipality.id,
+              federalStates: this.form.federalStates
             }
           );
           this.isLoading = false;
@@ -141,6 +136,7 @@ export default {
             this.$_options = false;
             this.form.title = "";
             this.form.municipality = { id: null, title: "" };
+            this.form.federalStates = [];
           }
         } else {
           this.$q.notify({
@@ -164,21 +160,54 @@ export default {
             id: state.municipality.id,
             title: state.municipality.title
           };
+          // Handle federal states - check if they exist and are in array format
+          if (state.federalStates) {
+            if (Array.isArray(state.federalStates)) {
+              this.form.federalStates = state.federalStates.map(fs => fs.id || fs);
+            } else {
+              this.form.federalStates = [];
+            }
+          } else {
+            this.form.federalStates = [];
+          }
         }
       }
+    },
+    loadFederalStates() {
+      this.$store.dispatch("federalState/getFederalStates");
     }
   },
   computed: {
     $_options: {
-      get: function() {
+      get: function () {
         return this.dialogState;
       },
-      set: function(val) {
+      set: function (val) {
         this.form.title = "";
         this.form.municipality = 0;
+        this.form.federalStates = [];
         this.$emit("update", val);
       }
+    },
+    federalStatesOptions() {
+      const federalStatesResponse = this.$store.state.federalState.federalStates;
+      // Check if the response has a data property (Strapi format)
+      if (federalStatesResponse && federalStatesResponse.data) {
+        const federalStates = federalStatesResponse.data;
+        if (!Array.isArray(federalStates)) {
+          return [];
+        }
+        return federalStates;
+      }
+      // Fallback for direct array format
+      if (Array.isArray(federalStatesResponse)) {
+        return federalStatesResponse;
+      }
+      return [];
     }
+  },
+  mounted() {
+    this.loadFederalStates();
   }
 };
 </script>

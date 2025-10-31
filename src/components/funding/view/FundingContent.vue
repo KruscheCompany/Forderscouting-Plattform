@@ -189,8 +189,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <h1 class="font-24 text-weight-regular q-mt-lg q-mb-none" style="line-height: 3rem;">
-            {{ funding.title || "" }}
+          <h1 class="font-24 text-weight-regular q-mt-lg q-mb-none" style="line-height: 3rem;" v-html="sanitizeHtml(funding.title || '')">
           </h1>
         </div>
       </div>
@@ -207,8 +206,7 @@
         <section slot="pdf-content">
           <div class="row">
             <div class="col-12">
-              <h4 class="font-24 text-weight-regular q-my-none">
-                {{ funding.title || "" }}
+              <h4 class="font-24 text-weight-regular q-my-none" v-html="sanitizeHtml(funding.title || '')">
               </h4>
             </div>
           </div>
@@ -223,8 +221,7 @@
                           {{ $t("projectContent.fundingGuidelines") }}
                         </h4>
                         <div class="q-ml-md font-16">
-                          <p class="q-mb-sm">
-                            {{ funding.title || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.title || '')">
                           </p>
                         </div>
                       </q-card-section>
@@ -236,8 +233,7 @@
                           {{ $t("funding provider") }}
                         </h4>
                         <div class="q-ml-md font-16">
-                          <p class="q-mb-sm">
-                            {{ funding.provider || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.provider || '')">
                           </p>
                         </div>
                       </q-card-section>
@@ -249,8 +245,7 @@
                           {{ $t("Contact person") }}
                         </h4>
                         <div class="q-ml-md font-16">
-                          <p class="q-mb-sm">
-                            {{ (!!funding.info && funding.info.contactName) || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml((funding.info?.contactName) || '')">
                           </p>
                         </div>
                       </q-card-section>
@@ -267,17 +262,13 @@
                           {{ $t("Contact Details") }}
                         </h4>
                         <div class="q-ml-md font-16">
-                          <p class="q-mb-sm">
-                            {{ (!!funding.info && funding.info.streetNo) || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.streetNo || '')">
                           </p>
-                          <p class="q-mb-sm">
-                            {{ (!!funding.info && funding.info.postalCode) || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.postalCode || '')">
                           </p>
-                          <p class="q-mb-sm">
-                            {{ (!!funding.info && funding.info.phone) || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.phone || '')">
                           </p>
-                          <p class="q-mb-sm text-overflow">
-                            {{ (!!funding.info && funding.info.email) || "" }}
+                          <p class="q-mb-sm text-overflow" v-html="sanitizeHtml(funding.info?.email || '')">
                           </p>
                         </div>
                       </q-card-section>
@@ -289,14 +280,13 @@
                           {{ $t("personalData.location") }}
                         </h4>
                         <div class="q-ml-md font-16">
-                          <p class="q-mb-sm">
-                            {{ (!!funding.info && funding.info.location) || "" }}
+                          <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.location || '')">
                           </p>
                         </div>
                       </q-card-section>
                       <q-separator inset class="bg-blue opacity-10" />
                     </div>
-                    <q-card-section v-if="funding.editors && funding.editors.length > 0">
+                    <q-card-section v-if="funding.editors && funding.editors.length > 0 && isAdmin">
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Invite Editor") }}
                       </h4>
@@ -378,10 +368,8 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.goal
-                                  ? funding.details.goal
-                                  : ''
-                                  "></p>
+                                <p class="q-mt-sm q-mb-sm text-block"
+                                  v-html="sanitizeHtml(funding.details?.goal || '')"></p>
                               </div>
                             </div>
                           </div>
@@ -400,10 +388,8 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.funded
-                                  ? funding.details.funded
-                                  : ''
-                                  "></p>
+                                <p class="q-mt-sm q-mb-sm text-block"
+                                  v-html="sanitizeHtml(funding.details?.funded || '')"></p>
                               </div>
                             </div>
                           </div>
@@ -422,10 +408,8 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.notFunded
-                                  ? funding.details.notFunded
-                                  : ''
-                                  "></p>
+                                <p class="q-mt-sm q-mb-sm text-block"
+                                  v-html="sanitizeHtml(funding.details?.notFunded || '')"></p>
                               </div>
                             </div>
                           </div>
@@ -444,10 +428,8 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.willBeFunded
-                                  ? funding.details.willBeFunded
-                                  : ''
-                                  "></p>
+                                <p class="q-mt-sm q-mb-sm text-block"
+                                  v-html="sanitizeHtml(funding.details?.willBeFunded || '')"></p>
                               </div>
                             </div>
                           </div>
@@ -465,10 +447,8 @@
                         <div class="col-12 col-md-8">
                           <div class="q-ml-xs">
                             <div class="q-ml-md font-16">
-                              <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.condition
-                                ? funding.details.condition
-                                : ''
-                                "></p>
+                              <p class="q-mt-sm q-mb-sm text-block"
+                                v-html="sanitizeHtml(funding.details?.condition || '')"></p>
                             </div>
                           </div>
                         </div>
@@ -495,8 +475,7 @@
                                     : 'q-col-gutter-x-sm'
                                     ">
                                     <div class="col-10 col-md-auto">
-                                      <p class="q-mt-sm q-mb-sm inline-block">
-                                        {{ rate.content || "" }}
+                                      <p class="q-mt-sm q-mb-sm inline-block" v-html="sanitizeHtml(rate.content || '')">
                                       </p>
                                     </div>
                                     <div class="col-auto col-md-auto">
@@ -524,8 +503,7 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm">
-                                  {{ funding.ownContribution || "" }}
+                                <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.ownContribution || '')">
                                 </p>
                               </div>
                             </div>
@@ -607,8 +585,8 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.assessment ? funding.assessment : ''
-                                  "></p>
+                                <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.assessment || '')">
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -665,8 +643,7 @@
                           <div class="col-12 col-md-8">
                             <div class="q-ml-xs">
                               <div class="q-ml-md font-16">
-                                <p class="q-mt-sm q-mb-sm">
-                                  {{ funding.notes || "" }}
+                                <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.notes || '')">
                                 </p>
                               </div>
                             </div>
@@ -776,21 +753,109 @@
                     </q-card-section>
                   </q-card>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </vue-html2pdf>
+
+      <div class="row q-col-gutter-lg">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-12 q-mb-md">
+              <q-card class="shadow-1 radius-20 row">
+                <div class="col-6">
+                  <div v-if="!!funding.provider">
+                    <q-card-section class="q-pb-none">
+                      <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                        {{ $t("funding provider") }}
+                      </h4>
+                      <div class="q-ml-md font-16">
+                        <p class="q-mb-sm" v-html="sanitizeHtml(funding.provider || '')">
+                        </p>
+                      </div>
+                    </q-card-section>
+                    <!-- <q-separator inset class="bg-blue opacity-10" /> -->
+                  </div>
+                  <div v-if="!!funding.info && funding.info.contactName">
+                    <q-card-section class="q-pb-none">
+                      <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                        {{ $t("Contact person") }}
+                      </h4>
+                      <div class="q-ml-md font-16">
+                        <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.contactName || '')">
+                        </p>
+                      </div>
+                    </q-card-section>
+                    <!-- <q-separator inset class="bg-blue opacity-10" /> -->
+                  </div>
+
+                  <div>
+                    <q-card-section v-if="!!funding.info && !!funding.info.location" class="q-pb-none">
+                      <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                        {{ $t("personalData.location") }}
+                      </h4>
+                      <div class="q-ml-md font-16">
+                        <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.location || '')">
+                        </p>
+                      </div>
+                    </q-card-section>
+                    <!-- <q-separator inset class="bg-blue opacity-10" /> -->
+                  </div>
+                  <q-card-section v-if="funding.editors && funding.editors.length > 0 && isAdmin">
+                    <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                      {{ $t("Invite Editor") }}
+                    </h4>
+                    <div class="q-ml-md font-16">
+                      <div v-if="funding.editors && funding.editors.length > 0">
+                        <p v-for="(editor, index) in funding.editors" :key="index" class="q-mb-sm">
+                          {{ editor.username }}
+                        </p>
+                      </div>
+                    </div>
+                  </q-card-section>
+                </div>
+                <div v-if="
+                  (!!funding.info && funding.info.streetNo) ||
+                  (!!funding.info && funding.info.postalCode) ||
+                  (!!funding.info && funding.info.phone) ||
+                  (!!funding.info && funding.info.email)
+                ">
+                  <q-card-section>
+                    <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                      {{ $t("Contact Details") }}
+                    </h4>
+                    <div class="q-ml-md font-16">
+                      <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.streetNo || '')">
+                      </p>
+                      <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.postalCode || '')">
+                      </p>
+                      <p class="q-mb-sm" v-html="sanitizeHtml(funding.info?.phone || '')">
+                      </p>
+                      <p class="q-mb-sm text-overflow" v-html="sanitizeHtml(funding.info?.email || '')">
+                      </p>
+                    </div>
+                  </q-card-section>
+                </div>
 
                 <div class="col-12 q-mb-md">
                   <div class="col-12">
                     <div class="row">
-                      <div class="col-12 q-mb-md">
-                        <q-card class="shadow-1 radius-20 row">
-                          <div class="col-6">
-                            <div v-if="!!funding.provider">
-                              <q-card-section class="q-pb-none">
-                                <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                                  {{ $t("funding provider") }}
-                                </h4>
-                                <div class="q-ml-md font-16">
-                                  <p class="q-mb-sm">
-                                    {{ funding.provider || "" }}
+                      <div class="col-12 col-md-4">
+                        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                          {{ $t("Funding rates") }}
+                        </h4>
+                      </div>
+                      <div class="col-12 col-md-8">
+                        <div class="q-ml-xs">
+                          <div class="q-ml-md font-16">
+                            <div v-if="funding.rates && funding.rates.length > 0">
+                              <div v-for="(rate, index) in funding.rates" :key="index" class="row" :class="$q.screen.gt.sm
+                                ? 'q-col-gutter-x-xl'
+                                : 'q-col-gutter-x-sm'
+                                ">
+                                <div class="col-10 col-md-auto">
+                                  <p class="q-mt-sm q-mb-sm inline-block" v-html="sanitizeHtml(rate.content || '')">
                                   </p>
                                 </div>
                               </q-card-section>
@@ -836,6 +901,71 @@
                               </div>
                             </q-card-section>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+                  </q-card-section>
+                  <q-separator inset class="bg-blue opacity-10" />
+                </div>
+                <div v-if="!!funding.ownContribution">
+                  <q-card-section class="q-pa-md items-start">
+                    <div class="row">
+                      <div class="col-12 col-md-4">
+                        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                          {{ $t("Own contribution") }}
+                        </h4>
+                      </div>
+                      <div class="col-12 col-md-8">
+                        <div class="q-ml-xs">
+                          <div class="q-ml-md font-16">
+                            <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.ownContribution + ' %' || '')">
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </q-card-section>
+                  <q-separator inset class="bg-blue opacity-10" />
+                </div>
+                <div>
+                  <q-card-section class="q-pa-md items-start">
+                    <div class="row">
+                      <div class="col-12 col-md-4">
+                        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                          {{ $t("Accumulability") }}
+                        </h4>
+                      </div>
+                      <div class="col-12 col-md-8">
+                        <div class="q-ml-xs">
+                          <div class="q-ml-md font-16">
+                            <p class="q-mt-sm q-mb-sm">
+                              {{
+                                funding.accumulability === true
+                                  ? $t("Yes")
+                                  : $t("No") || "Accumulability is not set"
+                              }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </q-card-section>
+                  <q-separator inset class="bg-blue opacity-10" />
+                </div>
+                <q-card-section v-if="
+                  funding.accumulability === true &&
+                  funding.fundingsLinkedTo &&
+                  funding.fundingsLinkedTo.length > 0
+                " class="q-pa-md items-baseline">
+                  <div class="row items-center">
+                    <div class="col-12 col-md-4">
+                      <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                        {{ $t("Links to the fundings") }}
+                      </h4>
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <div class="q-ml-xs">
+                        <div class="q-ml-md font-16">
                           <div v-if="
                             (!!funding.info && funding.info.streetNo) ||
                             (!!funding.info && funding.info.postalCode) ||
@@ -869,50 +999,17 @@
                   </div>
                   <div class="col-12 q-pt-none">
                     <div class="row">
-                      <div class="col-12 q-mb-md">
-                        <q-card class="shadow-1 radius-20">
-                          <q-card-section class="q-pa-md">
-                            <div class="row">
-                              <div class="col-12 col-md-4">
-                                <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                                  {{ $t("statsTable.categories") }}
-                                </h4>
-                              </div>
-                              <div class="col-12 col-md-8">
-                                <div class="q-ml-md font-16">
-                                  <div v-if="
-                                    funding.categories && funding.categories.length > 0
-                                  ">
-                                    <q-chip v-for="(category, index) in funding.categories" :key="index" square
-                                      size="16px" color="yellow-10" text-color="blue">
-                                      {{ category.title }}
-                                    </q-chip>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </q-card-section>
-                          <q-separator inset class="bg-blue opacity-10" />
-                          <q-card-section class="q-pa-md">
-                            <div class="row">
-                              <div class="col-12 col-md-4">
-                                <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                                  {{ $t("Tags") }}
-                                </h4>
-                              </div>
-                              <div class="col-12 col-md-8">
-                                <div class="q-ml-md font-16">
-                                  <div v-if="funding.tags && funding.tags.length > 0">
-                                    <q-chip v-for="(tag, index) in funding.tags" :key="index" square size="16px"
-                                      color="yellow-10" text-color="blue">
-                                      {{ tag.title }}
-                                    </q-chip>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </q-card-section>
-                        </q-card>
+                      <div class="col-12 col-md-4">
+                        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                          {{ $t("Basis for assessment") }}
+                        </h4>
+                      </div>
+                      <div class="col-12 col-md-8">
+                        <div class="q-ml-xs">
+                          <div class="q-ml-md font-16">
+                            <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.assessment || '')"></p>
+                          </div>
+                        </div>
                       </div>
                       <div v-if="
                         (!!funding.details && funding.details.goal) ||
@@ -1031,42 +1128,11 @@
                           </q-card-section>
                         </q-card>
                       </div>
-                      <div class="col-12 q-mb-md">
-                        <q-card class="shadow-1 radius-20">
-                          <div v-if="funding.rates && funding.rates.length > 0">
-                            <q-card-section class="q-pa-md items-start">
-                              <div class="row">
-                                <div class="col-12 col-md-4">
-                                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                                    {{ $t("Funding rates") }}
-                                  </h4>
-                                </div>
-                                <div class="col-12 col-md-8">
-                                  <div class="q-ml-xs">
-                                    <div class="q-ml-md font-16">
-                                      <div v-if="funding.rates && funding.rates.length > 0">
-                                        <div v-for="(rate, index) in funding.rates" :key="index" class="row" :class="$q.screen.gt.sm
-                                          ? 'q-col-gutter-x-xl'
-                                          : 'q-col-gutter-x-sm'
-                                          ">
-                                          <div class="col-10 col-md-auto">
-                                            <p class="q-mt-sm q-mb-sm inline-block">
-                                              {{ rate.content || "" }}
-                                            </p>
-                                          </div>
-                                          <div class="col-auto col-md-auto">
-                                            <p class="q-mt-sm q-mb-sm inline-block">
-                                              {{ rate.amount || "" }}%
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </q-card-section>
-                            <q-separator inset class="bg-blue opacity-10" />
+                      <div class="col-12 col-md-8">
+                        <div class="q-ml-xs">
+                          <div class="q-ml-md font-16">
+                            <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.notes || '')">
+                            </p>
                           </div>
                           <div v-if="!!funding.ownContribution">
                             <q-card-section class="q-pa-md items-start">
@@ -1367,8 +1433,11 @@ import DeleteDialog from "components/data/DeleteDialog.vue";
 import ArchiveDialog from "components/data/ArchiveDialog.vue";
 import CommentDialog from "components/funding/view/CommentDialog.vue";
 import VueHtml2pdf from "vue-html2pdf";
+import htmlSanitizer from "src/mixins/htmlSanitizer.js";
+
 export default {
-  name: "FundingView",
+  name: "FundingViewContent",
+  mixins: [htmlSanitizer],
   data() {
     return {
       slide: 1,
