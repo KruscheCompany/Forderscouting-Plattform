@@ -521,8 +521,6 @@ export default {
         this.getData("projectIdeas");
       } else if (val === "fundings") {
         this.getData("fundings");
-      } else {
-        this.getData("implementationChecklist");
       }
     }
   },
