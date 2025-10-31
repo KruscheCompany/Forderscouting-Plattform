@@ -296,7 +296,7 @@
                       </q-card-section>
                       <q-separator inset class="bg-blue opacity-10" />
                     </div>
-                    <q-card-section v-if="funding.editors && funding.editors.length > 0">
+                    <q-card-section v-if="funding.editors && funding.editors.length > 0 && isAdmin">
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Invite Editor") }}
                       </h4>
@@ -848,7 +848,7 @@
                     </q-card-section>
                     <!-- <q-separator inset class="bg-blue opacity-10" /> -->
                   </div>
-                  <q-card-section v-if="funding.editors && funding.editors.length > 0">
+                  <q-card-section v-if="funding.editors && funding.editors.length > 0 && isAdmin">
                     <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                       {{ $t("Invite Editor") }}
                     </h4>
@@ -1105,7 +1105,7 @@
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm">
-                              {{ funding.ownContribution || "" }}
+                              {{ funding.ownContribution ? funding.ownContribution + " %" : "" }}
                             </p>
                           </div>
                         </div>
@@ -1406,7 +1406,7 @@ import ArchiveDialog from "components/data/ArchiveDialog.vue";
 import CommentDialog from "components/funding/view/CommentDialog.vue";
 import VueHtml2pdf from "vue-html2pdf";
 export default {
-  name: "FundingView",
+  name: "FundingViewContent",
   data() {
     return {
       slide: 1,
