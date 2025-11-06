@@ -29,11 +29,6 @@ export async function login(context, payload) {
       //   });
       // }
 
-      context.commit("changeLoadingMessages", "Getting Checklists");
-      await context.dispatch("implementationChecklist/getChecklists", null, {
-        root: true
-      });
-
       context.commit("changeLoadingMessages", "");
       this.$router.push({ path: "/dashboard" });
       return true;
@@ -320,10 +315,6 @@ export async function logout(context) {
   context.commit("funding/setFundings", [], { root: true });
   context.commit("funding/setSpecificFunding", null, { root: true });
   context.commit("funding/setFundingsWithArchived", [], { root: true });
-  context.commit("implementationChecklist/setChecklists", [], { root: true });
-  context.commit("implementationChecklist/setSpecificChecklist", null, {
-    root: true
-  });
   sessionStorage.clear();
 }
 

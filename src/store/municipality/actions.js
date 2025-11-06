@@ -3,7 +3,7 @@ import { Notify } from "quasar";
 
 export async function getMunicipalities(context) {
   try {
-    const res = await api.get("/api/municipalities");
+    const res = await api.get("/api/municipalities?populate=federalStates");
     context.commit("setMunicipalities", res.data);
   } catch (error) {
     console.error("error :>> ", error);
@@ -31,7 +31,7 @@ export async function getSimplifiedMunicipalities(context) {
 
 export async function getStates(context) {
   try {
-    const res = await api.get("/api/locations?populate=municipality");
+    const res = await api.get("/api/locations");
     context.commit("setStates", res.data);
   } catch (error) {
     console.error("error :>> ", error);
@@ -97,12 +97,15 @@ export async function tempMunicipality(context, payload) {
 }
 
 export async function createMunicipality(context, payload) {
-  const { title } = payload;
-  const { location } = payload;
+  const { title, location, federalStates } = payload;
   if (!!title && !!location) {
     try {
       const res = await api.post("/api/municipalities", {
-        data: { title, location }
+        data: {
+          title,
+          location,
+          federalStates: federalStates || []
+        }
       });
       context.commit("addMunicipality", res.data.data);
       Notify.create({
@@ -123,11 +126,15 @@ export async function createMunicipality(context, payload) {
 
 // createState
 export async function createState(context, payload) {
-  const { title, municipality } = payload;
+  const { title, municipality, federalStates } = payload;
   if (!!title && !!municipality) {
     try {
       const res = await api.post("/api/locations", {
-        data: { title, municipality: municipality.id }
+        data: {
+          title,
+          municipality: municipality.id,
+          federalStates: federalStates || []
+        }
       });
       // context.commit("addState", res.data);
       Notify.create({
@@ -147,13 +154,16 @@ export async function createState(context, payload) {
 }
 
 export async function editMunicipality(context, payload) {
-  const { id } = payload;
-  const { title } = payload;
-  const { location } = payload;
+  const { id, title, location, federalStates } = payload;
   if (!!id && !!title && !!location) {
     try {
       const res = await api.put(`/api/municipalities/${id}`, {
-        data: { title, location, updatedAt: new Date().toISOString() }
+        data: {
+          title,
+          location,
+          federalStates: federalStates || [],
+          updatedAt: new Date().toISOString()
+        }
       });
       console.log("res :>> ", res);
       context.commit("editMunicipality", res.data.data);
@@ -174,13 +184,16 @@ export async function editMunicipality(context, payload) {
 }
 
 export async function editState(context, payload) {
-  const { id } = payload;
-  const { title } = payload;
-  const { municipality } = payload;
+  const { id, title, municipality, federalStates } = payload;
   if (!!id && !!title && !!municipality) {
     try {
       const res = await api.put(`/api/locations/${id}`, {
-        data: { title, municipality, updatedAt: new Date().toISOString() }
+        data: {
+          title,
+          municipality,
+          federalStates: federalStates || [],
+          updatedAt: new Date().toISOString()
+        }
       });
       // context.commit("editState", res.data.data);
       Notify.create({

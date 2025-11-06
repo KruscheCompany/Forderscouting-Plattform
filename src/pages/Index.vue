@@ -92,9 +92,6 @@
               <li class="font-16 text-left q-mb-md">
                 {{ $t("connectProjectsAndFunding") }}
               </li>
-              <li class="font-16 text-left q-mb-md">
-                {{ $t("provideImplementationChecklists") }}
-              </li>
             </ul>
             <p class="font-16 text-left">
               {{ $t("sustainabilityNote") }}
@@ -110,7 +107,7 @@
             <div class="flex justify-center">
               <span class="q-pa-xl font-18 ppeditorial">{{
                 $t("howCanPlatformSupportProject")
-                }}</span>
+              }}</span>
               <video controls poster="../assets/image1.png" style="width: 75%; height: auto">
                 <source src="https://api.foerderscouting-plattform.de/uploads/Plattformpotentiale_d0f41f78dd.mp4" />
               </video>
@@ -120,7 +117,7 @@
             <div class="flex justify-center">
               <span class="q-pa-xl font-18 ppeditorial">{{
                 $t("howDoesPlatformWork")
-                }}</span>
+              }}</span>
               <video controls poster="../assets/image2.png" style="width: 75%; height: auto">
                 <source src="https://api.foerderscouting-plattform.de/uploads/Projektarbeit_acbd6b13eb.mp4" />
               </video>

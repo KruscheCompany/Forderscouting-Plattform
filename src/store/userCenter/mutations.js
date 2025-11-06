@@ -48,10 +48,6 @@ export function setDataOverview(state, payload) {
         payload[item].forEach(funding => {
           state.dataOverview.push({ ...funding, type: "project" });
         });
-      } else if (item === "checklists") {
-        payload[item].forEach(funding => {
-          state.dataOverview.push({ ...funding, type: "checklist" });
-        });
       }
     }
   }

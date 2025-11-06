@@ -228,7 +228,15 @@
     "delete": "Delete",
     "createState": "Create State",
     "stateName": "State Name",
-    "statesOverview": "States Overview"
+    "statesOverview": "States Overview",
+    "selectFederalStates": "Select Federal States"
+  },
+  "federalStates": {
+    "overview": "Federal States Overview",
+    "createFederalState": "Create Federal State",
+    "federalStateName": "Federal State",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "DetailsAdministration": {
     "location": "Location",
@@ -504,6 +512,10 @@
   "Close": "Close",
   "bookmark": "Bookmark",
   "print": "Print",
+  "Export as PDF": "Export as PDF",
+  "Browser Print": "Browser Print",
+  "Generate and download PDF": "Generate and download PDF",
+  "Perfect page breaks (recommended)": "Perfect page breaks (recommended)",
   "transferOwnership": "Transfer Ownership",
   "transferOwnershipMessage": "Please select a user to transfer the document to",
   "sendEmail": "Send an email to selected user group",
@@ -522,6 +534,9 @@
   "archive": "Archive",
   "deleteState": "Delete State",
   "deleteStateMessage": "Are you sure you want to delete this state? This action cannot be undone.",
+  "editFederalState": "Edit Federal State",
+  "deleteFederalState": "Delete Federal State",
+  "deleteFederalStateMessage": "Are you sure you want to delete this federal state? This action cannot be undone.",
   "delete": "Delete",
   "Change Cookie settings": "Change Cookie settings",
   "No data": "No data available",
@@ -535,6 +550,11 @@
   "No Images": "No Images",
   "Content": "Content",
   "Amount": "Amount",
+  "emailSent": "Email sent successfully",
+  "emailNotSent": "Email could not be sent",
+  "pleaseFillAllFields": "Please fill in all fields",
+  "attachFiles": "Attach files",
+  "E-Mails": "Emails",
   "byAcceptingYouAgree": "By clicking \"accept\", you agree to our Imprint and Privacy Policy.",
   "cookieMain": "Diese Cookies sind für das ordnungsgemäße Funktionieren unserer Website erforderlich und können in unseren Systemen nicht abgeschaltet werden. unseren Systemen nicht ausgeschaltet werden. Sie werden in der Regel nur als Reaktion auf von Ihnen durchgeführte Aktionen gesetzt, die auf eine wie das Einstellen Ihrer Datenschutzeinstellungen, das Einloggen oder das Ausfüllen von Formularen oder wenn sie unerlässlich sind, um eine von Ihnen angeforderte Dienstleistung zu erbringen. Sie können sich nicht gegen diesen Cookies nicht widersprechen. Sie können Ihren Browser so einstellen, dass er diese Cookies blockiert oder Sie darauf hinweist, aber dann Wenn Sie dies tun, werden einige Teile der Website nicht funktionieren. Diese Cookies speichern keine persönlich identifizierbaren Informationen.",
   "Sunday": "Sunday",
@@ -807,7 +827,11 @@
       "successRefresh": "Funding options successfully updated",
       "errorRefresh": "Error updating funding options",
       "errorSaving": "Error saving funding selection",
-      "pleaseSelect": "Please select at least one funding option or mark \"No match\""
+      "pleaseSelect": "Please select at least one funding option or mark \"No match\"",
+      "missingMunicipality": "Your municipality is not set up in your profile. Please contact an administrator to resolve this.",
+      "missingFederalStates": "Your federal states are not set up in your profile. Please contact an administrator to resolve this.",
+      "missingBoth": "Your municipality and federal states are not set up in your profile. Please contact an administrator to resolve this.",
+      "noMatchingFundings": "No matching funding options found for your municipality and federal states."
     },
     "qAndA": {
       "title": "Open Questions & Answers",

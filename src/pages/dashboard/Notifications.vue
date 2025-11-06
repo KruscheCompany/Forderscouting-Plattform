@@ -58,16 +58,14 @@
                       : noti.typeOfNoti == "requests"
                         ? noti.project != null
                           ? noti.project.title
-                          : noti.funding != null
-                            ? noti.funding.title
-                            : noti.checklist.title
+                          : noti.funding.title
                         : ""
               }}
             </p>
           </div>
           <div :class="$q.screen.lt.md
-              ? 'text-center q-mt-md col-md col-12'
-              : 'text-right col-md col-12'
+            ? 'text-center q-mt-md col-md col-12'
+            : 'text-right col-md col-12'
             ">
             <q-btn @click="view(noti)" v-if="
               noti.typeOfNoti == 'fundingComments' ||
@@ -258,17 +256,6 @@ export default {
             this.requestDialog = true;
           } else {
             this.$router.push({ path: `/user/newFunding/${noti.funding.id}` });
-          }
-        } else if (noti.checklist != null) {
-          if (noti.checklist.owner.id != this.loggedInUser.id) {
-            this.tab = "implementationChecklist";
-            this.itemId = noti.checklist.id;
-            this.itemType = "view";
-            this.requestDialog = true;
-          } else {
-            this.$router.push({
-              path: `/user/newChecklist/${noti.checklist.id}`,
-            });
           }
         }
       }

@@ -10,7 +10,7 @@ export function addCategory(state, payload) {
   if (!!payload) {
     state.categories.push({
       ...payload,
-      dataSet: { projects: 0, fundings: 0, checklist: 0 }
+      dataSet: { projects: 0, fundings: 0 }
     });
   }
 }

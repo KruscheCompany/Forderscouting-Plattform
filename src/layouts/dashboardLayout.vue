@@ -67,26 +67,6 @@
                       </video>
                     </q-card>
                   </div>
-                  <!-- <div class="q-mt-md">
-                    <q-card class="my-card" flat bordered>
-                      <h6 class="q-px-lg">{{ $t("howDoICreateProjectIdea") }}</h6>
-                      <video controls rounded style="width: 100%; height: auto">
-                        <source
-                          src="https://api.foerderscouting-plattform.de/uploads/Projektidee_anlegen_5a38f854a0.mp4"
-                        />
-                      </video>
-                    </q-card>
-                  </div> -->
-                  <!-- <div class="q-mt-md">
-                    <q-card class="my-card" flat bordered>
-                      <h6 class="q-px-lg">{{ $t("howDoICreateImplementationChecklist") }}</h6>
-                      <video controls rounded style="width: 100%; height: auto">
-                        <source
-                          src="https://api.foerderscouting-plattform.de/uploads/Umsetzungschecklisten_anlegen_f4387a3188.mp4"
-                        />
-                      </video>
-                    </q-card>
-                  </div> -->
                 </q-card-section>
               </q-card>
             </q-dialog>

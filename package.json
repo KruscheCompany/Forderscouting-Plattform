@@ -16,6 +16,7 @@
     "babel-plugin-transform-remove-console": "^6.9.4",
     "core-js": "^3.6.5",
     "darkreader": "4.9.33",
+    "dompurify": "^3.3.0",
     "js-cookie": "^3.0.1",
     "quasar": "^1.22.10",
     "v-money": "^0.8.1",
