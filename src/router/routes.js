@@ -197,6 +197,19 @@ const routes = [
         component: () => import("pages/dashboard/States.vue")
       },
       {
+        path: "/federal-states",
+        name: "FederalStates",
+        meta: {
+          title: "Federal States",
+          titleDE: "Bundesländer",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: true
+        },
+        icon: "/icons/Government.svg",
+        component: () => import("pages/dashboard/FederalStates.vue")
+      },
+      {
         path: "/Administation/Areas",
         name: "AdministationAreas",
         meta: {
@@ -412,43 +425,6 @@ const routes = [
           requireAdmin: false
         },
         component: () => import("pages/dashboard/FundingView.vue")
-      },
-      {
-        path: "/user/newCheckList",
-        name: "newCheckList",
-        meta: {
-          title: "New Implementation checklist",
-          titleDE: "Neue Umsetzungscheckliste",
-          backLink: "/user/data",
-          requireAuth: true,
-          requireAdmin: false
-        },
-        component: () => import("pages/dashboard/ImplementationChecklist.vue")
-      },
-      {
-        path: "/user/newCheckList/:id",
-        name: "viewCheckList",
-        meta: {
-          title: "Details of the Implementation checklist",
-          titleDE: "Einzelheiten der Checkliste für die Umsetzung",
-          backLink: "/user/data",
-          requireAuth: true,
-          requireAdmin: false
-        },
-        component: () =>
-          import("pages/dashboard/ImplementationChecklistView.vue")
-      },
-      {
-        path: "/user/newCheckList/edit/:id",
-        name: "EditChecklist",
-        meta: {
-          title: "Edit Checklist",
-          titleDE: "Umsetzungscheckliste bearbeiten",
-          backLink: "/user/data",
-          requireAuth: true,
-          requireAdmin: false
-        },
-        component: () => import("pages/dashboard/ImplementationChecklist.vue")
       }
     ]
   },

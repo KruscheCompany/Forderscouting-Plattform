@@ -156,7 +156,7 @@
                     label-color="white"
                     dark
                     bg-color="primary"
-                    :label="$t('attach files')"
+                    :label="$t('attachFiles')"
                     multiple
                     display-value=""
                     append
@@ -436,7 +436,7 @@ export default {
 
       if (!userGroup || !subject || !body) {
         this.$q.notify({
-          message: this.$t("Bitte füllen Sie alle Felder aus"),
+          message: this.$t("pleaseFillAllFields"),
           color: "negative",
           position: "top",
           timeout: 2000,
@@ -484,10 +484,10 @@ export default {
     },
     async getUserGroupOptions() {
       const labelMapping = {
-        user: "Users",
-        Admin: "Administrators",
-        Leader: "Municipality Leaders",
-        Guest: "Guest Users",
+        user: "userGroups.Users",
+        Admin: "userGroups.Administrators",
+        Leader: "userGroups.Municipality Leaders",
+        Guest: "userGroups.Guest Users",
       };
 
       try {
@@ -502,13 +502,7 @@ export default {
             value: id,
           }));
 
-        // translate user groups
-        const userGroupsOptionsTranslated = userGroupsOptions.map((group) => ({
-          ...group,
-          label: this.$t(group.label),
-        }));
-
-        this.groups = userGroupsOptionsTranslated;
+        this.groups = userGroupsOptions;
         return userGroupsOptions;
       } catch (error) {
         console.error("Error fetching user groups:", error);

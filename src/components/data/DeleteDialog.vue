@@ -6,11 +6,7 @@
           {{
             tab == "projectIdeas"
               ? $t("Delete Project Idea")
-              : tab === "fundings"
-              ? $t("Delete Funding")
-              : tab === "implementationChecklist"
-              ? $t("Delete Implementation Checklist")
-              : ""
+              : $t("Delete Funding")
           }}
         </h6>
       </q-card-section>
@@ -20,43 +16,21 @@
             {{
               tab == "projectIdeas"
                 ? $t(
-                    "Are you sure you want to delete this Project Idea? It will be removed from all documents"
-                  )
-                : tab === "fundings"
-                ? $t(
-                    "Are you sure you want to delete this Funding? It will be removed from all documents"
-                  )
-                : tab === "implementationChecklist"
-                ? $t(
-                    "Are you sure you want to delete this Implementation Checklist? It will be removed from all documents"
-                  )
-                : ""
+                  "Are you sure you want to delete this Project Idea? It will be removed from all documents"
+                )
+                : $t(
+                  "Are you sure you want to delete this Funding? It will be removed from all documents"
+                )
             }}
           </p>
         </div>
       </q-card-section>
       <q-card-section>
         <div class="row justify-center q-ml-lg ">
-          <q-btn
-            :label="$t('category&Keyword.cancel')"
-            outline
-            v-close-popup
-            size="14px"
-            color="primary"
-            no-caps
-            class="no-shadow radius-6 q-px-xl  q-mr-sm "
-            :loading="isLoading"
-          />
-          <q-btn
-            :label="$t('confirm')"
-            unelevated
-            :loading="isLoading"
-            size="14px"
-            color="red"
-            no-caps
-            class="no-shadow radius-6 q-px-xl q-py-sm"
-            @click="deleteItem"
-          />
+          <q-btn :label="$t('category&Keyword.cancel')" outline v-close-popup size="14px" color="primary" no-caps
+            class="no-shadow radius-6 q-px-xl  q-mr-sm " :loading="isLoading" />
+          <q-btn :label="$t('confirm')" unelevated :loading="isLoading" size="14px" color="red" no-caps
+            class="no-shadow radius-6 q-px-xl q-py-sm" @click="deleteItem" />
         </div>
       </q-card-section>
     </q-card>
@@ -98,28 +72,15 @@ export default {
         if (res !== false) {
           this.$_options = false;
         }
-      } else {
-        this.isLoading = true;
-        const id = this.id;
-        const res = await this.$store.dispatch(
-          "implementationChecklist/deleteChecklist",
-          {
-            id: id
-          }
-        );
-        this.isLoading = false;
-        if (res !== false) {
-          this.$_options = false;
-        }
       }
     }
   },
   computed: {
     $_options: {
-      get: function() {
+      get: function () {
         return this.dialogState;
       },
-      set: function(val) {
+      set: function (val) {
         this.$emit("update", val);
       }
     }

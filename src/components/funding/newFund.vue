@@ -81,6 +81,33 @@
           <div class="row items-center">
             <div class="col-12 col-md-4">
               <p class="font-16 no-margin">
+                {{ $t("federalStates.selectFederalStates") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-8">
+              <q-select outlined dense v-model="form.federalStates" multiple use-chips :options="federalStatesList"
+                option-label="title" class="no-shadow input-radius-6"
+                :placeholder="$t('federalStates.selectFederalStates')"
+                :rules="[val => (val && val.length > 0) || $t('Required')]" options-selected-class="text-primary">
+              </q-select>
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-4">
+              <p class="font-16 no-margin">
+                {{ $t("Select Municipalities") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-8">
+              <q-select outlined dense v-model="form.municipalities" multiple use-chips :options="municipalitiesList"
+                option-label="title" class="no-shadow input-radius-6" :placeholder="$t('Select Municipalities')"
+                options-selected-class="text-primary">
+              </q-select>
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-4">
+              <p class="font-16 no-margin">
                 {{ $t("Invite Editor") }}
               </p>
             </div>
@@ -165,8 +192,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" placeholder="Förderziel"
-                v-model="form.details.goal" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.goal" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -176,8 +224,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                placeholder="Was wird gefördert" v-model="form.details.funded" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.funded" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -187,8 +256,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                placeholder="Was wird nicht gefördert" v-model="form.details.notFunded" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.notFunded" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -198,8 +288,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                :placeholder="$t('Who will be funded?')" v-model="form.details.willBeFunded" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.willBeFunded" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row items-baseline">
@@ -209,8 +320,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                placeholder="Rahmenbedingungen für Antragsteller*in" v-model="form.details.condition" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.condition" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row">
@@ -276,8 +408,29 @@
               </p>
             </div>
             <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                :placeholder="$t('Basis for assessment')" v-model="form.assessment" />
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.assessment" :toolbar="[
+                [
+                  {
+                    label: $q.lang.editor.align,
+                    icon: $q.iconSet.editor.align,
+                    fixedLabel: true,
+                    list: 'only-icons',
+                    options: ['left', 'center', 'right', 'justify']
+                  }
+                ],
+                ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                ['hr', 'link'],
+                ['fullscreen'],
+                [
+                  {
+                    label: $q.lang.editor.formatting,
+                    icon: $q.iconSet.editor.formatting,
+                    list: 'no-icons',
+                    options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                  }
+                ],
+                ['undo', 'redo']
+              ]" />
             </div>
           </div>
           <div class="row">
@@ -343,9 +496,29 @@
             <div class="col-12 col-md-8">
               <div class="row q-col-gutter-x-md">
                 <div class="col-12">
-                  <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" v-model="form.notes"
-                    color="primary" bg-color="white" placeholder="Hinweise zum Förderzeitraum">
-                  </q-input>
+                  <q-editor outlined class="no-shadow input-radius-6" v-model="form.notes" :toolbar="[
+                    [
+                      {
+                        label: $q.lang.editor.align,
+                        icon: $q.iconSet.editor.align,
+                        fixedLabel: true,
+                        list: 'only-icons',
+                        options: ['left', 'center', 'right', 'justify']
+                      }
+                    ],
+                    ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                    ['hr', 'link'],
+                    ['fullscreen'],
+                    [
+                      {
+                        label: $q.lang.editor.formatting,
+                        icon: $q.iconSet.editor.formatting,
+                        list: 'no-icons',
+                        options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                      }
+                    ],
+                    ['undo', 'redo']
+                  ]" />
                 </div>
               </div>
             </div>
@@ -395,13 +568,13 @@
                         <q-avatar rounded size="48px">
                           <small>{{
                             imgPreview(file).name.split(".")[1]
-                          }}</small>
+                            }}</small>
                         </q-avatar>
                       </q-item-section>
                       <q-item-section>
                         <q-item-label class="ellipsis" caption>{{
                           imgPreview(file).name
-                        }}</q-item-label>
+                          }}</q-item-label>
                       </q-item-section>
                       <q-item-section side>
                         <q-btn icon="delete" @click.prevent.stop="removeFile(index)" size="sm" round text-color="red"
@@ -435,22 +608,6 @@
               <q-separator class="bg-blue opacity-10" />
             </div>
           </div>
-          <div class="row items-center">
-            <div class="col-12 col-md-4">
-              <p class="font-16 no-margin" :class="$q.screen.gt.md ? 'q-pr-xl' : ''">
-                {{ $t("Link to implementation checklist (optional)") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-8">
-              <ImplementationChecklists :editing="!!funding ? funding.checklist : null"
-                @update:linkToImplementationChecklist="form.checklist = $event" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
           <div class="row justify-center">
             <div class="col-5 col-md-3 q-ml-sm">
               <q-btn :label="$t('newProjectIdeaForm.publish')"
@@ -477,7 +634,6 @@ import Tags from "components/projects/create/Tags.vue";
 import FundingRate from "src/components/funding/FundingRate.vue";
 import Links from "src/components/projects/create/Links.vue";
 import ProjectIdeas from "components/funding/ProjectIdeas.vue";
-import ImplementationChecklists from "components/funding/ImplementationChecklists.vue";
 import Fundings from "components/funding/Fundings.vue";
 import ImageDialog from "components/ImageDialog.vue";
 import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
@@ -492,7 +648,6 @@ export default {
     MunicipalityCities,
     Links,
     ProjectIdeas,
-    ImplementationChecklists,
     Fundings,
     ImageDialog
   },
@@ -527,12 +682,13 @@ export default {
         plannedEnd: "",
         notes: "",
         editors: [],
+        federalStates: [],
+        municipalities: [],
         rates: [],
         links: [],
         categories: [],
         tags: [],
         projects: [],
-        checklist: null,
         media: null,
         files: null,
         fundingsLinkedTo: []
@@ -600,12 +756,9 @@ export default {
           const res = await this.$store.dispatch("funding/createNewFunding", {
             data: {
               ...this.form,
+              federalStates: this.form.federalStates.map(fs => fs.id),
+              municipalities: this.form.municipalities.map(m => m.id),
               published: published,
-              municipality: {
-                id:
-                  this.userDetails.municipality &&
-                  this.userDetails.municipality.id
-              },
               owner: {
                 id: this.user && this.user.id
               }
@@ -634,12 +787,9 @@ export default {
           const res = await this.$store.dispatch("funding/editFunding", {
             data: {
               ...this.form,
-              published: published,
-              municipality: {
-                id:
-                  this.userDetails.municipality &&
-                  this.userDetails.municipality.id
-              }
+              federalStates: this.form.federalStates.map(fs => fs.id),
+              municipalities: this.form.municipalities.map(m => m.id),
+              published: published
               // owner: {
               //   id: this.user && this.user.id
               // }
@@ -674,9 +824,6 @@ export default {
         } else {
           // this.$refs.fundings.validate();
         }
-        if (!this.form.checklist) {
-          delete this.form.checklist;
-        }
         if (!!this.form.projects && this.form.projects.length < 1) {
           delete this.form.projects;
         }
@@ -699,6 +846,8 @@ export default {
         this.dataLoaded = true;
       }
       this.$store.dispatch("userCenter/getUsers");
+      this.$store.dispatch("federalState/getFederalStates");
+      this.$store.dispatch("municipality/getMunicipalities");
 
       if (this.form.archived && !isAdmin) {
         this.$q.notify({
@@ -795,6 +944,26 @@ export default {
         !!this.$route.params.id &&
         JSON.parse(JSON.stringify(this.$store.state.funding.funding))
       );
+    },
+    federalStatesList() {
+      const federalStates = this.$store.state.federalState.federalStates;
+      if (federalStates && federalStates.data) {
+        return federalStates.data.map(item => ({
+          id: item.id,
+          title: item.attributes.title
+        }));
+      }
+      return [];
+    },
+    municipalitiesList() {
+      const municipalities = this.$store.state.municipality.municipalities;
+      if (municipalities) {
+        return municipalities.map(item => ({
+          id: item.id,
+          title: item.title
+        }));
+      }
+      return [];
     }
   },
   mounted() {

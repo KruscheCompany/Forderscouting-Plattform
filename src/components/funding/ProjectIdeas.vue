@@ -1,35 +1,13 @@
 <template>
   <div>
-    <q-select
-      outlined
-      :bg-color="isInChecklist ? 'white' : ''"
-      dense
-      v-model="model"
-      :multiple="isInChecklist === false"
-      :clearable="isInChecklist === true"
-      :options="projects"
-      options-selected-class="text-primary text-weight-600"
-      class="no-shadow input-radius-6"
-      @input="onSelect"
-    >
+    <q-select outlined dense v-model="model" multiple :clearable="false" :options="projects"
+      options-selected-class="text-primary text-weight-600" class="no-shadow input-radius-6" @input="onSelect">
       <template v-slot:selected>
-        <div v-if="!isInChecklist">
+        <div>
           <template v-if="model && model.length > 0">
             <span v-for="(project, index) in model" :key="index">
               {{ index > 0 ? ", " : "" }}
               {{ project.title }}
-            </span>
-          </template>
-          <template v-else>
-            <span class="text-grey">
-              {{ $t("Select Projects") }}
-            </span>
-          </template>
-        </div>
-        <div v-if="isInChecklist">
-          <template v-if="model">
-            <span>
-              {{ model.title }}
             </span>
           </template>
           <template v-else>
@@ -54,10 +32,6 @@
 export default {
   name: "projectIdeas",
   props: {
-    isInChecklist: {
-      type: Boolean,
-      default: false
-    },
     editing: {
       type: [Object, Array],
       default: () => null
@@ -70,19 +44,12 @@ export default {
   },
   methods: {
     onSelect(value) {
-      if (!this.isInChecklist) {
-        const projects = [];
-        value.forEach(element => {
-          projects.push({ id: element.id });
-        });
-        this.$emit("update:linkToProject", projects.length > 0 ? projects : []);
-      } else {
-        let project = value;
-        this.$emit(
-          "update:linkToProject",
-          !!project && project.id ? project : null
-        );
-      }
+      const projects = [];
+      value.forEach(element => {
+        projects.push({ id: element.id });
+      });
+      this.$emit("update:linkToProject", projects.length > 0 ? projects : []);
+
     },
     setProject() {
       const project = JSON.parse(JSON.stringify(this.$store.state.project.project));
@@ -100,11 +67,6 @@ export default {
       });
     }
   }
-  // mounted() {
-  //   this.model = this.editing
-  //     ? JSON.parse(JSON.stringify(this.$store.state.project.project.projects))
-  //     : null;
-  // }
 };
 </script>
 
