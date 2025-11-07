@@ -240,7 +240,8 @@
     "createFederalState": "Bundesland anlegen",
     "federalStateName": "Bundesland",
     "edit": "Bearbeiten",
-    "delete": "Löschen"
+    "delete": "Löschen",
+    "selectFederalStates": "Bundesländer auswählen"
   },
   "DetailsAdministration": {
     "location": "Ort",
