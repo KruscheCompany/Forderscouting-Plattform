@@ -8,6 +8,32 @@ import DOMPurify from 'dompurify';
 export default {
   methods: {
     /**
+     * Decode HTML entities and fix list formatting
+     * @param {string} text - The text to decode
+     * @returns {string} - Decoded and formatted HTML
+     */
+    decodeAndFixHtml(text) {
+      if (!text) return text;
+      
+      // Decode HTML entities
+      const textarea = document.createElement('textarea');
+      textarea.innerHTML = text;
+      let decoded = textarea.value;
+      
+      // Fix orphaned <li> tags by removing wrapping divs and ensuring proper <ul> wrapping
+      // Remove <div> wrappers around list items
+      decoded = decoded.replace(/<div>(<li>.*?<\/li>)<\/div>/gi, '$1');
+      decoded = decoded.replace(/<div><br><\/div>/gi, '');
+      
+      // Wrap all consecutive <li> tags in a <ul> if not already wrapped
+      if (decoded.includes('<li>') && !decoded.includes('<ul>') && !decoded.includes('<ol>')) {
+        decoded = decoded.replace(/(<li>[\s\S]*<\/li>)/gi, '<ul>$1</ul>');
+      }
+      
+      return decoded;
+    },
+
+    /**
      * Sanitize HTML content with default configuration
      * Allows most formatting tags but removes dangerous elements and attributes
      *
@@ -17,7 +43,10 @@ export default {
     sanitizeHtml(html) {
       if (!html) return '';
 
-      return DOMPurify.sanitize(html, {
+      // Decode and fix HTML first
+      const fixedHtml = this.decodeAndFixHtml(html);
+
+      return DOMPurify.sanitize(fixedHtml, {
         ALLOWED_TAGS: [
           // Text formatting
           'p', 'br', 'span', 'div', 'strong', 'em', 'b', 'i', 'u', 's', 'mark', 'small', 'del', 'ins', 'sub', 'sup',
