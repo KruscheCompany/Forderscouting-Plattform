@@ -117,6 +117,9 @@ export default {
       if (this.uploadedFiles.length === 0) return 0;
       const totalProgress = this.uploadedFiles.reduce((sum, file) => sum + (file.progress || 0), 0);
       return Math.round(totalProgress / this.uploadedFiles.length);
+    },
+    currentUserId() {
+      return this.$store.state.userCenter.user?.user?.id || null;
     }
   },
   watch: {
@@ -255,9 +258,10 @@ export default {
         this.$set(this.uploadedFiles[index], 'uploading', true);
         this.$set(this.uploadedFiles[index], 'progress', 0);
 
-        // Call store action with progress callback
+        // Call store action with progress callback and admin_id
         const response = await this.$store.dispatch('ai/uploadFundingFile', {
           fileData,
+          admin_id: this.currentUserId,
           onUploadProgress: (progressEvent) => {
             const progress = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total
