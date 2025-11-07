@@ -6,11 +6,7 @@
           {{
             tab == "projectIdeas"
               ? $t("You don't have access to this Project Idea")
-              : tab === "fundings"
-              ? $t("You don't have access to this Funding")
-              : tab === "implementationChecklist"
-              ? $t("You don't have access to this Checklist")
-              : ""
+              : $t("You don't have access to this Funding")
           }}
         </h6>
       </q-card-section>
@@ -27,25 +23,10 @@
       </q-card-section>
       <q-card-section>
         <div class="row justify-center q-ml-lg ">
-          <q-btn
-            :label="$t('category&Keyword.cancel')"
-            outline
-            v-close-popup
-            size="14px"
-            color="primary"
-            no-caps
-            class="no-shadow radius-6 q-px-xl  q-mr-sm "
-          />
-          <q-btn
-            :label="$t('confirm')"
-            unelevated
-            :loading="isLoading"
-            size="14px"
-            color="primary"
-            no-caps
-            class="no-shadow radius-6 q-px-xl q-py-sm"
-            @click="requestAccess"
-          />
+          <q-btn :label="$t('category&Keyword.cancel')" outline v-close-popup size="14px" color="primary" no-caps
+            class="no-shadow radius-6 q-px-xl  q-mr-sm " />
+          <q-btn :label="$t('confirm')" unelevated :loading="isLoading" size="14px" color="primary" no-caps
+            class="no-shadow radius-6 q-px-xl q-py-sm" @click="requestAccess" />
         </div>
       </q-card-section>
     </q-card>
@@ -92,30 +73,15 @@ export default {
         if (res !== false) {
           this.$_options = false;
         }
-      } else {
-        this.isLoading = true;
-        const res = await this.$store.dispatch(
-          "implementationChecklist/requestAccess",
-          {
-            id: this.id,
-            userId: !!this.loggedInUser && this.loggedInUser.id,
-            type: this.type,
-            guest: this.isGuest
-          }
-        );
-        this.isLoading = false;
-        if (res !== false) {
-          this.$_options = false;
-        }
       }
     }
   },
   computed: {
     $_options: {
-      get: function() {
+      get: function () {
         return this.dialogState;
       },
-      set: function(val) {
+      set: function (val) {
         this.$emit("update", val);
       }
     },

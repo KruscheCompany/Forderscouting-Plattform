@@ -6,53 +6,27 @@
           {{
             tab == "projectIdeas"
               ? $t("Archive Project Idea")
-              : tab === "fundings"
-              ? $t("Archive Funding")
-              : tab === "implementationChecklist"
-              ? $t("Archive Implementation Checklist")
-              : ""
+              : $t("Archive Funding")
           }}
         </h6>
       </q-card-section>
-      <q-card-section align="left"
-        ><div class=" items-center text-center ">
+      <q-card-section align="left">
+        <div class=" items-center text-center ">
           <p>
             {{
               tab == "projectIdeas"
                 ? $t("Are you sure you want to archive this Project Idea?")
-                : tab === "fundings"
-                ? $t("Are you sure you want to archive this Funding?")
-                : tab === "implementationChecklist"
-                ? $t(
-                    "Are you sure you want to archive this Implementation Checklist?"
-                  )
-                : ""
+                : $t("Are you sure you want to archive this Funding?")
             }}
           </p>
-        </div></q-card-section
-      >
+        </div>
+      </q-card-section>
       <q-card-section>
         <div class="row justify-center q-ml-lg ">
-          <q-btn
-            :label="$t('category&Keyword.cancel')"
-            outline
-            v-close-popup
-            size="14px"
-            color="primary"
-            no-caps
-            class="no-shadow radius-6 q-px-xl  q-mr-sm "
-            :loading="isLoading"
-          />
-          <q-btn
-            :label="$t('confirm')"
-            unelevated
-            :loading="isLoading"
-            size="14px"
-            color="primary"
-            no-caps
-            class="no-shadow radius-6 q-px-xl q-py-sm"
-            @click="archiveItem"
-          />
+          <q-btn :label="$t('category&Keyword.cancel')" outline v-close-popup size="14px" color="primary" no-caps
+            class="no-shadow radius-6 q-px-xl  q-mr-sm " :loading="isLoading" />
+          <q-btn :label="$t('confirm')" unelevated :loading="isLoading" size="14px" color="primary" no-caps
+            class="no-shadow radius-6 q-px-xl q-py-sm" @click="archiveItem" />
         </div>
       </q-card-section>
     </q-card>
@@ -94,28 +68,15 @@ export default {
         if (res !== false) {
           this.$_options = false;
         }
-      } else {
-        this.isLoading = true;
-        const id = this.id;
-        const res = await this.$store.dispatch(
-          "implementationChecklist/archiveChecklist",
-          {
-            id: id
-          }
-        );
-        this.isLoading = false;
-        if (res !== false) {
-          this.$_options = false;
-        }
       }
     }
   },
   computed: {
     $_options: {
-      get: function() {
+      get: function () {
         return this.dialogState;
       },
-      set: function(val) {
+      set: function (val) {
         this.$emit("update", val);
       }
     }

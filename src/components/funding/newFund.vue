@@ -7,23 +7,23 @@
       <div class="bg-white radius-20 q-py-lg" :class="{ 'q-px-md': $q.screen.gt.sm }">
         <q-form @validation-error="scrollToInvalidElement" ref="newFundingForm" class="q-gutter-lg q-px-md q-mb-md">
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("projectContent.fundingGuidelines") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <q-input outlined dense class="no-shadow input-radius-6" :placeholder="$t('official title')"
                 v-model="form.title" :rules="[val => !!val || $t('Required')]" />
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("funding provider") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <div class="row q-col-gutter-x-md">
                 <div class="col-12">
                   <q-input outlined dense class="no-shadow input-radius-6" :placeholder="$t('funding provider')"
@@ -33,12 +33,12 @@
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Contact person") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <div class="row q-col-gutter-x-md q-col-gutter-y-lg">
                 <div class="col-12">
                   <q-input outlined dense class="no-shadow input-radius-6"
@@ -48,12 +48,12 @@
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Contact Details (optional)") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <div class="row q-col-gutter-x-md q-col-gutter-y-lg">
                 <div class="col-6">
                   <q-input outlined dense class="no-shadow input-radius-6"
@@ -71,30 +71,58 @@
                   <q-input outlined dense class="no-shadow input-radius-6"
                     :placeholder="$t('projectIdeaPlaceholder.email')" v-model="form.info.email" />
                 </div>
-                <div class="col-12">
+                <!-- Location field hidden - can be re-enabled if needed -->
+                <!-- <div class="col-12">
                   <MunicipalityCities :currentMunicipality="form.info.location"
                     @update:city="form.info.location = $event" />
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
           <div class="row items-center">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                {{ $t("federalStates.selectFederalStates") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-select outlined dense v-model="form.federalStates" multiple use-chips :options="federalStatesList"
+                option-label="title" class="no-shadow input-radius-6"
+                :placeholder="$t('federalStates.selectFederalStates')"
+                :rules="[val => (val && val.length > 0) || $t('Required')]" options-selected-class="text-primary">
+              </q-select>
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                {{ $t("Select Municipalities") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-select outlined dense v-model="form.municipalities" multiple use-chips :options="municipalitiesList"
+                option-label="title" class="no-shadow input-radius-6" :placeholder="$t('Select Municipalities')"
+                options-selected-class="text-primary">
+              </q-select>
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Invite Editor") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <UserSelect :editing="!!funding ? funding.editors : []" @update:user="form.editors = $event" />
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("newProjectIdeaForm.visibility") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <q-select outlined dense v-model="form.visibility" emit-value :options="visibilityOptions"
                 :rules="[val => !!val || $t('Required')]" class="no-shadow input-radius-6"
                 options-selected-class="text-primary">
@@ -136,19 +164,19 @@
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">{{ $t("Filter Categories") }}</p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <Categories :requiresValidation="true" :editing="!!funding ? funding.categories : []"
                 @update:category="form.categories = $event" />
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">{{ $t("Tags") }}</p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <Tags :requiresValidation="true" :editing="!!funding ? funding.tags : []"
                 @update:tag="form.tags = $event" />
             </div>
@@ -159,58 +187,58 @@
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Funding goal") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" placeholder="Förderziel"
-                v-model="form.details.goal" />
+            <div class="col-12 col-md-9">
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.goal"
+                :toolbar="editorToolbar" />
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("What is funded?") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                placeholder="Was wird gefördert" v-model="form.details.funded" />
+            <div class="col-12 col-md-9">
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.funded"
+                :toolbar="editorToolbar" />
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("What is not funded?") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                placeholder="Was wird nicht gefördert" v-model="form.details.notFunded" />
+            <div class="col-12 col-md-9">
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.notFunded"
+                :toolbar="editorToolbar" />
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Who will be funded?") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                :placeholder="$t('Who will be funded?')" v-model="form.details.willBeFunded" />
+            <div class="col-12 col-md-9">
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.willBeFunded"
+                :toolbar="editorToolbar" />
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin q-pr-md">
                 {{ $t("Conditions for Applicants") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                placeholder="Rahmenbedingungen für Antragsteller*in" v-model="form.details.condition" />
+            <div class="col-12 col-md-9">
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.condition"
+                :toolbar="editorToolbar" />
             </div>
           </div>
           <div class="row">
@@ -220,46 +248,46 @@
           </div>
 
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Funding rates") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <FundingRate :editing="!!funding ? funding.rates : []" @update:fundingRate="form.rates = $event" />
             </div>
           </div>
 
           <div class="row items-center">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Own contribution") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <q-input outlined dense class="no-shadow input-radius-6 removeArrow" suffix="%" placeholder="0"
                 v-model="form.ownContribution" :rules="[]" />
             </div>
           </div>
           <div class="row items-center">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Accumulability") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <q-btn-toggle v-model="form.accumulability" spread no-caps toggle-color="yellow" padding="12px 10px"
                 color="transparent" toggle-text-color="black" text-color="black" class="no-shadow toggleGap"
                 :options="accumulabilityOptions" />
             </div>
           </div>
           <div v-if="form.accumulability" class="row items-center">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Link to fundings") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <Fundings :requiresValidation="false" :editing="funding.fundingsLinkedTo"
                 @update:linkToFunding="form.fundingsLinkedTo = $event" />
             </div>
@@ -270,14 +298,13 @@
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Basis for assessment") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
-              <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-                :placeholder="$t('Basis for assessment')" v-model="form.assessment" />
+            <div class="col-12 col-md-9">
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.assessment" :toolbar="editorToolbar" />
             </div>
           </div>
           <div class="row">
@@ -286,12 +313,12 @@
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Funding Period") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <div class="row q-col-gutter-x-md">
                 <div class="col-6">
                   <q-input outlined dense class="no-shadow input-radius-6" :value="dateFormatter(form.plannedStart)"
@@ -335,17 +362,15 @@
             </div>
           </div>
           <div class="row items-center">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Notes to the funding period") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <div class="row q-col-gutter-x-md">
                 <div class="col-12">
-                  <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" v-model="form.notes"
-                    color="primary" bg-color="white" placeholder="Hinweise zum Förderzeitraum">
-                  </q-input>
+                  <q-editor outlined class="no-shadow input-radius-6" v-model="form.notes" :toolbar="editorToolbar" />
                 </div>
               </div>
             </div>
@@ -357,12 +382,12 @@
             </div>
           </div>
           <div class="row items-baseline">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 Links
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <Links :editing="!!funding ? funding.links : []" @update:link="form.links = $event" />
             </div>
           </div>
@@ -372,12 +397,12 @@
             </div>
           </div>
           <div class="row items-center">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 Uploads
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <div class="row q-col-gutter-md">
                 <div class="col-12">
                   <q-file flat v-model="form.files" class="uploadInput input-radius-6 text-white" label-color="white"
@@ -420,30 +445,14 @@
             </div>
           </div>
           <div class="row items-center">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Link to project ideas (optional)") }}
               </p>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-9">
               <ProjectIdeas :editing="!!funding ? funding.projects : []"
                 @update:linkToProject="form.projects = $event" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
-          <div class="row items-center">
-            <div class="col-12 col-md-4">
-              <p class="font-16 no-margin" :class="$q.screen.gt.md ? 'q-pr-xl' : ''">
-                {{ $t("Link to implementation checklist (optional)") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-8">
-              <ImplementationChecklists :editing="!!funding ? funding.checklist : null"
-                @update:linkToImplementationChecklist="form.checklist = $event" />
             </div>
           </div>
           <div class="row">
@@ -477,10 +486,8 @@ import Tags from "components/projects/create/Tags.vue";
 import FundingRate from "src/components/funding/FundingRate.vue";
 import Links from "src/components/projects/create/Links.vue";
 import ProjectIdeas from "components/funding/ProjectIdeas.vue";
-import ImplementationChecklists from "components/funding/ImplementationChecklists.vue";
 import Fundings from "components/funding/Fundings.vue";
 import ImageDialog from "components/ImageDialog.vue";
-import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
 
 export default {
   name: "newFund",
@@ -489,10 +496,8 @@ export default {
     Categories,
     Tags,
     FundingRate,
-    MunicipalityCities,
     Links,
     ProjectIdeas,
-    ImplementationChecklists,
     Fundings,
     ImageDialog
   },
@@ -527,12 +532,13 @@ export default {
         plannedEnd: "",
         notes: "",
         editors: [],
+        federalStates: [],
+        municipalities: [],
         rates: [],
         links: [],
         categories: [],
         tags: [],
         projects: [],
-        checklist: null,
         media: null,
         files: null,
         fundingsLinkedTo: []
@@ -578,6 +584,39 @@ export default {
       setScrollPosition(target, offset, duration);
     },
     dateFormatter,
+    decodeHtmlEntities(text) {
+      if (!text) return text;
+      const textarea = document.createElement('textarea');
+      textarea.innerHTML = text;
+      let decoded = textarea.value;
+
+      // Fix orphaned <li> tags by wrapping them in <ul>
+      // Match sequences of <div><li>...</li></div> or just <li> tags
+      decoded = decoded.replace(/(<div>)?<li>(.*?)<\/li>(<\/div>)?/gi, '<li>$2</li>');
+
+      // If we have <li> tags, wrap them in a <ul>
+      if (decoded.includes('<li>')) {
+        // Remove any wrapping divs around list items
+        decoded = decoded.replace(/<div>(<li>.*?<\/li>)<\/div>/gi, '$1');
+        decoded = decoded.replace(/<div><br><\/div>/gi, '');
+
+        // Wrap all consecutive <li> tags in a <ul>
+        decoded = decoded.replace(/(<li>[\s\S]*?<\/li>)/gi, function (match) {
+          // Check if already wrapped
+          if (!decoded.match(new RegExp('<ul[^>]*>' + match.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))) {
+            return match;
+          }
+          return match;
+        });
+
+        // Wrap all <li> sequences in <ul> if not already wrapped
+        if (!decoded.includes('<ul>') && !decoded.includes('<ol>')) {
+          decoded = decoded.replace(/(<li>[\s\S]*<\/li>)/gi, '<ul>$1</ul>');
+        }
+      }
+
+      return decoded;
+    },
     imgPreview(val) {
       return {
         url: !!val.id ? `${this.appUrl}${val.url}` : URL.createObjectURL(val),
@@ -600,12 +639,9 @@ export default {
           const res = await this.$store.dispatch("funding/createNewFunding", {
             data: {
               ...this.form,
+              federalStates: this.form.federalStates.map(fs => fs.id),
+              municipalities: this.form.municipalities.map(m => m.id),
               published: published,
-              municipality: {
-                id:
-                  this.userDetails.municipality &&
-                  this.userDetails.municipality.id
-              },
               owner: {
                 id: this.user && this.user.id
               }
@@ -634,12 +670,9 @@ export default {
           const res = await this.$store.dispatch("funding/editFunding", {
             data: {
               ...this.form,
-              published: published,
-              municipality: {
-                id:
-                  this.userDetails.municipality &&
-                  this.userDetails.municipality.id
-              }
+              federalStates: this.form.federalStates.map(fs => fs.id),
+              municipalities: this.form.municipalities.map(m => m.id),
+              published: published
               // owner: {
               //   id: this.user && this.user.id
               // }
@@ -674,9 +707,6 @@ export default {
         } else {
           // this.$refs.fundings.validate();
         }
-        if (!this.form.checklist) {
-          delete this.form.checklist;
-        }
         if (!!this.form.projects && this.form.projects.length < 1) {
           delete this.form.projects;
         }
@@ -689,9 +719,25 @@ export default {
         await this.$store.dispatch("funding/getSpecificFunding", {
           id: Number(this.$route.params.id)
         });
+
+        // Decode HTML entities in editor fields
+        const decodedFunding = {
+          ...this.funding,
+          notes: this.decodeHtmlEntities(this.funding.notes),
+          assessment: this.decodeHtmlEntities(this.funding.assessment),
+          details: {
+            ...this.funding.details,
+            goal: this.decodeHtmlEntities(this.funding.details?.goal),
+            funded: this.decodeHtmlEntities(this.funding.details?.funded),
+            notFunded: this.decodeHtmlEntities(this.funding.details?.notFunded),
+            willBeFunded: this.decodeHtmlEntities(this.funding.details?.willBeFunded),
+            condition: this.decodeHtmlEntities(this.funding.details?.condition)
+          }
+        };
+
         this.form = {
           ...this.form,
-          ...this.funding,
+          ...decodedFunding,
           files: this.funding.files,
           media: this.funding.media
         };
@@ -699,6 +745,8 @@ export default {
         this.dataLoaded = true;
       }
       this.$store.dispatch("userCenter/getUsers");
+      this.$store.dispatch("federalState/getFederalStates");
+      this.$store.dispatch("municipality/getMunicipalities");
 
       if (this.form.archived && !isAdmin) {
         this.$q.notify({
@@ -712,6 +760,17 @@ export default {
     }
   },
   computed: {
+    editorToolbar() {
+      return [
+        ['left', 'center', 'right', 'justify'],
+        ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+        ['token', 'hr', 'link'],
+        ['print', 'fullscreen'],
+        ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+        ['undo', 'redo'],
+        ['viewsource'],
+      ]
+    },
     datepickerLocale() {
       return {
         days: [
@@ -795,6 +854,26 @@ export default {
         !!this.$route.params.id &&
         JSON.parse(JSON.stringify(this.$store.state.funding.funding))
       );
+    },
+    federalStatesList() {
+      const federalStates = this.$store.state.federalState.federalStates;
+      if (federalStates && federalStates.data) {
+        return federalStates.data.map(item => ({
+          id: item.id,
+          title: item.attributes.title
+        }));
+      }
+      return [];
+    },
+    municipalitiesList() {
+      const municipalities = this.$store.state.municipality.municipalities;
+      if (municipalities) {
+        return municipalities.map(item => ({
+          id: item.id,
+          title: item.title
+        }));
+      }
+      return [];
     }
   },
   mounted() {

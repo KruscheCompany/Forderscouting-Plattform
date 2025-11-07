@@ -65,9 +65,7 @@
                 {{
                   tab == "projectIdeas"
                     ? $t("myData.createProjectIdea")
-                    : tab == "fundings"
-                      ? $t("fundingsCol.createFunding")
-                      : $t("checkListCols.createImplementationChecklist")
+                    : $t("fundingsCol.createFunding")
                 }}
               </p>
             </q-btn>
@@ -307,33 +305,6 @@ export default {
         } else {
           this.$router.push({ path: `/user/newFunding/${id}` });
         }
-      } else {
-        if (
-          row.visibility === "listed only" &&
-          (!!row.owner && row.owner.id) !==
-          (!!this.loggedInUser && this.loggedInUser.id) &&
-          !this.isAdmin
-        ) {
-          const hasReaderAccess =
-            !!row.readers &&
-            row.readers.filter(
-              user => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          const hasEditorAccess =
-            !!row.editors &&
-            row.editors.filter(
-              user => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          if (hasReaderAccess.length > 0 || hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newChecklist/${id}` });
-          } else {
-            this.itemId = row && row.id;
-            this.type = "view";
-            this.requestDialog = true;
-          }
-        } else {
-          this.$router.push({ path: `/user/newChecklist/${id}` });
-        }
       }
       this.viewIsLoading = false;
     },
@@ -382,27 +353,6 @@ export default {
         } else {
           this.$router.push({ path: `/user/newFunding/edit/${id}` });
         }
-      } else {
-        if (
-          (!!row.owner && row.owner.id) !==
-          (!!this.loggedInUser && this.loggedInUser.id) &&
-          !this.isAdmin
-        ) {
-          const hasEditorAccess =
-            !!row.editors &&
-            row.editors.filter(
-              user => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          if (hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newChecklist/edit/${id}` });
-          } else {
-            this.itemId = row && row.id;
-            this.type = "edit";
-            this.requestDialog = true;
-          }
-        } else {
-          this.$router.push({ path: `/user/newChecklist/edit/${id}` });
-        }
       }
       this.editIsLoading = false;
     },
@@ -425,13 +375,6 @@ export default {
           id: id
         });
         this.archiveIsLoading = false;
-      } else {
-        this.archiveIsLoading = true;
-        const id = row && row.id;
-        await this.$store.dispatch("implementationChecklist/archiveChecklist", {
-          id: id
-        });
-        this.archiveIsLoading = false;
       }
     },
     async addToWatchlist(row) {
@@ -449,13 +392,6 @@ export default {
           id: id
         });
         this.watchlistIsLoading = false;
-      } else {
-        this.watchlistIsLoading = true;
-        const id = row && row.id;
-        await this.$store.dispatch("implementationChecklist/addToWatchlist", {
-          id: id
-        });
-        this.watchlistIsLoading = false;
       }
     },
     goToPage(page) {
@@ -465,12 +401,6 @@ export default {
       } else if (page === "fundings") {
         this.$store.commit("funding/setSpecificFunding", null);
         this.$router.push({ path: "/user/newFunding" });
-      } else {
-        this.$store.commit(
-          "implementationChecklist/setSpecificChecklist",
-          null
-        );
-        this.$router.push({ path: "/user/newChecklist" });
       }
     },
     getData(tab) {
@@ -480,12 +410,6 @@ export default {
       } else if (tab == "fundings") {
         this.$store.dispatch("funding/getFundings");
         this.$store.commit("funding/setSpecificFunding", null);
-      } else {
-        this.$store.dispatch("implementationChecklist/getChecklists");
-        this.$store.commit(
-          "implementationChecklist/setSpecificChecklist",
-          null
-        );
       }
     },
     getLastCompletedStepColor(applicationProcessSteps) {
@@ -597,8 +521,6 @@ export default {
         this.getData("projectIdeas");
       } else if (val === "fundings") {
         this.getData("fundings");
-      } else {
-        this.getData("implementationChecklist");
       }
     }
   },
@@ -627,9 +549,7 @@ export default {
     columns() {
       return this.tab == "projectIdeas"
         ? this.projectCols
-        : this.tab == "fundings"
-          ? this.fundingCols
-          : this.checklistCols;
+        : this.fundingCols;
     },
     data() {
       return this.tab == "projectIdeas"
@@ -639,20 +559,12 @@ export default {
             return editor.id == this.loggedInUser.id
           }).length > 0
         })
-        : this.tab == "fundings"
-          ? !!this.$store.state.funding.fundings &&
-          this.$store.state.funding.fundings.filter((item) => {
-            return item.owner.id == this.loggedInUser.id || item.editors.filter((editor) => {
-              return editor.id == this.loggedInUser.id
-            }).length > 0
-          })
-          : !!this.$store.state.implementationChecklist.checklists &&
-          this.$store.state.implementationChecklist.checklists.filter((item) => {
-            return item.owner.id == this.loggedInUser.id || item.editors.filter((editor) => {
-              return editor.id == this.loggedInUser.id
-            }).length > 0
-          });
-      // }
+        : !!this.$store.state.funding.fundings &&
+        this.$store.state.funding.fundings.filter((item) => {
+          return item.owner.id == this.loggedInUser.id || item.editors.filter((editor) => {
+            return editor.id == this.loggedInUser.id
+          }).length > 0
+        });
     },
     projectCols() {
       return [
@@ -739,46 +651,6 @@ export default {
             const dateB = new Date(rowB.plannedEnd);
             return dateB - dateA;
           }
-        }
-      ];
-    },
-    checklistCols() {
-      return [
-        {
-          name: "id",
-          label: "id",
-          align: "left",
-          field: row => row.id,
-          sortable: true
-        },
-        {
-          name: "title",
-          label: this.$t("checkListCols.title"),
-          align: "left",
-          field: row => row.title,
-          sortable: true
-        },
-        {
-          name: "categories",
-          align: "left",
-          label: this.$t("checkListCols.categories"),
-          field: row =>
-            (!!row.categories &&
-              row.categories.map(category => category.title).join(", ")) ||
-            "No Categories",
-          sortable: true
-        },
-        {
-          name: "status",
-          label: "Status",
-          align: "left",
-          field: row =>
-            row.published === true
-              ? this.$t("Published")
-              : row.published === false
-                ? this.$t("Draft")
-                : this.$t("Status Unavailable"),
-          sortable: true
         }
       ];
     }

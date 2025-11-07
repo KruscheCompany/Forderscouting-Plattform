@@ -10,7 +10,7 @@ export function addTag(state, payload) {
   if (!!payload) {
     state.tags.push({
       ...payload,
-      dataSet: { projects: 0, fundings: 0, checklist: 0 }
+      dataSet: { projects: 0, fundings: 0 }
     });
   }
 }

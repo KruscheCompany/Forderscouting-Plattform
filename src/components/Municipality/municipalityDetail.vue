@@ -1,16 +1,8 @@
 <template>
   <div class="q-my-lg" :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'">
     <div class="row q-col-gutter-md">
-      <!-- <div class="col-12 col-md-auto"> -->
-      <!-- <q-card class="left-card radius-20 flex flex-center"> -->
-      <!-- <q-card-section> -->
-      <!-- TODO make this q-img -->
-      <!-- <img class="logo" al src="../../assets/Wappen.png" /> -->
-      <!-- </q-card-section> -->
-      <!-- </q-card> -->
-      <!-- </div> -->
       <div class="col-12 col-md-grow">
-        <q-card class="radius-20 bg-blue-1 right-card">
+        <q-card class="radius-20 bg-blue-1 shadow-2 q-pa-md">
           <q-card-section>
             <h6 class="q-mt-none q-mb-sm">
               {{ !!municipality && municipality.title }}
@@ -280,36 +272,6 @@ export default {
         } else {
           this.$router.push({ path: `/user/newFunding/${id}` });
         }
-      } else {
-        this.tab = "implementationChecklist";
-        if (
-          row.visibility === "listed only" &&
-          (!!row.owner && row.owner.id) !==
-          (!!this.loggedInUser && this.loggedInUser.id) &&
-          !this.isAdmin
-        ) {
-          const hasReaderAccess =
-            !!row.readers &&
-            row.readers.filter(
-              (user) =>
-                user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          const hasEditorAccess =
-            !!row.editors &&
-            row.editors.filter(
-              (user) =>
-                user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          if (hasReaderAccess.length > 0 || hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newChecklist/${id}` });
-          } else {
-            this.itemId = row && row.id;
-            this.itemType = "view";
-            this.requestDialog = true;
-          }
-        } else {
-          this.$router.push({ path: `/user/newChecklist/${id}` });
-        }
       }
       this.viewIsLoading = false;
     },
@@ -364,29 +326,6 @@ export default {
         } else {
           this.$router.push({ path: `/user/newFunding/edit/${id}` });
         }
-      } else {
-        this.tab = "implementationChecklist";
-        if (
-          (!!row.owner && row.owner.id) !==
-          (!!this.loggedInUser && this.loggedInUser.id) &&
-          !this.isAdmin
-        ) {
-          const hasEditorAccess =
-            !!row.editors &&
-            row.editors.filter(
-              (user) =>
-                user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          if (hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/user/newChecklist/edit/${id}` });
-          } else {
-            this.itemId = row && row.id;
-            this.itemType = "edit";
-            this.requestDialog = true;
-          }
-        } else {
-          this.$router.push({ path: `/user/newChecklist/edit/${id}` });
-        }
       }
       this.editIsLoading = false;
     },
@@ -403,14 +342,6 @@ export default {
         this.archiveIsLoading = true;
         const id = row && row.id;
         await this.$store.dispatch("funding/archiveFunding", {
-          id: id,
-        });
-        this.archiveIsLoading = false;
-        this.getData();
-      } else {
-        this.archiveIsLoading = true;
-        const id = row && row.id;
-        await this.$store.dispatch("implementationChecklist/archiveChecklist", {
           id: id,
         });
         this.archiveIsLoading = false;
@@ -434,14 +365,6 @@ export default {
         });
         this.watchlistIsLoading = false;
         this.getData();
-      } else {
-        this.watchlistIsLoading = true;
-        const id = row && row.id;
-        await this.$store.dispatch("implementationChecklist/addToWatchlist", {
-          id: id,
-        });
-        this.watchlistIsLoading = false;
-        this.getData();
       }
     },
     async deleteItem(row) {
@@ -450,9 +373,6 @@ export default {
         this.itemId = row && row.id;
       } else if (row.type === "funding") {
         this.tab = "fundings";
-        this.itemId = row && row.id;
-      } else {
-        this.tab = "implementationChecklist";
         this.itemId = row && row.id;
       }
       this.deleteDialog = true;
