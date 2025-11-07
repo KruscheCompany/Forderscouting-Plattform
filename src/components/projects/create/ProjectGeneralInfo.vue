@@ -3,23 +3,23 @@
     'projectContent.generalInformation')" header-class="bg-white text-black" v-model="expanded">
     <q-form @validation-error="scrollToInvalidElement" ref="newProjectIdeaForm" class="q-gutter-lg q-px-md ">
       <div class="row items-baseline">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
           <p class="font-16 no-margin">
             {{ $t("newProjectIdeaForm.projectName") }}
           </p>
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-9">
           <q-input outlined dense class="no-shadow input-radius-6" :placeholder="$t('projectIdeaPlaceholder.title')"
             v-model="localForm.title" :rules="[(val) => !!val || $t('Required')]" />
         </div>
       </div>
       <div class="row items-center">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
           <p class="font-16 no-margin">
             {{ $t("newProjectIdeaForm.contactPerson") }}
           </p>
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-9">
           <div class="row q-col-gutter-md">
             <div class="col-12 col-md-6">
               <q-input outlined dense class="no-shadow input-radius-6 disabledClass"
@@ -39,12 +39,12 @@
         </div>
       </div>
       <div class="row items-baseline">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
           <p class="font-16 no-margin">
             {{ $t("newProjectIdeaForm.contactDetails") }}
           </p>
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-9">
           <div class="row q-col-gutter-x-md" :class="$q.screen.gt.sm ? 'q-col-gutter-y-lg' : 'q-col-gutter-y-md'">
             <div class="col-12 col-md-6">
               <q-input outlined dense class="no-shadow input-radius-6 disabledClass"
@@ -77,22 +77,22 @@
         </div>
       </div>
       <div class="row items-center">
-        <div class="col-12 col-md-4" style="height: -webkit-fill-available;">
+        <div class="col-12 col-md-3" style="height: -webkit-fill-available;">
           <p class="font-16 no-margin">
             {{ $t("newProjectIdeaForm.inviteEditors") }}
           </p>
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-9">
           <UserSelect :editing="editingEditors" @update:user="updateEditors" />
         </div>
       </div>
       <div class="row items-baseline">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
           <p class="font-16 no-margin">
             {{ $t("newProjectIdeaForm.visibility") }}
           </p>
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-9">
           <q-select outlined dense v-model="localForm.visibility" :options="visibilityOptions" emit-value
             :rules="[(val) => !!val || $t('Required')]" class="no-shadow input-radius-6"
             options-selected-class="text-primary">
@@ -134,20 +134,20 @@
         </div>
       </div>
       <div class="row items-baseline">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
           <p class="font-16 no-margin">
             {{ $t("newProjectIdeaForm.filterCategories") }}
           </p>
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-9">
           <Categories :requiresValidation="true" :editing="editingCategories" @update:category="updateCategories" />
         </div>
       </div>
       <div class="row items-baseline">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
           <p class="font-16 no-margin">{{ $t("Tags") }}</p>
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-9">
           <Tags :requiresValidation="true" :editing="editingTags" @update:tag="updateTags" />
         </div>
       </div>
@@ -157,12 +157,12 @@
         </div>
       </div>
       <div class="row items-center q-mb-md">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
           <p class="font-16 no-margin">
             {{ $t("newProjectIdeaForm.investive/non-investive") }}
           </p>
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-9">
           <q-btn-toggle v-model="localForm.details.investive" spread no-caps :rules="[(val) => !!val || $t('Required')]"
             toggle-color="yellow" padding="12px 10px" color="transparent" toggle-text-color="black" text-color="black"
             class="no-shadow toggleGap" :options="investiveNoninvestiveOptions" />
