@@ -97,14 +97,16 @@
               </q-badge>
             </template>
             <template v-else>
-              <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
+              <q-tooltip v-if="col.value && col.value.length > 30" anchor="bottom left" self="top left"
                 content-style="font-size: 14px">
                 {{ col.value }}
               </q-tooltip>
               {{
-                col.value && col.value.length > 125
-                  ? col.value.substring(0, 125) + "..."
-                  : col.value
+                col.name === 'title' && col.value && col.value.length > 50
+                  ? col.value.substring(0, 50) + "..."
+                  : col.name === 'categories' && col.value && col.value.length > 30
+                    ? col.value.substring(0, 30) + "..."
+                    : col.value
               }}
             </template>
 

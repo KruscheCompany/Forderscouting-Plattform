@@ -1,7 +1,7 @@
 import { api } from "boot/axios";
 
 export async function uploadFundingFile(context, payload) {
-  const { fileData, onUploadProgress } = payload;
+  const { fileData, admin_id, onUploadProgress } = payload;
 
   // Create FormData
   const formData = new FormData();
@@ -10,6 +10,11 @@ export async function uploadFundingFile(context, payload) {
   // Add title - use custom title if provided, otherwise use filename without extension
   const title = fileData.title.trim() || fileData.name.replace(/\.[^/.]+$/, '');
   formData.append('title', title);
+
+  // Add admin_id if provided
+  if (admin_id) {
+    formData.append('admin_id', admin_id);
+  }
 
   // Make API request
   const response = await api.post(
