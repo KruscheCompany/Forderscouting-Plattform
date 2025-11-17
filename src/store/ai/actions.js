@@ -1,14 +1,14 @@
 import { api } from "boot/axios";
 
 export async function uploadFundingFile(context, payload) {
-  const { fileData, admin_id, onUploadProgress } = payload;
+  const { fileData, admin_id, onUploadProgress, authToken } = payload;
 
   // Create FormData
   const formData = new FormData();
   formData.append('data', fileData.file);
 
   // Add title - use custom title if provided, otherwise use filename without extension
-  const title = fileData.title.trim() || fileData.name.replace(/\.[^/.]+$/, '');
+  const title = (fileData.title || '').trim() || fileData.name.replace(/\.[^/.]+$/, '');
   formData.append('title', title);
 
   // Add admin_id if provided
@@ -16,15 +16,18 @@ export async function uploadFundingFile(context, payload) {
     formData.append('admin_id', admin_id);
   }
 
-  // Make API request
+  // Prepare headers. If an authToken is provided, send it as a Bearer token.
+  const headers = {};
+  if (authToken) {
+    headers['Authorization'] = `Bearer ${authToken}`;
+  }
+
+  // Note: let axios set the Content-Type (it will include proper boundary for FormData)
   const response = await api.post(
-    `${process.env.VUE_APP_AI}/funding/file`,
+    '/api/funding/proxy-upload',
     formData,
     {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'X-API-KEY': process.env.VUE_APP_AI_KEY
-      },
+      headers,
       onUploadProgress
     }
   );
@@ -88,7 +91,7 @@ export async function getFundingQuestions(context, payload) {
       fundingId,
       questions: response.data.questions
     });
-    
+
     return response;
 
   } catch (error) {
