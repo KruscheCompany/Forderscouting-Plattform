@@ -357,6 +357,9 @@
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("statsTable.categories") }}
                       </h4>
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-none">
+                        {{ $t('projectComponents.contentDetails.startingConditionDescription') }}
+                      </p>
                     </div>
                     <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                       <div class="q-ml-md font-16">
@@ -379,6 +382,7 @@
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Tags") }}
                       </h4>
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.tags') }}</p>
                     </div>
                     <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                       <div class="q-ml-md font-16">
@@ -409,6 +413,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Funding goal") }}
                         </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.fundingGoal') }}</p>
                       </div>
                       <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                         <div class="q-ml-xs">
@@ -431,6 +436,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("What is funded?") }}
                         </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.whatIsFunded') }}</p>
                       </div>
                       <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                         <div class="q-ml-xs">
@@ -453,6 +459,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("What is not funded?") }}
                         </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.whatIsNotFunded') }}</p>
                       </div>
                       <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                         <div class="q-ml-xs">
@@ -475,6 +482,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Who will be funded?") }}
                         </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.whoWillBeFunded') }}</p>
                       </div>
                       <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                         <div class="q-ml-xs">
@@ -496,6 +504,8 @@
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Conditions for Applicants") }}
                       </h4>
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.conditionsForApplicants') }}
+                      </p>
                     </div>
                     <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                       <div class="q-ml-xs">
@@ -520,6 +530,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Funding rates") }}
                         </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.fundingRates') }}</p>
                       </div>
                       <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                         <div class="q-ml-xs">
@@ -554,6 +565,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Own contribution") }}
                         </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.ownContribution') }}</p>
                       </div>
                       <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                         <div class="q-ml-xs">
@@ -574,6 +586,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Accumulability") }}
                         </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.accumulability') }}</p>
                       </div>
                       <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                         <div class="q-ml-xs">
@@ -602,6 +615,7 @@
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Links to the fundings") }}
                       </h4>
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.linksToFundings') }}</p>
                     </div>
                     <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                       <div class="q-ml-xs">
@@ -636,6 +650,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Basis for assessment") }}
                         </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.basisForAssessment') }}</p>
                       </div>
                       <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                         <div class="q-ml-xs">
@@ -653,6 +668,7 @@
                     <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                       {{ $t("Funding Period") }}
                     </h4>
+                    <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.fundingPeriod') }}</p>
                   </div>
                   <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                     <div class="q-ml-xs">
@@ -693,6 +709,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Notes to the funding period") }}
                         </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.notesToFundingPeriod') }}</p>
                       </div>
                       <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                         <div class="q-ml-xs">
@@ -713,6 +730,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("projectContent.links") }}
                         </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.projectLinks') }}</p>
                       </div>
                       <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                         <div class="q-ml-xs">
@@ -752,6 +770,7 @@
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         Uploads
                       </h4>
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.uploads') }}</p>
                     </div>
                     <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                       <div class="q-ml-xs">
@@ -783,6 +802,7 @@
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("projectContent.projectContent") }}
                       </h4>
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.projectContent') }}</p>
                     </div>
                     <div class="col-12 col-md-9 col-lg-10 col-xl-11">
                       <div class="q-ml-xs">

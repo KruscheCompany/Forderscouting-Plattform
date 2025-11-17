@@ -1096,5 +1096,28 @@
   "Details of the Funding": "Einzelheiten der Fördermittel",
   "New Implementation checklist": "Neue Umsetzungscheckliste",
   "Details of the Implementation checklist": "Einzelheiten der Checkliste für die Umsetzung",
-  "Edit Checklist": "Umsetzungscheckliste bearbeiten"
+  "Edit Checklist": "Umsetzungscheckliste bearbeiten",
+  "help": {
+    "fundingProvider": "Name der Institution oder Behörde, die die Förderung anbietet.",
+    "contactPerson": "Ansprechpartner*in für Rückfragen zur Förderung.",
+    "inviteEditor": "Benutzer*innen, die diese Förderung bearbeiten dürfen.",
+    "contactDetails": "Adresse, Telefon und E‑Mail der Förderstelle.",
+    "categories": "Themen und Kategorien dieser Förderung.",
+    "tags": "Schlagwörter zur besseren Auffindbarkeit.",
+    "fundingGoal": "Zweck oder Zielsetzung der Förderung.",
+    "whatIsFunded": "Welche Maßnahmen bzw. Ausgaben förderfähig sind.",
+    "whatIsNotFunded": "Welche Maßnahmen oder Kosten ausgeschlossen sind.",
+    "whoWillBeFunded": "Welche Zielgruppen oder Träger förderfähig sind.",
+    "conditionsForApplicants": "Voraussetzungen und Kriterien für Antragstellende.",
+    "fundingRates": "Verfügbare Fördersätze und deren Bedingungen.",
+    "ownContribution": "Erforderlicher Eigenanteil in Prozent.",
+    "accumulability": "Ob diese Förderung mit anderen kumulierbar ist.",
+    "linksToFundings": "Verweise auf verwandte Förderprogramme.",
+    "basisForAssessment": "Kriterien oder Bewertungsgrundlagen für Entscheidungen.",
+    "fundingPeriod": "Zeitlicher Rahmen für Anträge und Projektumsetzung.",
+    "notesToFundingPeriod": "Weitere Hinweise zu Fristen oder Zeitrahmen.",
+    "projectLinks": "Externe Links zur Richtlinie oder Antragsunterlagen.",
+    "uploads": "Hochgeladene Dateien zur Förderung (z. B. Richtlinien, Formulare).",
+    "projectContent": "Verknüpfte Projektideen, Beispiele und Hinweise."
+  }
 }
