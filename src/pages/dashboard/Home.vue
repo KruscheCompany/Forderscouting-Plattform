@@ -19,7 +19,8 @@
               </p>
             </q-btn>
           </div>
-          <div v-if="isAdmin" class="col-12 col-md-auto">
+          <!-- Hidden for our current platform. Feel free to enable this for your own use. -->
+          <div v-if="false" class="col-12 col-md-auto">
             <q-btn color="blue" icon="add" unelevated outline class="mr-0 radius-6 text-weight-600"
               :class="{ 'full-width': $q.screen.lt.md }" no-caps @click="$router.push({ path: '/user/newFunding' })">
               <p class="q-mb-none q-mx-md q-my-sm">

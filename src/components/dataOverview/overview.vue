@@ -818,7 +818,7 @@ export default {
       setTimeout(() => {
         this.$refs.table.setPagination({
           page: savedFilters.page || 1,
-          rowsPerPage: savedFilters.rowsPerPage || 10,
+          rowsPerPage: savedFilters.rowsPerPage != null ? savedFilters.rowsPerPage : 10,
         });
       }, 100);
     }
