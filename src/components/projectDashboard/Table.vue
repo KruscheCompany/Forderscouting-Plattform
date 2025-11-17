@@ -214,8 +214,8 @@ export default {
         { value: null, title: this.$t('In Bearbeitung') }
       ],
       investiveOptions: [
-        { value: true, title: "Yes" },
-        { value: false, title: "No" },
+        { value: true, title: this.$t('Investive') },
+        { value: false, title: this.$t('Non-Investive') },
       ],
       applicationStepOptions: [
         { value: "aiFundingCheck", title: this.$t('aiFundingCheck') },

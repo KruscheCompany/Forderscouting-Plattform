@@ -24,6 +24,7 @@
           </q-btn>
           <q-btn icon="notifications" to="/user/notifications" flat round dark color="blue" class="mr-0"
             :aria-label="$t('notifications')">
+            <q-badge v-if="notificationsCount > 0" rounded color="red" floating>{{ notificationsCount }}</q-badge>
           </q-btn>
           <q-btn v-if="isGuest" icon="person" to="/community/data?tab=projectIdeas" flat round dark color="blue"
             class="mr-0" :aria-label="$t('communityData')">
@@ -144,6 +145,7 @@ export default {
       themeIcon: "mdi-white-balance-sunny",
       isEnabled: false,
       isOpenDialog: false,
+      notificationsCount: 0,
     };
   },
   methods: {
@@ -211,6 +213,26 @@ export default {
         if (this.cookiePrefrence) localStorage.setItem("darkmode", false);
       }
     },
+    getNotificationsCount() {
+      this.$api
+        .get("/api/user/notification")
+        .then((response) => {
+          const data = response && response.data ? response.data : {};
+          const fundingComments = Array.isArray(data.fundingComments) ? data.fundingComments.length : 0;
+          const fundingExpirey = Array.isArray(data.fundingExpirey) ? data.fundingExpirey.length : 0;
+          const guest = Array.isArray(data.guest) ? data.guest.length : 0;
+          const requests = Array.isArray(data.requests) ? data.requests.length : 0;
+
+          this.notificationsCount = fundingComments + fundingExpirey + guest + requests;
+        })
+        .catch((err) => {
+          // Fail-safe: log and set notificationsCount to 0 on error
+          // (avoid throwing unhandled errors during rendering)
+          // eslint-disable-next-line no-console
+          console.error("Error fetching notifications:", err);
+          this.notificationsCount = 0;
+        });
+    },
   },
   computed: {
     user() {
@@ -236,6 +258,7 @@ export default {
     console.log("router", this.$router.currentRoute);
     this.checkLanguage();
     this.checkDarkMode();
+    this.getNotificationsCount();
   },
 };
 </script>

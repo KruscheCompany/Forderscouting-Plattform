@@ -52,19 +52,6 @@ const routes = [
         component: () => import("pages/dashboard/Home.vue")
       },
       {
-        path: "/overview",
-        name: "DataOverview",
-        meta: {
-          title: "Data Overview",
-          titleDE: "Datenübersicht",
-          showInNavigation: true,
-          requireAuth: true,
-          requireAdmin: false
-        },
-        icon: "/icons/Documents.svg",
-        component: () => import("pages/dashboard/DataOverview.vue")
-      },
-      {
         path: "/project/dashboard",
         name: "ProjectDashboard",
         meta: {
@@ -76,6 +63,19 @@ const routes = [
         },
         icon: "/icons/Documents.svg",
         component: () => import("pages/dashboard/ProjectDashboard.vue")
+      },
+      {
+        path: "/overview",
+        name: "DataOverview",
+        meta: {
+          title: "Data Overview",
+          titleDE: "Datenübersicht",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: false
+        },
+        icon: "/icons/Documents.svg",
+        component: () => import("pages/dashboard/DataOverview.vue")
       },
       {
         path: "/watchlist",
@@ -184,19 +184,6 @@ const routes = [
         component: () => import("pages/dashboard/EmailCenter.vue")
       },
       {
-        path: "/states",
-        name: "States",
-        meta: {
-          title: "States",
-          titleDE: "Gemeinden",
-          showInNavigation: true,
-          requireAuth: true,
-          requireAdmin: true
-        },
-        icon: "/icons/Government.svg",
-        component: () => import("pages/dashboard/States.vue")
-      },
-      {
         path: "/federal-states",
         name: "FederalStates",
         meta: {
@@ -222,6 +209,19 @@ const routes = [
         },
         icon: "/icons/Municipality.svg",
         component: () => import("pages/dashboard/Municipality.vue")
+      },
+      {
+        path: "/states",
+        name: "States",
+        meta: {
+          title: "States",
+          titleDE: "Gemeinden",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: true
+        },
+        icon: "/icons/Government.svg",
+        component: () => import("pages/dashboard/States.vue")
       },
       {
         path: "/Administation/Areas/:id",
