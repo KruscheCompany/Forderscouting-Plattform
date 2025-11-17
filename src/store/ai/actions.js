@@ -47,11 +47,11 @@ export async function matchFunding(context, payload) {
   try {
 
     const response = await api.post(
-      `${process.env.VUE_APP_AI}/funding/matching`,
+      '/api/funding/proxy-match',
       { startingCondition, goals, content, valuesAndBenefits, finances },
       {
         headers: {
-          'X-API-KEY': process.env.VUE_APP_AI_KEY
+          'Content-Type': 'application/json'
         }
       }
     );
@@ -77,11 +77,11 @@ export async function getFundingQuestions(context, payload) {
 
   try {
     const response = await api.post(
-      `${process.env.VUE_APP_AI}/funding/questions/${fundingId}`,
+      `/api/funding/proxy-questions/${fundingId}`,
       { idea, goals, content, valuesAndBenefits, finances },
       {
         headers: {
-          'X-API-KEY': process.env.VUE_APP_AI_KEY
+          'Content-Type': 'application/json'
         }
       }
     );
