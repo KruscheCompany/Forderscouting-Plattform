@@ -370,8 +370,8 @@ export default {
         }
 
         // 3a. Check if funding has municipalities and federalStates
-        const fundingMunicipalities = funding.attributes?.municipalities?.data || [];
-        const fundingFederalStates = funding.attributes?.federalStates?.data || [];
+        const fundingMunicipalities = funding.municipalities?.data || [];
+        const fundingFederalStates = funding.federalStates?.data || [];
 
         if (fundingMunicipalities.length === 0 || fundingFederalStates.length === 0) {
           return false;
