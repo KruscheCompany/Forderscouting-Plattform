@@ -1,7 +1,7 @@
 <template>
   <div class="row items-center q-gutter-md">
 
-    <div v-if="showTransferButton" class="col-auto">
+    <div v-if="showEditButton" class="col-auto">
       <q-btn @click="editProject" color="yellow" unelevated class="radius-6 text-weight-600" no-caps icon="edit"
         aria-label="Edit" :loading="loadingStates.edit" text-color="blue">
         <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
@@ -173,6 +173,20 @@ export default {
         this.project &&
         this.project.id &&
         (this.project.owner.id === this.loggedInUser.id || this.isAdmin)
+      );
+    },
+    showEditButton() {
+      const hasEditorAccess =
+        !!this.project.editors &&
+        this.project.editors.filter(
+          user => user.id === (!!this.loggedInUser && this.loggedInUser.id)
+        );
+      return (
+        this.isAdmin ||
+        (this.project &&
+          this.project.owner &&
+          this.project.owner.id === this.loggedInUser.id) ||
+        hasEditorAccess.length > 0
       );
     },
     showArchiveButton() {
