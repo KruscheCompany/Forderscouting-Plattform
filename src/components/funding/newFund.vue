@@ -100,9 +100,10 @@
               </p>
             </div>
             <div class="col-12 col-md-9">
-              <q-select outlined dense v-model="form.municipalities" multiple use-chips :options="municipalitiesList"
-                option-label="title" class="no-shadow input-radius-6" :placeholder="$t('Select Municipalities')"
-                options-selected-class="text-primary">
+              <q-select outlined dense v-model="form.municipalities" multiple use-chips
+                :options="filteredMunicipalities" option-label="title" class="no-shadow input-radius-6"
+                :placeholder="$t('Select Municipalities')" options-selected-class="text-primary"
+                :disable="!form.federalStates || form.federalStates.length === 0">
               </q-select>
             </div>
           </div>
@@ -420,13 +421,13 @@
                         <q-avatar rounded size="48px">
                           <small>{{
                             imgPreview(file).name.split(".")[1]
-                          }}</small>
+                            }}</small>
                         </q-avatar>
                       </q-item-section>
                       <q-item-section>
                         <q-item-label class="ellipsis" caption>{{
                           imgPreview(file).name
-                        }}</q-item-label>
+                          }}</q-item-label>
                       </q-item-section>
                       <q-item-section side>
                         <q-btn icon="delete" @click.prevent.stop="removeFile(index)" size="sm" round text-color="red"
@@ -870,10 +871,36 @@ export default {
       if (municipalities) {
         return municipalities.map(item => ({
           id: item.id,
-          title: item.title
+          title: item.title,
+          federalStates: item.federalStates || []
         }));
       }
       return [];
+    },
+    filteredMunicipalities() {
+      if (!this.form.federalStates || this.form.federalStates.length === 0) {
+        // If no federal states selected, only show already-selected municipalities
+        return this.form.municipalities || [];
+      }
+
+      const selectedFederalStateTitles = this.form.federalStates.map(fs => fs.title);
+      const selectedMunicipalityIds = (this.form.municipalities || []).map(m => m.id);
+
+      return this.municipalitiesList.filter(municipality => {
+        // Always include already-selected municipalities
+        if (selectedMunicipalityIds.includes(municipality.id)) {
+          return true;
+        }
+
+        // Include municipalities that match the selected federal states
+        if (!municipality.federalStates || municipality.federalStates.length === 0) {
+          return false;
+        }
+
+        return municipality.federalStates.some(fs =>
+          selectedFederalStateTitles.includes(fs.title)
+        );
+      });
     }
   },
   mounted() {
