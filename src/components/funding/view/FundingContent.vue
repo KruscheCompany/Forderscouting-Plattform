@@ -44,7 +44,7 @@
           <div class="row">
             <q-card class="col-12 shadow-1 radius-20 q-mb-none q-pa-none">
               <q-card-section class="row items-center justify-between q-pa-md q-col-gutter-sm">
-                <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                   <div class="row q-col-gutter-y-sm q-col-gutter-x-xl">
                     <div class="col-auto">
                       <p class="font-14 no-margin text-blue-grey-10">
@@ -353,15 +353,15 @@
               <q-card class="shadow-1 radius-20">
                 <q-card-section class="q-pa-md">
                   <div class="row">
-                    <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                    <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("statsTable.categories") }}
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-none">
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-none q-pr-xl">
                         {{ $t('projectComponents.contentDetails.startingConditionDescription') }}
                       </p>
                     </div>
-                    <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                    <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                       <div class="q-ml-md font-16">
                         <div v-if="
                           funding.categories && funding.categories.length > 0
@@ -378,13 +378,13 @@
                 <q-separator inset class="bg-blue opacity-10" />
                 <q-card-section class="q-pa-md">
                   <div class="row">
-                    <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                    <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Tags") }}
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.tags') }}</p>
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.tags') }}</p>
                     </div>
-                    <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                    <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                       <div class="q-ml-md font-16">
                         <div v-if="funding.tags && funding.tags.length > 0">
                           <q-chip v-for="(tag, index) in sortedTags" :key="index" square size="16px" color="yellow-10"
@@ -409,13 +409,13 @@
                 <div v-if="!!funding.details.goal">
                   <q-card-section class="q-pa-md items-start">
                     <div class="row">
-                      <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                      <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Funding goal") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.fundingGoal') }}</p>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.fundingGoal') }}</p>
                       </div>
-                      <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                      <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.goal
@@ -432,13 +432,13 @@
                 <div v-if="!!funding.details.funded">
                   <q-card-section class="q-pa-md items-start">
                     <div class="row">
-                      <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                      <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("What is funded?") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.whatIsFunded') }}</p>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.whatIsFunded') }}</p>
                       </div>
-                      <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                      <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.funded
@@ -455,13 +455,14 @@
                 <div v-if="!!funding.details.notFunded">
                   <q-card-section class="q-pa-md items-start">
                     <div class="row">
-                      <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                      <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("What is not funded?") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.whatIsNotFunded') }}</p>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.whatIsNotFunded') }}
+                        </p>
                       </div>
-                      <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                      <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.notFunded
@@ -478,13 +479,14 @@
                 <div v-if="!!funding.details.willBeFunded">
                   <q-card-section class="q-pa-md items-start">
                     <div class="row">
-                      <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                      <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Who will be funded?") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.whoWillBeFunded') }}</p>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.whoWillBeFunded') }}
+                        </p>
                       </div>
-                      <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                      <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.willBeFunded
@@ -500,14 +502,15 @@
                 </div>
                 <q-card-section v-if="!!funding.details.condition" class="q-pa-md items-start">
                   <div class="row">
-                    <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                    <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Conditions for Applicants") }}
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.conditionsForApplicants') }}
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{
+                        $t('help.conditionsForApplicants') }}
                       </p>
                     </div>
-                    <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                    <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                       <div class="q-ml-xs">
                         <div class="q-ml-md font-16">
                           <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.condition
@@ -526,13 +529,13 @@
                 <div v-if="funding.rates && funding.rates.length > 0">
                   <q-card-section class="q-pa-md items-start">
                     <div class="row">
-                      <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                      <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Funding rates") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.fundingRates') }}</p>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.fundingRates') }}</p>
                       </div>
-                      <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                      <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <div v-if="funding.rates && funding.rates.length > 0">
@@ -561,13 +564,14 @@
                 <div v-if="!!funding.ownContribution">
                   <q-card-section class="q-pa-md items-start">
                     <div class="row">
-                      <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                      <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Own contribution") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.ownContribution') }}</p>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.ownContribution') }}
+                        </p>
                       </div>
-                      <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                      <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.ownContribution + ' %' || '')">
@@ -582,13 +586,14 @@
                 <div>
                   <q-card-section class="q-pa-md items-start">
                     <div class="row">
-                      <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                      <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Accumulability") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.accumulability') }}</p>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.accumulability') }}
+                        </p>
                       </div>
-                      <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                      <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm">
@@ -611,13 +616,14 @@
                   funding.fundingsLinkedTo.length > 0
                 " class="q-pa-md items-baseline">
                   <div class="row items-center">
-                    <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                    <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Links to the fundings") }}
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.linksToFundings') }}</p>
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.linksToFundings') }}
+                      </p>
                     </div>
-                    <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                    <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                       <div class="q-ml-xs">
                         <div class="q-ml-md font-16">
                           <div v-if="
@@ -646,13 +652,14 @@
                 <div v-if="!!funding.assessment">
                   <q-card-section class="q-pa-md items-start">
                     <div class="row">
-                      <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                      <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Basis for assessment") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.basisForAssessment') }}</p>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.basisForAssessment')
+                          }}</p>
                       </div>
-                      <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                      <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.assessment || '')"></p>
@@ -664,17 +671,17 @@
                   <q-separator inset class="bg-blue opacity-10" />
                 </div>
                 <q-card-section :horizontal="$q.screen.gt.sm" class="q-pa-md items-start">
-                  <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                  <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                     <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                       {{ $t("Funding Period") }}
                     </h4>
-                    <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.fundingPeriod') }}</p>
+                    <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.fundingPeriod') }}</p>
                   </div>
-                  <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                  <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                     <div class="q-ml-xs">
                       <div class="q-ml-md font-16">
                         <div class="row">
-                          <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                          <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                             <p class="q-mt-sm q-mb-sm inline-block">
                               {{ $t("fundingsCol.start") }}
                             </p>
@@ -686,7 +693,7 @@
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                          <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                             <p class="q-mt-sm q-mb-sm inline-block">
                               {{ $t("fundingsCol.end") }}
                             </p>
@@ -705,13 +712,14 @@
                 <div v-if="!!funding.notes">
                   <q-card-section class="q-pa-md items-start">
                     <div class="row">
-                      <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                      <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Notes to the funding period") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.notesToFundingPeriod') }}</p>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{
+                          $t('help.notesToFundingPeriod') }}</p>
                       </div>
-                      <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                      <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.notes || '')">
@@ -726,13 +734,13 @@
                 <div v-if="funding.links && funding.links.length > 0">
                   <q-card-section class="q-pa-md items-start">
                     <div class="row">
-                      <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                      <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("projectContent.links") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.projectLinks') }}</p>
+                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.projectLinks') }}</p>
                       </div>
-                      <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                      <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
                             <div v-if="funding.links && funding.links.length > 0">
@@ -766,13 +774,13 @@
                 </div>
                 <q-card-section v-if="funding.files && funding.files.length > 0" class="q-pa-md items-start">
                   <div class="row">
-                    <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                    <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         Uploads
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.uploads') }}</p>
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.uploads') }}</p>
                     </div>
-                    <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                    <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                       <div class="q-ml-xs">
                         <div class="q-ml-md font-16">
                           <div v-if="funding.files && funding.files.length > 0">
@@ -798,13 +806,13 @@
               <q-card class="shadow-1 radius-20">
                 <q-card-section class="q-pa-md items-start">
                   <div class="row">
-                    <div class="col-12 col-md-3 col-lg-2 col-xl-1">
+                    <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("projectContent.projectContent") }}
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs">{{ $t('help.projectContent') }}</p>
+                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.projectContent') }}</p>
                     </div>
-                    <div class="col-12 col-md-9 col-lg-10 col-xl-11">
+                    <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                       <div class="q-ml-xs">
                         <div v-if="funding.projects && funding.projects.length > 0" class="q-ml-md font-16">
                           <div class="row">
