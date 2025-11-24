@@ -192,8 +192,8 @@ export default {
     // Get all fundings from store
     allFundings() {
       const fundings = this.$store.state.funding.fundings;
-      if (fundings && fundings.data) {
-        return fundings.data;
+      if (fundings) {
+        return fundings;
       }
       return [];
     },
@@ -220,7 +220,6 @@ export default {
 
       // Get matches from AI
       const aiMatches = this.getFundingMatches;
-
       // If no AI matches, return empty array
       if (!aiMatches || aiMatches.length === 0) {
         return [];
@@ -228,6 +227,7 @@ export default {
 
       // Validate user data
       if (!this.userDataValidation.isValid) {
+        console.log('User data is invalid');
         return [];
       }
 
@@ -298,7 +298,10 @@ export default {
     },
     funding() {
       return this.$store.state.funding.funding;
-    }
+    },
+    isAdmin() {
+      return this.$store.getters["userCenter/isAdmin"];
+    },
   },
   watch: {
     currentTab(newTab) {
@@ -352,6 +355,9 @@ export default {
 
     // Filter fundings by user's municipality and federal states
     filterFundingsByUserData(aiMatches) {
+      if (this.isAdmin) {
+        return aiMatches;
+      }
       const userMunicipalityId = this.userMunicipality?.id;
       const userFederalStateIds = this.userFederalStates.map(fs => fs.id);
 
@@ -370,8 +376,8 @@ export default {
         }
 
         // 3a. Check if funding has municipalities and federalStates
-        const fundingMunicipalities = funding.municipalities?.data || [];
-        const fundingFederalStates = funding.federalStates?.data || [];
+        const fundingMunicipalities = funding.municipalities || [];
+        const fundingFederalStates = funding.federalStates || [];
 
         if (fundingMunicipalities.length === 0 || fundingFederalStates.length === 0) {
           return false;
@@ -390,7 +396,6 @@ export default {
         const hasAllFederalStatesMatch = userFederalStateIds.every(userFsId =>
           fundingFederalStates.some(fundingFs => fundingFs.id === userFsId)
         );
-
         return hasAllFederalStatesMatch;
       });
     },
@@ -416,7 +421,7 @@ export default {
         !!id &&
         id !== (!!this.$route.params && Number(this.$route.params.id))
       ) {
-        const url = `/user/newFunding/${externalId}`;
+        const url = `/user/newFunding/${id}`;
         window.open(url, '_blank');
       }
     },
