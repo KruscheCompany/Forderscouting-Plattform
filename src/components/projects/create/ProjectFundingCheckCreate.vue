@@ -356,7 +356,7 @@ export default {
     // Filter fundings by user's municipality and federal states
     filterFundingsByUserData(aiMatches) {
       if (this.isAdmin) {
-        return aiMatches;
+        return aiMatches.slice(0, 6);
       }
       const userMunicipalityId = this.userMunicipality?.id;
       const userFederalStateIds = this.userFederalStates.map(fs => fs.id);
@@ -397,7 +397,7 @@ export default {
           fundingFederalStates.some(fundingFs => fundingFs.id === userFsId)
         );
         return hasAllFederalStatesMatch;
-      });
+      }).slice(0, 6);
     },
 
     // Show error notification if user data is invalid
