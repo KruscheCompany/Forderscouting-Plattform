@@ -2,15 +2,15 @@
   <div>
     <q-tabs v-if="isInPage" v-model="tab" align="justify" indicator-color="transparent" class="q-mb-lg text-black"
       active-bg-color="yellow" no-caps>
-      <q-route-tab :to="{ query: { tab: 'categories' } }" exact replace class="q-py-xs q-mr-lg radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="categories">
-        <p class="font-20 no-margin">{{ $t("category&Keyword.category") }}</p>
-      </q-route-tab>
       <q-route-tab :to="{ query: { tab: 'keywords/Tags' } }" exact replace class="q-py-xs radius-10 border-yellow"
         :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="keywords/Tags">
         <p class="font-20 no-margin">
           {{ $t("category&Keyword.keyword/Tags") }}
         </p>
+      </q-route-tab>
+      <q-route-tab :to="{ query: { tab: 'categories' } }" exact replace class="q-py-xs q-mr-lg radius-10 border-yellow"
+        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="categories">
+        <p class="font-20 no-margin">{{ $t("category&Keyword.category") }}</p>
       </q-route-tab>
     </q-tabs>
     <q-table class="radius-20 shadow-1 pagination-no-shadow" :data="apiData" :columns="columns" row-key="name"
@@ -109,7 +109,7 @@ export default {
   },
   data() {
     return {
-      tab: this.$router.currentRoute.query.tab || "categories",
+      tab: this.$router.currentRoute.query.tab || "tags",
       createDialog: false,
       deleteDialog: false,
       itemId: null,

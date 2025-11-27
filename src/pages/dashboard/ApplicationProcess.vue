@@ -469,7 +469,7 @@ export default {
         for (const funding of selectedFundings) {
           await this.$store.dispatch('ai/getFundingQuestions', {
             fundingId: funding._id,
-            idea: startingCondition,
+            startingCondition,
             goals,
             content,
             valuesAndBenefits,
