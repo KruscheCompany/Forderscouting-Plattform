@@ -68,7 +68,7 @@ export async function matchFunding(context, payload) {
 }
 
 export async function getFundingQuestions(context, payload) {
-  const { fundingId, idea, goals,
+  const { fundingId, startingCondition, goals,
           content,
           valuesAndBenefits,
           finances } = payload;
@@ -78,7 +78,7 @@ export async function getFundingQuestions(context, payload) {
   try {
     const response = await api.post(
       `/api/funding/proxy-questions/${fundingId}`,
-      { idea, goals, content, valuesAndBenefits, finances },
+      { startingCondition, goals, content, valuesAndBenefits, finances },
       {
         headers: {
           'Content-Type': 'application/json'
