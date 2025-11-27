@@ -907,7 +907,8 @@
     },
     "aptitude": {
       "title": "Empfehlung für politische Gremien",
-      "noRecommendation": "Keine Empfehlung verfügbar"
+      "noRecommendation": "Keine Empfehlung verfügbar",
+      "description": "Kurzer Aufgabentext (Wer hatte die Idee? Wie wurde die Idee entwickelt? Was ist der Kontext in der Gemeinde/ Stadt?)"
     },
     "decision": {
       "title": "Grundsatzbeschluss",
@@ -1118,6 +1119,7 @@
     "notesToFundingPeriod": "Weitere Hinweise zu Fristen oder Zeitrahmen.",
     "projectLinks": "Externe Links zur Richtlinie oder Antragsunterlagen.",
     "uploads": "Hochgeladene Dateien zur Förderung (z. B. Richtlinien, Formulare).",
-    "projectContent": "Verknüpfte Projektideen, Beispiele und Hinweise."
+    "projectContent": "Verknüpfte Projektideen, Beispiele und Hinweise.",
+    "Create Missing Translations": "Create Missing Translations"
   }
 }
