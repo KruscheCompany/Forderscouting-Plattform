@@ -4,6 +4,9 @@
       header-class="bg-white text-black" v-model="expandedAptitude">
       <q-card-section>
         <div>
+          <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+            {{ $t('projectComponents.aptitude.description') }}
+          </h4>
           <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" v-model="aptitude" />
         </div>
       </q-card-section>
