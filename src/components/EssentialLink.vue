@@ -66,7 +66,7 @@ export default {
         });
       else if (link.path == "/catkeytags")
         this.$router.push({
-          path: "/catkeytags?tab=categories"
+          path: "/catkeytags?tab=keywords%2FTags"
         });
       else this.$router.push(link.path);
       this.nextRoute = link.path;
