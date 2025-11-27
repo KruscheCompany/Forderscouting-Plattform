@@ -42,8 +42,8 @@ const routes = [
         path: "/dashboard",
         name: "Home",
         meta: {
-          title: "Home",
-          titleDE: "Home",
+          title: "home",
+          titleDE: "home",
           showInNavigation: true,
           requireAuth: true,
           requireAdmin: false

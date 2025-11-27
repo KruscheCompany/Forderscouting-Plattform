@@ -1,538 +1,143 @@
 <template>
-  <div class="funding-print-template" style="page-break-inside: avoid;">
-    <div class="print-header" style="page-break-inside: avoid; page-break-after: avoid;">
-      <h4 class="font-24 text-weight-regular q-my-none" style="page-break-inside: avoid; page-break-after: avoid;"
-        v-html="sanitizeHtml(funding.title || '')"></h4>
+  <div class="funding-print-template">
+    <!-- Header with Title -->
+    <div class="print-header">
+      <h1 class="document-title">
+        {{ funding.title || 'Richtlinie für die Gewährung von Zuwendungen' }}
+      </h1>
     </div>
 
+    <!-- Main Content -->
     <div class="print-content">
-      <!-- Basic Information Section -->
-      <div class="print-section avoid-page-break" style="page-break-inside: avoid; margin-bottom: 16px;">
-        <q-card class="shadow-1 radius-20" style="page-break-inside: avoid;">
-          <div v-if="!!funding.title" style="page-break-inside: avoid;">
-            <q-card-section style="page-break-inside: avoid;">
-              <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none" style="page-break-after: avoid;">
-                {{ $t("projectContent.fundingGuidelines") }}
-              </h4>
-              <div class="q-ml-md font-16">
-                <p class="q-mb-sm" style="page-break-inside: avoid;" v-html="sanitizeHtml(funding.title || '')"></p>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
+
+      <!-- Fördermittelgeber & Ansprechpartner (Two Column) -->
+      <div class="info-row">
+        <div class="info-column">
+          <h3 class="section-label">{{ $t("funding provider") }}</h3>
+          <div class="section-content" v-if="funding.provider" v-html="sanitizeHtml(funding.provider)"></div>
+        </div>
+        <div class="info-column">
+          <h3 class="section-label">{{ $t("Contact person") }}</h3>
+          <div class="section-content" v-if="funding.info?.contactName" v-html="sanitizeHtml(funding.info.contactName)">
           </div>
-
-          <div v-if="!!funding.provider" style="page-break-inside: avoid;">
-            <q-card-section style="page-break-inside: avoid;">
-              <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none" style="page-break-after: avoid;">
-                {{ $t("funding provider") }}
-              </h4>
-              <div class="q-ml-md font-16">
-                <p class="q-mb-sm" style="page-break-inside: avoid;" v-html="sanitizeHtml(funding.provider || '')"></p>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <div v-if="!!funding.info && funding.info.contactName" style="page-break-inside: avoid;">
-            <q-card-section style="page-break-inside: avoid;">
-              <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none" style="page-break-after: avoid;">
-                {{ $t("Contact person") }}
-              </h4>
-              <div class="q-ml-md font-16">
-                <p class="q-mb-sm" style="page-break-inside: avoid;"
-                  v-html="sanitizeHtml((funding.info?.contactName) || '')"></p>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <div v-if="
-            (!!funding.info && funding.info.streetNo) ||
-            (!!funding.info && funding.info.postalCode) ||
-            (!!funding.info && funding.info.phone) ||
-            (!!funding.info && funding.info.email)
-          " style="page-break-inside: avoid;">
-            <q-card-section style="page-break-inside: avoid;">
-              <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none" style="page-break-after: avoid;">
-                {{ $t("Contact Details") }}
-              </h4>
-              <p class="q-ml-md font-16 q-mb-sm" style="page-break-inside: avoid;" v-if="funding.info?.streetNo"
-                v-html="sanitizeHtml(funding.info.streetNo)"></p>
-              <p class="q-ml-md font-16 q-mb-sm" style="page-break-inside: avoid;" v-if="funding.info?.postalCode"
-                v-html="sanitizeHtml(funding.info.postalCode)"></p>
-              <p class="q-ml-md font-16 q-mb-sm" style="page-break-inside: avoid;" v-if="funding.info?.phone"
-                v-html="sanitizeHtml(funding.info.phone)"></p>
-              <p class="q-ml-md font-16 q-mb-sm text-overflow" style="page-break-inside: avoid;"
-                v-if="funding.info?.email" v-html="sanitizeHtml(funding.info.email)"></p>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <!-- Location field hidden - can be re-enabled if needed -->
-          <!-- <div v-if="!!funding.info && !!funding.info.location" style="page-break-inside: avoid;">
-            <q-card-section style="page-break-inside: avoid;">
-              <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none" style="page-break-after: avoid;">
-                {{ $t("personalData.location") }}
-              </h4>
-              <p class="q-ml-md font-16 q-mb-sm" style="page-break-inside: avoid;"
-                v-html="sanitizeHtml(funding.info.location)"></p>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div> -->
-
-          <q-card-section v-if="funding.editors && funding.editors.length > 0 && isAdmin"
-            style="page-break-inside: avoid;">
-            <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none" style="page-break-after: avoid;">
-              {{ $t("Invite Editor") }}
-            </h4>
-            <div class="q-ml-md font-16">
-              <p v-for="(editor, index) in funding.editors" :key="index" class="q-mb-sm"
-                style="page-break-inside: avoid;">
-                {{ editor.username }}
-              </p>
-            </div>
-          </q-card-section>
-        </q-card>
+        </div>
       </div>
 
-      <!-- Categories and Tags Section -->
-      <div class="print-section avoid-page-break">
-        <q-card class="shadow-1 radius-20">
-          <q-card-section class="q-pa-md">
-            <div class="row">
-              <div class="col-12 col-md-3">
-                <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                  {{ $t("statsTable.categories") }}
-                </h4>
-              </div>
-              <div class="col-12 col-md-9">
-                <div class="q-ml-md font-16">
-                  <div v-if="funding.categories && funding.categories.length > 0">
-                    <q-chip v-for="(category, index) in funding.categories" :key="index" square size="16px"
-                      color="yellow-10" text-color="blue">
-                      {{ category.title }}
-                    </q-chip>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-          <q-separator inset class="bg-blue opacity-10" />
-          <q-card-section class="q-pa-md">
-            <div class="row">
-              <div class="col-12 col-md-3">
-                <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                  {{ $t("Tags") }}
-                </h4>
-              </div>
-              <div class="col-12 col-md-9">
-                <div class="q-ml-md font-16">
-                  <div v-if="funding.tags && funding.tags.length > 0">
-                    <q-chip v-for="(tag, index) in funding.tags" :key="index" square size="16px" color="yellow-10"
-                      text-color="blue">
-                      {{ tag.title }}
-                    </q-chip>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
+      <!-- Kontaktdaten -->
+      <div v-if="hasContactData" class="print-section">
+        <h3 class="section-label">{{ $t("Contact Details") }}</h3>
+        <div class="section-content">
+          <p v-if="funding.info?.streetNo" class="contact-line" v-html="sanitizeHtml(funding.info.streetNo)"></p>
+          <p v-if="funding.info?.postalCode" class="contact-line" v-html="sanitizeHtml(funding.info.postalCode)"></p>
+          <p v-if="funding.info?.phone" class="contact-line" v-html="sanitizeHtml(funding.info.phone)"></p>
+          <p v-if="funding.info?.email" class="contact-line" v-html="sanitizeHtml(funding.info.email)"></p>
+        </div>
       </div>
 
-      <!-- Funding Details Section -->
-      <div v-if="
-        (!!funding.details && funding.details.goal) ||
-        (!!funding.details && funding.details.funded) ||
-        (!!funding.details && funding.details.notFunded) ||
-        (!!funding.details && funding.details.willBeFunded) ||
-        (!!funding.details && funding.details.condition)
-      " class="print-section page-break-before" style="page-break-before: always; margin-top: 16px;">
-        <q-card class="shadow-1 radius-20" style="page-break-inside: avoid;">
-          <div v-if="!!funding.details.goal" class="avoid-page-break">
-            <q-card-section class="q-pa-md items-start">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("Funding goal") }}
-                  </h4>
-                </div>
-                <div class="col-12 col-md-9">
-                  <div class="q-ml-xs">
-                    <div class="q-ml-md font-16">
-                      <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.details?.goal || '')"></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <div v-if="!!funding.details.funded" class="avoid-page-break">
-            <q-card-section class="q-pa-md items-start">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("What is funded?") }}
-                  </h4>
-                </div>
-                <div class="col-12 col-md-9">
-                  <div class="q-ml-xs">
-                    <div class="q-ml-md font-16">
-                      <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.details?.funded || '')"></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <div v-if="!!funding.details.notFunded" class="avoid-page-break">
-            <q-card-section class="q-pa-md items-start">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("What is not funded?") }}
-                  </h4>
-                </div>
-                <div class="col-12 col-md-9">
-                  <div class="q-ml-xs">
-                    <div class="q-ml-md font-16">
-                      <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.details?.notFunded || '')"></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <div v-if="!!funding.details.willBeFunded" class="avoid-page-break">
-            <q-card-section class="q-pa-md items-start">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("Who will be funded?") }}
-                  </h4>
-                </div>
-                <div class="col-12 col-md-9">
-                  <div class="q-ml-xs">
-                    <div class="q-ml-md font-16">
-                      <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.details?.willBeFunded || '')">
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <div v-if="!!funding.details.condition" class="avoid-page-break">
-            <q-card-section class="q-pa-md items-start">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("Conditions for Applicants") }}
-                  </h4>
-                </div>
-                <div class="col-12 col-md-9">
-                  <div class="q-ml-xs">
-                    <div class="q-ml-md font-16">
-                      <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.details?.condition || '')"></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-          </div>
-        </q-card>
+      <!-- Ziel der Förderung -->
+      <div v-if="funding.details?.goal" class="print-section">
+        <h3 class="section-label">{{ $t("Funding goal") }}</h3>
+        <div class="section-content formatted-text" v-html="sanitizeHtml(funding.details.goal)"></div>
       </div>
 
-      <!-- Funding Rates Section -->
-      <div class="print-section page-break-before" style="page-break-before: always; margin-top: 16px;">
-        <q-card class="shadow-1 radius-20" style="page-break-inside: avoid;">
-          <div v-if="funding.rates && funding.rates.length > 0">
-            <q-card-section class="q-pa-md items-start">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("Funding rates") }}
-                  </h4>
-                </div>
-                <div class="col-12 col-md-9">
-                  <div class="q-ml-xs">
-                    <div class="q-ml-md font-16">
-                      <div v-if="funding.rates && funding.rates.length > 0">
-                        <div v-for="(rate, index) in funding.rates" :key="index" class="row q-col-gutter-x-xl">
-                          <div class="col-10 col-md-auto">
-                            <p class="q-mt-sm q-mb-sm inline-block" v-html="sanitizeHtml(rate.content || '')"></p>
-                          </div>
-                          <div class="col-auto col-md-auto">
-                            <p class="q-mt-sm q-mb-sm inline-block">
-                              {{ rate.amount || "" }}%
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <div v-if="!!funding.ownContribution">
-            <q-card-section class="q-pa-md items-start">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("Own contribution") }}
-                  </h4>
-                </div>
-                <div class="col-12 col-md-9">
-                  <div class="q-ml-xs">
-                    <div class="q-ml-md font-16">
-                      <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.ownContribution || '')"></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <div>
-            <q-card-section class="q-pa-md items-start">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("Accumulability") }}
-                  </h4>
-                </div>
-                <div class="col-12 col-md-9">
-                  <div class="q-ml-xs">
-                    <div class="q-ml-md font-16">
-                      <p class="q-mt-sm q-mb-sm">
-                        {{
-                          funding.accumulability === true
-                            ? $t("Yes")
-                            : $t("No") || "Accumulability is not set"
-                        }}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <q-card-section v-if="
-            funding.accumulability === true &&
-            funding.fundingsLinkedTo &&
-            funding.fundingsLinkedTo.length > 0
-          " class="q-pa-md items-baseline">
-            <div class="row items-center">
-              <div class="col-12 col-md-3">
-                <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                  {{ $t("Links to the fundings") }}
-                </h4>
-              </div>
-              <div class="col-12 col-md-9">
-                <div class="q-ml-xs">
-                  <div class="q-ml-md font-16">
-                    <div v-if="funding.fundingsLinkedTo && funding.fundingsLinkedTo.length > 0" class="q-gutter-sm">
-                      <div v-for="(linkedFunding, index) in funding.fundingsLinkedTo" :key="index" class="row">
-                        <div class="col-auto">
-                          <span class="q-mb-sm text-blue block text-weight-600">{{ linkedFunding.title }}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
+      <!-- Fördergegenstand -->
+      <div v-if="funding.details?.funded" class="print-section">
+        <h3 class="section-label">{{ $t("What is funded?") }}</h3>
+        <div class="section-content formatted-text" v-html="sanitizeHtml(funding.details.funded)"></div>
       </div>
 
-      <!-- Assessment and Period Section -->
-      <div class="print-section page-break-before" style="page-break-before: always; margin-top: 16px;">
-        <q-card class="shadow-1 radius-20" style="page-break-inside: avoid;">
-          <div v-if="!!funding.assessment" class="avoid-page-break">
-            <q-card-section class="q-pa-md items-start">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("Basis for assessment") }}
-                  </h4>
-                </div>
-                <div class="col-12 col-md-9">
-                  <div class="q-ml-xs">
-                    <div class="q-ml-md font-16">
-                      <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.assessment || '')"></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <q-card-section class="q-pa-md items-start avoid-page-break">
-            <div class="row">
-              <div class="col-12 col-md-3">
-                <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                  {{ $t("Funding Period") }}
-                </h4>
-              </div>
-              <div class="col-12 col-md-9">
-                <div class="q-ml-xs">
-                  <div class="q-ml-md font-16">
-                    <div class="row">
-                      <div class="col-12 col-md-3">
-                        <p class="q-mt-sm q-mb-sm inline-block">
-                          {{ $t("fundingsCol.start") }}
-                        </p>
-                      </div>
-                      <div class="col-12 col-md-auto">
-                        <p class="q-mt-sm q-mb-sm inline-block">
-                          {{ dateFormatter(funding.plannedStart) || "" }}
-                        </p>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-12 col-md-3">
-                        <p class="q-mt-sm q-mb-sm inline-block">
-                          {{ $t("fundingsCol.end") }}
-                        </p>
-                      </div>
-                      <div class="col-12 col-md-auto">
-                        <p class="q-mt-sm q-mb-sm inline-block">
-                          {{ dateFormatter(funding.plannedEnd) || "" }}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-          <q-separator inset class="bg-blue opacity-10" />
-
-          <div v-if="!!funding.notes" class="avoid-page-break">
-            <q-card-section class="q-pa-md items-start">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("Notes to the funding period") }}
-                  </h4>
-                </div>
-                <div class="col-12 col-md-9">
-                  <div class="q-ml-xs">
-                    <div class="q-ml-md font-16">
-                      <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.notes || '')"></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <div v-if="funding.links && funding.links.length > 0" class="avoid-page-break">
-            <q-card-section class="q-pa-md items-start">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                    {{ $t("projectContent.links") }}
-                  </h4>
-                </div>
-                <div class="col-12 col-md-9">
-                  <div class="q-ml-xs">
-                    <div class="q-ml-md font-16">
-                      <div v-if="funding.links && funding.links.length > 0">
-                        <div v-for="(link, index) in funding.links" :key="index" class="row">
-                          <div class="col-12">
-                            <p class="q-mt-sm q-mb-xs inline-block">
-                              {{ link.title || "" }}
-                            </p>
-                          </div>
-                          <div class="col-auto">
-                            <span class="q-mb-sm text-blue block text-weight-600">{{ link.link }}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-            <q-separator inset class="bg-blue opacity-10" />
-          </div>
-
-          <q-card-section v-if="funding.files && funding.files.length > 0" class="q-pa-md items-start avoid-page-break">
-            <div class="row">
-              <div class="col-12 col-md-3">
-                <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                  Uploads
-                </h4>
-              </div>
-              <div class="col-12 col-md-9">
-                <div class="q-ml-xs">
-                  <div class="q-ml-md font-16">
-                    <div v-if="funding.files && funding.files.length > 0">
-                      <div v-for="(file, index) in funding.files" :key="index" class="row">
-                        <div class="col-auto">
-                          <span class="q-mb-sm text-blue block text-weight-600">{{ file.name }}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
+      <!-- Förderfähige Ausgaben -->
+      <div v-if="funding.details?.notFunded" class="print-section">
+        <h3 class="section-label">{{ $t("What is not funded?") }}</h3>
+        <div class="section-content formatted-text" v-html="sanitizeHtml(funding.details.notFunded)"></div>
       </div>
 
-      <!-- Projects Section -->
-      <div v-if="funding.projects && funding.projects.length > 0" class="print-section page-break-before"
-        style="page-break-before: always; margin-top: 16px;">
-        <q-card class="shadow-1 radius-20" style="page-break-inside: avoid;">
-          <q-card-section class="q-pa-md items-start">
-            <div class="row">
-              <div class="col-12 col-md-3">
-                <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                  {{ $t("projectContent.projectContent") }}
-                </h4>
-              </div>
-              <div class="col-12 col-md-9">
-                <div class="q-ml-xs">
-                  <div v-if="funding.projects && funding.projects.length > 0" class="q-ml-md font-16">
-                    <div class="row">
-                      <p class="q-mt-sm q-mb-xs">
-                        {{ $t("Statistics.projectIdeas") }}
-                      </p>
-                    </div>
-                    <div v-if="funding.projects && funding.projects.length > 0">
-                      <div class="row" v-for="(project, index) in funding.projects" :key="index">
-                        <div class="col-auto">
-                          <span class="q-mb-sm text-blue block text-weight-600">{{ project.title }}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
+      <!-- Ausschlusskriterien -->
+      <div v-if="funding.details?.condition" class="print-section page-break">
+        <h3 class="section-label">{{ $t("Conditions for Applicants") }}</h3>
+        <div class="section-content formatted-text" v-html="sanitizeHtml(funding.details.condition)"></div>
       </div>
+
+      <!-- Zuwendungsempfänger -->
+      <div v-if="funding.details?.willBeFunded" class="print-section">
+        <h3 class="section-label">{{ $t("Who will be funded?") }}</h3>
+        <div class="section-content formatted-text" v-html="sanitizeHtml(funding.details.willBeFunded)"></div>
+      </div>
+
+      <!-- Voraussetzungen -->
+      <div v-if="funding.assessment" class="print-section">
+        <h3 class="section-label">{{ $t("Basis for assessment") }}</h3>
+        <div class="section-content formatted-text" v-html="sanitizeHtml(funding.assessment)"></div>
+      </div>
+
+      <!-- Fördersätze -->
+      <div v-if="hasRatesData" class="print-section page-break">
+        <h3 class="section-label">{{ $t("Funding rates") }}</h3>
+        <div class="rates-table">
+          <div class="rates-row rates-header">
+            <div class="rate-label">Projektförderung bis zu</div>
+            <div class="rate-percentage">Eigenanteil</div>
+            <div class="rate-accumulation">Kumulierbarkeit</div>
+          </div>
+          <div v-for="(rate, index) in funding.rates" :key="index" class="rates-row">
+            <div class="rate-label">{{ rate.content || 'Projektförderung bis zu' }}</div>
+            <div class="rate-percentage">{{ rate.amount || '0' }}%</div>
+            <div class="rate-accumulation">{{ funding.accumulability ? $t('Yes') : $t('No') }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Programmlaufzeit -->
+      <div v-if="funding.plannedStart || funding.plannedEnd" class="print-section">
+        <h3 class="section-label">{{ $t("Funding Period") }}</h3>
+        <div class="program-dates">
+          <div class="date-row">
+            <span class="date-label">{{ $t("fundingsCol.start") }}</span>
+            <span class="date-value">{{ dateFormatter(funding.plannedStart) }}</span>
+          </div>
+          <div class="date-row">
+            <span class="date-label">{{ $t("fundingsCol.end") }}</span>
+            <span class="date-value">{{ dateFormatter(funding.plannedEnd) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weitere Informationen -->
+      <div v-if="funding.notes || (funding.links && funding.links.length > 0)" class="print-section page-break">
+        <h3 class="section-label">{{ $t("Notes to the funding period") }}</h3>
+        <div class="section-content">
+          <div v-if="funding.notes" class="formatted-text q-mb-md" v-html="sanitizeHtml(funding.notes)"></div>
+
+          <!-- Links -->
+          <div v-if="funding.links && funding.links.length > 0">
+            <div v-for="(link, index) in funding.links" :key="index" class="link-item">
+              <div class="link-title">{{ link.title }}</div>
+              <a :href="link.link" class="link-url text-blue">{{ link.link }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories and Tags (Optional - can be hidden for cleaner print) -->
+      <div v-if="showCategoriesAndTags && (hasCategoriesOrTags)" class="print-section">
+        <div v-if="funding.categories && funding.categories.length > 0" class="q-mb-md">
+          <h4 class="subsection-label">{{ $t("statsTable.categories") }}</h4>
+          <div class="tags-container">
+            <span v-for="(category, index) in funding.categories" :key="index" class="tag">
+              {{ category.title }}
+            </span>
+          </div>
+        </div>
+        <div v-if="funding.tags && funding.tags.length > 0">
+          <h4 class="subsection-label">{{ $t("Tags") }}</h4>
+          <div class="tags-container">
+            <span v-for="(tag, index) in funding.tags" :key="index" class="tag">
+              {{ tag.title }}
+            </span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -552,6 +157,29 @@ export default {
     isAdmin: {
       type: Boolean,
       default: false
+    },
+    showCategoriesAndTags: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    hasContactData() {
+      return !!(
+        this.funding.info?.streetNo ||
+        this.funding.info?.postalCode ||
+        this.funding.info?.phone ||
+        this.funding.info?.email
+      );
+    },
+    hasRatesData() {
+      return this.funding.rates && this.funding.rates.length > 0;
+    },
+    hasCategoriesOrTags() {
+      return (
+        (this.funding.categories && this.funding.categories.length > 0) ||
+        (this.funding.tags && this.funding.tags.length > 0)
+      );
     }
   },
   methods: {
@@ -563,158 +191,243 @@ export default {
 <style lang="scss" scoped>
 .funding-print-template {
   width: 100%;
+  max-width: 210mm;
+  margin: 0 auto;
   background: white;
-  padding: 20px;
+  padding: 20mm 15mm;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #000;
 }
 
 .print-header {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  page-break-after: avoid;
 }
 
-.print-content {
-  width: 100%;
+.document-title {
+  font-size: 18pt;
+  font-weight: 400;
+  line-height: 1.4;
+  margin: 20px 0 30px 0;
+  color: #000;
+  page-break-after: avoid;
+}
+
+.info-row {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 25px;
+  page-break-inside: avoid;
+}
+
+.info-column {
+  flex: 1;
+  page-break-inside: avoid;
+}
+
+.section-label {
+  font-size: 10pt;
+  font-weight: 400;
+  color: #666;
+  margin: 0 0 8px 0;
+  font-style: italic;
+  page-break-after: avoid;
+}
+
+.subsection-label {
+  font-size: 10pt;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+  page-break-after: avoid;
+}
+
+.section-content {
+  font-size: 11pt;
+  color: #000;
+  margin-bottom: 5px;
+  page-break-inside: avoid;
+}
+
+.contact-line {
+  margin: 2px 0;
+  page-break-inside: avoid;
 }
 
 .print-section {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  page-break-inside: avoid;
 }
 
-/* Page break handling for better PDF generation */
-.avoid-page-break {
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
-  display: block;
+.page-break {
+  page-break-before: auto;
 }
 
-.text-block {
+.formatted-text {
   white-space: pre-line;
   word-wrap: break-word;
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
+
+  ::v-deep ul,
+  ::v-deep ol {
+    margin: 10px 0;
+    padding-left: 25px;
+  }
+
+  ::v-deep li {
+    margin: 5px 0;
+    page-break-inside: avoid;
+  }
+
+  ::v-deep p {
+    margin: 8px 0;
+  }
+
+  ::v-deep strong {
+    font-weight: 600;
+  }
 }
 
-/* Ensure all text elements have proper spacing to avoid breaks */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  page-break-after: avoid !important;
-  break-after: avoid !important;
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
-  page-break-before: auto;
-  break-before: auto;
+// Rates Table
+.rates-table {
+  width: 100%;
+  margin-top: 10px;
+  page-break-inside: avoid;
 }
 
-h4 {
-  margin-bottom: 8px;
+.rates-row {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  padding: 8px 0;
+  page-break-inside: avoid;
+}
+
+.rates-header {
+  font-weight: 600;
+  border-bottom: 2px solid #333;
+}
+
+.rate-label {
+  flex: 2;
+}
+
+.rate-percentage {
+  flex: 0.8;
+  text-align: center;
+}
+
+.rate-accumulation {
+  flex: 1;
+  text-align: center;
+}
+
+// Program Dates
+.program-dates {
+  display: flex;
+  gap: 60px;
+  margin-top: 10px;
+  page-break-inside: avoid;
+}
+
+.date-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.date-label {
+  font-size: 10pt;
+  color: #666;
+  font-style: italic;
+}
+
+.date-value {
+  font-size: 11pt;
+  color: #000;
+}
+
+// Links
+.link-item {
+  margin-bottom: 10px;
+  page-break-inside: avoid;
+}
+
+.link-title {
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.link-url {
+  font-size: 10pt;
+  word-break: break-all;
+}
+
+// Tags
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 8px;
 }
 
-p {
-  orphans: 4;
-  widows: 4;
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
-  margin-bottom: 8px;
-  line-height: 1.5;
-}
-
-div {
-  page-break-inside: avoid;
-  break-inside: avoid;
-}
-
-.q-card {
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
-  margin-bottom: 16px;
-}
-
-.q-card-section {
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
-  padding: 12px 16px;
-}
-
-.row {
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  font-size: 9pt;
+  color: #333;
 }
 
 /* Print-specific styles */
 @media print {
   .funding-print-template {
     padding: 0;
+    max-width: 100%;
   }
 
-  * {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  .document-title {
+    page-break-after: avoid;
   }
 
-  .avoid-page-break {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    display: block !important;
+  .print-section {
+    page-break-inside: avoid;
   }
 
-  .page-break-before {
-    page-break-before: always !important;
-    break-before: page !important;
+  .info-row,
+  .info-column {
+    page-break-inside: avoid;
+  }
+
+  .page-break {
+    page-break-before: auto;
   }
 
   h1,
   h2,
   h3,
-  h4,
-  h5,
-  h6 {
-    page-break-after: avoid !important;
-    break-after: avoid !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  h4 {
+    page-break-after: avoid;
   }
 
-  p,
-  ul,
-  ol,
-  div,
-  span,
-  li {
-    orphans: 4;
-    widows: 4;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  .rates-table,
+  .rates-row {
+    page-break-inside: avoid;
   }
 
-  .q-card,
-  .q-card-section {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  .program-dates,
+  .date-row {
+    page-break-inside: avoid;
   }
 
-  .row {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  .link-item {
+    page-break-inside: avoid;
   }
 
-  .q-chip {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    display: inline-block !important;
-  }
-
-  table,
-  thead,
-  tbody,
-  tr,
-  td,
-  th {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  a {
+    color: #0066cc;
+    text-decoration: none;
   }
 }
 </style>
