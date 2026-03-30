@@ -157,17 +157,20 @@
           <q-td colspan="100%">
             <div class="text-left q-pa-md">
               <template v-if="props.row.financialPlan && props.row.financialPlan.costAndFinance">
-                <div v-for="item in props.row.financialPlan.costAndFinance" :key="item.id">
-                  <div class="row">
+                <div class="financial-grid">
+                  <div v-for="(item, index) in props.row.financialPlan.costAndFinance" :key="index"
+                    class="financial-grid-row">
                     <p class="font-14 text-weight-bold text-blue q-mb-none">{{ item.title }}: </p>
-                    <p class="font-14 text-blue q-ml-sm q-mb-none">{{ formatCurrency(item.value) }}</p>
-                    <p v-if="item.title === 'Fördermittel'"
-                      class="font-14 text-blue q-ml-sm q-mb-none text-weight-bold">{{
-                        getSelectedFunding(props.row) }}</p>
-                    <q-btn v-if="item.title === 'Fördermittel' && props.row.fundingMatches?.length" flat dense round
-                      size="sm" icon="mdi-arrow-top-right-thin-circle-outline"
-                      @click.stop="openFundingLink(props.row.external_id)" class="funding-link-btn"
-                      :disabled="!props.row.external_id" />
+                    <div class="row items-center">
+                      <p class="font-14 text-blue q-mb-none">{{ formatCurrency(item.value) }}</p>
+                      <p v-if="item.title === 'Fördermittel'"
+                        class="font-14 text-blue q-ml-sm q-mb-none text-weight-bold">{{
+                          getSelectedFunding(props.row) }}</p>
+                      <q-btn v-if="item.title === 'Fördermittel' && props.row.fundingMatches?.length" flat dense round
+                        size="sm" icon="mdi-arrow-top-right-thin-circle-outline"
+                        @click.stop="openFundingLink(props.row.external_id)" class="funding-link-btn"
+                        :disabled="!props.row.external_id" />
+                    </div>
                   </div>
                 </div>
               </template>
@@ -209,9 +212,10 @@ export default {
       selectedApplicationSteps: null,
       tagsKeywords: null,
       statusOptions: [
-        { value: true, title: this.$t('Zuwendungsbescheid') },
-        { value: false, title: this.$t('Ablehnungsbescheid') },
-        { value: null, title: this.$t('In Bearbeitung') }
+        { value: "sentToFunding", title: this.$t('projectComponents.submissionSigning.sentToFunding') },
+        { value: "grantNotice", title: this.$t('Zuwendungsbescheid') },
+        { value: "rejectionNotice", title: this.$t('Ablehnungsbescheid') },
+        { value: "inProgress", title: this.$t('In Bearbeitung') }
       ],
       investiveOptions: [
         { value: true, title: this.$t('Investive') },
@@ -829,6 +833,18 @@ export default {
 
   &-container {
     background-color: #f5f5f5;
+  }
+}
+
+.financial-grid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 4px;
+
+  .financial-grid-row {
+    display: contents;
   }
 }
 </style>
