@@ -17,13 +17,10 @@
             <h4 class="font-16 text-blue-grey-10 q-my-none">
               {{ $t('projectComponents.contentDetails.financialPlanTitle') }}
             </h4>
-            <div class="col-12 col-md-4 q-mb-xs" v-for="(plan, index) in costAndFinance" :key="index">
-              <div class="q-py-sm q-pl-md bg-grey-3" style="height: 40.5px">
-                <p class="font-14 text-weight-bold q-my-none text-blue">{{ plan.title }}:
-                  <span class="font-16 text-weight-regular">
-                    {{ formatCurrency(plan.value) }}
-                  </span>
-                </p>
+            <div class="financial-grid q-py-sm q-pl-md bg-grey-3">
+              <div v-for="(plan, index) in costAndFinance" :key="index" class="financial-grid-row">
+                <p class="font-14 text-weight-bold q-my-none text-blue">{{ plan.title }}: </p>
+                <p class="font-16 text-weight-regular q-my-none text-blue">{{ formatCurrency(plan.value) }}</p>
               </div>
             </div>
 
@@ -99,5 +96,22 @@ export default {
 .text-block {
   white-space: pre-line;
   min-height: 144px
+}
+
+.financial-grid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: center;
+  column-gap: 12px;
+
+  .financial-grid-row {
+    display: contents;
+
+    >* {
+      height: 40.5px;
+      display: flex;
+      align-items: center;
+    }
+  }
 }
 </style>
