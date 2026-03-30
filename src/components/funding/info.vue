@@ -34,11 +34,16 @@
         <q-tr :props="props">
           <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
             class="font-14 cursor-pointer">
-            {{
-              col.value && col.value.length > 145
-                ? col.value.substring(0, 145) + "..."
-                : col.value
-            }}
+            <template v-if="col.name === 'visibilityIcon'">
+              <q-icon :name="col.value === 'all users' ? 'visibility' : 'visibility_off'" size="sm" class="text-blue" />
+            </template>
+            <template v-else>
+              {{
+                col.value && col.value.length > 145
+                  ? col.value.substring(0, 145) + "..."
+                  : col.value
+              }}
+            </template>
           </q-td>
           <q-td class="text-right" auto-width>
             <q-btn size="md" color="primary" round flat dense icon="more_vert" aria-label="Optionen">
@@ -96,7 +101,6 @@ export default {
   name: "fundingInfo",
   data() {
     return {
-      visibleColumns: ["title", "plannedStart", "plannedEnd"],
       itemId: null,
       tab: "fundings",
       deleteDialog: false,
@@ -157,11 +161,23 @@ export default {
             const dateB = new Date(rowB.plannedEnd);
             return dateB - dateA;
           }
+        },
+        {
+          name: "visibilityIcon",
+          align: "center",
+          label: this.$t("fundingsCol.visibility") || "Sichtbarkeit",
+          field: row => row.visibility,
+          sortable: false
         }
       ];
     },
     isAdmin() {
       return this.$store.getters["userCenter/isAdmin"];
+    },
+    visibleColumns() {
+      const cols = ["title", "plannedStart", "plannedEnd"];
+      if (this.isAdmin) cols.push("visibilityIcon");
+      return cols;
     },
     loggedInUser() {
       return (

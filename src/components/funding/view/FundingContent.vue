@@ -538,20 +538,10 @@
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
-                            <div v-if="funding.rates && funding.rates.length > 0">
-                              <div v-for="(rate, index) in funding.rates" :key="index" class="row" :class="$q.screen.gt.sm
-                                ? 'q-col-gutter-x-xl'
-                                : 'q-col-gutter-x-sm'
-                                ">
-                                <div class="col-10 col-md-auto">
-                                  <p class="q-mt-sm q-mb-sm inline-block" v-html="sanitizeHtml(rate.content || '')">
-                                  </p>
-                                </div>
-                                <div class="col-auto col-md-auto">
-                                  <p class="q-mt-sm q-mb-sm inline-block">
-                                    {{ rate.amount || "" }}%
-                                  </p>
-                                </div>
+                            <div v-if="funding.rates && funding.rates.length > 0" class="rates-grid">
+                              <div v-for="(rate, index) in funding.rates" :key="index" class="rates-grid-row">
+                                <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(rate.content || '')"></p>
+                                <p class="q-mt-sm q-mb-sm">{{ rate.amount || "" }}%</p>
                               </div>
                             </div>
                           </div>
@@ -657,7 +647,7 @@
                           {{ $t("Basis for assessment") }}
                         </h4>
                         <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.basisForAssessment')
-                          }}</p>
+                        }}</p>
                       </div>
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
@@ -1126,5 +1116,16 @@ export default {
 
 .text-block {
   white-space: pre-line;
+}
+
+.rates-grid {
+  display: inline-grid;
+  grid-template-columns: max-content max-content;
+  align-items: center;
+  column-gap: 24px;
+
+  .rates-grid-row {
+    display: contents;
+  }
 }
 </style>

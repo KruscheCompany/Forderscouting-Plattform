@@ -2,10 +2,6 @@
   <div class="q-my-lg ">
     <q-tabs v-if="isInPage" v-model="tab" align="justify" indicator-color="transparent" class="q-mb-lg text-black"
       active-bg-color="yellow" no-caps>
-      <q-route-tab :to="{ query: { tab: 'all' } }" exact replace class="q-py-xs q-mr-lg radius-10 border-yellow"
-        :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'" name="all">
-        <p class="font-20 no-margin">{{ $t("watchListHome.allBtn") }}</p>
-      </q-route-tab>
       <q-route-tab :to="{ query: { tab: 'projectIdeas' } }" exact replace
         class="q-py-xs q-mr-lg radius-10 border-yellow" :class="$q.screen.gt.sm ? 'q-pa-lg' : 'q-pa-sm q-px-lg'"
         name="projectIdeas">
@@ -39,11 +35,6 @@
           <div class="col-12">
             <q-tabs v-model="tab" align="justify" indicator-color="transparent" class="text-black"
               active-bg-color="yellow" no-caps dense>
-              <q-tab class="q-mr-lg radius-6 border-yellow" name="all">
-                <p class="font-14 text-weight-600 no-margin">
-                  {{ $t("watchListHome.allBtn") }}
-                </p>
-              </q-tab>
               <q-tab class="q-mr-lg radius-6 border-yellow" name="projectIdeas">
                 <p class="font-14 text-weight-600 no-margin">
                   {{ $t("watchListHome.projectIdeaBtn") }}
@@ -97,16 +88,14 @@
               </q-badge>
             </template>
             <template v-else>
-              <q-tooltip v-if="col.value && col.value.length > 30" anchor="bottom left" self="top left"
+              <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
                 content-style="font-size: 14px">
                 {{ col.value }}
               </q-tooltip>
               {{
-                col.name === 'title' && col.value && col.value.length > 50
-                  ? col.value.substring(0, 50) + "..."
-                  : col.name === 'categories' && col.value && col.value.length > 30
-                    ? col.value.substring(0, 30) + "..."
-                    : col.value
+                col.value && col.value.length > 125
+                  ? col.value.substring(0, 125) + "..."
+                  : col.value
               }}
             </template>
 
@@ -192,7 +181,7 @@ export default {
   },
   data() {
     return {
-      tab: this.$router.currentRoute.query.tab || "all",
+      tab: this.$router.currentRoute.query.tab || "projectIdeas",
       filter: "",
       visibleColumns: [
         "title",
@@ -524,23 +513,14 @@ export default {
       return this.$router.currentRoute.path == "/watchlist";
     },
     columns() {
-      if (this.tab === "projectIdeas") {
-        return this.projectCols;
-      } else if (this.tab === "fundings") {
+      if (this.tab === "fundings") {
         return this.fundingCols;
       } else {
-        return this.allCols;
+        return this.projectCols;
       }
     },
     data() {
-      if (this.tab === "projectIdeas") {
-        return (
-          !!this.$store.state.userCenter.watchlists &&
-          this.$store.state.userCenter.watchlists.filter(item =>
-            item.hasOwnProperty("project")
-          )
-        );
-      } else if (this.tab === "fundings") {
+      if (this.tab === "fundings") {
         return (
           !!this.$store.state.userCenter.watchlists &&
           this.$store.state.userCenter.watchlists.filter(item =>
@@ -550,161 +530,11 @@ export default {
       } else {
         return (
           !!this.$store.state.userCenter.watchlists &&
-          this.$store.state.userCenter.watchlists
+          this.$store.state.userCenter.watchlists.filter(item =>
+            item.hasOwnProperty("project")
+          )
         );
       }
-    },
-    allCols() {
-      return [
-        {
-          name: "id",
-          label: "id",
-          align: "left",
-          field: row => row.id,
-          sortable: true
-        },
-        {
-          name: "title",
-          label: this.$t("myData.title"),
-          align: "left",
-          field: row =>
-            row.hasOwnProperty("project")
-              ? row.project.title
-              : row.hasOwnProperty("funding")
-                ? row.funding.title
-                : "",
-          sortable: true
-        },
-        {
-          name: "type",
-          label: this.$t("statsTable.type"),
-          align: "left",
-          field: row =>
-            row.hasOwnProperty("project")
-              ? this.$t(row.project.type)
-              : row.hasOwnProperty("funding")
-                ? this.$t(row.funding.type)
-                : "",
-          sortable: true
-        },
-        {
-          name: "categories",
-          align: "left",
-          label: this.$t("fundingsCol.categories"),
-          field: row =>
-            row.hasOwnProperty("project")
-              ? (!!row.project &&
-                !!row.project.categories &&
-                row.project.categories
-                  .map(category => category.title)
-                  .join(", ")) ||
-              this.$t("NoCategories")
-              : row.hasOwnProperty("funding")
-                ? (!!row.funding &&
-                  !!row.funding.categories &&
-                  row.funding.categories
-                    .map(category => category.title)
-                    .join(", ")) ||
-                this.$t("NoCategories")
-                : "",
-          sortable: true
-        },
-        {
-          name: "plannedStart",
-          label: this.$t("fundingsCol.start"),
-          align: "left",
-          field: row =>
-            row.hasOwnProperty("project")
-              ? dateFormatter(!!row.project && row.project.plannedStart)
-              : row.hasOwnProperty("funding")
-                ? dateFormatter(!!row.funding && row.funding.plannedStart)
-                : "",
-          sortable: true,
-          sort: (a, b, rowA, rowB) => {
-            if (
-              rowA.hasOwnProperty("project") &&
-              rowB.hasOwnProperty("funding")
-            ) {
-              console.log("rowA", rowA);
-              console.log("rowB", rowB);
-              const dateA = new Date(
-                !!rowA.project && rowA.project.plannedStart
-              );
-              const dateB = new Date(
-                !!rowB.funding && rowB.funding.plannedStart
-              );
-              return dateB - dateA;
-            } else if (
-              rowA.hasOwnProperty("funding") ||
-              rowB.hasOwnProperty("project")
-            ) {
-              const dateA = new Date(
-                !!rowA.funding && rowA.funding.plannedStart
-              );
-              const dateB = new Date(
-                !!rowB.project && rowB.project.plannedStart
-              );
-              return dateB - dateA;
-            }
-          }
-        },
-        {
-          name: "plannedEnd",
-          label: this.$t("fundingsCol.end"),
-          align: "left",
-          field: row =>
-            row.hasOwnProperty("project")
-              ? dateFormatter(!!row.project && row.project.plannedEnd)
-              : row.hasOwnProperty("funding")
-                ? dateFormatter(!!row.funding && row.funding.plannedEnd)
-                : "",
-          sortable: true,
-          sort: (a, b, rowA, rowB) => {
-            if (
-              rowA.hasOwnProperty("project") &&
-              rowB.hasOwnProperty("funding")
-            ) {
-              console.log("rowA", rowA);
-              console.log("rowB", rowB);
-              const dateA = new Date(
-                !!rowA.project && rowA.project.plannedStart
-              );
-              const dateB = new Date(
-                !!rowB.funding && rowB.funding.plannedStart
-              );
-              return dateB - dateA;
-            } else if (
-              rowA.hasOwnProperty("funding") ||
-              rowB.hasOwnProperty("project")
-            ) {
-              const dateA = new Date(
-                !!rowA.funding && rowA.funding.plannedStart
-              );
-              const dateB = new Date(
-                !!rowB.project && rowB.project.plannedStart
-              );
-              return dateB - dateA;
-            }
-          }
-        },
-        {
-          name: "owner",
-          label: this.$t("Owner"),
-          align: "left",
-          field: row =>
-            row.hasOwnProperty("project")
-              ? !!row.project &&
-              !!row.project.owner &&
-              row.project.owner.username
-              : row.hasOwnProperty("funding")
-                ? !!row.funding &&
-                !!row.funding.owner &&
-                row.funding.owner.username
-                : "",
-
-          sortable: true
-        }
-      ];
     },
     projectCols() {
       return [

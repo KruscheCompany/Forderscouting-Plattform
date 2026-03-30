@@ -4,24 +4,28 @@
       header-class="bg-white text-black" v-model="expandedFundingCheck">
 
       <div class="row q-col-gutter-sm q-pa-md">
-        <div class="col-12 col-sm-6 col-md-3 col-lg-2" v-for="(funding, index) in fundingMatches" :key="index">
+        <div class="col-12 col-sm-6 col-md-3 col-lg-3" v-for="(funding, index) in fundingMatches" :key="index">
           <div class="funding-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
-            :class="{ 'selected': selectedFundingIndices.includes(index) }" @mouseenter="hoveredCard = index"
-            @mouseleave="hoveredCard = null">
+            :class="{ 'selected': selectedFundingIndices.includes(index) }"
+            :style="!selectedFundingIndices.includes(index) ? getFundingCardStyle(funding.score) : {}"
+            @mouseenter="hoveredCard = index" @mouseleave="hoveredCard = null">
 
             <!-- Card content with flex layout -->
             <div class="card-content">
               <!-- Top row with index and link button -->
               <div class="row items-center justify-between q-mb-sm">
-                <div class="funding-index text-weight-bold text-primary">
-                  {{ index + 1 }}
+                <div class="col">
+                  <div class="row items-center">
+                    <div class="funding-index text-weight-bold q-mr-sm">
+                      {{ index + 1 }}
+                    </div>
+                    <div class="funding-score text-weight-bold">
+                      <q-icon name="star" size="16px" class="q-mr-xs" color="amber" />
+                      {{ (funding.score * 100).toFixed(2) }}%
+                    </div>
+                  </div>
                 </div>
-                <div class="funding-score text-weight-bold">
-                  <q-icon name="star" size="16px" class="q-mr-xs" color="amber" />
-                  {{ (funding.score * 100).toFixed(2) }}%
-                </div>
-                <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
-                  :color="selectedFundingIndices.includes(index) ? 'white' : 'black'"
+                <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline" color="white"
                   @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
                   :disabled="!funding.external_id" />
               </div>
@@ -32,13 +36,17 @@
               <!-- Title at bottom -->
               <div class="funding-title font-16 text-weight-medium q-mb-md">
                 {{ funding.title }}
+                <q-tooltip v-if="funding.title && funding.title.length > 72" anchor="bottom left" self="top left"
+                  content-style="font-size: 14px; max-width: 300px; white-space: normal;">
+                  {{ funding.title }}
+                </q-tooltip>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Fehlanzeige Card -->
-        <div class="col-12 col-sm-6 col-md-3 col-lg-2">
+        <div class="col-12 col-sm-6 col-md-3 col-lg-3">
           <div class="fehlanzeige-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
             :class="{ 'selected': hasFehlanzeige }">
 
@@ -114,6 +122,15 @@ export default {
     }
   },
   methods: {
+    getFundingCardStyle(score) {
+      const pct = score * 100;
+      if (pct >= 90) return { background: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)', color: 'white' };
+      if (pct >= 80) return { background: 'linear-gradient(135deg, #2e7d32 0%, #388e3c 100%)', color: 'white' };
+      if (pct >= 70) return { background: 'linear-gradient(135deg, #388e3c 0%, #4caf50 100%)', color: 'white' };
+      if (pct >= 60) return { background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)', color: '#1b5e20' };
+      if (pct >= 50) return { background: 'linear-gradient(135deg, #81c784 0%, #a5d6a7 100%)', color: '#1b5e20' };
+      return { background: 'linear-gradient(135deg, #a5d6a7 0%, #e8f5e9 100%)', color: '#1b5e20' };
+    },
     openFundingLink(externalId) {
       if (externalId) {
         // Construct URL to funding details page
@@ -128,7 +145,7 @@ export default {
 
 <style lang="scss" scoped>
 .funding-card {
-  background: #f5f5f5;
+  background: transparent;
   min-height: 160px;
   max-height: 160px;
   border: 2px solid transparent;
@@ -153,20 +170,16 @@ export default {
   }
 
   &.selected {
-    background: #bfd3ff;
+    background: #000055;
     border: 0;
     box-shadow: none;
 
-    .funding-index {
-      background: white
-    }
-
     .funding-title {
-      color: black;
+      color: white;
     }
 
     .funding-score {
-      color: black;
+      color: white;
     }
 
     .funding-preview {
@@ -184,11 +197,11 @@ export default {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: rgba(25, 118, 210, 0.2);
+  background: rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $blue;
+  color: white;
 }
 
 .funding-score {
@@ -202,7 +215,7 @@ export default {
 }
 
 .funding-link-btn {
-  opacity: 0.7;
+  opacity: 0.6;
   transition: opacity 0.3s ease;
 
   &:hover {
