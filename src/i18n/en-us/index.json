@@ -66,7 +66,8 @@
     "start": "Planned Start",
     "end": "Planned End",
     "created_at": "Creation Date",
-    "createFunding": "Create Funding"
+    "createFunding": "Create Funding",
+    "visibility": "Visibility"
   },
   "checkListCols": {
     "title": "Title",

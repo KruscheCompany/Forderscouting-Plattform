@@ -9,29 +9,6 @@
           </q-chip>
         </div>
 
-        <!-- Goals Comparison -->
-        <div class="row q-col-gutter-md q-mb-lg">
-          <div class="col-12 col-md-6">
-            <q-card class="project-data-card q-pa-md full-height">
-              <div class="text-subtitle1 text-primary">
-                <q-icon name="description" class="q-mr-sm" />
-                {{ $t('projectContent.projectGoals') }}
-              </div>
-              <div class="text-body1 q-mt-sm">{{ projectData.details.goals || 'Keine Projektziele angegeben' }}</div>
-            </q-card>
-          </div>
-          <div class="col-12 col-md-6">
-            <q-card class="funding-data-card q-pa-md full-height">
-              <div class="text-subtitle1 text-secondary">
-                <q-icon name="monetization_on" class="q-mr-sm" />
-                {{ $t('Funding goal') }}
-              </div>
-              <div class="text-body1 q-mt-sm">
-                {{ getFundingDetails(cardIndex)?.details?.goal || 'Keine Förderziele verfügbar' }}</div>
-            </q-card>
-          </div>
-        </div>
-
         <!-- Content Comparison -->
         <div class="row q-col-gutter-md q-mb-lg">
           <div class="col-12 col-md-6">
@@ -51,68 +28,7 @@
                 {{ $t('What is funded?') }}
               </div>
               <div class="text-body1 q-mt-sm">
-                {{ getFundingDetails(cardIndex)?.details?.funded || 'Keine Förderinhalte verfügbar' }}</div>
-            </q-card>
-          </div>
-        </div>
-
-        <!-- Budget & Financial Comparison -->
-        <div class="row q-col-gutter-md q-mb-lg">
-          <div class="col-12 col-md-6">
-            <q-card class="project-data-card q-pa-md full-height">
-              <div class="text-subtitle1 text-primary">
-                <q-icon name="description" class="q-mr-sm" />
-                {{ $t('ProjectDashboard.totalInvestment') }}
-              </div>
-              <div class="row q-col-gutter-sm q-mt-sm">
-                <div class="col-12">
-                  <strong>{{ projectData.financialPlan?.costAndFinance.length ?
-                    projectData.financialPlan?.costAndFinance[0].title : '' }}:</strong>
-                  {{ projectData.financialPlan?.costAndFinance.length ?
-                    formatCurrency(projectData.financialPlan?.costAndFinance[0].value) : 'Nicht angegeben' }}
-                </div>
-              </div>
-            </q-card>
-          </div>
-          <div class="col-12 col-md-6">
-            <q-card class="funding-data-card q-pa-md full-height">
-              <div class="text-subtitle1 text-secondary">
-                <q-icon name="monetization_on" class="q-mr-sm" />
-                {{ $t('Funding rates') }}
-              </div>
-              <div class="row q-col-gutter-sm q-mt-sm">
-                <div class="col-12" v-for="rate in getFundingDetails(cardIndex)?.rates" :key="rate.id">
-                  <strong>{{ rate.content }}:</strong>
-                  {{ rate.amount }}%
-                </div>
-              </div>
-            </q-card>
-          </div>
-        </div>
-
-        <!-- End Date Comparison -->
-        <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-6">
-            <q-card class="project-data-card q-pa-md full-height">
-              <div class="text-subtitle1 text-primary">
-                <q-icon name="description" class="q-mr-sm" />
-                {{ $t('projectIdeaPlaceholder.plannedEndDate') }}
-              </div>
-              <div class="text-body1 q-mt-sm">
-                {{ projectData.details?.timeline ?
-                  projectData.details?.timeline : 'Kein Enddatum angegeben' }}
-              </div>
-            </q-card>
-          </div>
-          <div class="col-12 col-md-6">
-            <q-card class="funding-data-card q-pa-md full-height">
-              <div class="text-subtitle1 text-secondary">
-                <q-icon name="monetization_on" class="q-mr-sm" />
-                {{ $t('projectIdeaPlaceholder.plannedEndDate') }}
-              </div>
-              <div class="text-body1 q-mt-sm">
-                {{ getFundingDetails(cardIndex)?.plannedEnd ?
-                  getFundingDetails(cardIndex)?.plannedEnd : 'Kein Enddatum angegeben' }}
+                <p class="q-mt-sm q-mb-sm text-block" v-html="getFundingDetails(cardIndex)?.details?.funded || 'Keine Förderinhalte verfügbar'"></p>
               </div>
             </q-card>
           </div>
@@ -123,8 +39,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
 export default {
   name: 'FundingComparisonSection',
   props: {
