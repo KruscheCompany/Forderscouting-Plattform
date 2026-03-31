@@ -43,6 +43,10 @@
                   ? col.value.substring(0, 145) + "..."
                   : col.value
               }}
+              <q-tooltip v-if="col.name === 'title' && col.value && col.value.length > 145" anchor="bottom left"
+                self="top left" content-style="font-size: 14px">
+                {{ col.value }}
+              </q-tooltip>
             </template>
           </q-td>
           <q-td class="text-right" auto-width>
