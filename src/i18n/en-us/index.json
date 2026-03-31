@@ -832,7 +832,11 @@
       "missingMunicipality": "Your municipality is not set up in your profile. Please contact an administrator to resolve this.",
       "missingFederalStates": "Your federal states are not set up in your profile. Please contact an administrator to resolve this.",
       "missingBoth": "Your municipality and federal states are not set up in your profile. Please contact an administrator to resolve this.",
-      "noMatchingFundings": "No matching funding options found for your municipality and federal states."
+      "noMatchingFundings": "No matching funding options found for your municipality and federal states.",
+      "aiAssessment": "AI Assessment",
+      "aiGenerated": "AI-generated",
+      "comingSoon": "Coming Soon",
+      "aiAssessmentTeaser": "Soon our AI will automatically analyze how well your project matches each funding guideline — with detailed reasoning and actionable recommendations."
     },
     "qAndA": {
       "title": "Open Questions & Answers",
