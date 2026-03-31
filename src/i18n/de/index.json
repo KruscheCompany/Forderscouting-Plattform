@@ -899,7 +899,11 @@
       "missingMunicipality": "Ihre Gemeinde ist nicht in Ihrem Profil eingerichtet. Bitte kontaktieren Sie einen Administrator, um dies zu beheben.",
       "missingFederalStates": "Ihre Bundesländer sind nicht in Ihrem Profil eingerichtet. Bitte kontaktieren Sie einen Administrator, um dies zu beheben.",
       "missingBoth": "Ihre Gemeinde und Bundesländer sind nicht in Ihrem Profil eingerichtet. Bitte kontaktieren Sie einen Administrator, um dies zu beheben.",
-      "noMatchingFundings": "Keine passenden Förderungen für Ihre Gemeinde und Bundesländer gefunden."
+      "noMatchingFundings": "Keine passenden Förderungen für Ihre Gemeinde und Bundesländer gefunden.",
+      "aiAssessment": "KI-Bewertung",
+      "aiGenerated": "KI-generiert",
+      "comingSoon": "Demnächst verfügbar",
+      "aiAssessmentTeaser": "Bald wird unsere KI automatisch analysieren, wie gut Ihr Projekt zu den jeweiligen Förderrichtlinien passt — mit detaillierter Begründung und Handlungsempfehlungen."
     },
     "qAndA": {
       "title": "Offene Fragen & Antworten",
@@ -992,7 +996,8 @@
       "documents": "Unterlagen",
       "procedure": "Verfahrensablauf",
       "applicationDeadline": "Antragsfrist",
-      "applicationCost": "Beantragungskosten"
+      "applicationCost": "Beantragungskosten",
+      "noContent": "Keine Beschreibung der Abstimmung der Projektunterlagen verfügbar"
     },
     "applicationDecision": {
       "title": "Antragsbeschluss",
@@ -1003,6 +1008,7 @@
       "title": "Unterzeichnung & Antragsstellung",
       "selectionLabel": "Upload Projektantragsunterlagen",
       "pendingDecision": "Antragsentscheidung ausstehend",
+      "sentToFunding": "an die Finanzierung gesendet",
       "sentToFundingBody": "Antrag bei der Förderstelle eingereicht",
       "grantNotice": "Zuwendungsbescheid",
       "rejectionNotice": "Ablehnungsbescheid",

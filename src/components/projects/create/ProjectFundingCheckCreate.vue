@@ -691,7 +691,7 @@ export default {
   background: transparent;
   min-height: 160px;
   max-height: 160px;
-  border: 2px solid transparent;
+  border: 2px solid white;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
