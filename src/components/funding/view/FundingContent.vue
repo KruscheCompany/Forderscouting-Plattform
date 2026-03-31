@@ -418,10 +418,7 @@
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
-                            <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.goal
-                              ? funding.details.goal
-                              : ''
-                              "></p>
+                            <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.details.goal || '')"></p>
                           </div>
                         </div>
                       </div>
@@ -441,10 +438,8 @@
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
-                            <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.funded
-                              ? funding.details.funded
-                              : ''
-                              "></p>
+                            <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.details.funded || '')">
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -465,10 +460,8 @@
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
-                            <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.notFunded
-                              ? funding.details.notFunded
-                              : ''
-                              "></p>
+                            <p class="q-mt-sm q-mb-sm text-block"
+                              v-html="sanitizeHtml(funding.details.notFunded || '')"></p>
                           </div>
                         </div>
                       </div>
@@ -489,10 +482,8 @@
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
                           <div class="q-ml-md font-16">
-                            <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.willBeFunded
-                              ? funding.details.willBeFunded
-                              : ''
-                              "></p>
+                            <p class="q-mt-sm q-mb-sm text-block"
+                              v-html="sanitizeHtml(funding.details.willBeFunded || '')"></p>
                           </div>
                         </div>
                       </div>
@@ -513,10 +504,8 @@
                     <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                       <div class="q-ml-xs">
                         <div class="q-ml-md font-16">
-                          <p class="q-mt-sm q-mb-sm text-block" v-html="!!funding.details.condition
-                            ? funding.details.condition
-                            : ''
-                            "></p>
+                          <p class="q-mt-sm q-mb-sm text-block" v-html="sanitizeHtml(funding.details.condition || '')">
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -647,7 +636,7 @@
                           {{ $t("Basis for assessment") }}
                         </h4>
                         <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.basisForAssessment')
-                        }}</p>
+                          }}</p>
                       </div>
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">

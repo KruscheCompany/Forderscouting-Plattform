@@ -125,11 +125,11 @@ export default {
     getFundingCardStyle(score) {
       const pct = score * 100;
       if (pct >= 90) return { background: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)', color: 'white' };
-      if (pct >= 80) return { background: 'linear-gradient(135deg, #2e7d32 0%, #388e3c 100%)', color: 'white' };
-      if (pct >= 70) return { background: 'linear-gradient(135deg, #388e3c 0%, #4caf50 100%)', color: 'white' };
-      if (pct >= 60) return { background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)', color: '#1b5e20' };
-      if (pct >= 50) return { background: 'linear-gradient(135deg, #81c784 0%, #a5d6a7 100%)', color: '#1b5e20' };
-      return { background: 'linear-gradient(135deg, #a5d6a7 0%, #e8f5e9 100%)', color: '#1b5e20' };
+      if (pct >= 80) return { background: 'linear-gradient(135deg, #388e3c 0%, #66bb6a 100%)', color: 'white' };
+      if (pct >= 70) return { background: 'linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%)', color: '#1b5e20' };
+      if (pct >= 60) return { background: 'linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%)', color: '#33691e' };
+      if (pct >= 50) return { background: 'linear-gradient(135deg, #f9fbe7 0%, #f1f8e9 100%)', color: '#558b2f' };
+      return { background: 'linear-gradient(135deg, #fafafa 0%, #eeeeee 100%)', color: '#616161' };
     },
     openFundingLink(externalId) {
       if (externalId) {
@@ -148,7 +148,7 @@ export default {
   background: transparent;
   min-height: 160px;
   max-height: 160px;
-  border: 2px solid transparent;
+  border: 2px solid white;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -165,8 +165,8 @@ export default {
   }
 
   &:hover {
-    border-color: #1976d2;
-    transform: translateY(-2px);
+    border-color: #000055;
+    transform: translateY(-4px);
   }
 
   &.selected {
@@ -246,7 +246,7 @@ export default {
 }
 
 .transition-all {
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 // Refresh Card Styles
