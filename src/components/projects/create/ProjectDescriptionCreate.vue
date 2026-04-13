@@ -42,6 +42,7 @@ export default {
       editing: true,
       showWarningDialog: false,
       originalStartingCondition: "", // Store original value for comparison
+      startingConditionReset: false, // Track if starting condition was reset via warning dialog
       // Combined form data structure
       form: {
         title: "",
@@ -206,14 +207,14 @@ export default {
       try {
         this.isLoading = true;
         this.showWarningDialog = false;
+        this.startingConditionReset = true;
 
-        // Re-merge the data
+        // Reset funding match and open questions, and reset the relevant steps
         this.form = {
           ...this.form,
           fundingMatches: null,
           questions: null,
           fundingCheckSteps: this.getResetSteps(),
-          reset: true
         };
         this.form.details.investive = JSON.parse(JSON.stringify(this.form.details.investive));
 
@@ -255,9 +256,15 @@ export default {
         await this.checkOptionalParameters();
 
         const projectData = {
+          ...(this.editing ? this.project : {}),
           ...this.form,
           published: true,
+          details: {
+            ...(this.editing ? this.project.details : {}),
+            ...this.form.details,
+          },
           info: {
+            ...(this.editing ? this.project.info : {}),
             ...this.form.info,
             contactName: this.userDetails.fullName,
             phone: this.userDetails.phone,
@@ -300,7 +307,7 @@ export default {
           this.$emit('project-created', {
             id: projectId,
             projectData: projectData,
-            hasStartingConditionChanged: this.form.reset
+            hasStartingConditionChanged: this.startingConditionReset
           });
 
         } else if (this.editing) {
@@ -315,7 +322,7 @@ export default {
           this.$emit('project-created', {
             id: projectId,
             projectData: projectData,
-            hasStartingConditionChanged: this.form.reset
+            hasStartingConditionChanged: this.startingConditionReset
           });
         } else {
           // Unexpected response format
@@ -339,6 +346,7 @@ export default {
         });
       }
 
+      this.startingConditionReset = false;
       this.isLoading = false;
     },
 

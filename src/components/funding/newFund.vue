@@ -164,6 +164,229 @@
               <q-separator class="bg-blue opacity-10" />
             </div>
           </div>
+
+          <!-- New fields section -->
+          <div class="row items-baseline">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                {{ $t("Funding Period") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <div class="row q-col-gutter-x-md">
+                <div class="col-6">
+                  <q-input outlined dense class="no-shadow input-radius-6" :value="dateFormatter(form.plannedStart)"
+                    readonly color="primary" bg-color="white"
+                    :placeholder="$t('projectIdeaPlaceholder.plannedStartDate')"
+                    @click="$refs.qPlannedStartDateProxy.show()" :rules="[val => !!val || $t('Required')]">
+                    <template v-slot:append>
+                      <q-icon name="event" color="blue-5" class="cursor-pointer">
+                        <q-popup-proxy ref="qPlannedStartDateProxy" transition-show="scale" transition-hide="scale">
+                          <q-date :options="plannedStartOptions" v-model="form.plannedStart" mask="YYYY-MM-DD"
+                            @input="$refs.qPlannedStartDateProxy.hide()" first-day-of-week="1"
+                            :locale="datepickerLocale">
+                            <div class="row items-center justify-end">
+                              <q-btn v-close-popup no-caps :label="$t('Close')" color="primary" flat />
+                            </div>
+                          </q-date>
+                        </q-popup-proxy>
+                      </q-icon>
+                    </template>
+                  </q-input>
+                </div>
+                <div class="col-6">
+                  <q-input outlined dense class="no-shadow input-radius-6"
+                    :value="form.fundingOpen ? '' : dateFormatter(form.plannedEnd)" color="primary" readonly
+                    bg-color="white" :placeholder="$t('projectIdeaPlaceholder.plannedEndDate')"
+                    @click="!form.fundingOpen && $refs.qPlannedEndDateProxy.show()"
+                    :rules="[val => form.fundingOpen || !!form.plannedEnd || $t('Required')]"
+                    :disable="form.fundingOpen">
+                    <template v-slot:append>
+                      <q-icon name="event" :color="form.fundingOpen ? 'grey-5' : 'blue-5'"
+                        :class="form.fundingOpen ? '' : 'cursor-pointer'">
+                        <q-popup-proxy v-if="!form.fundingOpen" ref="qPlannedEndDateProxy" transition-show="scale"
+                          transition-hide="scale">
+                          <q-date :options="plannedEndOptions" v-model="form.plannedEnd" mask="YYYY-MM-DD"
+                            @input="$refs.qPlannedEndDateProxy.hide()" first-day-of-week="1" :locale="datepickerLocale">
+                            <div class="row items-center justify-end">
+                              <q-btn v-close-popup no-caps :label="$t('Close')" color="primary" flat />
+                            </div>
+                          </q-date>
+                        </q-popup-proxy>
+                      </q-icon>
+                    </template>
+                  </q-input>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">{{ $t('fundingOpen') }}</p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-toggle v-model="form.fundingOpen" color="primary" />
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">{{ $t('applicationEligible') }}</p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-toggle v-model="form.applicationEligible" color="primary" />
+            </div>
+          </div>
+          <div class="row items-baseline">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">{{ $t('fundingCalls.label') }}</p>
+            </div>
+            <div class="col-12 col-md-9">
+              <FundingCalls :editing="!!funding ? (funding.fundingCalls || []) : []"
+                @update:fundingCalls="form.fundingCalls = $event" />
+            </div>
+          </div>
+          <div class="row items-baseline">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">{{ $t('additionalInfo') }}</p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-input outlined dense type="textarea" class="no-shadow input-radius-6"
+                :placeholder="$t('additionalInfo')" v-model="form.additionalInfo" autogrow />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <q-separator class="bg-blue opacity-10" />
+            </div>
+          </div>
+
+          <!-- Rates, contributions, links & uploads section -->
+          <div class="row items-baseline">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                {{ $t("Funding rates") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <FundingRate :editing="!!funding ? funding.rates : []" @update:fundingRate="form.rates = $event" />
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                {{ $t("Own contribution") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-input outlined dense class="no-shadow input-radius-6 removeArrow" suffix="%" placeholder="0"
+                v-model="form.ownContribution" :rules="[]" />
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                {{ $t("Accumulability") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-btn-toggle v-model="form.accumulability" spread no-caps toggle-color="yellow" padding="12px 10px"
+                color="transparent" toggle-text-color="black" text-color="black" class="no-shadow toggleGap"
+                :options="accumulabilityOptions" />
+            </div>
+          </div>
+          <div v-if="form.accumulability" class="row items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                {{ $t("Link to fundings") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <Fundings :requiresValidation="false" :editing="funding.fundingsLinkedTo"
+                @update:linkToFunding="form.fundingsLinkedTo = $event" />
+            </div>
+          </div>
+          <div class="row items-baseline">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                {{ $t("Who will be funded?") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.willBeFunded"
+                :toolbar="editorToolbar" />
+            </div>
+          </div>
+          <div class="row items-baseline">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                Links
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <Links :editing="!!funding ? funding.links : []" @update:link="form.links = $event" />
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                Uploads
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <div class="row q-col-gutter-md">
+                <div class="col-12">
+                  <q-file flat v-model="form.files" class="uploadInput input-radius-6 text-white" label-color="white"
+                    dark bg-color="primary" :label="!!form.files && form.files.length > 0
+                      ? $t('Add Files')
+                      : $t('Select Files')
+                      " multiple display-value="" append>
+                    <template v-slot:prepend>
+                      <q-icon color="white" class="on-right" name="upload" />
+                    </template>
+                  </q-file>
+                  <div class="q-mt-sm" v-if="form.files && form.files.length > 0">
+                    <q-item v-for="(file, index) in form.files" :key="index" clickable>
+                      <q-item-section side>
+                        <q-avatar rounded size="48px">
+                          <small>{{
+                            imgPreview(file).name.split(".")[1]
+                            }}</small>
+                        </q-avatar>
+                      </q-item-section>
+                      <q-item-section>
+                        <q-item-label class="ellipsis" caption>{{
+                          imgPreview(file).name
+                          }}</q-item-label>
+                      </q-item-section>
+                      <q-item-section side>
+                        <q-btn icon="delete" @click.prevent.stop="removeFile(index)" size="sm" round text-color="red"
+                          dense>
+                        </q-btn>
+                      </q-item-section>
+                    </q-item>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                {{ $t("Link to project ideas (optional)") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <ProjectIdeas :editing="!!funding ? funding.projects : []"
+                @update:linkToProject="form.projects = $event" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <q-separator class="bg-blue opacity-10" />
+            </div>
+          </div>
           <div class="row items-baseline">
             <div class="col-12 col-md-3">
               <p class="font-16 no-margin">{{ $t("Filter Categories") }}</p>
@@ -222,17 +445,6 @@
           </div>
           <div class="row items-baseline">
             <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                {{ $t("Who will be funded?") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.willBeFunded"
-                :toolbar="editorToolbar" />
-            </div>
-          </div>
-          <div class="row items-baseline">
-            <div class="col-12 col-md-3">
               <p class="font-16 no-margin q-pr-md">
                 {{ $t("Conditions for Applicants") }}
               </p>
@@ -240,57 +452,6 @@
             <div class="col-12 col-md-9">
               <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.condition"
                 :toolbar="editorToolbar" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
-
-          <div class="row items-baseline">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                {{ $t("Funding rates") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <FundingRate :editing="!!funding ? funding.rates : []" @update:fundingRate="form.rates = $event" />
-            </div>
-          </div>
-
-          <div class="row items-center">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                {{ $t("Own contribution") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <q-input outlined dense class="no-shadow input-radius-6 removeArrow" suffix="%" placeholder="0"
-                v-model="form.ownContribution" :rules="[]" />
-            </div>
-          </div>
-          <div class="row items-center">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                {{ $t("Accumulability") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <q-btn-toggle v-model="form.accumulability" spread no-caps toggle-color="yellow" padding="12px 10px"
-                color="transparent" toggle-text-color="black" text-color="black" class="no-shadow toggleGap"
-                :options="accumulabilityOptions" />
-            </div>
-          </div>
-          <div v-if="form.accumulability" class="row items-center">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                {{ $t("Link to fundings") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <Fundings :requiresValidation="false" :editing="funding.fundingsLinkedTo"
-                @update:linkToFunding="form.fundingsLinkedTo = $event" />
             </div>
           </div>
           <div class="row">
@@ -308,60 +469,6 @@
               <q-editor outlined class="no-shadow input-radius-6" v-model="form.assessment" :toolbar="editorToolbar" />
             </div>
           </div>
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
-          <div class="row items-baseline">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                {{ $t("Funding Period") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <div class="row q-col-gutter-x-md">
-                <div class="col-6">
-                  <q-input outlined dense class="no-shadow input-radius-6" :value="dateFormatter(form.plannedStart)"
-                    readonly color="primary" bg-color="white"
-                    :placeholder="$t('projectIdeaPlaceholder.plannedStartDate')"
-                    @click="$refs.qPlannedStartDateProxy.show()" :rules="[val => !!val || $t('Required')]">
-                    <template v-slot:append>
-                      <q-icon name="event" color="blue-5" class="cursor-pointer">
-                        <q-popup-proxy ref="qPlannedStartDateProxy" transition-show="scale" transition-hide="scale">
-                          <q-date :options="plannedStartOptions" v-model="form.plannedStart" mask="YYYY-MM-DD"
-                            @input="$refs.qPlannedStartDateProxy.hide()" first-day-of-week="1"
-                            :locale="datepickerLocale">
-                            <div class="row items-center justify-end">
-                              <q-btn v-close-popup no-caps :label="$t('Close')" color="primary" flat />
-                            </div>
-                          </q-date>
-                        </q-popup-proxy>
-                      </q-icon>
-                    </template>
-                  </q-input>
-                </div>
-                <div class="col-6">
-                  <q-input outlined dense class="no-shadow input-radius-6" :value="dateFormatter(form.plannedEnd)"
-                    color="primary" readonly bg-color="white" :placeholder="$t('projectIdeaPlaceholder.plannedEndDate')"
-                    @click="$refs.qPlannedEndDateProxy.show()" :rules="[val => !!val || $t('Required')]">
-                    <template v-slot:append>
-                      <q-icon name="event" color="blue-5" class="cursor-pointer">
-                        <q-popup-proxy ref="qPlannedEndDateProxy" transition-show="scale" transition-hide="scale">
-                          <q-date :options="plannedEndOptions" v-model="form.plannedEnd" mask="YYYY-MM-DD"
-                            @input="$refs.qPlannedEndDateProxy.hide()" first-day-of-week="1" :locale="datepickerLocale">
-                            <div class="row items-center justify-end">
-                              <q-btn v-close-popup no-caps :label="$t('Close')" color="primary" flat />
-                            </div>
-                          </q-date>
-                        </q-popup-proxy>
-                      </q-icon>
-                    </template>
-                  </q-input>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="row items-center">
             <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
@@ -374,86 +481,6 @@
                   <q-editor outlined class="no-shadow input-radius-6" v-model="form.notes" :toolbar="editorToolbar" />
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
-          <div class="row items-baseline">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                Links
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <Links :editing="!!funding ? funding.links : []" @update:link="form.links = $event" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
-          <div class="row items-center">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                Uploads
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <div class="row q-col-gutter-md">
-                <div class="col-12">
-                  <q-file flat v-model="form.files" class="uploadInput input-radius-6 text-white" label-color="white"
-                    dark bg-color="primary" :label="!!form.files && form.files.length > 0
-                      ? $t('Add Files')
-                      : $t('Select Files')
-                      " multiple display-value="" append>
-                    <template v-slot:prepend>
-                      <q-icon color="white" class="on-right" name="upload" />
-                    </template>
-                  </q-file>
-                  <div class="q-mt-sm" v-if="form.files && form.files.length > 0">
-                    <q-item v-for="(file, index) in form.files" :key="index" clickable>
-                      <q-item-section side>
-                        <q-avatar rounded size="48px">
-                          <small>{{
-                            imgPreview(file).name.split(".")[1]
-                            }}</small>
-                        </q-avatar>
-                      </q-item-section>
-                      <q-item-section>
-                        <q-item-label class="ellipsis" caption>{{
-                          imgPreview(file).name
-                          }}</q-item-label>
-                      </q-item-section>
-                      <q-item-section side>
-                        <q-btn icon="delete" @click.prevent.stop="removeFile(index)" size="sm" round text-color="red"
-                          dense>
-                        </q-btn>
-                      </q-item-section>
-                    </q-item>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
-          <div class="row items-center">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                {{ $t("Link to project ideas (optional)") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <ProjectIdeas :editing="!!funding ? funding.projects : []"
-                @update:linkToProject="form.projects = $event" />
             </div>
           </div>
           <div class="row">
@@ -485,6 +512,7 @@ import UserSelect from "components/user/UserSelect.vue";
 import Categories from "components/projects/create/Categories.vue";
 import Tags from "components/projects/create/Tags.vue";
 import FundingRate from "src/components/funding/FundingRate.vue";
+import FundingCalls from "src/components/funding/FundingCalls.vue";
 import Links from "src/components/projects/create/Links.vue";
 import ProjectIdeas from "components/funding/ProjectIdeas.vue";
 import Fundings from "components/funding/Fundings.vue";
@@ -497,6 +525,7 @@ export default {
     Categories,
     Tags,
     FundingRate,
+    FundingCalls,
     Links,
     ProjectIdeas,
     Fundings,
@@ -542,7 +571,11 @@ export default {
         projects: [],
         media: null,
         files: null,
-        fundingsLinkedTo: []
+        fundingsLinkedTo: [],
+        fundingOpen: false,
+        applicationEligible: false,
+        fundingCalls: [],
+        additionalInfo: ""
       },
       accumulabilityOptions: [
         { label: "Ja", value: true },
@@ -691,6 +724,10 @@ export default {
       });
     },
     checkOptionalParameters() {
+      // Clear plannedEnd when fundingOpen is true
+      if (this.form.fundingOpen) {
+        this.form.plannedEnd = null;
+      }
       // if Editing a funding
       if (!!this.funding) {
         console.log("Editing");
@@ -740,7 +777,11 @@ export default {
           ...this.form,
           ...decodedFunding,
           files: this.funding.files,
-          media: this.funding.media
+          media: this.funding.media,
+          fundingOpen: this.funding.fundingOpen || false,
+          applicationEligible: this.funding.applicationEligible || false,
+          fundingCalls: this.funding.fundingCalls || [],
+          additionalInfo: this.funding.additionalInfo || ""
         };
         this.$q.loading.hide();
         this.dataLoaded = true;

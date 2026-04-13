@@ -121,18 +121,18 @@
           <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
             class="font-14 cursor-pointer">
             <template v-if="col.name === 'applicationProcess'">
-              <q-badge color="primary" class="text-white q-py-sm q-px-md" v-if="!props.row.applicationProcessSteps">
+              <q-badge color="primary" class="text-white q-py-sm q-px-md" :style="stepBadgeStyle" v-if="!props.row.applicationProcessSteps">
                 {{ $t("aiFundingCheck") }}
               </q-badge>
               <q-badge :color="getLastCompletedStepColor(props.row.applicationProcessSteps)"
                 :text-color="getLastCompletedStepTextColor(props.row.applicationProcessSteps)"
-                class="text-white q-py-sm q-px-md" v-else>
+                class="text-white q-py-sm q-px-md" :style="stepBadgeStyle" v-else>
                 {{ getLastCompletedStep(props.row.applicationProcessSteps) }}
               </q-badge>
             </template>
             <template v-else-if="col.name === 'status'">
               <q-badge :color="getStatusColor(props.row.status)"
-                :class="props.row.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md">
+                :class="props.row.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md" :style="statusBadgeStyle">
                 {{ getStatusText(props.row.status) }}
               </q-badge>
             </template>
@@ -657,6 +657,25 @@ export default {
     },
     municipalityOptions() {
       return this.$store.state.municipality.municipalitiesSimplified;
+    },
+    stepBadgeStyle() {
+      const texts = [
+        this.$t('aiFundingCheck'),
+        this.$t('projectDevelopment'),
+        this.$t('application'),
+      ];
+      const maxLen = Math.max(...texts.map(t => (t || '').length));
+      return { minWidth: (maxLen * 7.5 + 40) + 'px', justifyContent: 'center' };
+    },
+    statusBadgeStyle() {
+      const texts = [
+        this.$t('projectComponents.submissionSigning.sentToFunding'),
+        this.$t('Zuwendungsbescheid'),
+        this.$t('Ablehnungsbescheid'),
+        this.$t('In Bearbeitung'),
+      ];
+      const maxLen = Math.max(...texts.map(t => (t || '').length));
+      return { minWidth: (maxLen * 7.5 + 40) + 'px', justifyContent: 'center' };
     },
   },
   mounted() {
