@@ -330,6 +330,14 @@
   "links": {
     "linkAdd": "Add link"
   },
+  "fundingOpen": "Permanently open",
+  "applicationEligible": "Application eligible",
+  "additionalInfo": "Additional information",
+  "fundingCalls": {
+    "label": "Funding calls",
+    "addCall": "Add call"
+  },
+  "Label": "Label",
   "projectIdeaPlaceholder": {
     "title": "Title",
     "name": "Name",

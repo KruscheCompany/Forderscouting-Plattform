@@ -8,16 +8,10 @@
         <!-- Project Header Section -->
         <div class="col-12">
           <div class="row">
-            <ProjectHeader :project="project" :logged-in-user="loggedInUser" :is-admin="isAdmin"
-              :loading-states="loadingStates" @transfer-document="handleTransferDocument" @export-to-pdf="exportToPdf"
-              @archive-project="handleArchiveProject" @delete-project="handleDeleteProject"
-              @request-access="handleRequestAccess" />
+            <ProjectHeader :project="project" :logged-in-user="loggedInUser" :is-admin="isAdmin" />
           </div>
         </div>
       </div>
-
-      <!-- PDF Export Component -->
-      <ProjectPrint :project="project" ref="projectPrint" />
 
       <!-- Main Content Layout -->
       <div class="row">
@@ -47,25 +41,6 @@
       </div>
     </div>
 
-    <!-- Dialogs -->
-    <DeleteDialog :id="itemId" :tab="tab" :dialogState="deleteDialog"
-      @update="closeDeleteDialog($event), (itemId = null)" />
-
-    <ArchiveDialog :id="itemId" :tab="tab" :dialogState="archiveDialog"
-      @update="closeArchiveDialog($event), (itemId = null)" />
-
-    <RequestAccessDialog :id="itemId" :tab="tab" :type="type" :dialogState="requestDialog" @update="
-      (requestDialog = $event),
-      (itemId = null),
-      (type = null),
-      (editIsLoading = false),
-      (duplicateIsLoading = false)
-      " />
-
-    <DocumentTransferDialog v-if="!!project && !!project.id && (project.owner.id === loggedInUser.id || isAdmin)"
-      :id="itemId" type="project" :dialogState="documentTransferDialog"
-      @update="closeDocumentTransferDialog($event), (itemId = null)" />
-
     <!-- Preview Document Dialog -->
     <q-dialog v-model="showPreviewDocumentDialog" full-width>
       <q-card>
@@ -81,18 +56,11 @@
 
 
 <script>
-import { dateFormatter } from "src/boot/dateFormatter";
-import DeleteDialog from "components/data/DeleteDialog.vue";
-import ArchiveDialog from "components/data/ArchiveDialog.vue";
-import RequestAccessDialog from "components/data/RequestAccessDialog.vue";
-import DocumentTransferDialog from "components/DocumentTransferDialog.vue";
-
 // Import new components
 import ProjectRequestsList from "./ProjectRequestsList.vue";
 import ProjectHeader from "./ProjectHeader.vue";
 import ProjectGeneralInfo from "./ProjectGeneralInfo.vue";
 import ProjectContentDetails from "./ProjectContentDetails.vue";
-import ProjectPrint from "./ProjectPrint.vue";
 import ProjectFundingCheck from "./ProjectFundingCheck.vue";
 import ProjectQAndA from "./ProjectQAndA.vue";
 import ProjectAptitude from "./ProjectAptitude.vue";
@@ -102,17 +70,7 @@ export default {
   name: "projectContent",
   data() {
     return {
-      itemId: null,
-      tab: "projectIdeas",
-      type: null,
-      requestDialog: false,
-      deleteDialog: false,
-      archiveDialog: false,
-      documentTransferDialog: false,
-      isLoading: false,
       previewDocumentData: null,
-      actionButton: false,
-      previewDocumentTitle: "previewDocumentTitle",
       showPreviewDocumentDialog: false,
     };
   },
@@ -124,15 +82,10 @@ export default {
     }
   },
   components: {
-    DeleteDialog,
-    ArchiveDialog,
-    RequestAccessDialog,
-    DocumentTransferDialog,
     ProjectRequestsList,
     ProjectHeader,
     ProjectGeneralInfo,
     ProjectContentDetails,
-    ProjectPrint,
     ProjectFundingCheck,
     ProjectQAndA,
     ProjectAptitude,
@@ -150,35 +103,6 @@ export default {
     }
   },
   methods: {
-    async getProject() {
-      await this.$store.dispatch("project/getSpecificProject", {
-        id: Number(this.project.id)
-      });
-    },
-
-    dateFormatter,
-
-    closeArchiveDialog(val) {
-      this.archiveDialog = val;
-      if (!!this.project && this.project.archived === true) {
-        this.$router.go(-1);
-      }
-    },
-
-    closeDocumentTransferDialog(val) {
-      this.documentTransferDialog = val;
-      if (!!this.project && this.project.id) {
-        this.documentTransferDialog = false;
-      }
-    },
-
-    closeDeleteDialog(val) {
-      this.deleteDialog = val;
-      if (!!this.project && !this.project.id) {
-        this.$router.go(-1);
-      }
-    },
-
     async getData() {
       this.$q.loading.show();
       await this.$store.dispatch("project/getSpecificProject", {
@@ -187,63 +111,9 @@ export default {
       this.$q.loading.hide();
     },
 
-    async getNewData(id) {
-      if (!!id) {
-        this.$q.loading.show();
-        await this.$store.dispatch("project/getSpecificProject", {
-          id: id
-        });
-        this.$q.loading.hide();
-      }
-    },
-
     async handleOpenDocumentPreviewModal(file) {
       this.showPreviewDocumentDialog = true;
       this.previewDocumentData = `https://pdf.foerderscouting-plattform.de/generic/web/viewer_readonly.html?file=${process.env.VUE_APP_MAIN_URL}/api/file/${file.id}?token=${this.$store.state.userCenter.user.jwt}`;
-    },
-
-    // Dialog event handlers
-    handleTransferDocument() {
-      this.itemId = !!this.project && this.project.id;;
-      this.documentTransferDialog = true;
-    },
-
-    handleArchiveProject(itemId) {
-      this.itemId = itemId;
-      this.archiveDialog = true;
-    },
-
-    handleDeleteProject(itemId) {
-      this.itemId = itemId;
-      this.deleteDialog = true;
-    },
-
-    handleRequestAccess({ id, type }) {
-      this.itemId = id;
-      this.type = type;
-      this.requestDialog = true;
-    },
-
-    handleDelete() {
-      this.getData();
-    },
-
-    handleArchive() {
-      this.getData();
-    },
-
-    handleTransfer() {
-      this.getData();
-    },
-
-    handleRequestAccessComplete() {
-      this.getData();
-    },
-
-    exportToPdf() {
-      if (this.$refs.projectPrint) {
-        this.$refs.projectPrint.exportToPdf();
-      }
     },
 
   },
@@ -257,26 +127,8 @@ export default {
         this.$store.state.userCenter.user.user
       );
     },
-    appUrl() {
-      return process.env.VUE_APP_MAIN_URL;
-    },
-    isDashboardView() {
-      return (
-        this.$router.currentRoute.meta &&
-        this.$router.currentRoute.meta.backLink === "/user/data"
-      );
-    },
     project() {
       return this.$store.state.project.project;
-    },
-    loadingStates() {
-      return {
-        watchlist: false,
-        edit: false,
-        duplicate: false,
-        archive: false,
-        delete: false
-      };
     },
     skipQuestions() {
       return this.project.fundingCheckSteps.some(step => step.skip);

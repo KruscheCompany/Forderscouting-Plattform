@@ -337,6 +337,14 @@
   "links": {
     "linkAdd": "Link hinzufügen"
   },
+  "fundingOpen": "Dauernd offen",
+  "applicationEligible": "Antragsberechtigt",
+  "additionalInfo": "Zusätzliche Informationen",
+  "fundingCalls": {
+    "label": "Förderaufrufe",
+    "addCall": "Aufruf hinzufügen"
+  },
+  "Label": "Bezeichnung",
   "projectIdeaPlaceholder": {
     "title": "Titel",
     "name": "Name",
