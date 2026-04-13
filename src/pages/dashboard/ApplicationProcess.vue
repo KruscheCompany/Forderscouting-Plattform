@@ -53,6 +53,11 @@
       <ProjectViewContentDetails :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewFundingCheck :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewQAndA v-if="!skipQuestions" :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewAptitude :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewDecision :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewTaskPlan v-if="step !== 'taskPlan'" :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewSiteVisit v-if="step !== 'taskPlan' && step !== 'siteVisit'" :project="form" :current-tab="step"
+        class="q-my-md" />
       <ProjectViewGoals v-if="step === 'requirements'" :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectTaskPlanCreate ref="taskPlanRef" v-if="step === 'taskPlan'" :created-project-id="createdProjectId"
@@ -73,6 +78,10 @@
       <ProjectViewContentDetails :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewFundingCheck :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewQAndA v-if="!skipQuestions" :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewAptitude :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewDecision :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewTaskPlan :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewSiteVisit :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewGoals :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewRequirements :project="form" :current-tab="step" class="q-my-md" />
 
@@ -159,6 +168,9 @@ import ProjectViewGuidelineFormCheck from 'src/components/projects/view/ProjectG
 import ProjectViewFinancingCheck from 'src/components/projects/view/ProjectFinancingCheck.vue';
 import ProjectViewDocumentsCoordination from 'src/components/projects/view/ProjectDocumentsCoordination.vue';
 import ProjectViewAptitude from 'src/components/projects/view/ProjectAptitude.vue';
+import ProjectViewDecision from 'src/components/projects/view/ProjectDecision.vue';
+import ProjectViewTaskPlan from 'src/components/projects/view/ProjectTaskPlan.vue';
+import ProjectViewSiteVisit from 'src/components/projects/view/ProjectSiteVisit.vue';
 
 
 export default {
@@ -190,7 +202,10 @@ export default {
     ProjectViewGuidelineFormCheck,
     ProjectViewFinancingCheck,
     ProjectViewDocumentsCoordination,
-    ProjectViewAptitude
+    ProjectViewAptitude,
+    ProjectViewDecision,
+    ProjectViewTaskPlan,
+    ProjectViewSiteVisit
   },
   data() {
     return {
@@ -572,7 +587,15 @@ export default {
         // If coming from a redirect (has triggerFundingMatch query), let the watcher handle it
         // Otherwise use the normal behavior
         if (!this.$route.query.triggerFundingMatch) {
-          this.setActiveTabBasedOnCompletion();
+          if (this.$route.query.tab) {
+            // Restore tab and step from view mode navigation
+            this.tab = this.$route.query.tab;
+            if (this.$route.query.step) {
+              this.step = this.$route.query.step;
+            }
+          } else {
+            this.setActiveTabBasedOnCompletion();
+          }
         }
       }
       this.$store.dispatch("userCenter/getUsers");

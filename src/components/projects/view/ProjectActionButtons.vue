@@ -1,5 +1,6 @@
 <template>
-  <div class="row items-center q-gutter-md">
+  <!-- Desktop: full button row -->
+  <div v-if="$q.screen.gt.sm" class="row items-center q-gutter-sm q-pr-sm">
 
     <div v-if="showEditButton" class="col-auto">
       <q-btn @click="editProject" color="yellow" unelevated class="radius-6 text-weight-600" no-caps icon="edit"
@@ -58,6 +59,68 @@
       </q-btn>
     </div>
   </div>
+
+  <!-- Mobile: collapsed action menu -->
+  <div v-else class="q-pr-xs">
+    <q-btn flat round icon="mdi-dots-vertical" color="white" aria-label="Actions">
+      <q-menu anchor="bottom right" self="top right">
+        <q-list style="min-width: 180px">
+
+          <q-item v-if="showEditButton" clickable v-close-popup @click="editProject">
+            <q-item-section avatar>
+              <q-icon name="edit" color="yellow-8" />
+            </q-item-section>
+            <q-item-section>{{ $t("edit") }}</q-item-section>
+          </q-item>
+
+          <q-item v-if="showTransferButton" clickable v-close-popup @click="transferDocument">
+            <q-item-section avatar>
+              <q-icon name="send" color="blue" />
+            </q-item-section>
+            <q-item-section>{{ $t("transferOwnership") }}</q-item-section>
+          </q-item>
+
+          <q-item clickable v-close-popup @click="exportToPdf">
+            <q-item-section avatar>
+              <q-icon name="print" color="blue" />
+            </q-item-section>
+            <q-item-section>{{ $t("print") }}</q-item-section>
+          </q-item>
+
+          <q-item clickable v-close-popup @click="addToWatchlist">
+            <q-item-section avatar>
+              <q-icon name="star_outline" color="blue" />
+            </q-item-section>
+            <q-item-section>{{ $t("bookmark") }}</q-item-section>
+          </q-item>
+
+          <q-item clickable v-close-popup @click="duplicateProject">
+            <q-item-section avatar>
+              <q-icon name="content_copy" color="blue" />
+            </q-item-section>
+            <q-item-section>{{ $t("duplicate") }}</q-item-section>
+          </q-item>
+
+          <q-item v-if="showArchiveButton" clickable v-close-popup @click="archiveProject">
+            <q-item-section avatar>
+              <q-icon name="inventory" color="blue" />
+            </q-item-section>
+            <q-item-section>{{ $t("archive") }}</q-item-section>
+          </q-item>
+
+          <q-separator v-if="isAdmin" />
+
+          <q-item v-if="isAdmin" clickable v-close-popup @click="deleteProject">
+            <q-item-section avatar>
+              <q-icon name="delete" color="red" />
+            </q-item-section>
+            <q-item-section class="text-red">{{ $t("delete") }}</q-item-section>
+          </q-item>
+
+        </q-list>
+      </q-menu>
+    </q-btn>
+  </div>
 </template>
 
 <script>
@@ -97,6 +160,7 @@ export default {
     'archive-project',
     'delete-project',
     'request-access',
+    'edit-project',
   ],
   methods: {
     async addToWatchlist() {
@@ -120,12 +184,12 @@ export default {
         );
 
         if (hasEditorAccess) {
-          this.$router.push({ path: `/application/process/edit/${id}` });
+          this.$emit('edit-project', id);
         } else {
           this.$emit('request-access', { id, type: 'edit' });
         }
       } else {
-        this.$router.push({ path: `/application/process/edit/${id}` });
+        this.$emit('edit-project', id);
       }
 
       this.$emit('loading-state', { type: 'edit', value: false });
