@@ -81,7 +81,8 @@
             <div class="row items-start no-wrap">
 
               <!-- Icon Column -->
-              <div class="ai-icon-wrapper q-mr-md">
+              <div class="ai-icon-wrapper q-mr-md"
+                :class="{ 'ai-icon-wrapper--active': fundingMatches[cardIndex]?.reasoning }">
                 <q-icon name="auto_awesome" color="white" size="sm" />
               </div>
 
@@ -92,14 +93,29 @@
                     {{ $t('projectComponents.fundingCheck.aiAssessment') }}
                   </span>
                   <q-space />
-                  <q-chip dense color="orange-3" text-color="orange-10" size="sm" icon="schedule"
-                    class="coming-soon-chip text-weight-bold">
+                  <q-chip v-if="!fundingMatches[cardIndex]?.reasoning" dense color="orange-3" text-color="orange-10"
+                    size="sm" icon="schedule" class="coming-soon-chip text-weight-bold">
                     {{ $t('projectComponents.fundingCheck.comingSoon') }}
                   </q-chip>
+                  <q-chip v-else dense color="blue-2" text-color="blue-9" size="sm" icon="auto_awesome"
+                    class="text-weight-bold">
+                    {{ $t('projectComponents.fundingCheck.aiGenerated') }}
+                  </q-chip>
                 </div>
-                <p class="text-body2 text-grey-6 q-mb-none">
+
+                <!-- No reasoning yet: teaser -->
+                <p v-if="!fundingMatches[cardIndex]?.reasoning" class="text-body2 text-grey-6 q-mb-none">
                   {{ $t('projectComponents.fundingCheck.aiAssessmentTeaser') }}
                 </p>
+
+                <!-- Reasoning available -->
+                <template v-else>
+                  <!-- Reasoning text -->
+                  <p class="text-body2 text-grey-8 q-mb-none">
+                    {{ fundingMatches[cardIndex].reasoning }}
+                  </p>
+                </template>
+
               </div>
 
             </div>
@@ -439,11 +455,22 @@ export default {
   justify-content: center;
   flex-shrink: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+
+  &--active {
+    background: linear-gradient(135deg, #000055, #2233aa);
+    box-shadow: 0 2px 10px rgba(0, 0, 85, 0.35);
+  }
 }
 
 .coming-soon-chip {
   animation: pulse 2.5s ease-in-out infinite;
   flex-shrink: 0;
+}
+
+.reasoning-text {
+  line-height: 1.65;
+  white-space: pre-line;
 }
 
 .full-height {

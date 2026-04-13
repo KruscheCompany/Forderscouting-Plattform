@@ -5,6 +5,12 @@
         <q-tab v-for="(tab, index) in tabs" :key="tab.name" :name="tab.name" :label="$t(tab.title)"
           :icon="tab.done ? 'mdi-check-all' : ''" :disable="shouldDisableTab(index)" />
       </q-tabs>
+      <q-space />
+      <ProjectActionButtons v-if="project" :project="project" :logged-in-user="loggedInUser" :is-admin="isAdmin"
+        :loading-states="loadingStates" @edit-project="handleEditProject" @transfer-document="handleTransferDocument"
+        @export-to-pdf="exportToPdf" @add-to-watchlist="() => { }" @duplicate-project="() => { }"
+        @archive-project="handleArchiveProject" @delete-project="handleDeleteProject"
+        @request-access="handleRequestAccess" />
     </q-toolbar>
     <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="radius-bottom-20 shadow-2">
       <q-step v-for="(step, index) in steps" :key="index" :name="step.name" :title="$t(step.title)" :icon="step.icon"
@@ -15,27 +21,48 @@
     <div v-if="tab === 'projectDevelopment'">
       <ProjectViewGeneralInfo :project="project" :current-tab="step" />
       <ProjectViewContentDetails :project="project" :current-tab="step" class="q-my-md" />
-      <ProjectTaskPlan v-if="step === 'taskPlan'" :project="project" :current-tab="step" class="q-my-md" />
-      <ProjectSiteVisit v-if="step === 'siteVisit'" :project="project" :current-tab="step" class="q-my-md" />
-      <ProjectGoals v-if="step === 'goals'" :project="project" :current-tab="step" class="q-my-md" />
-      <ProjectRequirements v-if="step === 'requirements'" :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectTaskPlan :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectSiteVisit v-if="step !== 'taskPlan'" :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectGoals v-if="step !== 'taskPlan' && step !== 'siteVisit'" :project="project" :current-tab="step"
+        class="q-my-md" />
+      <ProjectRequirements v-if="step !== 'taskPlan' && step !== 'siteVisit' && step !== 'goals'" :project="project"
+        :current-tab="step" class="q-my-md" />
     </div>
 
     <div v-if="tab === 'application'">
       <ProjectViewGeneralInfo :project="project" :current-tab="step" />
       <ProjectViewContentDetails :project="project" :current-tab="step" class="q-my-md" />
-      <ProjectGuidelineContentCheck v-if="step === 'guidelineContentCheck'" :project="project" :current-tab="step"
+      <ProjectGuidelineContentCheck :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectGuidelineFormCheck v-if="step !== 'guidelineContentCheck'" :project="project" :current-tab="step"
         class="q-my-md" />
-      <ProjectGuidelineFormCheck v-if="step === 'guidelineFormCheck'" :project="project" :current-tab="step"
-        class="q-my-md" />
-      <ProjectFinancingCheck v-if="step === 'financingCheck'" :project="project" :current-tab="step" class="q-my-md" />
-      <ProjectDocumentsCoordination v-if="step === 'projectDocumentsCoordination'" :project="project"
+      <ProjectFinancingCheck v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck'" :project="project"
         :current-tab="step" class="q-my-md" />
-      <ProjectApplicationDecision v-if="step === 'applicationDecision' || step === 'submissionSigning'"
+      <ProjectDocumentsCoordination
+        v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck' && step !== 'financingCheck'"
+        :project="project" :current-tab="step" class="q-my-md" />
+      <ProjectApplicationDecision
+        v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck' && step !== 'financingCheck' && step !== 'projectDocumentsCoordination'"
         :project="project" :current-tab="step" class="q-my-md" />
       <ProjectSubmissionSigning v-if="step === 'submissionSigning'" :project="project" :current-tab="step"
         class="q-my-md" />
     </div>
+
+    <!-- PDF Export Component -->
+    <ProjectPrint v-if="project" :project="project" ref="projectPrint" />
+
+    <!-- Dialogs -->
+    <DeleteDialog v-if="project" :id="itemId" tab="projectIdeas" :dialogState="deleteDialog"
+      @update="closeDeleteDialog($event), (itemId = null)" />
+
+    <ArchiveDialog v-if="project" :id="itemId" tab="projectIdeas" :dialogState="archiveDialog"
+      @update="closeArchiveDialog($event), (itemId = null)" />
+
+    <RequestAccessDialog v-if="project" :id="itemId" tab="projectIdeas" :type="requestAccessType"
+      :dialogState="requestDialog" @update="(requestDialog = $event), (itemId = null), (requestAccessType = null)" />
+
+    <DocumentTransferDialog v-if="project && project.id && (project.owner.id === loggedInUser.id || isAdmin)"
+      :id="itemId" type="project" :dialogState="documentTransferDialog"
+      @update="closeDocumentTransferDialog($event), (itemId = null)" />
   </q-page>
 </template>
 
@@ -53,6 +80,12 @@ import ProjectFinancingCheck from 'src/components/projects/view/ProjectFinancing
 import ProjectDocumentsCoordination from 'src/components/projects/view/ProjectDocumentsCoordination.vue';
 import ProjectApplicationDecision from 'src/components/projects/view/ProjectApplicationDecision.vue';
 import ProjectSubmissionSigning from 'src/components/projects/view/ProjectSubmissionSigning.vue';
+import ProjectActionButtons from 'src/components/projects/view/ProjectActionButtons.vue';
+import ProjectPrint from 'src/components/projects/view/ProjectPrint.vue';
+import DeleteDialog from 'components/data/DeleteDialog.vue';
+import ArchiveDialog from 'components/data/ArchiveDialog.vue';
+import RequestAccessDialog from 'components/data/RequestAccessDialog.vue';
+import DocumentTransferDialog from 'components/DocumentTransferDialog.vue';
 
 export default {
   name: "projectView",
@@ -69,12 +102,24 @@ export default {
     ProjectFinancingCheck,
     ProjectDocumentsCoordination,
     ProjectApplicationDecision,
-    ProjectSubmissionSigning
+    ProjectSubmissionSigning,
+    ProjectActionButtons,
+    ProjectPrint,
+    DeleteDialog,
+    ArchiveDialog,
+    RequestAccessDialog,
+    DocumentTransferDialog
   },
   data() {
     return {
       step: 'project',
       tab: 'aiFundingCheck',
+      itemId: null,
+      requestAccessType: null,
+      requestDialog: false,
+      deleteDialog: false,
+      archiveDialog: false,
+      documentTransferDialog: false,
       fundingCheckSteps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
         { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: false },
@@ -101,6 +146,24 @@ export default {
   computed: {
     project() {
       return this.$store.getters["project/getProject"];
+    },
+    isAdmin() {
+      return this.$store.getters["userCenter/isAdmin"];
+    },
+    loggedInUser() {
+      return (
+        !!this.$store.state.userCenter.user &&
+        this.$store.state.userCenter.user.user
+      );
+    },
+    loadingStates() {
+      return {
+        watchlist: false,
+        edit: false,
+        duplicate: false,
+        archive: false,
+        delete: false
+      };
     },
     steps() {
       if (this.tab === 'aiFundingCheck') {
@@ -134,6 +197,49 @@ export default {
     }
   },
   methods: {
+    handleEditProject(id) {
+      this.$router.push({
+        path: `/application/process/edit/${id}`,
+        query: { tab: this.tab, step: this.step }
+      });
+    },
+    handleTransferDocument() {
+      this.itemId = this.project && this.project.id;
+      this.documentTransferDialog = true;
+    },
+    handleArchiveProject(itemId) {
+      this.itemId = itemId;
+      this.archiveDialog = true;
+    },
+    handleDeleteProject(itemId) {
+      this.itemId = itemId;
+      this.deleteDialog = true;
+    },
+    handleRequestAccess({ id, type }) {
+      this.itemId = id;
+      this.requestAccessType = type;
+      this.requestDialog = true;
+    },
+    closeArchiveDialog(val) {
+      this.archiveDialog = val;
+      if (this.project && this.project.archived === true) {
+        this.$router.go(-1);
+      }
+    },
+    closeDeleteDialog(val) {
+      this.deleteDialog = val;
+      if (this.project && !this.project.id) {
+        this.$router.go(-1);
+      }
+    },
+    closeDocumentTransferDialog(val) {
+      this.documentTransferDialog = val;
+    },
+    exportToPdf() {
+      if (this.$refs.projectPrint) {
+        this.$refs.projectPrint.exportToPdf();
+      }
+    },
     shouldDisableTab(index) {
       // First tab is never disabled
       if (index === 0) return false;
