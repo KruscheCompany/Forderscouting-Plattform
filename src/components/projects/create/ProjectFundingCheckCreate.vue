@@ -38,7 +38,13 @@
               <div class="row items-center justify-between q-mb-sm">
                 <div class="col">
                   <div class="row items-center">
-                    <div class="funding-index text-weight-bold q-mr-sm">
+                    <div class="funding-index text-weight-bold q-mr-sm"
+                      :style="{
+                        color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white',
+                        background: !selectedCards.includes(index)
+                          ? (getFundingCardStyle(funding.score).color === 'white' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)')
+                          : 'rgba(255,255,255,0.15)'
+                      }">
                       {{ index + 1 }}
                     </div>
                     <div class="funding-score text-weight-bold">
@@ -47,7 +53,8 @@
                     </div>
                   </div>
                 </div>
-                <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline" color="white"
+                <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
+                  :style="{ color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white' }"
                   @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
                   :disabled="!funding.external_id" />
               </div>
@@ -740,11 +747,9 @@ export default {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
 }
 
 .funding-score {

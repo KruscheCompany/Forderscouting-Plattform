@@ -46,8 +46,8 @@ export default {
       // Remove newline characters
       html = html.replace(/\n/g, '');
 
-      // Replace h3 elements with p elements
-      html = html.replace(/<h3([^>]*)>/gi, '<p$1>').replace(/<\/h3>/gi, '</p>');
+      // Replace all heading elements (h1-h6) with p elements
+      html = html.replace(/<h[1-6]([^>]*)>/gi, '<p$1>').replace(/<\/h[1-6]>/gi, '</p>');
 
       // Decode and fix HTML first
       const fixedHtml = this.decodeAndFixHtml(html);
