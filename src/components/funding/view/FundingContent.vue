@@ -278,7 +278,7 @@
                       background: funding.applicationEligible ? '#43a047' : '#ef5350'
                     }" />
                     <span
-                      :class="funding.applicationEligible ? 'text-positive text-weight-medium' : 'text-negative text-weight-medium'"
+                      :class="funding.applicationEligible ? 'text-positive text-weight-medium ppeditorial' : 'text-negative text-weight-medium ppeditorial'"
                       class="text-caption">
                       {{ $t('applicationEligible') }}
                     </span>
@@ -294,22 +294,25 @@
                     <!-- Column 1: Provider, Contact person, Editors -->
                     <div class="col q-pa-md info-card-col">
                       <div v-if="!!funding.provider">
-                        <p class="text-caption text-blue-grey-5 q-mb-xs q-mt-none text-uppercase">
+                        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("funding provider") }}
-                        </p>
-                        <p class="font-14 q-mb-sm" v-html="sanitizeHtml(funding.provider || '')"></p>
+                        </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-sm q-mt-xs"
+                          v-html="sanitizeHtml(funding.provider || '')"></p>
                       </div>
                       <div v-if="!!funding.info && funding.info.contactName">
-                        <p class="text-caption text-blue-grey-5 q-mb-xs q-mt-md text-uppercase">
+                        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-md">
                           {{ $t("Contact person") }}
-                        </p>
-                        <p class="font-14 q-mb-sm" v-html="sanitizeHtml(funding.info?.contactName || '')"></p>
+                        </h4>
+                        <p class="font-14 text-blue-grey-10 q-mb-sm q-mt-xs"
+                          v-html="sanitizeHtml(funding.info?.contactName || '')"></p>
                       </div>
                       <div v-if="funding.editors && funding.editors.length > 0 && isAdmin">
-                        <p class="text-caption text-blue-grey-5 q-mb-xs q-mt-md text-uppercase">
+                        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-md">
                           {{ $t("Invite Editor") }}
-                        </p>
-                        <p v-for="(editor, index) in funding.editors" :key="index" class="font-14 q-mb-xs">
+                        </h4>
+                        <p v-for="(editor, index) in funding.editors" :key="index"
+                          class="font-14 text-blue-grey-10 q-mb-xs q-mt-xs">
                           {{ editor.username }}
                         </p>
                       </div>
@@ -323,16 +326,17 @@
                         (!!funding.info && funding.info.phone) ||
                         (!!funding.info && funding.info.email)
                       ">
-                        <p class="text-caption text-blue-grey-5 q-mb-xs q-mt-none text-uppercase">
+                        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Contact Details") }}
-                        </p>
-                        <p v-if="funding.info?.streetNo" class="font-14 q-mb-xs"
+                        </h4>
+                        <p v-if="funding.info?.streetNo" class="font-14 text-blue-grey-10 q-mb-xs q-mt-xs"
                           v-html="sanitizeHtml(funding.info.streetNo)"></p>
-                        <p v-if="funding.info?.postalCode" class="font-14 q-mb-xs"
+                        <p v-if="funding.info?.postalCode" class="font-14 text-blue-grey-10 q-mb-xs"
                           v-html="sanitizeHtml(funding.info.postalCode)"></p>
-                        <p v-if="funding.info?.phone" class="font-14 q-mb-xs" v-html="sanitizeHtml(funding.info.phone)">
+                        <p v-if="funding.info?.phone" class="font-14 text-blue-grey-10 q-mb-xs"
+                          v-html="sanitizeHtml(funding.info.phone)">
                         </p>
-                        <p v-if="funding.info?.email" class="font-14 q-mb-xs text-overflow"
+                        <p v-if="funding.info?.email" class="font-14 text-blue-grey-10 q-mb-xs text-overflow"
                           v-html="sanitizeHtml(funding.info.email)"></p>
                       </template>
                     </div>
@@ -343,15 +347,17 @@
                       <div class="row q-col-gutter-lg">
                         <!-- Programmaufzeit -->
                         <div class="col-auto">
-                          <p class="text-caption text-blue-grey-5 q-mb-sm q-mt-none text-uppercase">
+                          <h4 class="font-16 text-blue-grey-10 q-mb-sm q-mt-none">
                             {{ $t("Funding Period") }}
-                          </p>
+                          </h4>
                           <div class="q-mb-sm">
-                            <p class="text-caption text-blue-grey-4 q-mb-none">{{ $t("fundingsCol.start") }}</p>
+                            <p class="ppeditorial text-caption text-blue-grey-4 q-mb-none">{{ $t("fundingsCol.start") }}
+                            </p>
                             <p class="font-14 q-mb-none q-mt-none">{{ dateFormatter(funding.plannedStart) || '—' }}</p>
                           </div>
                           <div>
-                            <p class="text-caption text-blue-grey-4 q-mb-none">{{ $t("fundingsCol.end") }}</p>
+                            <p class="ppeditorial text-caption text-blue-grey-4 q-mb-none">{{ $t("fundingsCol.end") }}
+                            </p>
                             <p v-if="funding.fundingOpen"
                               class="font-14 text-positive text-weight-medium q-mb-none q-mt-none">
                               {{ $t('fundingOpen') }}
@@ -363,9 +369,9 @@
 
                         <!-- Förderaufrufe -->
                         <div class="col-auto" v-if="funding.fundingCalls && funding.fundingCalls.length > 0">
-                          <p class="text-caption text-blue-grey-5 q-mb-sm q-mt-none text-uppercase">
+                          <h4 class="font-16 text-blue-grey-10 q-mb-sm q-mt-none">
                             {{ $t("fundingCalls.label") }}
-                          </p>
+                          </h4>
                           <div v-for="(call, idx) in funding.fundingCalls" :key="idx"
                             class="row no-wrap items-baseline q-mb-xs" style="gap: 12px;">
                             <span class="text-weight-medium font-14">{{ call.label }}</span>
@@ -1102,13 +1108,20 @@ export default {
 }
 
 .rates-grid {
-  display: inline-grid;
-  grid-template-columns: max-content max-content;
+  display: grid;
+  grid-template-columns: 1fr max-content;
   align-items: center;
   column-gap: 24px;
+  width: 100%;
 
   .rates-grid-row {
     display: contents;
+
+    p:first-child {
+      overflow-wrap: break-word;
+      word-break: break-word;
+      min-width: 0;
+    }
   }
 }
 </style>
