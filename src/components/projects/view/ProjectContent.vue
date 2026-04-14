@@ -115,6 +115,15 @@ export default {
       this.showPreviewDocumentDialog = true;
       this.previewDocumentData = `https://pdf.foerderscouting-plattform.de/generic/web/viewer_readonly.html?file=${process.env.VUE_APP_MAIN_URL}/api/file/${file.id}?token=${this.$store.state.userCenter.user.jwt}`;
     },
+    async getNewData(id) {
+      if (!!id) {
+        this.$q.loading.show();
+        await this.$store.dispatch("project/getSpecificProject", {
+          id: id
+        });
+        this.$q.loading.hide();
+      }
+    },
 
   },
   computed: {
