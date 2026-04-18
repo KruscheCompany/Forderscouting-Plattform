@@ -368,7 +368,6 @@ export default {
       if (this.isAdmin) {
         return aiMatches.slice(0, 12);
       }
-      const userMunicipalityId = this.userMunicipality?.id;
       const userFederalStateIds = this.userFederalStates.map(fs => fs.id);
 
       return aiMatches.filter(match => {
@@ -385,11 +384,10 @@ export default {
           return false;
         }
 
-        // 3a. Check if funding has municipalities and federalStates
-        const fundingMunicipalities = funding.municipalities || [];
+        // 3a. Check if funding has federalStates
         const fundingFederalStates = funding.federalStates || [];
 
-        if (fundingMunicipalities.length === 0 || fundingFederalStates.length === 0) {
+        if (fundingFederalStates.length === 0) {
           return false;
         }
 
