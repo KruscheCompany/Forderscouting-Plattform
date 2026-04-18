@@ -38,13 +38,12 @@
               <div class="row items-center justify-between q-mb-sm">
                 <div class="col">
                   <div class="row items-center">
-                    <div class="funding-index text-weight-bold q-mr-sm"
-                      :style="{
-                        color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white',
-                        background: !selectedCards.includes(index)
-                          ? (getFundingCardStyle(funding.score).color === 'white' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)')
-                          : 'rgba(255,255,255,0.15)'
-                      }">
+                    <div class="funding-index text-weight-bold q-mr-sm" :style="{
+                      color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white',
+                      background: !selectedCards.includes(index)
+                        ? (getFundingCardStyle(funding.score).color === 'white' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)')
+                        : 'rgba(255,255,255,0.15)'
+                    }">
                       {{ index + 1 }}
                     </div>
                     <div class="funding-score text-weight-bold">
@@ -391,15 +390,6 @@ export default {
         const fundingFederalStates = funding.federalStates || [];
 
         if (fundingMunicipalities.length === 0 || fundingFederalStates.length === 0) {
-          return false;
-        }
-
-        // 3b. Check if user's municipality is in funding's municipalities
-        const hasMunicipalityMatch = fundingMunicipalities.some(
-          m => m.id === userMunicipalityId
-        );
-
-        if (!hasMunicipalityMatch) {
           return false;
         }
 
@@ -955,13 +945,13 @@ export default {
   }
 
   .refresh-card {
-    min-height: 120px;
-    max-height: 120px;
+    min-height: 140px;
+    max-height: 140px;
   }
 
   .fehlanzeige-card {
-    min-height: 120px;
-    max-height: 120px;
+    min-height: 140px;
+    max-height: 140px;
   }
 }
 </style>
