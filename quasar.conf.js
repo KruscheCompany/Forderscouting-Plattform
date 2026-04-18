@@ -43,6 +43,7 @@ module.exports = function (ctx) {
       vueRouterMode: "history", // available values: 'hash', 'history'
       rtl: false,
       publicPath: "",
+      sourceMap: true,
       // transpile: true,
       // transpileDependencies: ['/node_modules/darkreader/'],
       // Add dependencies for transpiling with Babel (Array of string/regex)
