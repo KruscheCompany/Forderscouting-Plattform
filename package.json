@@ -43,15 +43,10 @@
     "workbox-webpack-plugin": "^5.0.0"
   },
   "browserslist": [
-    "last 10 Chrome versions",
-    "last 10 Firefox versions",
-    "last 4 Edge versions",
-    "last 7 Safari versions",
-    "last 8 Android versions",
-    "last 8 ChromeAndroid versions",
-    "last 8 FirefoxAndroid versions",
-    "last 10 iOS versions",
-    "last 5 Opera versions"
+    "> 0.5% in de",
+    "last 2 versions",
+    "not dead",
+    "not IE 11"
   ],
   "engines": {
     "node": ">= 18.17.0",
