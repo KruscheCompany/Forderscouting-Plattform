@@ -8,7 +8,7 @@
           <q-card-section class="q-pt-none">
             <div class="row q-col-gutter-md">
 
-              <div class="col-4 col-md-4">
+              <div class="col-12 col-sm-6 col-md-4">
 
                 <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                   {{ $t("projectContent.contactPerson") }}
@@ -23,9 +23,10 @@
                   {{ $t("projectContent.contactDetails") }}
                 </h4>
                 <div class="font-16">
-                  <p class="q-mb-sm">
-                    {{ streetAddress }} / {{ postalCode }} / {{ phone }} / {{ email }}
-                  </p>
+                  <p class="q-mb-xs" v-if="streetAddress">{{ streetAddress }}</p>
+                  <p class="q-mb-xs" v-if="postalCode">{{ postalCode }}</p>
+                  <p class="q-mb-xs" v-if="phone">{{ phone }}</p>
+                  <p class="q-mb-sm" v-if="email">{{ email }}</p>
                 </div>
 
                 <div v-if="hasEditors">
@@ -46,7 +47,7 @@
 
               </div>
 
-              <div class="col-4 col-md-4">
+              <div class="col-12 col-sm-6 col-md-4">
 
                 <div v-if="location">
                   <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
@@ -88,7 +89,7 @@
 
               </div>
 
-              <div class="col-4">
+              <div class="col-12 col-sm-6 col-md-4">
                 <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                   {{ $t("projectContent.categories") }} & {{ $t("projectContent.tags") }}
                 </h4>
