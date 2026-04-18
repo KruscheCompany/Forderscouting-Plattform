@@ -3,8 +3,8 @@
     <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t('projectComponents.financingCheck.title')"
       header-class="bg-white text-black" v-model="expandedFinancingCheck">
       <q-card-section class="q-pt-none">
-        <div class="row">
-          <div class="col-8 q-pr-sm">
+        <div class="row q-col-gutter-sm">
+          <div class="col-12 col-md-8">
             <h4 class="font-16 text-blue-grey-10 q-my-none">
               {{ $t('projectComponents.contentDetails.financingOverview') }}
             </h4>
@@ -12,7 +12,7 @@
               <p class="q-my-sm text-block" v-html="financialPlanDescription"></p>
             </q-banner>
           </div>
-          <div class="col-4">
+          <div class="col-12 col-md-4">
 
             <h4 class="font-16 text-blue-grey-10 q-my-none">
               {{ $t('projectComponents.contentDetails.financialPlanTitle') }}

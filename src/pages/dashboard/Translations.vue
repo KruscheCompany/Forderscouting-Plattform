@@ -4,27 +4,16 @@
       <h5 class="q-my-none">{{ $t("Translation Management") }}</h5>
     </div>
 
-    <TranslationTable
-      :columns="columns"
-      :loading="loading"
-      :translations="translations"
-      :filter="searchText"
-      @update-translation="updateTranslation"
-      @update-filter="searchText = $event"
-    >
+    <TranslationTable :columns="columns" :loading="loading" :translations="translations" :filter="searchText"
+      @update-translation="updateTranslation" @update-filter="searchText = $event">
       <template v-slot:search>
         <TranslationSearch v-model="searchText" />
       </template>
     </TranslationTable>
 
     <div class="q-mt-md row q-col-gutter-md">
-      <TranslationActions
-        :saving="saving"
-        :loading="loading"
-        :has-changes="hasChanges"
-        @save="saveChanges"
-        @create-missing="createMissingTranslations"
-      />
+      <TranslationActions :saving="saving" :loading="loading" :has-changes="hasChanges" @save="saveChanges"
+        @create-missing="createMissingTranslations" />
     </div>
   </q-page>
 </template>
@@ -67,8 +56,8 @@ export default {
           field: "deCurrent",
           sortable: false,
         },
-        { name: "en", align: "left", label: "English", field: "en", sortable: false },
-        { name: "de", align: "left", label: "German", field: "de", sortable: false },
+        { name: "en", align: "left", label: "English", field: "en", sortable: false, style: "min-width: 220px" },
+        { name: "de", align: "left", label: "German", field: "de", sortable: false, style: "min-width: 220px" },
       ],
     };
   },

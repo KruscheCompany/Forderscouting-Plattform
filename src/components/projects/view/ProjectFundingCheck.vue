@@ -411,13 +411,13 @@ export default {
   }
 
   .refresh-card {
-    min-height: 120px;
-    max-height: 120px;
+    min-height: 140px;
+    max-height: 140px;
   }
 
   .fehlanzeige-card {
-    min-height: 120px;
-    max-height: 120px;
+    min-height: 140px;
+    max-height: 140px;
   }
 }
 </style>

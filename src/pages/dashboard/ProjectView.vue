@@ -12,10 +12,15 @@
         @archive-project="handleArchiveProject" @delete-project="handleDeleteProject"
         @request-access="handleRequestAccess" />
     </q-toolbar>
-    <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="radius-bottom-20 shadow-2">
-      <q-step v-for="(step, index) in steps" :key="index" :name="step.name" :title="$t(step.title)" :icon="step.icon"
-        :done="step.done" :header-nav="step.done" />
+    <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="shadow-2"
+      :class="$q.screen.gt.xs ? 'radius-bottom-20' : ''">
+      <q-step v-for="(step, index) in steps" :key="index" :name="step.name"
+        :title="$q.screen.gt.xs ? $t(step.title) : ''" :icon="step.icon" :done="step.done" :header-nav="step.done" />
     </q-stepper>
+    <div v-if="$q.screen.xs && activeStepTitle"
+      class="bg-white text-center text-caption text-primary q-py-xs q-px-md radius-bottom-20 shadow-2">
+      {{ $t(activeStepTitle) }}
+    </div>
     <ProjectContent :currentTab="step" v-if="tab === 'aiFundingCheck'" />
 
     <div v-if="tab === 'projectDevelopment'">
@@ -175,6 +180,10 @@ export default {
       } else {
         return [];
       }
+    },
+    activeStepTitle() {
+      const current = this.steps.find(s => s.name === this.step);
+      return current ? current.title : '';
     },
     tabs() {
       return this.project && this.project.applicationProcessSteps ? this.project.applicationProcessSteps : [
