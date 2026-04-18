@@ -10,10 +10,16 @@
       </q-toolbar>
     </div>
     <div>
-      <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="radius-bottom-20 shadow-2">
-        <q-step v-for="(step, index) in steps" :key="index" :name="step.name" :title="$t(step.title)" :icon="step.icon"
-          :done="step.done && !step.skip" :header-nav="step.done && !step.skip" active-color="yellow" />
+      <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="shadow-2"
+        :class="$q.screen.gt.xs ? 'radius-bottom-20' : ''">
+        <q-step v-for="(step, index) in steps" :key="index" :name="step.name"
+          :title="$q.screen.gt.xs ? $t(step.title) : ''" :icon="step.icon" :done="step.done && !step.skip"
+          :header-nav="step.done && !step.skip" active-color="yellow" />
       </q-stepper>
+      <div v-if="$q.screen.xs && activeStepTitle"
+        class="bg-white text-center text-caption text-primary q-py-xs q-px-md radius-bottom-20 shadow-2">
+        {{ $t(activeStepTitle) }}
+      </div>
     </div>
 
     <div v-if="tab === 'aiFundingCheck'">
@@ -250,6 +256,10 @@ export default {
     },
     skipQuestions() {
       return this.steps.some(step => step.skip);
+    },
+    activeStepTitle() {
+      const current = this.steps.find(s => s.name === this.step);
+      return current ? current.title : '';
     },
     steps() {
       if (this.tab === 'aiFundingCheck') {

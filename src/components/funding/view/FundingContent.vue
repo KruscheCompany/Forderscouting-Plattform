@@ -18,7 +18,7 @@
                     {{ !!request.user && request.user.username }}
                     {{ $t("would like to access document") }}
                   </p>
-                  <p class="font-14 q-mb-none">
+                  <p class="font-16 q-mb-none">
                     {{ !!request.funding && request.funding.title }}
                   </p>
                 </div>
@@ -47,7 +47,7 @@
                 <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                   <div class="row q-col-gutter-y-sm q-col-gutter-x-xl">
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">
+                      <p class="font-16 no-margin text-blue-grey-10">
                         Erstelldatum
                       </p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
@@ -59,19 +59,19 @@
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("Owner") }}</p>
+                      <p class="font-16 no-margin text-blue-grey-10">{{ $t("Owner") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{ (!!funding.owner && funding.owner.username) || "" }}
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.type") }}</p>
+                      <p class="font-16 no-margin text-blue-grey-10">{{ $t("projectContent.type") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{ $t("fundingsColsHome.fundInfo") }}
                       </p>
                     </div>
                     <div class="col-auto">
-                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.visibility") }}</p>
+                      <p class="font-16 no-margin text-blue-grey-10">{{ $t("projectContent.visibility") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{
                           funding.visibility === "only for me"
@@ -158,7 +158,7 @@
                 <div class="col-8">
                   <div class="row">
                     <div class="col-4">
-                      <p class="font-14 no-margin text-blue-grey-10">
+                      <p class="font-16 no-margin text-blue-grey-10">
                         Erstelldatum
                       </p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
@@ -171,13 +171,13 @@
                       </p>
                     </div>
                     <div class="col-4">
-                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("Owner") }}</p>
+                      <p class="font-16 no-margin text-blue-grey-10">{{ $t("Owner") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{ (!!funding.owner && funding.owner.username) || "" }}
                       </p>
                     </div>
                     <div class="col-4">
-                      <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.type") }}</p>
+                      <p class="font-16 no-margin text-blue-grey-10">{{ $t("projectContent.type") }}</p>
                       <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                         {{ $t("fundingsColsHome.fundInfo") }}
                       </p>
@@ -297,14 +297,14 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("funding provider") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-sm q-mt-xs"
+                        <p class="font-16 text-blue-grey-10 q-mb-sm q-mt-xs"
                           v-html="sanitizeHtml(funding.provider || '')"></p>
                       </div>
                       <div v-if="!!funding.info && funding.info.contactName">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-md">
                           {{ $t("Contact person") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-sm q-mt-xs"
+                        <p class="font-16 text-blue-grey-10 q-mb-sm q-mt-xs"
                           v-html="sanitizeHtml(funding.info?.contactName || '')"></p>
                       </div>
                       <div v-if="funding.editors && funding.editors.length > 0 && isAdmin">
@@ -312,7 +312,7 @@
                           {{ $t("Invite Editor") }}
                         </h4>
                         <p v-for="(editor, index) in funding.editors" :key="index"
-                          class="font-14 text-blue-grey-10 q-mb-xs q-mt-xs">
+                          class="font-16 text-blue-grey-10 q-mb-xs q-mt-xs">
                           {{ editor.username }}
                         </p>
                       </div>
@@ -329,14 +329,14 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Contact Details") }}
                         </h4>
-                        <p v-if="funding.info?.streetNo" class="font-14 text-blue-grey-10 q-mb-xs q-mt-xs"
+                        <p v-if="funding.info?.streetNo" class="font-16 text-blue-grey-10 q-mb-xs q-mt-xs"
                           v-html="sanitizeHtml(funding.info.streetNo)"></p>
-                        <p v-if="funding.info?.postalCode" class="font-14 text-blue-grey-10 q-mb-xs"
+                        <p v-if="funding.info?.postalCode" class="font-16 text-blue-grey-10 q-mb-xs"
                           v-html="sanitizeHtml(funding.info.postalCode)"></p>
-                        <p v-if="funding.info?.phone" class="font-14 text-blue-grey-10 q-mb-xs"
+                        <p v-if="funding.info?.phone" class="font-16 text-blue-grey-10 q-mb-xs"
                           v-html="sanitizeHtml(funding.info.phone)">
                         </p>
-                        <p v-if="funding.info?.email" class="font-14 text-blue-grey-10 q-mb-xs text-overflow"
+                        <p v-if="funding.info?.email" class="font-16 text-blue-grey-10 q-mb-xs text-overflow"
                           v-html="sanitizeHtml(funding.info.email)"></p>
                       </template>
                     </div>
@@ -353,16 +353,16 @@
                           <div class="q-mb-sm">
                             <p class="ppeditorial text-caption text-blue-grey-4 q-mb-none">{{ $t("fundingsCol.start") }}
                             </p>
-                            <p class="font-14 q-mb-none q-mt-none">{{ dateFormatter(funding.plannedStart) || '—' }}</p>
+                            <p class="font-16 q-mb-none q-mt-none">{{ dateFormatter(funding.plannedStart) || '—' }}</p>
                           </div>
                           <div>
                             <p class="ppeditorial text-caption text-blue-grey-4 q-mb-none">{{ $t("fundingsCol.end") }}
                             </p>
                             <p v-if="funding.fundingOpen"
-                              class="font-14 text-positive text-weight-medium q-mb-none q-mt-none">
+                              class="font-16 text-positive text-weight-medium q-mb-none q-mt-none">
                               {{ $t('fundingOpen') }}
                             </p>
-                            <p v-else class="font-14 q-mb-none q-mt-none">{{ dateFormatter(funding.plannedEnd) || '—' }}
+                            <p v-else class="font-16 q-mb-none q-mt-none">{{ dateFormatter(funding.plannedEnd) || '—' }}
                             </p>
                           </div>
                         </div>
@@ -374,8 +374,8 @@
                           </h4>
                           <div v-for="(call, idx) in funding.fundingCalls" :key="idx"
                             class="row no-wrap items-baseline q-mb-xs" style="gap: 12px;">
-                            <span class="text-weight-medium font-14">{{ call.label }}</span>
-                            <span class="font-14 text-blue-grey-6 text-no-wrap">
+                            <span class="text-weight-medium font-16">{{ call.label }}</span>
+                            <span class="font-16 text-blue-grey-6 text-no-wrap">
                               {{ dateFormatter(call.date) }}
                             </span>
                           </div>
@@ -385,7 +385,7 @@
                       <!-- Additional Info -->
                       <template v-if="funding.additionalInfo">
                         <q-separator class="bg-blue opacity-10 q-mt-md q-mb-sm" />
-                        <p class="font-14 text-blue-grey-8 q-mb-none">
+                        <p class="font-16 text-blue-grey-8 q-mb-none">
                           {{ funding.additionalInfo }}
                         </p>
                       </template>
@@ -419,7 +419,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("projectContent.links") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.projectLinks') }}</p>
+                        <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.projectLinks') }}</p>
                       </div>
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
@@ -428,9 +428,10 @@
                               <div class="col-12">
                                 <p class="q-mt-sm q-mb-xs inline-block">{{ link.title || "" }}</p>
                               </div>
-                              <div class="col-auto">
+                              <div class="col-12">
                                 <a class="q-mb-sm text-blue block text-weight-600" target="_blank"
-                                  rel="noopener noreferrer" :href="link.link.split('://')[0].substring(0, 5) === 'https'
+                                  rel="noopener noreferrer" style="overflow-wrap: break-word; word-break: break-all;"
+                                  :href="link.link.split('://')[0].substring(0, 5) === 'https'
                                     ? link.link
                                     : link.link.split('://')[0].substring(0, 4) === 'http'
                                       ? link.link
@@ -454,7 +455,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Who will be funded?") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.whoWillBeFunded') }}
+                        <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.whoWillBeFunded') }}
                         </p>
                       </div>
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
@@ -478,7 +479,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Funding rates") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.fundingRates') }}</p>
+                        <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.fundingRates') }}</p>
                       </div>
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
@@ -497,33 +498,54 @@
                   <q-separator inset class="bg-blue opacity-10" />
                 </div>
 
-                <!-- Own contribution | Accumulability -->
-                <q-card-section class="q-pa-md items-start">
-                  <div class="row q-col-gutter-lg">
-                    <div class="col-12 col-md-6" v-if="!!funding.ownContribution">
-                      <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-                        {{ $t("Own contribution") }}
-                      </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.ownContribution') }}
-                      </p>
-                      <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.ownContribution + ' %' || '')"></p>
+                <!-- Own contribution -->
+                <div v-if="!!funding.ownContribution">
+                  <q-card-section class="q-pa-md items-start">
+                    <div class="row">
+                      <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+                        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+                          {{ $t("Own contribution") }}
+                        </h4>
+                        <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.ownContribution') }}
+                        </p>
+                      </div>
+                      <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+                        <div class="q-ml-xs">
+                          <div class="q-ml-md font-16">
+                            <p class="q-mt-sm q-mb-sm" v-html="sanitizeHtml(funding.ownContribution + ' %' || '')"></p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-12 col-md-6">
+                  </q-card-section>
+                  <q-separator inset class="bg-blue opacity-10" />
+                </div>
+
+                <!-- Accumulability -->
+                <q-card-section class="q-pa-md items-start">
+                  <div class="row">
+                    <div class="col-12 col-md-4 col-lg-3 col-xl-2">
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Accumulability") }}
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.accumulability') }}</p>
-                      <p class="q-mt-sm q-mb-sm">
-                        {{ funding.accumulability === true ? $t("Yes") : $t("No") }}
-                      </p>
-                      <div
-                        v-if="funding.accumulability === true && funding.fundingsLinkedTo && funding.fundingsLinkedTo.length > 0">
-                        <p class="font-14 text-blue-grey-10 q-mb-xs">{{ $t("Links to the fundings") }}</p>
-                        <div v-for="(linkedFunding, index) in funding.fundingsLinkedTo" :key="index">
-                          <a class="q-mb-sm text-blue block text-weight-600 cursor-pointer" target="_blank"
-                            rel="noopener noreferrer" @click.prevent="viewFunding(linkedFunding.id)">
-                            {{ linkedFunding.title }}
-                          </a>
+                      <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.accumulability') }}</p>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+                      <div class="q-ml-xs">
+                        <div class="q-ml-md font-16">
+                          <p class="q-mt-sm q-mb-sm">
+                            {{ funding.accumulability === true ? $t("Yes") : $t("No") }}
+                          </p>
+                          <div
+                            v-if="funding.accumulability === true && funding.fundingsLinkedTo && funding.fundingsLinkedTo.length > 0">
+                            <p class="font-16 text-blue-grey-10 q-mb-xs">{{ $t("Links to the fundings") }}</p>
+                            <div v-for="(linkedFunding, index) in funding.fundingsLinkedTo" :key="index">
+                              <a class="q-mb-sm text-blue block text-weight-600 cursor-pointer" target="_blank"
+                                rel="noopener noreferrer" @click.prevent="viewFunding(linkedFunding.id)">
+                                {{ linkedFunding.title }}
+                              </a>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -545,7 +567,7 @@
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("statsTable.categories") }}
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-none q-pr-xl">
+                      <p class="font-16 text-blue-grey-10 q-mb-none q-mt-none q-pr-xl">
                         {{ $t('projectComponents.contentDetails.startingConditionDescription') }}
                       </p>
                     </div>
@@ -570,7 +592,7 @@
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Tags") }}
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.tags') }}</p>
+                      <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.tags') }}</p>
                     </div>
                     <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                       <div class="q-ml-md font-16">
@@ -601,7 +623,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Funding goal") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.fundingGoal') }}</p>
+                        <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.fundingGoal') }}</p>
                       </div>
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
@@ -621,7 +643,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("What is funded?") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.whatIsFunded') }}</p>
+                        <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.whatIsFunded') }}</p>
                       </div>
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                         <div class="q-ml-xs">
@@ -642,7 +664,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("What is not funded?") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.whatIsNotFunded') }}
+                        <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.whatIsNotFunded') }}
                         </p>
                       </div>
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
@@ -663,7 +685,7 @@
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("Conditions for Applicants") }}
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{
+                      <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{
                         $t('help.conditionsForApplicants') }}
                       </p>
                     </div>
@@ -688,7 +710,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Basis for assessment") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.basisForAssessment')
+                        <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.basisForAssessment')
                         }}</p>
                       </div>
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
@@ -709,7 +731,7 @@
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                           {{ $t("Notes to the funding period") }}
                         </h4>
-                        <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{
+                        <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{
                           $t('help.notesToFundingPeriod') }}</p>
                       </div>
                       <div class="col-12 col-md-8 col-lg-9 col-xl-10">
@@ -730,7 +752,7 @@
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         Uploads
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.uploads') }}</p>
+                      <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.uploads') }}</p>
                     </div>
                     <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                       <div class="q-ml-xs">
@@ -762,7 +784,7 @@
                       <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
                         {{ $t("projectContent.projectContent") }}
                       </h4>
-                      <p class="font-14 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.projectContent') }}</p>
+                      <p class="font-16 text-blue-grey-10 q-mb-none q-mt-xs q-pr-md">{{ $t('help.projectContent') }}</p>
                     </div>
                     <div class="col-12 col-md-8 col-lg-9 col-xl-10">
                       <div class="q-ml-xs">
@@ -1109,10 +1131,10 @@ export default {
 
 .rates-grid {
   display: grid;
-  grid-template-columns: 1fr max-content;
+  grid-template-columns: auto auto;
+  justify-content: start;
   align-items: center;
   column-gap: 24px;
-  width: 100%;
 
   .rates-grid-row {
     display: contents;

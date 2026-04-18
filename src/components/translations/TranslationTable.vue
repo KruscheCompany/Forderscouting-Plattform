@@ -1,60 +1,37 @@
 <template>
-  <q-table
-    title="Translations"
-    :data="filteredData"
-    :columns="columns"
-    row-key="key"
-    :loading="loading"
-    :rows-per-page-options="[15, 50, 100, 0]"
-    class="radius-20 shadow-1 pagination-no-shadow"
-    :rows-per-page-label="$t('Records per page')"
-    :no-data-label="$t('No data')"
-    :no-results-label="$t('No results')"
-    :pagination="pagination"
-    ref="table"
-  >
-    <template v-slot:top>
-      <slot name="search"></slot>
-    </template>
-    <template v-slot:header="props">
-      <q-tr class="tableHeader" :props="props">
-        <q-th
-          v-for="col in props.cols"
-          :key="col.name"
-          :props="props"
-          class="font-14 text-black"
-        >
-          {{ col.label }}
-        </q-th>
-        <q-th auto-width />
-      </q-tr>
-    </template>
-    <template v-slot:body-cell-en="props">
-      <q-td :props="props">
-        <q-input
-          :value="translations[props.row.key] ? translations[props.row.key].en : ''"
-          class="bg-white input-radius-6 no-shadow q-mb-sm q-mt-sm"
-          borderless
-          outlined
-          dense
-          @input="(value) => updateTranslation(props.row.key, 'en', value)"
-        />
-      </q-td>
-    </template>
+  <div class="overflow-auto">
+    <q-table title="Translations" :data="filteredData" :columns="columns" row-key="key" :loading="loading"
+      :rows-per-page-options="[15, 50, 100, 0]" class="radius-20 shadow-1 pagination-no-shadow"
+      :rows-per-page-label="$t('Records per page')" :no-data-label="$t('No data')" :no-results-label="$t('No results')"
+      :pagination="pagination" ref="table">
+      <template v-slot:top>
+        <slot name="search"></slot>
+      </template>
+      <template v-slot:header="props">
+        <q-tr class="tableHeader" :props="props">
+          <q-th v-for="col in props.cols" :key="col.name" :props="props" class="font-14 text-black">
+            {{ col.label }}
+          </q-th>
+          <q-th auto-width />
+        </q-tr>
+      </template>
+      <template v-slot:body-cell-en="props">
+        <q-td :props="props">
+          <q-input :value="translations[props.row.key] ? translations[props.row.key].en : ''"
+            class="bg-white input-radius-6 no-shadow q-mb-sm q-mt-sm" borderless outlined dense
+            @input="(value) => updateTranslation(props.row.key, 'en', value)" />
+        </q-td>
+      </template>
 
-    <template v-slot:body-cell-de="props">
-      <q-td :props="props">
-        <q-input
-          :value="translations[props.row.key] ? translations[props.row.key].de : ''"
-          borderless
-          outlined
-          dense
-          class="bg-white input-radius-6 no-shadow q-mb-sm q-mt-sm"
-          @input="(value) => updateTranslation(props.row.key, 'de', value)"
-        />
-      </q-td>
-    </template>
-  </q-table>
+      <template v-slot:body-cell-de="props">
+        <q-td :props="props">
+          <q-input :value="translations[props.row.key] ? translations[props.row.key].de : ''" borderless outlined dense
+            class="bg-white input-radius-6 no-shadow q-mb-sm q-mt-sm"
+            @input="(value) => updateTranslation(props.row.key, 'de', value)" />
+        </q-td>
+      </template>
+    </q-table>
+  </div>
 </template>
 
 <script>
@@ -145,8 +122,8 @@ export default {
       const savedPagination = JSON.parse(localStorage.getItem("pagination"));
 
       this.$refs.table.setPagination({
-          page: savedPagination.translationsPage || 1,
-          rowsPerPage: savedPagination.translationsRowsPerPage || 15,
+        page: savedPagination.translationsPage || 1,
+        rowsPerPage: savedPagination.translationsRowsPerPage || 15,
       });
       this.$emit('update-filter', savedPagination.translationsSearchTerm || '');
     }

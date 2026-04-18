@@ -1,15 +1,7 @@
 <template>
-  <div class="col-8 col-md-4">
-    <q-input
-      v-model="searchValue"
-      debounce="300"
-      borderless
-      outlined
-      dense
-      :placeholder="$t('Search')"
-      class="bg-white input-radius-6 no-shadow q-mb-sm q-mt-sm"
-      @input="onSearch"
-    >
+  <div class="col-12 col-sm-8 col-md-4">
+    <q-input v-model="searchValue" debounce="300" borderless outlined dense :placeholder="$t('Search')"
+      class="bg-white input-radius-6 no-shadow q-mb-sm q-mt-sm" @input="onSearch">
       <template v-slot:prepend>
         <q-icon name="search" />
       </template>
