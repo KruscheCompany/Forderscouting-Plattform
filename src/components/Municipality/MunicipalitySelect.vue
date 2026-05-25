@@ -7,6 +7,7 @@
       :options="municipalities"
       options-selected-class="text-primary text-weight-600"
       class="no-shadow input-radius-6"
+      :rules="rules"
       @input="onSelect"
     >
       <template v-slot:selected>
@@ -39,6 +40,10 @@ export default {
     currentMunicipality: {
       type: Object,
       default: null,
+    },
+    rules: {
+      type: Array,
+      default: () => [],
     },
   },
   data() {

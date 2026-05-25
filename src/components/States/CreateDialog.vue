@@ -31,7 +31,8 @@
             </div>
             <div class="col-12 col-md-9">
               <MunicipalitySelect :currentMunicipality="form.municipality"
-                @update:municipality="form.municipality = $event" />
+                @update:municipality="form.municipality = $event"
+                :rules="[val => (!!val && !!val.id) || $t('Required')]" />
             </div>
           </div>
           <div class="items-center q-mb-lg">
@@ -44,7 +45,8 @@
               <q-select outlined multiple use-chips class="no-shadow input-radius-6" v-model="form.federalStates"
                 :options="federalStatesOptions" option-value="id"
                 :option-label="opt => opt.attributes ? opt.attributes.title : ''" emit-value map-options
-                :placeholder="$t('administrativeAreas.selectFederalStates')" />
+                :placeholder="$t('administrativeAreas.selectFederalStates')"
+                :rules="[val => (val && val.length > 0) || $t('Required')]" />
             </div>
           </div>
           <div class="row q-col-gutter-sm">

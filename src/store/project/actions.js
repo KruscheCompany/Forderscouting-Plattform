@@ -254,6 +254,7 @@ export async function editProjectIdea(context, payload) {
         type: "positive"
       });
       context.commit("setCreatedProjectIdea", res.data.data);
+      context.dispatch("getApplicationProcess");
       return res.data
     } catch (error) {
       console.error("error", error);
