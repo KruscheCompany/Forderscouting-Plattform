@@ -62,8 +62,8 @@
                   <q-btn
                     @click="onAccept('essential')"
                     padding="10px 0"
-                    outline
-                    color="primary"
+                    unelevated
+                    color="grey-6"
                     class="shadow-0 full-width"
                   >
                     {{ $t("acceptEssentials") }}
@@ -158,175 +158,76 @@ export default {
   },
   methods: {
     async onAccept(val) {
-      let consent = {
-        essential: this.essential,
-        prefrences: this.userPreferences,
-        version: "1.0.0"
+      const consent = {
+        essential: true,
+        prefrences: val !== "essential" ? this.userPreferences : false,
+        version: "2.0.0",
+        timestamp: new Date().toISOString(),
       };
-      if (val === "essential") {
-        consent.prefrences = false;
-      }
-      if (consent.prefrences === false) {
-        localStorage.clear();
-      }
-      const consentCookie = Cookies.get("consent");
-      if (!!consentCookie) {
-        const cookie = JSON.parse(consentCookie);
-        console.log("cookie", cookie);
-        if (cookie.hasOwnProperty("cKey")) {
-          console.log("update");
-          const instance = this.$api.create();
-          delete instance.defaults.headers.common["Authorization"];
-          try {
-            const res = await instance.put(`/api/data-concents/1`, {
-              data: {
-                key: cookie.cKey,
-                consent: consent
-              }
-            });
-            Cookies.set("consent", JSON.stringify(res.data), {
-              expires: 365,
-              secure: this.APP_URL !== "188" ? true : false,
-              sameSite: this.APP_URL !== "188" ? "None" : "Lax"
-            });
-            // this.checkConsentStatus();
-            location.reload();
-          } catch (error) {
-            this.$q.notify({
-              type: "negative",
-              message: error.response.data.error.message
-            });
-            this.loading = false;
-          }
-        } else {
-          console.log("create");
-          const instance = this.$api.create();
-          delete instance.defaults.headers.common["Authorization"];
-          try {
-            const res = await instance.put(`/api/data-concents/1`, {
-              data: {
-                key: cookie,
-                consent: consent
-              }
-            });
-            Cookies.set("consent", JSON.stringify(res.data), {
-              expires: 365,
-              secure: this.APP_URL !== "188" ? true : false,
-              sameSite: this.APP_URL !== "188" ? "None" : "Lax"
-            });
-            // this.checkConsentStatus();
-            location.reload();
-          } catch (error) {
-            this.$q.notify({
-              type: "negative",
-              message: error.response.data.error.message
-            });
-            this.loading = false;
-          }
-        }
-      } else {
-        console.log("create key and update");
-        const instance = this.$api.create();
-        delete instance.defaults.headers.common["Authorization"];
+
+      Cookies.set("consent", JSON.stringify(consent), {
+        expires: 365,
+        secure: window.location.protocol === "https:",
+        sameSite: "Lax",
+      });
+
+      if (this.$store.getters["userCenter/isSignedIn"]) {
         try {
-          const res = await instance.get("/api/concent/key");
-          Cookies.set("consent", JSON.stringify(res.data.key), {
-            expires: 365,
-            secure: this.APP_URL !== "188" ? true : false,
-            sameSite: this.APP_URL !== "188" ? "None" : "Lax"
-          });
-          const updateRes = await instance.put(`/api/data-concents/1`, {
-            data: {
-              key: res.data.key,
-              consent: consent
-            }
-          });
-          Cookies.set("consent", JSON.stringify(updateRes.data), {
-            expires: 365,
-            secure: this.APP_URL !== "188" ? true : false,
-            sameSite: this.APP_URL !== "188" ? "None" : "Lax"
-          });
-          this.checkConsentStatus();
+          await this.$api.put("/api/users/me", { consent });
+          await this.$store.dispatch("userCenter/getUserInfo");
         } catch (error) {
           this.$q.notify({
             type: "negative",
-            message: error.response.data.error.message
+            message: error?.response?.data?.error?.message || "Fehler beim Speichern."
           });
-          this.loading = false;
         }
       }
+
+      if (!consent.prefrences) {
+        localStorage.clear();
+      }
+
+      this.$store.commit("userCenter/changeShowCookieBox", false);
     },
     async checkConsentStatus() {
       const cookieStatus = Cookies.get("consent");
       if (!cookieStatus) {
-        console.log("consent not found");
         this.$store.commit("userCenter/changeShowCookieBox", true);
       } else {
-        console.log("consent found, check specific cookie");
+        const cookie = JSON.parse(cookieStatus);
+        if (cookie.version !== "2.0.0") {
+          this.$store.commit("userCenter/changeShowCookieBox", true);
+          return;
+        }
         this.$store.commit("userCenter/changeShowCookieBox", false);
         this.getCookieDetails();
       }
     },
-    async getCookieDetails() {
-      const consentCookie = Cookies.get("consent");
-      if (!!consentCookie) {
-        const cookie = JSON.parse(Cookies.get("consent"));
-        console.log("cookie", cookie);
-        if (cookie.hasOwnProperty("cKey")) {
-          console.log("update");
-          const instance = this.$api.create();
-          delete instance.defaults.headers.common["Authorization"];
-          try {
-            const res = await instance.post(`/api/concent/findKey`, {
-              data: {
-                key: cookie.cKey
-              }
-            });
-            console.log("resssss", res);
-            Cookies.set("consent", JSON.stringify(res.data[0]), {
-              expires: 365,
-              secure: this.APP_URL !== "188" ? true : false,
-              sameSite: this.APP_URL !== "188" ? "None" : "Lax"
-            });
-            this.essential = res.data[0].consent.essential;
-            this.userPreferences = res.data[0].consent.prefrences;
-          } catch (error) {
-            this.$q.notify({
-              type: "negative",
-              message: error.response.data.error.message || ""
-            });
-            this.loading = false;
-          }
-        } else {
-          console.log("create");
-          const instance = this.$api.create();
-          delete instance.defaults.headers.common["Authorization"];
-          try {
-            const res = await instance.post(`/api/concent/findKey`, {
-              data: {
-                key: cookie
-              }
-            });
-            Cookies.set("consent", JSON.stringify(res.data[0]), {
-              expires: 365,
-              secure: this.APP_URL !== "188" ? true : false,
-              sameSite: this.APP_URL !== "188" ? "None" : "Lax"
-            });
-            this.essential = res.data[0].consent.essential;
-            this.userPreferences = res.data[0].consent.prefrences;
-            console.log("resssss", res);
-          } catch (error) {
-            this.$q.notify({
-              type: "negative",
-              message: error.response.data.error.message || ""
-            });
-            this.loading = false;
-          }
+    getCookieDetails() {
+      const userInfo = this.$store.state.userCenter.user?.user;
+      if (userInfo?.consent) {
+        this.essential = userInfo.consent.essential != null ? userInfo.consent.essential : true;
+        this.userPreferences = userInfo.consent.prefrences != null ? userInfo.consent.prefrences : false;
+        return;
+      }
+      const cookie = Cookies.get("consent");
+      if (cookie) {
+        try {
+          const parsed = JSON.parse(cookie);
+          this.essential = parsed.essential != null ? parsed.essential : true;
+          this.userPreferences = parsed.prefrences != null ? parsed.prefrences : false;
+        } catch (e) {
+          // malformed cookie — ignore
         }
       }
     }
   },
-  mounted() {
+  async mounted() {
+    if (navigator.globalPrivacyControl === true) {
+      this.userPreferences = false;
+      await this.onAccept("essential");
+      return;
+    }
     this.checkConsentStatus();
   },
   watch: {
@@ -339,9 +240,6 @@ export default {
   computed: {
     showCookieBox() {
       return this.$store.state.userCenter.showCookieBox;
-    },
-    APP_URL() {
-      return window.location.hostname.substring(0, 3);
     }
   }
 };
