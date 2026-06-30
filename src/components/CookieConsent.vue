@@ -172,14 +172,20 @@ export default {
       });
 
       if (this.$store.getters["userCenter/isSignedIn"]) {
-        try {
-          await this.$api.put("/api/users/me", { consent });
-          await this.$store.dispatch("userCenter/getUserInfo");
-        } catch (error) {
-          this.$q.notify({
-            type: "negative",
-            message: error?.response?.data?.error?.message || "Fehler beim Speichern."
-          });
+        const userDetailsId = this.$store.state.userCenter.user?.userDetails?.id;
+        if (userDetailsId) {
+          try {
+            await this.$api.put(`/api/user-details/${userDetailsId}`, { data: { consent } });
+            this.$store.commit("userCenter/setUserDetails", {
+              ...this.$store.state.userCenter.user.userDetails,
+              consent,
+            });
+          } catch (error) {
+            this.$q.notify({
+              type: "negative",
+              message: error?.response?.data?.error?.message || "Fehler beim Speichern."
+            });
+          }
         }
       }
 
@@ -204,10 +210,10 @@ export default {
       }
     },
     getCookieDetails() {
-      const userInfo = this.$store.state.userCenter.user?.user;
-      if (userInfo?.consent) {
-        this.essential = userInfo.consent.essential != null ? userInfo.consent.essential : true;
-        this.userPreferences = userInfo.consent.prefrences != null ? userInfo.consent.prefrences : false;
+      const userDetails = this.$store.state.userCenter.user?.userDetails;
+      if (userDetails?.consent) {
+        this.essential = userDetails.consent.essential != null ? userDetails.consent.essential : true;
+        this.userPreferences = userDetails.consent.prefrences != null ? userDetails.consent.prefrences : false;
         return;
       }
       const cookie = Cookies.get("consent");
