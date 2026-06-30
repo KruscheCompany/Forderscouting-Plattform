@@ -206,16 +206,16 @@ export default {
     getCookieDetails() {
       const userInfo = this.$store.state.userCenter.user?.user;
       if (userInfo?.consent) {
-        this.essential = userInfo.consent.essential ?? true;
-        this.userPreferences = userInfo.consent.prefrences ?? false;
+        this.essential = userInfo.consent.essential != null ? userInfo.consent.essential : true;
+        this.userPreferences = userInfo.consent.prefrences != null ? userInfo.consent.prefrences : false;
         return;
       }
       const cookie = Cookies.get("consent");
       if (cookie) {
         try {
           const parsed = JSON.parse(cookie);
-          this.essential = parsed.essential ?? true;
-          this.userPreferences = parsed.prefrences ?? false;
+          this.essential = parsed.essential != null ? parsed.essential : true;
+          this.userPreferences = parsed.prefrences != null ? parsed.prefrences : false;
         } catch (e) {
           // malformed cookie — ignore
         }
