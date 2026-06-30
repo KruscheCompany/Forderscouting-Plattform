@@ -195,8 +195,7 @@ export default {
         this.$store.commit("userCenter/changeShowCookieBox", true);
       } else {
         const cookie = JSON.parse(cookieStatus);
-        const consentData = cookie.consent || {};
-        if (consentData.version !== "2.0.0") {
+        if (cookie.version !== "2.0.0") {
           this.$store.commit("userCenter/changeShowCookieBox", true);
           return;
         }
