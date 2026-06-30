@@ -1,6 +1,7 @@
 import { api } from "boot/axios";
 import { Notify } from "quasar";
 import Cookies from "js-cookie";
+
 export async function login(context, payload) {
   const { identifier } = payload;
   const { password } = payload;
