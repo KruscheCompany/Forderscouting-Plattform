@@ -17,7 +17,6 @@ export function setUserInfo(state, payload) {
   if (!!payload) {
     state.user.user.username = payload.username;
     state.user.user.role = payload.role;
-    state.user.user.consent = payload.consent != null ? payload.consent : null;
   }
 }
 
