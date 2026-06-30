@@ -1,5 +1,7 @@
 import { api } from "boot/axios";
 import { Notify } from "quasar";
+import Cookies from "js-cookie";
+
 export async function login(context, payload) {
   const { identifier } = payload;
   const { password } = payload;
@@ -70,8 +72,34 @@ export async function getUserDetails(context) {
 export async function getUserInfo(context) {
   try {
     const res = await api.get("/api/users/me");
-    console.log("USER INFO res", res);
     context.commit("setUserInfo", res.data);
+    const userConsent = res.data.consent;
+    if (userConsent && userConsent.version === "2.0.0") {
+      Cookies.set("consent", JSON.stringify(userConsent), {
+        expires: 365,
+        secure: window.location.protocol === "https:",
+        sameSite: "Lax",
+      });
+      context.commit("changeShowCookieBox", false);
+    } else {
+      // Profile has no v2.0.0 consent — check if cookie already has valid consent
+      const cookieStr = Cookies.get("consent");
+      if (cookieStr) {
+        try {
+          const cookieConsent = JSON.parse(cookieStr);
+          if (cookieConsent.version === "2.0.0") {
+            // Silently save cookie consent to profile — user already accepted pre-login
+            await api.put("/api/users/me", { consent: cookieConsent });
+            context.commit("setUserInfo", { ...res.data, consent: cookieConsent });
+            context.commit("changeShowCookieBox", false);
+            return;
+          }
+        } catch (e) {
+          // malformed cookie — fall through to show banner
+        }
+      }
+      context.commit("changeShowCookieBox", true);
+    }
   } catch (error) {
     console.log("error :>> ", error.response);
     Notify.create({
