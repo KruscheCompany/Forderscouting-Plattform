@@ -74,7 +74,7 @@ export async function getUserInfo(context) {
     const res = await api.get("/api/users/me");
     context.commit("setUserInfo", res.data);
     const userConsent = res.data.consent;
-    if (userConsent?.version === "2.0.0") {
+    if (userConsent && userConsent.version === "2.0.0") {
       Cookies.set("consent", JSON.stringify(userConsent), {
         expires: 365,
         secure: window.location.protocol === "https:",
@@ -82,6 +82,22 @@ export async function getUserInfo(context) {
       });
       context.commit("changeShowCookieBox", false);
     } else {
+      // Profile has no v2.0.0 consent — check if cookie already has valid consent
+      const cookieStr = Cookies.get("consent");
+      if (cookieStr) {
+        try {
+          const cookieConsent = JSON.parse(cookieStr);
+          if (cookieConsent.version === "2.0.0") {
+            // Silently save cookie consent to profile — user already accepted pre-login
+            await api.put("/api/users/me", { consent: cookieConsent });
+            context.commit("setUserInfo", { ...res.data, consent: cookieConsent });
+            context.commit("changeShowCookieBox", false);
+            return;
+          }
+        } catch (e) {
+          // malformed cookie — fall through to show banner
+        }
+      }
       context.commit("changeShowCookieBox", true);
     }
   } catch (error) {
