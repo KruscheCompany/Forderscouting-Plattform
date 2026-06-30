@@ -1,5 +1,6 @@
 import { api } from "boot/axios";
 import { Notify } from "quasar";
+import Cookies from "js-cookie";
 export async function login(context, payload) {
   const { identifier } = payload;
   const { password } = payload;
@@ -70,8 +71,18 @@ export async function getUserDetails(context) {
 export async function getUserInfo(context) {
   try {
     const res = await api.get("/api/users/me");
-    console.log("USER INFO res", res);
     context.commit("setUserInfo", res.data);
+    const userConsent = res.data.consent;
+    if (userConsent?.version === "2.0.0") {
+      Cookies.set("consent", JSON.stringify(userConsent), {
+        expires: 365,
+        secure: window.location.protocol === "https:",
+        sameSite: "Lax",
+      });
+      context.commit("changeShowCookieBox", false);
+    } else {
+      context.commit("changeShowCookieBox", true);
+    }
   } catch (error) {
     console.log("error :>> ", error.response);
     Notify.create({
