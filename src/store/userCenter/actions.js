@@ -203,6 +203,7 @@ export async function updateUser(context, payload) {
       });
       context.dispatch("getUserDetails");
       context.dispatch("getUserInfo");
+      context.dispatch("getUsers");
       this.$router.push({ path: "/Administation/User/" });
     } catch (error) {
       console.log("error :>> ", error.response);
