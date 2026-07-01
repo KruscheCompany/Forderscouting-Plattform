@@ -52,10 +52,22 @@ export default {
         this.model = newVal;
       },
     },
+    municipalities: {
+      immediate: true,
+      handler() {
+        this.syncOptions();
+      },
+    },
   },
   methods: {
     getGroupedStates() {
       this.$store.dispatch("municipality/getGroupedStates");
+    },
+    syncOptions() {
+      if (!this.municipalities) return;
+      this.options = this.selectedMunicipality
+        ? this.municipalities[this.selectedMunicipality] || []
+        : this.allStates;
     },
     municipalityChanged() {
       if (this.$store.state.municipality.tempMunicipality) {
@@ -127,12 +139,9 @@ export default {
         if (this.$route.query.tab === "personalData") {
           this.model = this.userDetails.location;
         }
-      } else {
-        //if the user has not selected a municipality yet then set the options to the cities of all municipalities
-        this.options = this.allStates;
       }
     }
-    this.options = this.municipalities[this.selectedMunicipality];
+    this.syncOptions();
   },
 };
 </script>
