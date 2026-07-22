@@ -67,7 +67,14 @@
     "end": "Datum Ende",
     "created_at": "Erstelldatum",
     "createFunding": "Fördermittel erstellen",
-    "visibility": "Sichtbarkeit"
+    "visibility": "Sichtbarkeit",
+    "eligibility": "Antragstellung"
+  },
+  "eligibilityFilter": {
+    "all": "Alle",
+    "eligible": "Antragsberechtigt",
+    "notEligible": "Nicht berechtigt",
+    "filterTooltip": "Nach Antragstellung filtern"
   },
   "checkListCols": {
     "title": "Titel",

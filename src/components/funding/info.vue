@@ -7,20 +7,70 @@
       }" :rows-per-page-label="$t('Records per page')" :no-data-label="$t('No data')"
       :no-results-label="$t('No results')" ref="table">
       <template v-slot:top v-if="!isGuest">
-        <p class="font-24 ppeditorial">{{ $t("fundingsInfo.current") }}</p>
+        <div class="column">
+          <p class="font-24 ppeditorial q-mb-none">{{ $t("fundingsInfo.current") }}</p>
+          <p @click="$router.push({ path: '/user/data?tab=fundings' })"
+            class="font-16 text-blue text-underline text-weight-600 cursor-pointer ppeditorial q-mt-xs q-mb-none">
+            {{ $t("fundingsInfo.showAll") }}
+          </p>
+        </div>
         <q-space />
-        <p @click="$router.push({ path: '/user/data?tab=fundings' })"
-          class="font-16 text-blue text-underline text-weight-600 cursor-pointer ppeditorial">
-          {{ $t("fundingsInfo.showAll") }}
-        </p>
+        <q-btn round flat dense icon="filter_list" :color="eligibilityFilter !== 'all' ? 'primary' : 'grey-7'"
+          aria-label="Filter">
+          <q-menu anchor="bottom right" self="top right" class="radius-10 shadow-2" transition-show="jump-down"
+            transition-hide="jump-up">
+            <q-list style="min-width: 220px" separator padding>
+              <q-item-label header class="font-12 text-weight-600 text-grey-7 q-pb-sm">
+                {{ $t("eligibilityFilter.filterTooltip") }}
+              </q-item-label>
+              <q-item v-for="opt in eligibilityFilterOptions" :key="opt.value" clickable v-close-popup
+                :active="eligibilityFilter === opt.value" active-class="bg-blue-1 text-primary"
+                @click="eligibilityFilter = opt.value">
+                <q-item-section avatar>
+                  <q-icon :name="opt.icon" :color="eligibilityFilter === opt.value ? 'primary' : opt.color" size="sm" />
+                </q-item-section>
+                <q-item-section class="text-weight-500">{{ opt.label }}</q-item-section>
+                <q-item-section side v-if="eligibilityFilter === opt.value">
+                  <q-icon name="check" color="primary" size="xs" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+          <q-tooltip>{{ $t("eligibilityFilter.filterTooltip") }}</q-tooltip>
+        </q-btn>
       </template>
       <template v-slot:top v-else>
-        <p class="font-24 ppeditorial">{{ $t("fundingsInfo.current") }}</p>
+        <div class="column">
+          <p class="font-24 ppeditorial q-mb-none">{{ $t("fundingsInfo.current") }}</p>
+          <p @click="$router.push({ path: '/community/data?tab=fundings' })"
+            class="font-16 text-blue text-underline text-weight-600 cursor-pointer ppeditorial q-mt-xs q-mb-none">
+            {{ $t("fundingsInfo.showAll") }}
+          </p>
+        </div>
         <q-space />
-        <p @click="$router.push({ path: '/community/data?tab=fundings' })"
-          class="font-16 text-blue text-underline text-weight-600 cursor-pointer ppeditorial">
-          {{ $t("fundingsInfo.showAll") }}
-        </p>
+        <q-btn round flat dense icon="filter_list" :color="eligibilityFilter !== 'all' ? 'primary' : 'grey-7'"
+          aria-label="Filter">
+          <q-menu anchor="bottom right" self="top right" class="radius-10 shadow-2" transition-show="jump-down"
+            transition-hide="jump-up">
+            <q-list style="min-width: 220px" separator padding>
+              <q-item-label header class="font-12 text-weight-600 text-grey-7 q-pb-sm">
+                {{ $t("eligibilityFilter.filterTooltip") }}
+              </q-item-label>
+              <q-item v-for="opt in eligibilityFilterOptions" :key="opt.value" clickable v-close-popup
+                :active="eligibilityFilter === opt.value" active-class="bg-blue-1 text-primary"
+                @click="eligibilityFilter = opt.value">
+                <q-item-section avatar>
+                  <q-icon :name="opt.icon" :color="eligibilityFilter === opt.value ? 'primary' : opt.color" size="sm" />
+                </q-item-section>
+                <q-item-section class="text-weight-500">{{ opt.label }}</q-item-section>
+                <q-item-section side v-if="eligibilityFilter === opt.value">
+                  <q-icon name="check" color="primary" size="xs" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+          <q-tooltip>{{ $t("eligibilityFilter.filterTooltip") }}</q-tooltip>
+        </q-btn>
       </template>
       <template v-slot:header="props">
         <q-tr class="tableHeader" :props="props">
@@ -36,6 +86,14 @@
             class="font-14 cursor-pointer">
             <template v-if="col.name === 'visibilityIcon'">
               <q-icon :name="col.value === 'all users' ? 'visibility' : 'visibility_off'" size="sm" class="text-blue" />
+            </template>
+            <template v-else-if="col.name === 'applicationEligible'">
+              <div class="flex flex-center">
+                <q-icon :name="col.value ? 'check_circle' : 'cancel'"
+                  :color="col.value ? 'positive' : 'negative'" size="sm">
+                  <q-tooltip>{{ col.value ? $t('eligibilityFilter.eligible') : $t('eligibilityFilter.notEligible') }}</q-tooltip>
+                </q-icon>
+              </div>
             </template>
             <template v-else>
               {{
@@ -109,7 +167,8 @@ export default {
       tab: "fundings",
       deleteDialog: false,
       type: null,
-      requestDialog: false
+      requestDialog: false,
+      eligibilityFilter: "all"
     };
   },
   components: {
@@ -118,13 +177,24 @@ export default {
   },
   computed: {
     data() {
-      return (
-        !!this.$store.state.funding.fundings &&
-        this.$store.state.funding.fundings
-      );
+      const fundings = this.$store.state.funding.fundings;
+      if (!fundings) return fundings;
+      if (this.eligibilityFilter === "eligible") {
+        return fundings.filter(item => item.applicationEligible === true);
+      } else if (this.eligibilityFilter === "notEligible") {
+        return fundings.filter(item => item.applicationEligible !== true);
+      }
+      return fundings;
     },
     isGuest() {
       return this.$store.getters["userCenter/isGuest"];
+    },
+    eligibilityFilterOptions() {
+      return [
+        { label: this.$t("eligibilityFilter.all"), value: "all", icon: "filter_list", color: "grey-7" },
+        { label: this.$t("eligibilityFilter.eligible"), value: "eligible", icon: "check_circle", color: "positive" },
+        { label: this.$t("eligibilityFilter.notEligible"), value: "notEligible", icon: "cancel", color: "negative" }
+      ];
     },
     columns() {
       return [
@@ -172,6 +242,13 @@ export default {
           label: this.$t("fundingsCol.visibility") || "Sichtbarkeit",
           field: row => row.visibility,
           sortable: false
+        },
+        {
+          name: "applicationEligible",
+          align: "center",
+          label: this.$t("fundingsCol.eligibility"),
+          field: row => row.applicationEligible,
+          sortable: true
         }
       ];
     },
@@ -179,7 +256,7 @@ export default {
       return this.$store.getters["userCenter/isAdmin"];
     },
     visibleColumns() {
-      const cols = ["title", "plannedStart", "plannedEnd"];
+      const cols = ["title", "plannedStart", "plannedEnd", "applicationEligible"];
       if (this.isAdmin) cols.push("visibilityIcon");
       return cols;
     },

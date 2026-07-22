@@ -67,7 +67,14 @@
     "end": "Planned End",
     "created_at": "Creation Date",
     "createFunding": "Create Funding",
-    "visibility": "Visibility"
+    "visibility": "Visibility",
+    "eligibility": "Eligibility"
+  },
+  "eligibilityFilter": {
+    "all": "All",
+    "eligible": "Eligible",
+    "notEligible": "Not Eligible",
+    "filterTooltip": "Filter by eligibility"
   },
   "checkListCols": {
     "title": "Title",
