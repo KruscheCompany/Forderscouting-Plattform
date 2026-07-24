@@ -916,6 +916,12 @@
     "accessDenied": "Access denied to financial information",
     "accessError": "Error checking access permissions",
     "noFinancialData": "No financial data available",
-    "financialPlan": "Financial Plan"
+    "financialPlan": "Financial Plan",
+    "title": "Title",
+    "archivedApplications": "Archived Applications",
+    "owner": "Owner",
+    "municipality": "Municipality",
+    "plannedStart": "Planned Start",
+    "plannedEnd": "Planned End"
   }
 }

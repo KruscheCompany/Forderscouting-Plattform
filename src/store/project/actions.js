@@ -45,6 +45,18 @@ export async function getApplicationProcess(context, filters = {}) {
   }
 }
 
+export async function getArchivedProjects(context) {
+  try {
+    const res = await api.get("/api/project/dashboard/archived");
+    context.commit("setArchivedProjects", res.data || []);
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+  }
+}
+
 export async function createNewProjectIdea(context, payload) {
   const { projectData } = payload;
   const { files, media, ...dataWithoutFiles } = projectData;

@@ -10,11 +10,13 @@
       </div>
     </div>
     <projectDashboardTable @stats="(val) => (statsData = val)" />
+    <archivedProjectsTable v-if="isLeader || isAdmin" />
   </q-page>
 </template>
 
 <script>
 import projectDashboardTable from "components/projectDashboard/Table.vue";
+import archivedProjectsTable from "components/projectDashboard/ArchivedTable.vue";
 export default {
   name: "projectDashboard",
   data() {
@@ -24,8 +26,15 @@ export default {
   },
   components: {
     projectDashboardTable,
+    archivedProjectsTable,
   },
   computed: {
+    isAdmin() {
+      return this.$store.getters["userCenter/isAdmin"];
+    },
+    isLeader() {
+      return this.$store.getters["userCenter/isLeader"];
+    },
     statistics() {
       return [
         {

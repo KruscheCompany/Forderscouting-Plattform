@@ -59,6 +59,10 @@ export function setFinancialPlan(state, payload) {
   state.financialPlan = payload;
 }
 
+export function setArchivedProjects(state, payload) {
+  state.archivedProjects = payload || [];
+}
+
 export function updateFundingCheckSteps(state, payload) {
   if (state.project) {
     state.project.fundingCheckSteps = payload;

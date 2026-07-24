@@ -7,6 +7,7 @@
       </q-tabs>
       <q-space />
       <ProjectActionButtons v-if="project" :project="project" :logged-in-user="loggedInUser" :is-admin="isAdmin"
+        :is-leader="isLeader"
         :loading-states="loadingStates" @edit-project="handleEditProject" @transfer-document="handleTransferDocument"
         @export-to-pdf="exportToPdf" @add-to-watchlist="() => { }" @duplicate-project="() => { }"
         @archive-project="handleArchiveProject" @delete-project="handleDeleteProject"
@@ -154,6 +155,9 @@ export default {
     },
     isAdmin() {
       return this.$store.getters["userCenter/isAdmin"];
+    },
+    isLeader() {
+      return this.$store.getters["userCenter/isLeader"];
     },
     loggedInUser() {
       return (
