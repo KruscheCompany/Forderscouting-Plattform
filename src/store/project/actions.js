@@ -115,6 +115,7 @@ export async function reorderPriorityList(context, payload) {
   const { order } = payload;
   try {
     await api.put("/api/prioritized-projects/reorder", { order });
+    context.dispatch("getPrioritizedProjects");
   } catch (error) {
     Notify.create({
       type: "negative",

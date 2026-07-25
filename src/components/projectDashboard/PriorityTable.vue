@@ -20,7 +20,11 @@
         {{ $t("ProjectDashboard.selectMunicipalityPrompt") }}
       </div>
 
-      <div v-else-if="!loading && prioritizedProjects.length === 0" class="text-black">
+      <div v-else-if="loading" class="text-center q-pa-md">
+        <q-spinner color="primary" size="2em" />
+      </div>
+
+      <div v-else-if="prioritizedProjects.length === 0" class="text-black">
         {{ $t("ProjectDashboard.noPrioritizedProjects") }}
       </div>
 
