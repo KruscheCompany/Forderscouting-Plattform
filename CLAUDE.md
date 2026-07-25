@@ -108,14 +108,30 @@ Translations live in Strapi and are fetched at boot with pagination. The `vue-i1
 **Adding/editing translation keys — always in this order:**
 1. Add/edit the key in this repo's `src/i18n/de/index.json` and `src/i18n/en-us/index.json` (these are the source of truth for what the FE expects).
 2. Copy the same key/value into the BE repo's `de.json` (locale `de`) and `en.json` (locale `en` — note: BE locale code is `en`, not `en-us`) at the repo root of `Forderscouting-Plattform-API`.
-3. Run the BE's `import_translations2.js` importer to push new keys into Strapi's `translations` table — **local Strapi instance only** (`http://localhost:1337`), never point it at the production API. It skips keys that already exist, so it's safe to rerun.
-4. Never hardcode a real JWT in `import_translations2.js` — get a fresh token by logging in locally and pass it via the `LOCAL_JWT` env var (`STRAPI_TOKEN` reads `process.env.LOCAL_JWT`).
+3. Run the BE's `import_translations2.js` importer to push new keys into Strapi's `translations` table. It prompts you to pick a target environment (local/dev/stage/prod — prod requires re-typing "prod" to confirm) and logs in itself using `TRANSLATE_EMAIL_AUTH_<ENV>` / `TRANSLATE_EMAIL_PASS_<ENV>` from `.env` to get a JWT. It skips keys that already exist, so it's safe to rerun.
 
 ### User roles
 The application distinguishes four roles checked via `userCenter` getters: `admin`, `leader`, `guest`, and regular authenticated users. Navigation visibility and feature access are gated by these roles.
 
 ### Components structure
 Components under `src/components/` are organised by domain: `funding/`, `projects/`, `Municipality/`, `States/`, `FederalStates/`, `applicationProcess/`, `categoriesKeywords/`, `data/`, `dataOverview/`, `dialogs/`, `network/`, `projectDashboard/`, `stats/`, `translations/`, `user/`, `watchlist/`.
+
+## Versioning & Changelog
+
+Both this repo (`Forderscouting-Plattform`) and the backend (`Forderscouting-Plattform-API`) share one version number, following SemVer (`MAJOR.MINOR.PATCH`):
+
+- **MAJOR** — a big change to how the platform works or looks (e.g. a redesigned page or flow).
+- **MINOR** — a new feature users will notice.
+- **PATCH** — a fix or small tweak; nothing new for a user to learn.
+
+As soon as a user-facing change is built and working — regardless of whether it has been pushed to GitHub, merged, or deployed yet — do this before considering the work done:
+1. Bump `version` in **both** repos' `package.json` to the same new value.
+2. Add one entry to `CHANGELOG.md` (this repo's root) for that version, with both a `### de` and `### en` bullet list, written in plain language for a municipal-staff end user — no file names, function names, or ticket numbers (those stay in `TICKETS.md`).
+3. If a change wouldn't be visible or meaningful to that user (internal refactor, config change, dev-only fix), it does **not** need a version bump or changelog entry — it only needs a `TICKETS.md` entry if one is otherwise warranted.
+
+This is not tied to deployment status — local, uncommitted, or unpushed work still gets versioned and logged the moment it's functionally complete, so the version number and changelog always reflect what has actually been built, not what has shipped to production.
+
+The in-app "?" help panel (`src/layouts/dashboardLayout.vue`) renders `CHANGELOG.md` in a "What's New" card via `src/services/changelogService.js`, picking the `de`/`en` bullets based on the active locale.
 
 ## Coding conventions
 - Vue 2 Options API only — no `<script setup>` or Composition API
