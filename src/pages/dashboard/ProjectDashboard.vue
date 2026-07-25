@@ -9,6 +9,7 @@
         </div>
       </div>
     </div>
+    <priorityTable />
     <projectDashboardTable @stats="(val) => (statsData = val)" />
     <archivedProjectsTable v-if="isLeader || isAdmin" />
   </q-page>
@@ -17,6 +18,7 @@
 <script>
 import projectDashboardTable from "components/projectDashboard/Table.vue";
 import archivedProjectsTable from "components/projectDashboard/ArchivedTable.vue";
+import priorityTable from "components/projectDashboard/PriorityTable.vue";
 export default {
   name: "projectDashboard",
   data() {
@@ -27,6 +29,7 @@ export default {
   components: {
     projectDashboardTable,
     archivedProjectsTable,
+    priorityTable,
   },
   computed: {
     isAdmin() {
