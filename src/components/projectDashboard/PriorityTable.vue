@@ -107,6 +107,7 @@ export default {
     },
     async remove(row) {
       await this.$store.dispatch("project/removeFromPriorityList", { id: row.id });
+      this.$emit("removed");
     },
     async onDragEnd() {
       const order = this.localList.map((row) => row.id);

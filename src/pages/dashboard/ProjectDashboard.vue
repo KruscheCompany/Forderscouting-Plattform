@@ -9,8 +9,8 @@
         </div>
       </div>
     </div>
-    <priorityTable />
-    <projectDashboardTable @stats="(val) => (statsData = val)" />
+    <priorityTable @removed="onPriorityRemoved" />
+    <projectDashboardTable ref="dashboardTable" @stats="(val) => (statsData = val)" />
     <archivedProjectsTable v-if="isLeader || isAdmin" />
   </q-page>
 </template>
@@ -73,6 +73,10 @@ export default {
   methods: {
     getProjectDashboardStats() {
       this.$store.dispatch("project/getProjectDashboardStats");
+    },
+    onPriorityRemoved() {
+      this.$refs.dashboardTable.getProjects();
+      this.$refs.dashboardTable.updateDashboardStats();
     },
     formatCurrency(value) {
       if (!value || value === '') {
