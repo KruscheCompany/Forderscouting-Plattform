@@ -1083,7 +1083,16 @@
     "owner": "Besitzer*in",
     "municipality": "Gemeinde",
     "plannedStart": "Geplanter Beginn",
-    "plannedEnd": "Geplantes Ende"
+    "plannedEnd": "Geplantes Ende",
+    "prioritizedProjects": "Priorisierte Projekte",
+    "selectMunicipalityPrompt": "Bitte wählen Sie eine Gemeinde aus",
+    "noPrioritizedProjects": "Noch keine priorisierten Projekte",
+    "prioritizedBy": "Priorisiert von",
+    "prioritize": "Priorisieren",
+    "removeFromPriorityList": "Aus Priorisierung entfernen",
+    "alreadyPrioritized": "Diese Projektidee ist bereits priorisiert.",
+    "prioritizeSuccess": "Projektidee erfolgreich priorisiert",
+    "removePrioritySuccess": "Projektidee erfolgreich aus der Priorisierung entfernt"
   },
   "aiFundingCheck": "KI-Fördermittelcheck",
   "AI funding check": "KI-Fördermittelcheck",

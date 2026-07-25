@@ -943,6 +943,15 @@
     "owner": "Owner",
     "municipality": "Municipality",
     "plannedStart": "Planned Start",
-    "plannedEnd": "Planned End"
+    "plannedEnd": "Planned End",
+    "prioritizedProjects": "Prioritised projects",
+    "selectMunicipalityPrompt": "Please select a municipality",
+    "noPrioritizedProjects": "No prioritised projects yet",
+    "prioritizedBy": "Prioritised by",
+    "prioritize": "Prioritise",
+    "removeFromPriorityList": "Remove from priority list",
+    "alreadyPrioritized": "This project idea is already prioritised.",
+    "prioritizeSuccess": "Project idea prioritised successfully",
+    "removePrioritySuccess": "Project idea removed from the priority list"
   }
 }
