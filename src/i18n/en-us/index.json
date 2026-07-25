@@ -611,6 +611,23 @@
   "Nov": "Nov",
   "Dec": "Dec",
   "login": "Login",
+  "loginDialog": {
+    "tagline": "The digital assistance system for developing, funding, and implementing municipal projects — from idea to grant approval.",
+    "subtitle": "Access is currently limited to registered municipal users.",
+    "forgotPasswordTitle": "Reset password",
+    "forgotPasswordSubtitle": "Enter the email linked to your account. We'll send you a secure link to choose a new password.",
+    "checkInboxTitle": "Email on its way!",
+    "checkInboxMessage": "We've sent a reset link to {email}.",
+    "useAnotherEmail": "Use a different email address",
+    "noAccountYet": "No account yet?",
+    "sidePanelFooter": "Interkommunale Förderscouting-Plattform Nordfriesland · Heimat 2.0 (BMWSB)"
+  },
+  "registerPage": {
+    "subtitle": "Request guest access to discover project ideas and funding for your municipality.",
+    "haveAccount": "Already registered?",
+    "successTitle": "Request sent!",
+    "successMessage": "We're reviewing your request and will reach out to {email} once your guest access is approved."
+  },
   "guestRegistration": "Guest Registration",
   "ifYouWantToSeeMoreDocuments": "If you want to see more documents and checklists, please register.",
   "amtViol": "Amt Viöl",

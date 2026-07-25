@@ -4,7 +4,7 @@
         ? [val => (!!val && val.length > 0) || $t('Required')]
         : []
       " multiple :options="categories" options-selected-class="text-primary text-weight-600"
-      class="no-shadow input-radius-6" @input="onSelect">
+      class="no-shadow input-radius-6" hide-bottom-space @input="onSelect">
       <template v-slot:selected>
         <template v-if="model && model.length > 0">
           <span v-for="(category, index) in model" :key="index">

@@ -35,6 +35,16 @@ const routes = [
     ]
   },
   {
+    path: "/login",
+    name: "Login",
+    component: () => import("pages/Login.vue")
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: () => import("pages/Register.vue")
+  },
+  {
     path: "/dashboard",
     component: () => import("layouts/dashboardLayout.vue"),
     children: [

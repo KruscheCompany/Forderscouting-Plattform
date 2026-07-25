@@ -670,6 +670,23 @@
   "Nov": "Nov",
   "Dec": "Dez",
   "login": "Login",
+  "loginDialog": {
+    "tagline": "Das digitale Assistenzsystem für die Entwicklung, Förderung und Umsetzung kommunaler Projekte — von der Idee zum Zuwendungsbescheid.",
+    "subtitle": "Der Zugang ist aktuell auf registrierte kommunale Nutzer:innen beschränkt.",
+    "forgotPasswordTitle": "Passwort zurücksetzen",
+    "forgotPasswordSubtitle": "Geben Sie die mit Ihrem Konto verknüpfte E-Mail-Adresse ein. Wir senden Ihnen einen sicheren Link, um ein neues Passwort festzulegen.",
+    "checkInboxTitle": "E-Mail unterwegs!",
+    "checkInboxMessage": "Wir haben einen Link zum Zurücksetzen an {email} geschickt.",
+    "useAnotherEmail": "Andere E-Mail-Adresse verwenden",
+    "noAccountYet": "Noch kein Konto?",
+    "sidePanelFooter": "Interkommunale Förderscouting-Plattform Nordfriesland · Heimat 2.0 (BMWSB)"
+  },
+  "registerPage": {
+    "subtitle": "Fordern Sie einen Gastzugang an, um Projektideen und Fördermittel für Ihre Kommune zu entdecken.",
+    "haveAccount": "Bereits registriert?",
+    "successTitle": "Anfrage gesendet!",
+    "successMessage": "Wir prüfen Ihre Anfrage und melden uns unter {email}, sobald Ihr Gastzugang freigeschaltet ist."
+  },
   "guestRegistration": "Registrierung Gastzugang",
   "ifYouWantToSeeMoreDocuments": "Wenn Sie weitere Dokumente sowie Checklisten sehen möchten, dann registrieren Sie sich.",
   "amtViol": "Amt Viöl",

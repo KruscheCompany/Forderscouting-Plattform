@@ -7,6 +7,7 @@
       :options="administrations"
       options-selected-class="text-primary"
       class="no-shadow input-radius-6"
+      hide-bottom-space
       @input="onSelect"
       :rules="!isRequired ? [val => !!val || $t('Required')] : []"
     >
