@@ -226,6 +226,13 @@ export default {
   max-width: 420px;
   width: 100%;
   padding: 4px;
+  animation: login-fade-up 0.4s ease-out;
+}
+.login-side-middle {
+  animation: login-fade-up 0.4s ease-out;
+}
+.login-side-footer {
+  animation: login-fade-up 0.4s ease-out 0.08s both;
 }
 .login-fields {
   margin-top: 0;
@@ -350,6 +357,10 @@ export default {
   60% { opacity: 1; transform: scale(1.08); }
   100% { transform: scale(1); }
 }
+@keyframes login-fade-up {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 
 @media (max-width: 700px) {
   .login-side-panel {
@@ -358,10 +369,14 @@ export default {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reset-envelope {
+  .reset-envelope,
+  .login-register-panel,
+  .login-side-middle,
+  .login-side-footer {
     animation: none !important;
   }
-  .login-input >>> .q-field__control {
+  .login-input >>> .q-field__control,
+  .login-select-field >>> .q-field__control {
     transition: none !important;
   }
 }

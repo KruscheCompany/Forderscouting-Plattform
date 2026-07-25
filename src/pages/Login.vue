@@ -304,6 +304,13 @@ export default {
 .login-form-inner .q-tab-panels {
   max-width: 388px;
   width: 100%;
+  animation: login-fade-up 0.4s ease-out;
+}
+.login-side-middle {
+  animation: login-fade-up 0.4s ease-out;
+}
+.login-side-footer {
+  animation: login-fade-up 0.4s ease-out 0.08s both;
 }
 .login-tab-panel {
   padding: 4px;
@@ -429,6 +436,10 @@ export default {
   60% { opacity: 1; transform: scale(1.08); }
   100% { transform: scale(1); }
 }
+@keyframes login-fade-up {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 
 @media (max-width: 700px) {
   .login-side-panel {
@@ -438,7 +449,10 @@ export default {
 
 @media (prefers-reduced-motion: reduce) {
   .login-card-shake,
-  .reset-envelope {
+  .reset-envelope,
+  .login-form-inner .q-tab-panels,
+  .login-side-middle,
+  .login-side-footer {
     animation: none !important;
   }
   .login-input >>> .q-field__control {
