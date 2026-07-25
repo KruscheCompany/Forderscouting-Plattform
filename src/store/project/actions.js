@@ -57,6 +57,73 @@ export async function getArchivedProjects(context) {
   }
 }
 
+export async function getPrioritizedProjects(context, payload = {}) {
+  try {
+    const { municipalityId } = payload;
+    const query = municipalityId ? `?municipality=${municipalityId}` : '';
+    const res = await api.get(`/api/prioritized-projects${query}`);
+    context.commit("setPrioritizedProjects", res.data || []);
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+  }
+}
+
+export async function addToPriorityList(context, payload) {
+  const { id } = payload;
+  if (!!id) {
+    try {
+      await api.post("/api/prioritized-projects", { data: { project: id } });
+      Notify.create({
+        message: "Projektidee erfolgreich priorisiert",
+        type: "positive"
+      });
+      context.dispatch("getPrioritizedProjects");
+    } catch (error) {
+      Notify.create({
+        type: "negative",
+        message: error.response.data.error.message
+      });
+      return false;
+    }
+  }
+}
+
+export async function removeFromPriorityList(context, payload) {
+  const { id } = payload;
+  if (!!id) {
+    try {
+      await api.delete(`/api/prioritized-projects/${id}`);
+      Notify.create({
+        message: "Projektidee erfolgreich aus der Priorisierung entfernt",
+        type: "positive"
+      });
+      context.dispatch("getPrioritizedProjects");
+    } catch (error) {
+      Notify.create({
+        type: "negative",
+        message: error.response.data.error.message
+      });
+      return false;
+    }
+  }
+}
+
+export async function reorderPriorityList(context, payload) {
+  const { order } = payload;
+  try {
+    await api.put("/api/prioritized-projects/reorder", { order });
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    context.dispatch("getPrioritizedProjects");
+  }
+}
+
 export async function createNewProjectIdea(context, payload) {
   const { projectData } = payload;
   const { files, media, ...dataWithoutFiles } = projectData;
