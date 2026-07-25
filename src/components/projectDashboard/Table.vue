@@ -149,6 +149,8 @@
             </template>
           </q-td>
           <q-td auto-width class="text-center">
+            <q-btn v-if="isLeader" size="md" color="blue" round dense flat icon="mdi-star-outline"
+              :title="$t('ProjectDashboard.prioritize')" @click.stop="prioritizeRow(props.row)" />
             <q-btn size="md" color="blue" round dense @click="toggleExpand(props.row)"
               :icon="isExpanded(props.row) ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
           </q-td>
@@ -400,6 +402,12 @@ export default {
       }
     },
 
+    async prioritizeRow(row) {
+      await this.$store.dispatch("project/addToPriorityList", { id: row.id });
+      this.getProjects();
+      this.updateDashboardStats();
+    },
+
     // Track expanded rows using unique IDs
     async toggleExpand(row) {
       const rowId = row.id || row.name; // Use ID or name as unique identifier
@@ -636,6 +644,9 @@ export default {
     },
     isAdmin() {
       return this.$store.getters["userCenter/isAdmin"];
+    },
+    isLeader() {
+      return this.$store.getters["userCenter/isLeader"];
     },
     loggedInUser() {
       return (
