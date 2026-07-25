@@ -1,5 +1,15 @@
 # Änderungsprotokoll / Changelog
 
+## 4.1.0 — 2026-07-25
+
+### de
+- Gemeindeleitungen können Projektideen priorisieren: Ausgewählte Projekte erscheinen in einer eigenen Liste ganz oben im Projekt-Dashboard und lassen sich per Drag & Drop in die gewünschte Reihenfolge bringen. Alle Mitarbeitenden der Gemeinde sehen diese Liste, aber nur die Gemeindeleitung kann sie verändern.
+- Administratoren können die Prioritätenliste jeder Gemeinde über eine Auswahlbox einsehen und sehen, welche Leitung diese gesetzt hat.
+
+### en
+- Municipality leaders can now prioritise project ideas: selected projects appear in their own list at the top of the Project Dashboard and can be reordered by drag & drop. Everyone in the municipality can see this list, but only the leader can change it.
+- Administrators can inspect any municipality's priority list via a selector and see which leader set it.
+
 ## 4.0.0 — 2026-07-25
 
 ### de
