@@ -35,3 +35,7 @@ yarn-error.log*
 .env.dev
 yarn.lock
 
+graphify-out
+docs
+.superpowers
+.worktrees

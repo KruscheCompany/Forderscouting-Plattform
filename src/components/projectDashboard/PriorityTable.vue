@@ -10,38 +10,52 @@
       </q-item-section>
     </template>
 
-    <div class="q-pa-md">
-      <q-select v-if="isAdmin" clearable class="no-shadow q-mb-md input-radius-4" style="max-width: 320px"
-        color="primary" bg-color="white" :label="$t('ProjectDashboard.municipalities')" filled
-        :options="municipalityOptions" v-model="selectedMunicipality" option-value="id" option-label="title"
-        @input="onMunicipalityChange" />
-
-      <div v-if="isAdmin && !selectedMunicipality" class="text-black">
-        {{ $t("ProjectDashboard.selectMunicipalityPrompt") }}
+    <div class="bg-white radius-20 shadow-1 overflow-hidden priority-table q-mt-md">
+      <div v-if="isAdmin" class="q-pa-md" :class="{ 'priority-selector-border': selectedMunicipality }">
+        <p class="text-black q-mb-xs font-14">{{ $t("ProjectDashboard.municipalities") }}</p>
+        <q-select clearable class="no-shadow input-radius-4" style="max-width: 320px" color="primary"
+          bg-color="grey-2" :label="$t('Search')" filled :options="municipalityOptions"
+          v-model="selectedMunicipality" option-value="id" option-label="title" @input="onMunicipalityChange" />
       </div>
 
-      <div v-else-if="loading" class="text-center q-pa-md">
+      <div v-if="isAdmin && !selectedMunicipality" class="priority-empty-state q-pa-xl text-center">
+        <q-icon name="mdi-office-building-outline" size="40px" color="grey-5" />
+        <p class="text-blue-grey-7 font-14 q-mt-sm q-mb-none">{{ $t("ProjectDashboard.selectMunicipalityPrompt") }}</p>
+      </div>
+
+      <div v-else-if="loading" class="text-center q-pa-xl">
         <q-spinner color="primary" size="2em" />
       </div>
 
-      <div v-else-if="prioritizedProjects.length === 0" class="text-black">
-        {{ $t("ProjectDashboard.noPrioritizedProjects") }}
+      <div v-else-if="prioritizedProjects.length === 0" class="priority-empty-state q-pa-xl text-center">
+        <q-icon name="mdi-star-off-outline" size="40px" color="grey-5" />
+        <p class="text-blue-grey-7 font-14 q-mt-sm q-mb-none">{{ $t("ProjectDashboard.noPrioritizedProjects") }}</p>
       </div>
 
-      <draggable v-else v-model="localList" tag="div" handle=".drag-handle" :disabled="!isLeader"
-        @end="onDragEnd">
-        <div v-for="row in localList" :key="row.id" class="row items-center q-py-sm q-px-sm priority-row">
-          <q-icon v-if="isLeader" name="mdi-drag" class="drag-handle cursor-pointer q-mr-sm" size="sm" />
-          <div class="col">
-            <span class="font-14">{{ row.project.title }}</span>
-            <div v-if="isAdmin && row.prioritizedBy" class="font-14 text-blue-grey-7">
-              {{ $t("ProjectDashboard.prioritizedBy") }}: {{ prioritizedByName(row) }}
+      <template v-else>
+        <div class="row items-center priority-table-header font-14 text-black q-px-md q-py-sm">
+          <div v-if="isLeader" class="priority-col-handle"></div>
+          <div class="col">{{ $t("ProjectDashboard.title") }}</div>
+          <div v-if="isAdmin" class="priority-col-by">{{ $t("ProjectDashboard.prioritizedBy") }}</div>
+          <div v-if="isLeader" class="priority-col-actions"></div>
+        </div>
+
+        <draggable v-model="localList" tag="div" handle=".drag-handle" :disabled="!isLeader" @end="onDragEnd">
+          <div v-for="row in localList" :key="row.id" class="row items-center q-px-md q-py-sm priority-row">
+            <div v-if="isLeader" class="priority-col-handle">
+              <q-icon name="mdi-drag" class="drag-handle cursor-pointer" size="sm" />
+            </div>
+            <div class="col font-14 text-overflow">{{ row.project.title }}</div>
+            <div v-if="isAdmin" class="priority-col-by font-14 text-blue-grey-7 text-overflow">
+              {{ prioritizedByName(row) }}
+            </div>
+            <div v-if="isLeader" class="priority-col-actions text-right">
+              <q-btn flat dense round size="sm" icon="close" color="grey-8"
+                :title="$t('ProjectDashboard.removeFromPriorityList')" @click="remove(row)" />
             </div>
           </div>
-          <q-btn v-if="isLeader" flat dense round size="sm" icon="close" color="grey-8"
-            :title="$t('ProjectDashboard.removeFromPriorityList')" @click="remove(row)" />
-        </div>
-      </draggable>
+        </draggable>
+      </template>
     </div>
   </q-expansion-item>
 </template>
@@ -125,11 +139,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.priority-selector-border {
+  border-bottom: 1px solid rgba(18, 54, 115, 0.1);
+}
+
+.priority-table-header {
+  background: white;
+  border-bottom: 1px solid rgba(18, 54, 115, 0.5);
+}
+
 .priority-row {
-  border-bottom: 1px solid $grey-3;
+  border-bottom: 1px solid rgba(18, 54, 115, 0.1);
 
   &:last-child {
     border-bottom: none;
   }
+
+  &:hover {
+    background: $grey-1;
+  }
+}
+
+.priority-col-handle {
+  width: 32px;
+}
+
+.priority-col-by {
+  width: 220px;
+}
+
+.priority-col-actions {
+  width: 48px;
+}
+
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
