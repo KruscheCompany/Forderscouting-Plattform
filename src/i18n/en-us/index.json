@@ -861,6 +861,7 @@
       "fehlanzeige": "No match - No suitable funding",
       "noFundingData": "No funding information available",
       "noProjectData": "No project data available for funding search",
+      "noProjectDataFields": "The following details from step 1 are missing for the funding search: {fields}. Please fill them in on the first step.",
       "successRefresh": "Funding options successfully updated",
       "errorRefresh": "Error updating funding options",
       "errorSaving": "Error saving funding selection",
@@ -872,7 +873,9 @@
       "aiAssessment": "AI Assessment",
       "aiGenerated": "AI-generated",
       "comingSoon": "Coming Soon",
-      "aiAssessmentTeaser": "Soon our AI will automatically analyze how well your project matches each funding guideline — with detailed reasoning and actionable recommendations."
+      "aiAssessmentTeaser": "Soon our AI will automatically analyze how well your project matches each funding guideline — with detailed reasoning and actionable recommendations.",
+      "showMore": "Show more funding guidelines",
+      "matchingLoading": "AI is searching for matching funding guidelines..."
     },
     "qAndA": {
       "title": "Open Questions & Answers",

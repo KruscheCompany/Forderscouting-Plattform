@@ -1,5 +1,33 @@
 # Änderungsprotokoll / Changelog
 
+## 4.2.2 — 2026-07-28
+
+### de
+- Im ersten Schritt der Projekterstellung sind "Projektziele", "Projektinhalt" und "Projektmehrwert & -nutzen" jetzt Pflichtfelder (wie die Ausgangssituation), damit unvollständige Angaben nicht erst später bei der Fördersuche zu Problemen führen.
+- Die Fehlermeldung bei der Fördersuche nennt jetzt genau, welche Angaben aus Schritt 1 fehlen, statt nur allgemein "keine Projektdaten verfügbar" zu melden.
+
+### en
+- In the first project creation step, "Project Goals", "Project Content" and "Project Value & Benefits" are now required fields (like the Starting Condition), so incomplete entries don't cause problems later during the funding search.
+- The funding search error message now names exactly which details from step 1 are missing, instead of just reporting "no project data available".
+
+## 4.2.1 — 2026-07-28
+
+### de
+- Fehlerbehebung: Beim Anlegen eines neuen Projekts wurde die KI-Fördermittelsuche nach dem ersten Schritt manchmal nicht automatisch gestartet, sodass die Schaltfläche "Förderungen aktualisieren" fälschlich einen Fehler zu fehlenden Projektdaten meldete.
+
+### en
+- Bug fix: When creating a new project, the AI funding search sometimes didn't start automatically after the first step, causing the "Update funding options" button to incorrectly report missing project data.
+
+## 4.2.0 — 2026-07-28
+
+### de
+- Beim KI-Fördermittelcheck werden jetzt nicht mehr nur 12 Förderrichtlinien-Vorschläge angezeigt: Über "Weitere Förderrichtlinien anzeigen" lassen sich schrittweise weitere Treffer einblenden.
+- Eine Förderrichtlinie aus den weiteren Treffern lässt sich per Drag & Drop nach oben in die Haupt-Auswahl ziehen.
+
+### en
+- The AI funding check no longer stops at 12 suggestions: a "Show more funding guidelines" button reveals additional matches step by step.
+- A funding guideline from the additional matches can be dragged up into the main selection.
+
 ## 4.1.0 — 2026-07-25
 
 ### de

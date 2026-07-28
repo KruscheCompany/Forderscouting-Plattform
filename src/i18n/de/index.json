@@ -927,6 +927,7 @@
       "fehlanzeige": "Fehlanzeige - Keine passende Förderung",
       "noFundingData": "Keine Förderinformationen verfügbar",
       "noProjectData": "Keine Projektdaten für die Fördersuche verfügbar",
+      "noProjectDataFields": "Folgende Angaben aus Schritt 1 fehlen für die Fördersuche: {fields}. Bitte ergänzen Sie diese im ersten Schritt.",
       "successRefresh": "Förderungen erfolgreich aktualisiert",
       "errorRefresh": "Fehler beim Aktualisieren der Förderungen",
       "errorSaving": "Fehler beim Speichern der Förderauswahl",
@@ -939,7 +940,9 @@
       "aiAssessment": "KI-Bewertung",
       "aiGenerated": "KI-generiert",
       "comingSoon": "Demnächst verfügbar",
-      "aiAssessmentTeaser": "Bald wird unsere KI automatisch analysieren, wie gut Ihr Projekt zu den jeweiligen Förderrichtlinien passt — mit detaillierter Begründung und Handlungsempfehlungen."
+      "aiAssessmentTeaser": "Bald wird unsere KI automatisch analysieren, wie gut Ihr Projekt zu den jeweiligen Förderrichtlinien passt — mit detaillierter Begründung und Handlungsempfehlungen.",
+      "showMore": "Weitere Förderrichtlinien anzeigen",
+      "matchingLoading": "KI sucht passende Förderrichtlinien..."
     },
     "qAndA": {
       "title": "Offene Fragen & Antworten",

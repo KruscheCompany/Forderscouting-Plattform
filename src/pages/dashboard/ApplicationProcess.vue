@@ -295,19 +295,6 @@ export default {
   watch: {
     step(newStep) {
       this.refreshData();
-    },
-    // Watch for route changes to handle query parameters
-    '$route': {
-      handler(newRoute) {
-        // Check if we have a triggerFundingMatch query param (coming from a redirect)
-        if (newRoute.query.triggerFundingMatch === '1' && this.form && this.form.details) {
-          // Wait for the next tick to ensure form data is fully populated
-          this.$nextTick(() => {
-            this.handleFundingMatch(this.form);
-          });
-        }
-      },
-      immediate: true // Run immediately when component is created
     }
   },
 
@@ -436,6 +423,7 @@ export default {
       const { startingCondition, goals, content, valuesAndBenefits } = projectData.details || {};
       const { financialPlan } = projectData;
       const finances = `${financialPlan?.description || ''} ${(financialPlan?.costAndFinance || []).map(item => `${item.title}: ${item.value} Euro`).join(', ')}`;
+      this.$q.loading.show({ message: this.$t('projectComponents.fundingCheck.matchingLoading') });
       try {
         await this.$store.dispatch('ai/matchFunding', {
           startingCondition,
@@ -450,6 +438,11 @@ export default {
       } catch (fundingError) {
         console.error('Funding matching failed:', fundingError);
         this.step = 'fundingCheck';
+      } finally {
+        // Let the (large, one-off) layout reflow from the funding cards mounting happen
+        // while still covered by the loading overlay, so hiding it doesn't reveal a jump
+        await this.$nextTick();
+        this.$q.loading.hide();
       }
     },
     async handleFundingSubmitted(data) {
@@ -594,18 +587,18 @@ export default {
           this.$refs.projectDescriptionRef.setData();
         }
 
-        // If coming from a redirect (has triggerFundingMatch query), let the watcher handle it
-        // Otherwise use the normal behavior
-        if (!this.$route.query.triggerFundingMatch) {
-          if (this.$route.query.tab) {
-            // Restore tab and step from view mode navigation
-            this.tab = this.$route.query.tab;
-            if (this.$route.query.step) {
-              this.step = this.$route.query.step;
-            }
-          } else {
-            this.setActiveTabBasedOnCompletion();
+        // If coming from a redirect (has triggerFundingMatch query), trigger the AI match now
+        // that form is populated from the freshly-fetched project. Otherwise use the normal behavior
+        if (this.$route.query.triggerFundingMatch === '1') {
+          await this.handleFundingMatch(this.form);
+        } else if (this.$route.query.tab) {
+          // Restore tab and step from view mode navigation
+          this.tab = this.$route.query.tab;
+          if (this.$route.query.step) {
+            this.step = this.$route.query.step;
           }
+        } else {
+          this.setActiveTabBasedOnCompletion();
         }
       }
       this.$store.dispatch("userCenter/getUsers");

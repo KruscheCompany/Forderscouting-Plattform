@@ -2,6 +2,13 @@
 
 Tracks Jira tickets finished in this repo (+ related BE repo commits).
 
+## PAV-211 — AI Funding Match "Show More" + Drag&Drop
+- Removed the frontend-only `.slice(0, 12)` cap in `filterFundingsByUserData()` (`src/components/projects/create/ProjectFundingCheckCreate.vue`); backend AI proxy already returned uncapped results.
+- New "Weitere Förderrichtlinien anzeigen" button reveals 4 more tiles per click (`visibleCount`/`canShowMore`/`showMoreMatches`), hides once exhausted.
+- Tiles wrapped in `vuedraggable` (single reorderable list, first 12 shown by default via `topSetSize`); whole card stays clickable to select, only the external-link button is drag-excluded.
+- `selectedCards` (existing index-based mechanism, reused as-is) is remapped on drag via `onDragChange` so a selected tile stays selected after being moved.
+- FE only, no BE changes.
+
 ## PAV-209 — Project Priority List (Leader)
 - Leaders can pin/reorder project ideas into a dedicated, drag-to-reorder priority section above the main Project Dashboard table; pinned projects leave the main table while pinned. Read-only for everyone else in the municipality.
 - Admin gets the same section with a municipality picker to inspect any municipality's list, including which leader set it.
