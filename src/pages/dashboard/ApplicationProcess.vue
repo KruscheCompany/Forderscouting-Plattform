@@ -64,7 +64,8 @@
       <ProjectViewTaskPlan v-if="step !== 'taskPlan'" :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewSiteVisit v-if="step !== 'taskPlan' && step !== 'siteVisit'" :project="form" :current-tab="step"
         class="q-my-md" />
-      <ProjectViewGoals v-if="step === 'requirements'" :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewGoalsAndRequirements v-if="step !== 'taskPlan' && step !== 'siteVisit' && step !== 'goalsAndRequirements'"
+        :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectTaskPlanCreate ref="taskPlanRef" v-if="step === 'taskPlan'" :created-project-id="createdProjectId"
         :project-data="form" :current-tab="step" class="q-my-md" @taskPlan-submitted="goToNextStep(false)" />
@@ -72,11 +73,12 @@
       <ProjectSiteVisit ref="siteVisitRef" v-if="step === 'siteVisit'" :created-project-id="createdProjectId"
         :project-data="form" :current-tab="step" class="q-my-md" @siteVisit-submitted="goToNextStep(false)" />
 
-      <ProjectGoals ref="goalsRef" v-if="step === 'goals'" :created-project-id="createdProjectId" :project-data="form"
-        :current-tab="step" class="q-my-md" @goals-submitted="goToNextStep(false)" />
+      <ProjectGoalsAndRequirements ref="goalsAndRequirementsRef" v-if="step === 'goalsAndRequirements'"
+        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
+        @goalsAndRequirements-submitted="goToNextStep(false)" />
 
-      <ProjectRequirements ref="requirementsRef" v-if="step === 'requirements'" :created-project-id="createdProjectId"
-        :project-data="form" :current-tab="step" class="q-my-md" @requirements-submitted="goToNextTab" />
+      <ProjectFinancingCheck ref="financingCheckRef" v-if="step === 'financingCheck'" :created-project-id="createdProjectId"
+        :project-data="form" :current-tab="step" class="q-my-md" @financingCheck-submitted="goToNextTab" />
     </div>
 
     <div v-if="tab === 'application'">
@@ -88,31 +90,17 @@
       <ProjectViewDecision :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewTaskPlan :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewSiteVisit :project="form" :current-tab="step" class="q-my-md" />
-      <ProjectViewGoals :project="form" :current-tab="step" class="q-my-md" />
-      <ProjectViewRequirements :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewGoalsAndRequirements :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewFinancingCheck :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectViewGuidelineContentCheck v-if="step !== 'guidelineContentCheck'" :project="form" :current-tab="step"
         class="q-my-md" />
-      <ProjectViewGuidelineFormCheck v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck'"
-        :project="form" :current-tab="step" class="q-my-md" />
-      <ProjectViewFinancingCheck
-        v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck' && step !== 'financingCheck'"
-        :project="form" :current-tab="step" class="q-my-md" />
-      <ProjectViewDocumentsCoordination
-        v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck' && step !== 'financingCheck' && step !== 'projectDocumentsCoordination'"
+      <ProjectViewDocumentsCoordination v-if="step !== 'guidelineContentCheck' && step !== 'projectDocumentsCoordination'"
         :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectGuidelineContentCheck ref="guidelineContentCheckRef" v-if="step === 'guidelineContentCheck'"
         :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
         @guidelineContentCheck-submitted="goToNextStep(false)" />
-
-      <ProjectGuidelineFormCheck ref="guidelineFormCheckRef" v-if="step === 'guidelineFormCheck'"
-        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
-        @guidelineFormCheck-submitted="goToNextStep(false)" />
-
-      <ProjectFinancingCheck ref="financingCheckRef" v-if="step === 'financingCheck'"
-        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
-        @financingCheck-submitted="goToNextStep(false)" />
 
       <ProjectDocumentsCoordination ref="documentsCoordinationRef" v-if="step === 'projectDocumentsCoordination'"
         :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
@@ -153,10 +141,8 @@ import ProjectAptitudeCreate from 'src/components/projects/create/ProjectAptitud
 import ProjectDecisionCreate from 'src/components/projects/create/ProjectDecisionCreate.vue';
 import ProjectTaskPlanCreate from 'src/components/projects/create/ProjectTaskPlanCreate.vue';
 import ProjectSiteVisit from 'src/components/projects/create/ProjectSiteVisit.vue';
-import ProjectGoals from 'src/components/projects/create/ProjectGoals.vue';
-import ProjectRequirements from 'src/components/projects/create/ProjectRequirements.vue';
+import ProjectGoalsAndRequirements from 'src/components/projects/create/ProjectGoalsAndRequirements.vue';
 import ProjectGuidelineContentCheck from 'src/components/projects/create/ProjectGuidelineContentCheck.vue';
-import ProjectGuidelineFormCheck from 'src/components/projects/create/ProjectGuidelineFormCheck.vue';
 import ProjectFinancingCheck from 'src/components/projects/create/ProjectFinancingCheck.vue';
 import ProjectDocumentsCoordination from 'src/components/projects/create/ProjectDocumentsCoordination.vue';
 import ProjectApplicationDecision from 'src/components/projects/create/ProjectApplicationDecision.vue';
@@ -167,10 +153,8 @@ import ProjectViewContentDetails from 'src/components/projects/view/ProjectConte
 import ProjectViewApplicationDecision from 'src/components/projects/view/ProjectApplicationDecision.vue';
 import ProjectViewFundingCheck from 'src/components/projects/view/ProjectFundingCheck.vue';
 import ProjectViewQAndA from 'src/components/projects/view/ProjectQAndA.vue';
-import ProjectViewGoals from 'src/components/projects/view/ProjectGoals.vue';
-import ProjectViewRequirements from 'src/components/projects/view/ProjectRequirements.vue';
+import ProjectViewGoalsAndRequirements from 'src/components/projects/view/ProjectGoalsAndRequirements.vue';
 import ProjectViewGuidelineContentCheck from 'src/components/projects/view/ProjectGuidelineContentCheck.vue';
-import ProjectViewGuidelineFormCheck from 'src/components/projects/view/ProjectGuidelineFormCheck.vue';
 import ProjectViewFinancingCheck from 'src/components/projects/view/ProjectFinancingCheck.vue';
 import ProjectViewDocumentsCoordination from 'src/components/projects/view/ProjectDocumentsCoordination.vue';
 import ProjectViewAptitude from 'src/components/projects/view/ProjectAptitude.vue';
@@ -189,10 +173,8 @@ export default {
     ProjectDecisionCreate,
     ProjectTaskPlanCreate,
     ProjectSiteVisit,
-    ProjectGoals,
-    ProjectRequirements,
+    ProjectGoalsAndRequirements,
     ProjectGuidelineContentCheck,
-    ProjectGuidelineFormCheck,
     ProjectFinancingCheck,
     ProjectDocumentsCoordination,
     ProjectApplicationDecision,
@@ -202,10 +184,8 @@ export default {
     ProjectViewApplicationDecision,
     ProjectViewFundingCheck,
     ProjectViewQAndA,
-    ProjectViewGoals,
-    ProjectViewRequirements,
+    ProjectViewGoalsAndRequirements,
     ProjectViewGuidelineContentCheck,
-    ProjectViewGuidelineFormCheck,
     ProjectViewFinancingCheck,
     ProjectViewDocumentsCoordination,
     ProjectViewAptitude,
@@ -231,13 +211,11 @@ export default {
       projectDevelopmentSteps: [
         { name: 'taskPlan', title: 'task plan', icon: 'mdi-checkbox-multiple-marked', done: false },
         { name: 'siteVisit', title: 'site visit', icon: 'mdi-map-marker', done: false },
-        { name: 'goals', title: 'goals', icon: 'mdi-target', done: false },
-        { name: 'requirements', title: 'requirements', icon: 'mdi-file-document', done: false }
+        { name: 'goalsAndRequirements', title: 'Goals and requirements', icon: 'mdi-target', done: false },
+        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false }
       ],
       projectApplicationSteps: [
         { name: 'guidelineContentCheck', title: 'Guideline Check (Content)', icon: 'mdi-clipboard-check', done: false },
-        { name: 'guidelineFormCheck', title: 'Guideline Check (Formalities)', icon: 'mdi-format-list-checks', done: false },
-        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false },
         { name: 'projectDocumentsCoordination', title: 'Project Documents Coordination', icon: 'mdi-file-document-multiple', done: false },
         { name: 'applicationDecision', title: 'Application Decision', icon: 'mdi-gavel', done: false },
         { name: 'submissionSigning', title: 'Submission & Signing', icon: 'mdi-file-sign', done: false }
@@ -548,14 +526,10 @@ export default {
         await this.$refs.taskPlanRef.submitTaskPlan();
       } else if (this.step === 'siteVisit') {
         await this.$refs.siteVisitRef.submitSiteVisit();
-      } else if (this.step === 'goals') {
-        await this.$refs.goalsRef.submitGoals();
-      } else if (this.step === 'requirements') {
-        await this.$refs.requirementsRef.submitRequirements();
+      } else if (this.step === 'goalsAndRequirements') {
+        await this.$refs.goalsAndRequirementsRef.submitGoalsAndRequirements();
       } else if (this.step === 'guidelineContentCheck') {
         await this.$refs.guidelineContentCheckRef.submitGuidelineContentCheck();
-      } else if (this.step === 'guidelineFormCheck') {
-        await this.$refs.guidelineFormCheckRef.submitGuidelineFormCheck();
       } else if (this.step === 'financingCheck') {
         await this.$refs.financingCheckRef.submitFinancingCheck();
       } else if (this.step === 'projectDocumentsCoordination') {

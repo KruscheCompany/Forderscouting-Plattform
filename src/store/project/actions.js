@@ -1,5 +1,6 @@
 import { api } from "boot/axios";
 import { Notify } from "quasar";
+import { normalizeApplicationProcessSteps } from "./stepMigration";
 
 export async function getProjectIdeas(context) {
   try {
@@ -400,7 +401,7 @@ export async function getSpecificProject(context, payload) {
   if (id) {
     try {
       const res = await api.get(`/api/projects/${id}`);
-      context.commit("setSpecificProject", res.data);
+      context.commit("setSpecificProject", normalizeApplicationProcessSteps(res.data));
     } catch (error) {
       console.log("error", error);
       Notify.create({

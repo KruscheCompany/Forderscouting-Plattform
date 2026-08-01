@@ -1011,32 +1011,22 @@
       "description": "Kurzer Aufgabentext",
       "noContent": "Keine Beschreibung des Standortbesuchs verfügbar"
     },
-    "goals": {
-      "title": "Ziele definieren",
-      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Ziele definiert? Welche Ziele wurden definiert?",
-      "noContent": "Keine Ziele definiert"
-    },
-    "requirements": {
-      "title": "Anforderungen definieren",
-      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Anforderungen definiert? Welche Anforderungen wurden definiert?",
-      "noContent": "Keine Anforderungen definiert"
+    "goalsAndRequirements": {
+      "title": "Ziele und Anforderungen definieren",
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Ziele und Anforderungen definiert? Welche Ziele und Anforderungen wurden definiert?",
+      "noContent": "Keine Ziele und Anforderungen definiert"
     },
     "guidelineContentCheck": {
-      "title": "Richtlinien-Check (Langfassung)",
-      "description": "Kurzer Aufgabentext - Bitte vergesst den inhaltlichen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
+      "title": "Richtlinien-Check (Inhalt und Formalitäten) Langfassung",
+      "description": "Kurzer Aufgabentext - Bitte vergesst den inhaltlichen und formalen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
       "noContent": "Keine Beschreibung des Richtlinien-Checks verfügbar",
       "uploadsTitle": "Uploads",
-      "uploadsDescription": "Hier könnt ihr Dateien hochladen, die ihr im Rahmen des Richtlinien-Checks verwendet habt (z.B. Auszüge aus der Richtlinie, Merkblätter, Antragsformulare etc.)"
-    },
-    "guidelineFormCheck": {
-      "title": "Richtlinien-Check (Langfassung)",
+      "uploadsDescription": "Hier könnt ihr Dateien hochladen, die ihr im Rahmen des Richtlinien-Checks verwendet habt (z.B. Auszüge aus der Richtlinie, Merkblätter, Antragsformulare etc.)",
       "bulletPointTitle": "Infos zur Antragsstellung (Langfassung XFLB - Part Antragstellung)",
-      "description": "Kurzer Aufgabentext - Bitte vergesst den formalen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
       "documents": "Unterlagen",
       "procedure": "Verfahrensablauf",
       "applicationDeadline": "Antragsfrist",
-      "applicationCost": "Beantragungskosten",
-      "noContent": "Keine Beschreibung der Abstimmung der Projektunterlagen verfügbar"
+      "applicationCost": "Beantragungskosten"
     },
     "applicationDecision": {
       "title": "Antragsbeschluss",
@@ -1116,10 +1106,8 @@
   "Speicherdatum": "Speicherdatum",
   "task plan": "Aufgabenplan",
   "site visit": " ggf. Begehung",
-  "goals": "Ziele definieren",
-  "requirements": "Anforderungen definieren",
-  "Guideline Check (Content)": "Richtlinien-Check (Inhalt)",
-  "Guideline Check (Formalities)": "Richtlinien-Check (Formalitäten)",
+  "Goals and requirements": "Ziele und Anforderungen definieren",
+  "Guideline Check (Content)": "Richtlinien-Check (Inhalt und Formalitäten)",
   "Financing Check": "Finanzierungs-Check",
   "Project Documents Coordination": "Abstimmung Projektunterlagenn",
   "Application Decision": "Antragsbeschluss",

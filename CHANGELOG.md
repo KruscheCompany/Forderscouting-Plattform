@@ -1,5 +1,29 @@
 # Änderungsprotokoll / Changelog
 
+## 5.0.1 — 2026-07-29
+
+### de
+- Projekte, die schon vor der Umstellung des Antragswegs (siehe Version 5.0.0) begonnen wurden, blieben teils im Antragsweg-Assistenten hängen oder zeigten einen Fehler. Das ist jetzt behoben, alte Projekte werden automatisch auf den neuen Ablauf umgestellt.
+- Zeilenumbrüche in den zusammengeführten Texten "Ziele und Anforderungen" sowie "Richtlinien-Check" wurden beim Anzeigen verschluckt. Die Texte werden jetzt korrekt mit Absätzen dargestellt.
+- Die Überschrift des Schritts "Richtlinien-Check (Inhalt)" heißt jetzt "Richtlinien-Check (Inhalt und Formalitäten)", passend zum zusammengeführten Inhalt dieses Schritts.
+
+### en
+- Projects that were already in progress before the application-path restructure (see version 5.0.0) could get stuck in the application-path wizard or show an error. This is now fixed - older projects are automatically upgraded to the new flow.
+- Line breaks in the merged "Goals and requirements" and "Guideline check" texts were being swallowed when displayed. These texts now show correctly with paragraph breaks.
+- The title of the "Guideline Check (Content)" step now reads "Guideline Check (Content and Formalities)", matching the merged content of that step.
+
+## 5.0.0 — 2026-07-28
+
+### de
+- Der Antragsweg wurde vereinfacht: "Ziele definieren" und "Anforderungen definieren" sind jetzt ein gemeinsamer Schritt "Ziele und Anforderungen definieren".
+- Der Richtlinien-Check (Langfassung) ist jetzt ein einziger Schritt mit einem gemeinsamen Textfeld für Inhalt und Formalitäten, statt zwei getrennter Schritte.
+- Der Finanzierungs-Check ist jetzt Teil der "Projektentwicklung" statt der "Antragsstellung".
+
+### en
+- The application path has been simplified: "Define goals" and "Define requirements" are now a single combined step "Define goals and requirements".
+- The guideline check (long version) is now a single step with one combined text field for content and formalities, instead of two separate steps.
+- The financing check is now part of "Project development" instead of "Application".
+
 ## 4.2.2 — 2026-07-28
 
 ### de

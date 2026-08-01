@@ -1,14 +1,14 @@
 <template>
   <q-card class="shadow-1 radius-20">
     <q-expansion-item class="shadow-1 overflow-hidden radius-20"
-      :label="$t('projectComponents.guidelineContentCheck.title')" header-class="bg-white text-black"
-      v-model="expandedGuidelineContentCheck">
+      :label="$t('projectComponents.goalsAndRequirements.title')" header-class="bg-white text-black"
+      v-model="expandedGoalsAndRequirements">
       <q-card-section class="q-pt-none">
         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-          {{ $t('projectComponents.guidelineContentCheck.description') }}
+          {{ $t('projectComponents.goalsAndRequirements.description') }}
         </h4>
         <q-banner rounded class="bg-grey-3 font-16">
-          <p class="q-my-sm text-block" v-html="sanitizeHtml(guidelineCheckText)"></p>
+          <p class="q-my-sm text-block" v-html="sanitizeHtml(goalsAndRequirementsText)"></p>
         </q-banner>
       </q-card-section>
     </q-expansion-item>
@@ -19,7 +19,7 @@
 import htmlSanitizer from 'src/mixins/htmlSanitizer.js';
 
 export default {
-  name: "ProjectGuidelineContentCheck",
+  name: "ProjectGoalsAndRequirementsView",
   mixins: [htmlSanitizer],
   props: {
     project: {
@@ -34,24 +34,24 @@ export default {
   },
   data() {
     return {
-      expandedGuidelineContentCheck: this.currentTab === "guidelineContentCheck",
+      expandedGoalsAndRequirements: this.currentTab === "goalsAndRequirements",
     };
   },
   computed: {
-    guidelineCheckText() {
-      const raw = this.project && this.project.details && this.project.details.guidelineCheck
-        ? this.project.details.guidelineCheck
-        : this.$t('projectComponents.guidelineContentCheck.noContent');
+    goalsAndRequirementsText() {
+      const raw = this.project && this.project.details && this.project.details.goalsAndRequirements
+        ? this.project.details.goalsAndRequirements
+        : this.$t('projectComponents.goalsAndRequirements.noContent');
       // Convert newlines to <br> before sanitizeHtml() runs, since sanitizeHtml()
       // strips raw \n characters (see src/mixins/htmlSanitizer.js) which would
       // otherwise destroy the "\n\n---\n\n" merge separator between the old
-      // guideline check fields.
+      // goals/requirements fields.
       return raw.replace(/\n/g, '<br>');
     }
   },
   watch: {
     currentTab(newTab) {
-      this.expandedGuidelineContentCheck = newTab === "guidelineContentCheck";
+      this.expandedGoalsAndRequirements = newTab === "goalsAndRequirements";
     }
   }
 }

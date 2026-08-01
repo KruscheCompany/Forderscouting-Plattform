@@ -29,25 +29,19 @@
       <ProjectViewContentDetails :project="project" :current-tab="step" class="q-my-md" />
       <ProjectTaskPlan :project="project" :current-tab="step" class="q-my-md" />
       <ProjectSiteVisit v-if="step !== 'taskPlan'" :project="project" :current-tab="step" class="q-my-md" />
-      <ProjectGoals v-if="step !== 'taskPlan' && step !== 'siteVisit'" :project="project" :current-tab="step"
-        class="q-my-md" />
-      <ProjectRequirements v-if="step !== 'taskPlan' && step !== 'siteVisit' && step !== 'goals'" :project="project"
+      <ProjectGoalsAndRequirements v-if="step !== 'taskPlan' && step !== 'siteVisit'" :project="project"
         :current-tab="step" class="q-my-md" />
+      <ProjectFinancingCheck v-if="step !== 'taskPlan' && step !== 'siteVisit' && step !== 'goalsAndRequirements'"
+        :project="project" :current-tab="step" class="q-my-md" />
     </div>
 
     <div v-if="tab === 'application'">
       <ProjectViewGeneralInfo :project="project" :current-tab="step" />
       <ProjectViewContentDetails :project="project" :current-tab="step" class="q-my-md" />
       <ProjectGuidelineContentCheck :project="project" :current-tab="step" class="q-my-md" />
-      <ProjectGuidelineFormCheck v-if="step !== 'guidelineContentCheck'" :project="project" :current-tab="step"
+      <ProjectDocumentsCoordination v-if="step !== 'guidelineContentCheck'" :project="project" :current-tab="step"
         class="q-my-md" />
-      <ProjectFinancingCheck v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck'" :project="project"
-        :current-tab="step" class="q-my-md" />
-      <ProjectDocumentsCoordination
-        v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck' && step !== 'financingCheck'"
-        :project="project" :current-tab="step" class="q-my-md" />
-      <ProjectApplicationDecision
-        v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck' && step !== 'financingCheck' && step !== 'projectDocumentsCoordination'"
+      <ProjectApplicationDecision v-if="step !== 'guidelineContentCheck' && step !== 'projectDocumentsCoordination'"
         :project="project" :current-tab="step" class="q-my-md" />
       <ProjectSubmissionSigning v-if="step === 'submissionSigning'" :project="project" :current-tab="step"
         class="q-my-md" />
@@ -78,10 +72,8 @@ import ProjectViewGeneralInfo from 'src/components/projects/view/ProjectGeneralI
 import ProjectViewContentDetails from 'src/components/projects/view/ProjectContentDetails.vue';
 import ProjectTaskPlan from 'src/components/projects/view/ProjectTaskPlan.vue';
 import ProjectSiteVisit from 'src/components/projects/view/ProjectSiteVisit.vue';
-import ProjectGoals from 'src/components/projects/view/ProjectGoals.vue';
-import ProjectRequirements from 'src/components/projects/view/ProjectRequirements.vue';
+import ProjectGoalsAndRequirements from 'src/components/projects/view/ProjectGoalsAndRequirements.vue';
 import ProjectGuidelineContentCheck from 'src/components/projects/view/ProjectGuidelineContentCheck.vue';
-import ProjectGuidelineFormCheck from 'src/components/projects/view/ProjectGuidelineFormCheck.vue';
 import ProjectFinancingCheck from 'src/components/projects/view/ProjectFinancingCheck.vue';
 import ProjectDocumentsCoordination from 'src/components/projects/view/ProjectDocumentsCoordination.vue';
 import ProjectApplicationDecision from 'src/components/projects/view/ProjectApplicationDecision.vue';
@@ -101,10 +93,8 @@ export default {
     ProjectViewContentDetails,
     ProjectTaskPlan,
     ProjectSiteVisit,
-    ProjectGoals,
-    ProjectRequirements,
+    ProjectGoalsAndRequirements,
     ProjectGuidelineContentCheck,
-    ProjectGuidelineFormCheck,
     ProjectFinancingCheck,
     ProjectDocumentsCoordination,
     ProjectApplicationDecision,
@@ -136,13 +126,11 @@ export default {
       projectDevelopmentSteps: [
         { name: 'taskPlan', title: 'task plan', icon: 'mdi-checkbox-multiple-marked', done: false },
         { name: 'siteVisit', title: 'site visit', icon: 'mdi-map-marker', done: false },
-        { name: 'goals', title: 'goals', icon: 'mdi-target', done: false },
-        { name: 'requirements', title: 'requirements', icon: 'mdi-file-document', done: false }
+        { name: 'goalsAndRequirements', title: 'Goals and requirements', icon: 'mdi-target', done: false },
+        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false }
       ],
       projectApplicationSteps: [
         { name: 'guidelineContentCheck', title: 'Guideline Check (Content)', icon: 'mdi-clipboard-check', done: false },
-        { name: 'guidelineFormCheck', title: 'Guideline Check (Formalities)', icon: 'mdi-format-list-checks', done: false },
-        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false },
         { name: 'projectDocumentsCoordination', title: 'Project Documents Coordination', icon: 'mdi-file-document-multiple', done: false },
         { name: 'applicationDecision', title: 'Application Decision', icon: 'mdi-gavel', done: false },
         { name: 'submissionSigning', title: 'Submission & Signing', icon: 'mdi-file-sign', done: false }
