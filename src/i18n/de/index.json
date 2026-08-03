@@ -969,7 +969,25 @@
     "aptitude": {
       "title": "Empfehlung für politische Gremien",
       "noRecommendation": "Keine Empfehlung verfügbar",
-      "description": "Kurzer Aufgabentext (Wer hatte die Idee? Wie wurde die Idee entwickelt? Was ist der Kontext in der Gemeinde/ Stadt?)"
+      "description": "Kurzer Aufgabentext (Wer hatte die Idee? Wie wurde die Idee entwickelt? Was ist der Kontext in der Gemeinde/ Stadt?)",
+      "vorpruefung": {
+        "finanzen": "Finanzen",
+        "personal": "Personal",
+        "foerdermittelgeber": "Fördermittelgeber",
+        "notesPlaceholder": "Interne Notizen",
+        "send": "Anfrage senden",
+        "resend": "Erneut senden",
+        "sentOn": "Gesendet am",
+        "answeredOn": "Beantwortet am",
+        "statusPositiv": "Positiv",
+        "statusNegativ": "Negativ",
+        "statusRuecksprache": "Rücksprache nötig",
+        "wantsPhoneCall": "Telefonischer Rückruf gewünscht",
+        "wantsOnsiteMeeting": "Vor-Ort-Termin gewünscht",
+        "sendSuccess": "Vorprüfung erfolgreich angefragt",
+        "resendSuccess": "Vorprüfung erneut gesendet",
+        "gateBlocked": "Alle drei Vorprüfungen müssen positiv beantwortet sein, bevor Sie fortfahren können."
+      }
     },
     "decision": {
       "title": "Grundsatzbeschluss",
@@ -1070,6 +1088,21 @@
     "financingCheck": {
       "title": "Finanzierungs-Check"
     }
+  },
+  "reviewPage": {
+    "loading": "Wird geladen...",
+    "invalidLink": "Dieser Link ist ungültig oder abgelaufen.",
+    "alreadyAnswered": "Sie haben bereits am {date} geantwortet. Vielen Dank.",
+    "downloadPdf": "Als PDF herunterladen",
+    "decisionLabel": "Ihre Entscheidung",
+    "decisionPositiv": "Positiv",
+    "decisionNegativ": "Negativ",
+    "decisionRuecksprache": "Rücksprache nötig",
+    "wantsPhoneCall": "Telefonischer Rückruf gewünscht",
+    "wantsOnsiteMeeting": "Vor-Ort-Termin gewünscht",
+    "responseTextLabel": "Ihre Anmerkungen",
+    "submit": "Absenden",
+    "submitSuccess": "Vielen Dank für Ihre Antwort."
   },
   "ProjectDashboard": {
     "activeProjects": "Aktive Projekte",

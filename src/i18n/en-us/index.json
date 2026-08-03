@@ -901,7 +901,25 @@
     },
     "aptitude": {
       "title": "Recommendation for political committees",
-      "noRecommendation": "No recommendation available"
+      "noRecommendation": "No recommendation available",
+      "vorpruefung": {
+        "finanzen": "Finance",
+        "personal": "Personnel",
+        "foerdermittelgeber": "Funding provider",
+        "notesPlaceholder": "Internal notes",
+        "send": "Send request",
+        "resend": "Resend",
+        "sentOn": "Sent on",
+        "answeredOn": "Answered on",
+        "statusPositiv": "Positive",
+        "statusNegativ": "Negative",
+        "statusRuecksprache": "Follow-up needed",
+        "wantsPhoneCall": "Phone call requested",
+        "wantsOnsiteMeeting": "On-site meeting requested",
+        "sendSuccess": "Review requested successfully",
+        "resendSuccess": "Review request resent",
+        "gateBlocked": "All three reviews must be answered positively before you can continue."
+      }
     },
     "decision": {
       "title": "Basic decision",
@@ -946,6 +964,21 @@
         "Links": "Links"
       }
     }
+  },
+  "reviewPage": {
+    "loading": "Loading...",
+    "invalidLink": "This link is invalid or has expired.",
+    "alreadyAnswered": "You already responded on {date}. Thank you.",
+    "downloadPdf": "Download as PDF",
+    "decisionLabel": "Your decision",
+    "decisionPositiv": "Positive",
+    "decisionNegativ": "Negative",
+    "decisionRuecksprache": "Follow-up needed",
+    "wantsPhoneCall": "Phone call requested",
+    "wantsOnsiteMeeting": "On-site meeting requested",
+    "responseTextLabel": "Your comments",
+    "submit": "Submit",
+    "submitSuccess": "Thank you for your response."
   },
   "ProjectDashboard": {
     "activeProjects": "Active Projects",
