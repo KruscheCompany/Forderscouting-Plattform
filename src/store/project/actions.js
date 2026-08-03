@@ -368,6 +368,74 @@ export async function simpleUpdateProjectIdea(context, payload) {
   }
 }
 
+export async function fetchVorpruefungTickets(context, payload) {
+  const { projectId } = payload;
+  try {
+    const res = await api.get(`/api/vorpruefung-tickets?filters[project]=${projectId}`);
+    return res.data.data || res.data || [];
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    return [];
+  }
+}
+
+export async function createVorpruefungTicket(context, payload) {
+  const { projectId, type, notes } = payload;
+  try {
+    const res = await api.post("/api/vorpruefung-tickets", {
+      data: { project: projectId, type, notes: notes || "" }
+    });
+    Notify.create({
+      message: "Vorprüfung erfolgreich angefragt",
+      type: "positive"
+    });
+    return res.data.data || res.data;
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    return false;
+  }
+}
+
+export async function updateVorpruefungTicketNotes(context, payload) {
+  const { id, notes } = payload;
+  try {
+    const res = await api.put(`/api/vorpruefung-tickets/${id}`, {
+      data: { notes }
+    });
+    return res.data.data || res.data;
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    return false;
+  }
+}
+
+export async function resendVorpruefungTicket(context, payload) {
+  const { id } = payload;
+  try {
+    await api.post(`/api/vorpruefung-tickets/${id}/resend`);
+    Notify.create({
+      message: "Vorprüfung erneut gesendet",
+      type: "positive"
+    });
+    return true;
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    return false;
+  }
+}
+
 // New action to update local state only
 export function updateLocalProjectState(context, payload) {
   const { data } = payload;
