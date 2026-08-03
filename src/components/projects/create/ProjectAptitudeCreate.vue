@@ -8,6 +8,14 @@
             {{ $t('projectComponents.aptitude.description') }}
           </h4>
           <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" v-model="aptitude" />
+          <div class="q-mt-md">
+            <VorpruefungTicketCard type="finanzen" :project-id="createdProjectId"
+              :ticket="ticketByType('finanzen')" @ticket-created="loadTickets" />
+            <VorpruefungTicketCard type="personal" :project-id="createdProjectId"
+              :ticket="ticketByType('personal')" @ticket-created="loadTickets" />
+            <VorpruefungTicketCard type="foerdermittelgeber" :project-id="createdProjectId"
+              :ticket="ticketByType('foerdermittelgeber')" @ticket-created="loadTickets" />
+          </div>
         </div>
       </q-card-section>
     </q-expansion-item>
@@ -15,8 +23,13 @@
 </template>
 
 <script>
+import VorpruefungTicketCard from "src/components/projects/create/VorpruefungTicketCard.vue";
+
 export default {
   name: "ProjectAptitude",
+  components: {
+    VorpruefungTicketCard
+  },
   props: {
     projectData: {
       type: Object,
@@ -36,6 +49,7 @@ export default {
     return {
       expandedAptitude: this.currentTab === "aptitude",
       aptitude: this.projectData.details.aptitude || "",
+      vorpruefungTickets: [],
       resetSteps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
         { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: true },
@@ -51,7 +65,23 @@ export default {
       this.expandedAptitude = newTab === "aptitude";
     }
   },
+  mounted() {
+    this.loadTickets();
+  },
   methods: {
+    ticketByType(type) {
+      return this.vorpruefungTickets.find(t => t.type === type) || null;
+    },
+    async loadTickets() {
+      this.vorpruefungTickets = await this.$store.dispatch("project/fetchVorpruefungTickets", {
+        projectId: this.createdProjectId
+      });
+      const allGreen = ["finanzen", "personal", "foerdermittelgeber"].every(type => {
+        const t = this.ticketByType(type);
+        return t && t.status === "positiv";
+      });
+      this.$emit("tickets-updated", allGreen);
+    },
     // Get updated steps with aptitude marked as done
     getUpdatedSteps() {
       // Use existing steps from projectData if available, otherwise use default steps
