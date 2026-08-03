@@ -2,6 +2,7 @@
   <div class="login-page">
     <div class="login-page-row">
       <div class="login-side-panel">
+        <animated-journey-map-background />
         <div class="login-side-top">
           <img src="../assets/Logo.svg" alt="logo" class="login-side-logo">
         </div>
@@ -33,6 +34,7 @@
                       hide-bottom-space
                       class="no-shadow login-input"
                       v-model="form.name"
+                      :placeholder="$t('registerPage.namePlaceholder')"
                       :rules="[val => !!val || 'Erforderlich']"
                     />
                   </div>
@@ -44,6 +46,7 @@
                       hide-bottom-space
                       class="no-shadow login-input"
                       v-model="form.email"
+                      :placeholder="$t('loginDialog.emailPlaceholder')"
                       :rules="[val => !!val || 'Erforderlich']"
                     />
                   </div>
@@ -127,6 +130,7 @@
 </template>
 
 <script>
+import AnimatedJourneyMapBackground from "components/AnimatedJourneyMapBackground.vue";
 import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
 import Municipality from "components/projects/create/Municipality.vue";
 import Categories from "components/projects/create/Categories.vue";
@@ -134,6 +138,7 @@ import Categories from "components/projects/create/Categories.vue";
 export default {
   name: "Register",
   components: {
+    AnimatedJourneyMapBackground,
     MunicipalityCities,
     Municipality,
     Categories
@@ -225,13 +230,17 @@ export default {
 .login-register-panel {
   max-width: 420px;
   width: 100%;
-  padding: 4px;
   animation: login-fade-up 0.4s ease-out;
 }
+.login-side-top {
+  position: relative;
+}
 .login-side-middle {
+  position: relative;
   animation: login-fade-up 0.4s ease-out;
 }
 .login-side-footer {
+  position: relative;
   animation: login-fade-up 0.4s ease-out 0.08s both;
 }
 .login-fields {
@@ -316,39 +325,41 @@ export default {
 
 .login-side-panel {
   position: relative;
+  z-index: 0;
   width: 42%;
   flex: 0 0 42%;
-  background: #e8ecfb;
+  max-width: 820px;
+  background: #c7d1fb;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 44px 40px;
+  padding: clamp(44px, 24px + 2.0833vw, 64px) clamp(40px, 8px + 3.3333vw, 72px);
 }
 .login-side-logo {
-  height: 30px;
+  height: clamp(30px, 21px + 0.9375vw, 39px);
 }
 .login-side-middle {
-  max-width: 380px;
+  max-width: clamp(380px, 200px + 18.75vw, 560px);
 }
 .login-side-headline {
   font-family: Georgia, "Times New Roman", serif;
   color: #000055;
-  font-size: 34px;
+  font-size: clamp(34px, 22px + 1.25vw, 46px);
   font-weight: 700;
   line-height: 1.15;
   margin: 0;
 }
 .login-side-tagline {
   color: #3a4788;
-  font-size: 14px;
+  font-size: clamp(14px, 11px + 0.3125vw, 17px);
   font-weight: 400;
   line-height: 1.6;
-  margin-top: 18px;
+  margin-top: clamp(18px, 12px + 0.625vw, 24px);
   margin-bottom: 0;
 }
 .login-side-footer {
   color: #59639b;
-  font-size: 12px;
+  font-size: clamp(12px, 11px + 0.1042vw, 13px);
   margin: 0;
 }
 

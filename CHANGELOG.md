@@ -1,5 +1,31 @@
 # Änderungsprotokoll / Changelog
 
+## 6.0.0 — 2026-08-03
+
+### de
+- Die Anmelde- und Registrierungsseite wurde neu gestaltet: eine animierte Illustration begleitet jetzt den Anmeldevorgang, Formulare und Texte passen sich besser an große Bildschirme an, und alle Eingabefelder zeigen jetzt Platzhaltertexte.
+- Der Anmelde-Button zeigt beim Einloggen jetzt eine ruhige Lade-Animation statt eines Text-Wechsels.
+
+### en
+- The login and registration page has been redesigned: an animated illustration now accompanies the sign-in process, forms and text adapt better to large screens, and all input fields now show placeholder text.
+- The login button now shows a calm loading animation instead of switching text while signing in.
+
+## 5.1.0 — 2026-08-01
+
+### de
+- Neue Organisationsebene "Landkreis" zwischen Bundesland und Gemeinde: Admins können Landkreise anlegen, mit Bundesländern und Gemeinden verknüpfen und Förderrichtlinien einem Landkreis zuordnen.
+- Neue Benutzer*innen können jetzt entweder einer Gemeinde oder einem Landkreis zugeordnet werden.
+- Landkreis-Koordinator*innen erhalten dieselben Gastfreischaltungsrechte wie Gemeinde-Koordinator*innen.
+- Die Fördersuche berücksichtigt jetzt auch den Landkreis bei der Filterung passender Förderrichtlinien.
+- Nutzer*innen, die einem Landkreis zugeordnet sind, sehen alle Projektideen aus den Gemeinden ihres Landkreises.
+
+### en
+- New organisational level "Landkreis" (rural district) between federal state and municipality: admins can create Landkreise, link them to federal states and municipalities, and assign funding guidelines to a Landkreis.
+- New users can now be assigned to either a municipality or a Landkreis.
+- Landkreis coordinators get the same guest-verification rights as municipality coordinators.
+- The funding search now also filters matching funding guidelines by Landkreis.
+- Users assigned to a Landkreis see all project ideas from the municipalities in their Landkreis.
+
 ## 5.0.1 — 2026-07-29
 
 ### de

@@ -246,6 +246,15 @@
     "edit": "Edit",
     "delete": "Delete"
   },
+  "landkreise": {
+    "overview": "Landkreise Overview",
+    "createLandkreis": "Create Landkreis",
+    "landkreisName": "Landkreis",
+    "edit": "Edit",
+    "delete": "Delete",
+    "selectMunicipalities": "Select Municipalities",
+    "selectLandkreis": "Select Landkreis"
+  },
   "DetailsAdministration": {
     "location": "Location",
     "users": "Users",
@@ -553,6 +562,9 @@
   "editFederalState": "Edit Federal State",
   "deleteFederalState": "Delete Federal State",
   "deleteFederalStateMessage": "Are you sure you want to delete this federal state? This action cannot be undone.",
+  "editLandkreis": "Edit Landkreis",
+  "deleteLandkreis": "Delete Landkreis",
+  "deleteLandkreisMessage": "Are you sure you want to delete this Landkreis? This action cannot be undone.",
   "delete": "Delete",
   "Change Cookie settings": "Change Cookie settings",
   "No data": "No data available",
@@ -620,13 +632,16 @@
     "checkInboxMessage": "We've sent a reset link to {email}.",
     "useAnotherEmail": "Use a different email address",
     "noAccountYet": "No account yet?",
-    "sidePanelFooter": "Interkommunale Förderscouting-Plattform Nordfriesland · Heimat 2.0 (BMWSB)"
+    "sidePanelFooter": "Interkommunale Förderscouting-Plattform Nordfriesland · Heimat 2.0 (BMWSB)",
+    "emailPlaceholder": "name@amt-vioel.de",
+    "passwordPlaceholder": "••••••••"
   },
   "registerPage": {
     "subtitle": "Request guest access to discover project ideas and funding for your municipality.",
     "haveAccount": "Already registered?",
     "successTitle": "Request sent!",
-    "successMessage": "We're reviewing your request and will reach out to {email} once your guest access is approved."
+    "successMessage": "We're reviewing your request and will reach out to {email} once your guest access is approved.",
+    "namePlaceholder": "First and last name"
   },
   "guestRegistration": "Guest Registration",
   "ifYouWantToSeeMoreDocuments": "If you want to see more documents and checklists, please register.",

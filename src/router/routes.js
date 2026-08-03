@@ -207,6 +207,19 @@ const routes = [
         component: () => import("pages/dashboard/FederalStates.vue")
       },
       {
+        path: "/landkreise",
+        name: "Landkreise",
+        meta: {
+          title: "Landkreise",
+          titleDE: "Landkreise",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: true
+        },
+        icon: "/icons/Government.svg",
+        component: () => import("pages/dashboard/Landkreise.vue")
+      },
+      {
         path: "/Administation/Areas",
         name: "AdministationAreas",
         meta: {

@@ -28,11 +28,18 @@
                   : !!userDetails && userDetails.fullName
                   " disable />
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6" v-if="needsMunicipalityPicker">
+              <q-select outlined dense class="no-shadow input-radius-6" v-model="selectedLandkreisMunicipality"
+                :options="landkreisMunicipalityOptions" option-value="id" option-label="title" emit-value map-options
+                :rules="[(val) => !!val || $t('Required')]"
+                :placeholder="$t('projectComponents.generalInfo.municipalityPlaceholder')"
+                @input="$emit('update:selected-municipality', $event)" />
+            </div>
+            <div class="col-12 col-md-6" v-else>
               <q-input outlined dense disable class="no-shadow input-radius-6 disabledClass"
                 :placeholder="$t('projectComponents.generalInfo.municipalityPlaceholder')" :value="!!project
                   ? localForm.municipality.title
-                  : !!userDetails && userDetails.municipality.title
+                  : !!userDetails && userDetails.municipality && userDetails.municipality.title
                   " :rules="[]" />
             </div>
           </div>
@@ -181,7 +188,7 @@ import { scroll } from "quasar";
 const { getScrollTarget, setScrollPosition } = scroll;
 export default {
   name: "ProjectGeneralInfo",
-  emits: ['update:form-data'],
+  emits: ['update:form-data', 'update:selected-municipality'],
   components: {
     UserSelect,
     MunicipalityCities,
@@ -223,11 +230,18 @@ export default {
       },
       isLoading: false,
       dataLoaded: true,
+      selectedLandkreisMunicipality: null,
     };
   },
   computed: {
     project() {
       return this.$store.getters["project/getProject"];
+    },
+    needsMunicipalityPicker() {
+      return !this.project && !this.userDetails?.municipality && !!this.userDetails?.landkreis;
+    },
+    landkreisMunicipalityOptions() {
+      return this.userDetails?.landkreis?.municipalities || [];
     },
 
     // Stable computed properties for child component props

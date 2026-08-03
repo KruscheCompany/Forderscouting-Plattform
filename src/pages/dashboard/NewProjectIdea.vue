@@ -32,11 +32,16 @@
                       : !!userDetails && userDetails.fullName
                       " disable />
                 </div>
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-6" v-if="needsMunicipalityPicker">
+                  <q-select outlined dense class="no-shadow input-radius-6" v-model="selectedLandkreisMunicipality"
+                    :options="landkreisMunicipalityOptions" option-value="id" option-label="title" emit-value
+                    map-options :rules="[(val) => !!val || $t('Required')]" placeholder="Gemeinde/Verwaltung" />
+                </div>
+                <div class="col-12 col-md-6" v-else>
                   <q-input outlined dense disable class="no-shadow input-radius-6 disabledClass"
                     placeholder="Gemeinde/Verwaltung" :value="!!project
                       ? form.municipality.title
-                      : !!userDetails && userDetails.municipality.title
+                      : !!userDetails && userDetails.municipality && userDetails.municipality.title
                       " :rules="[]" />
                 </div>
               </div>
@@ -517,6 +522,7 @@ export default {
       },
       isLoading: false,
       dataLoaded: true,
+      selectedLandkreisMunicipality: null,
     };
   },
   methods: {
@@ -584,7 +590,9 @@ export default {
                 postalCode: this.userDetails.postalCode,
               },
               municipality: {
-                id: this.userDetails.municipality && this.userDetails.municipality.id,
+                id:
+                  (this.userDetails.municipality && this.userDetails.municipality.id) ||
+                  this.selectedLandkreisMunicipality,
               },
               owner: {
                 id: this.user && this.user.id,
@@ -716,6 +724,12 @@ export default {
       return (
         this.$store.state.userCenter.user && this.$store.state.userCenter.user.userDetails
       );
+    },
+    needsMunicipalityPicker() {
+      return !this.project && !this.userDetails?.municipality && !!this.userDetails?.landkreis;
+    },
+    landkreisMunicipalityOptions() {
+      return this.userDetails?.landkreis?.municipalities || [];
     },
     user() {
       return this.$store.state.userCenter.user.user;

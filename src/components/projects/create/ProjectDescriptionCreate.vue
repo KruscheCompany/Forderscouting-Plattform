@@ -2,7 +2,8 @@
   <div>
     <!-- Project General Information -->
     <ProjectGeneralInfo ref="generalInfoRef" :current-tab="currentTab" :form-data="form"
-      @update:form-data="updateGeneralInfo" />
+      @update:form-data="updateGeneralInfo"
+      @update:selected-municipality="selectedLandkreisMunicipality = $event" />
 
     <!-- Project Content Details -->
     <ProjectContentDetails ref="contentDetailsRef" class="q-my-md" :current-tab="currentTab" :form-data="form"
@@ -75,6 +76,7 @@ export default {
         media: null,
         files: null,
       },
+      selectedLandkreisMunicipality: null,
       resetSteps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
         { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: false },
@@ -273,7 +275,9 @@ export default {
             postalCode: this.userDetails.postalCode,
           },
           municipality: {
-            id: this.userDetails.municipality && this.userDetails.municipality.id,
+            id:
+              (this.userDetails.municipality && this.userDetails.municipality.id) ||
+              this.selectedLandkreisMunicipality,
           },
           owner: {
             id: this.user && this.user.id,

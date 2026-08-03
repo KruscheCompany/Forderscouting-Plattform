@@ -576,7 +576,9 @@ export default {
     loggedInUserMunicipality() {
       return (
         !!this.$store.state.userCenter.user &&
-        this.$store.state.userCenter.user.userDetails.municipality
+        !!this.$store.state.userCenter.user.userDetails &&
+        (this.$store.state.userCenter.user.userDetails.municipality ||
+          this.$store.state.userCenter.user.userDetails.landkreis)
       );
     },
     isInPage() {

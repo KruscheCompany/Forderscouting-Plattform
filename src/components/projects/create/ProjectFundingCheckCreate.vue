@@ -214,9 +214,14 @@ export default {
       return this.userDetails?.municipality || null;
     },
 
-    // Get user's federal states from municipality
+    // Get user's landkreis (mutually exclusive with municipality)
+    userLandkreis() {
+      return this.userDetails?.landkreis || null;
+    },
+
+    // Get user's federal states from municipality or landkreis
     userFederalStates() {
-      return this.userMunicipality?.federalStates || [];
+      return this.userMunicipality?.federalStates || this.userLandkreis?.federalStates || [];
     },
 
     // Get all fundings from store
@@ -230,7 +235,7 @@ export default {
 
     // Check if user has required data
     userDataValidation() {
-      const hasMunicipality = !!this.userMunicipality;
+      const hasMunicipality = !!this.userMunicipality || !!this.userLandkreis;
       const hasFederalStates = this.userFederalStates && this.userFederalStates.length > 0;
 
       return {

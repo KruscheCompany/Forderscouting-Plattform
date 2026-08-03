@@ -2,6 +2,7 @@
   <div class="login-page">
     <div class="login-page-row">
       <div class="login-side-panel">
+        <animated-journey-map-background />
         <div class="login-side-top">
           <img src="../assets/Logo.svg" alt="logo" class="login-side-logo">
         </div>
@@ -34,6 +35,7 @@
                       hide-bottom-space
                       class="no-shadow login-input"
                       v-model="form.identifier"
+                      :placeholder="$t('loginDialog.emailPlaceholder')"
                       :rules="[val => !!val || 'Erforderlich']"
                     />
                   </div>
@@ -60,6 +62,7 @@
                       hide-bottom-space
                       class="no-shadow login-input"
                       v-model="form.password"
+                      :placeholder="$t('loginDialog.passwordPlaceholder')"
                       :rules="[val => !!val || 'Erforderlich']"
                     />
                   </div>
@@ -72,7 +75,7 @@
                 <div class="row justify-center login-field-row-first">
                   <div class="col-12 text-center">
                     <q-btn
-                      :class="{ 'login-card-shake': shake }"
+                      :class="{ 'login-card-shake': shake, 'login-btn-loading': isLoading }"
                       @click="login"
                       class="radius-10 full-width login-submit-btn"
                       no-caps
@@ -82,14 +85,11 @@
                       unelevated
                       :loading="isLoading"
                     >
-                      <q-icon v-if="loginSuccess" name="check" size="20px" />
+                      <q-icon v-if="loginSuccess" name="check" size="20px" class="login-btn-icon" />
                       <template v-else>{{ $t("login") }}</template>
                       <template v-slot:loading>
-                        {{ loginMessages }}
-                        <q-circular-progress
-                          indeterminate
-                          class="on-right"
-                        /> </template
+                        <span></span>
+                      </template>
                     ></q-btn>
                   </div>
                 </div>
@@ -133,6 +133,7 @@
                         hide-bottom-space
                         class="no-shadow login-input"
                         v-model="resetForm.email"
+                        :placeholder="$t('loginDialog.emailPlaceholder')"
                         :rules="[val => !!val || 'Erforderlich']"
                       />
                     </div>
@@ -195,8 +196,13 @@
 </template>
 
 <script>
+import AnimatedJourneyMapBackground from "components/AnimatedJourneyMapBackground.vue";
+
 export default {
   name: "Login",
+  components: {
+    AnimatedJourneyMapBackground
+  },
   data() {
     return {
       tab: "login",
@@ -269,11 +275,6 @@ export default {
         }
       });
     }
-  },
-  computed: {
-    loginMessages() {
-      return this.$store.state.userCenter.loadingMessages;
-    }
   }
 };
 </script>
@@ -302,14 +303,19 @@ export default {
   padding: 56px 60px;
 }
 .login-form-inner .q-tab-panels {
-  max-width: 388px;
+  max-width: 380px;
   width: 100%;
   animation: login-fade-up 0.4s ease-out;
 }
+.login-side-top {
+  position: relative;
+}
 .login-side-middle {
+  position: relative;
   animation: login-fade-up 0.4s ease-out;
 }
 .login-side-footer {
+  position: relative;
   animation: login-fade-up 0.4s ease-out 0.08s both;
 }
 .login-tab-panel {
@@ -363,9 +369,28 @@ export default {
   height: 52px;
   font-weight: 700;
   font-size: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.login-btn-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 0, 85, 0.18) 45%,
+    rgba(0, 0, 85, 0.18) 55%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: login-btn-sweep 1.1s ease-in-out infinite;
 }
 .login-card-shake {
   animation: login-shake 0.4s ease;
+}
+.login-btn-icon {
+  animation: login-envelope-in 0.35s ease;
 }
 .login-inline-link {
   color: #000055;
@@ -390,39 +415,41 @@ export default {
 
 .login-side-panel {
   position: relative;
+  z-index: 0;
   width: 42%;
   flex: 0 0 42%;
-  background: #e8ecfb;
+  max-width: 820px;
+  background: #c7d1fb;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 44px 40px;
+  padding: clamp(44px, 24px + 2.0833vw, 64px) clamp(40px, 8px + 3.3333vw, 72px);
 }
 .login-side-logo {
-  height: 30px;
+  height: clamp(30px, 21px + 0.9375vw, 39px);
 }
 .login-side-middle {
-  max-width: 380px;
+  max-width: clamp(380px, 200px + 18.75vw, 560px);
 }
 .login-side-headline {
   font-family: Georgia, "Times New Roman", serif;
   color: #000055;
-  font-size: 34px;
+  font-size: clamp(34px, 22px + 1.25vw, 46px);
   font-weight: 700;
   line-height: 1.15;
   margin: 0;
 }
 .login-side-tagline {
   color: #3a4788;
-  font-size: 14px;
+  font-size: clamp(14px, 11px + 0.3125vw, 17px);
   font-weight: 400;
   line-height: 1.6;
-  margin-top: 18px;
+  margin-top: clamp(18px, 12px + 0.625vw, 24px);
   margin-bottom: 0;
 }
 .login-side-footer {
   color: #59639b;
-  font-size: 12px;
+  font-size: clamp(12px, 11px + 0.1042vw, 13px);
   margin: 0;
 }
 
@@ -440,6 +467,10 @@ export default {
   0% { opacity: 0; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+@keyframes login-btn-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
 
 @media (max-width: 700px) {
   .login-side-panel {
@@ -450,6 +481,8 @@ export default {
 @media (prefers-reduced-motion: reduce) {
   .login-card-shake,
   .reset-envelope,
+  .login-btn-icon,
+  .login-btn-loading::after,
   .login-form-inner .q-tab-panels,
   .login-side-middle,
   .login-side-footer {

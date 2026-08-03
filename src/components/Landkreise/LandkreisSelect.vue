@@ -4,12 +4,11 @@
       outlined
       dense
       v-model="model"
-      :options="administrations"
-      options-selected-class="text-primary"
+      :options="landkreise"
+      options-selected-class="text-primary text-weight-600"
       class="no-shadow input-radius-6"
-      hide-bottom-space
+      :rules="rules"
       @input="onSelect"
-      :rules="isRequired ? [val => !!val || $t('Required')] : []"
     >
       <template v-slot:selected>
         <template v-if="model">
@@ -19,7 +18,7 @@
         </template>
         <template v-else>
           <span class="text-grey">
-            {{ $t("select administration") }}
+            {{ $t("landkreise.selectLandkreis") }}
           </span>
         </template>
       </template>
@@ -36,45 +35,42 @@
 
 <script>
 export default {
-  name: "municipalitySelect",
+  name: "landkreisSelect",
   props: {
-    currentMunicipality: {
+    currentLandkreis: {
       type: Object,
-      default: null
+      default: null,
     },
-    isRequired: {
-      type: Boolean,
-      default: true
-    }
+    rules: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
-      model: ""
+      model: this.currentLandkreis,
     };
   },
   methods: {
     onSelect(value) {
-      const municipality = {
+      const landkreis = {
         id: value.id,
-        title: value.title
+        title: value.title,
       };
-      this.$emit("update:municipality", municipality.id);
-      this.$store.commit("municipality/setTempMunicipality", municipality);
-    }
+      this.$emit("update:landkreis", landkreis);
+    },
   },
   computed: {
-    administrations() {
-      return this.$store.state.municipality.municipalities;
-    }
+    landkreise() {
+      const landkreise = this.$store.state.landkreis.landkreise;
+      return Array.isArray(landkreise)
+        ? [...landkreise].sort((a, b) => a.title.localeCompare(b.title))
+        : [];
+    },
   },
   mounted() {
-    if (this.currentMunicipality) {
-      this.model = this.currentMunicipality;
-    }
+    this.$store.dispatch("landkreis/getLandkreise");
   },
-  beforeDestroy() {
-    this.$store.commit("municipality/setTempMunicipality", null);
-  }
 };
 </script>
 

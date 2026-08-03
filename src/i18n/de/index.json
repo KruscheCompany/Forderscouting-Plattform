@@ -251,6 +251,15 @@
     "delete": "Löschen",
     "selectFederalStates": "Bundesländer auswählen"
   },
+  "landkreise": {
+    "overview": "Landkreise-Übersicht",
+    "createLandkreis": "Landkreis anlegen",
+    "landkreisName": "Landkreis",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "selectMunicipalities": "Gemeinden auswählen",
+    "selectLandkreis": "Landkreis auswählen"
+  },
   "DetailsAdministration": {
     "location": "Ort",
     "users": "Benutzer*innen:",
@@ -470,6 +479,9 @@
   "editFederalState": "Bundesland bearbeiten",
   "deleteFederalState": "Bundesland löschen",
   "deleteFederalStateMessage": "Wollen Sie dieses Bundesland wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
+  "editLandkreis": "Landkreis bearbeiten",
+  "deleteLandkreis": "Landkreis löschen",
+  "deleteLandkreisMessage": "Wollen Sie diesen Landkreis wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
   "approve": "Genehmigen",
   "addEditors": "Bearbeiter*innen hinzufügen",
   "Add Images": "Bilder hinzufügen",
@@ -679,13 +691,16 @@
     "checkInboxMessage": "Wir haben einen Link zum Zurücksetzen an {email} geschickt.",
     "useAnotherEmail": "Andere E-Mail-Adresse verwenden",
     "noAccountYet": "Noch kein Konto?",
-    "sidePanelFooter": "Interkommunale Förderscouting-Plattform Nordfriesland · Heimat 2.0 (BMWSB)"
+    "sidePanelFooter": "Interkommunale Förderscouting-Plattform Nordfriesland · Heimat 2.0 (BMWSB)",
+    "emailPlaceholder": "name@amt-vioel.de",
+    "passwordPlaceholder": "••••••••"
   },
   "registerPage": {
     "subtitle": "Fordern Sie einen Gastzugang an, um Projektideen und Fördermittel für Ihre Kommune zu entdecken.",
     "haveAccount": "Bereits registriert?",
     "successTitle": "Anfrage gesendet!",
-    "successMessage": "Wir prüfen Ihre Anfrage und melden uns unter {email}, sobald Ihr Gastzugang freigeschaltet ist."
+    "successMessage": "Wir prüfen Ihre Anfrage und melden uns unter {email}, sobald Ihr Gastzugang freigeschaltet ist.",
+    "namePlaceholder": "Vor- und Nachname"
   },
   "guestRegistration": "Registrierung Gastzugang",
   "ifYouWantToSeeMoreDocuments": "Wenn Sie weitere Dokumente sowie Checklisten sehen möchten, dann registrieren Sie sich.",
