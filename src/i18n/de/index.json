@@ -241,7 +241,9 @@
     "createState": "Gemeinde anlegen",
     "stateName": "Gemeinde",
     "statesOverview": "Gemeindeübersicht",
-    "selectFederalStates": "Bundesländer auswählen"
+    "selectFederalStates": "Bundesländer auswählen",
+    "financeContactEmail": "Kontakt-E-Mail Finanzen",
+    "personnelContactEmail": "Kontakt-E-Mail Personal"
   },
   "federalStates": {
     "overview": "Bundesländer-Übersicht",

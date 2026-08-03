@@ -237,7 +237,9 @@
     "createState": "Create State",
     "stateName": "State Name",
     "statesOverview": "States Overview",
-    "selectFederalStates": "Select Federal States"
+    "selectFederalStates": "Select Federal States",
+    "financeContactEmail": "Finance contact email",
+    "personnelContactEmail": "Personnel contact email"
   },
   "federalStates": {
     "overview": "Federal States Overview",

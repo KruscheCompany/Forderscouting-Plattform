@@ -97,14 +97,16 @@ export async function tempMunicipality(context, payload) {
 }
 
 export async function createMunicipality(context, payload) {
-  const { title, location, federalStates } = payload;
+  const { title, location, federalStates, financeContactEmail, personnelContactEmail } = payload;
   if (!!title && !!location) {
     try {
       const res = await api.post("/api/municipalities", {
         data: {
           title,
           location,
-          federalStates: federalStates || []
+          federalStates: federalStates || [],
+          financeContactEmail: financeContactEmail || null,
+          personnelContactEmail: personnelContactEmail || null
         }
       });
       context.commit("addMunicipality", res.data.data);
@@ -154,7 +156,7 @@ export async function createState(context, payload) {
 }
 
 export async function editMunicipality(context, payload) {
-  const { id, title, location, federalStates } = payload;
+  const { id, title, location, federalStates, financeContactEmail, personnelContactEmail } = payload;
   if (!!id && !!title && !!location) {
     try {
       const res = await api.put(`/api/municipalities/${id}`, {
@@ -162,6 +164,8 @@ export async function editMunicipality(context, payload) {
           title,
           location,
           federalStates: federalStates || [],
+          financeContactEmail: financeContactEmail || null,
+          personnelContactEmail: personnelContactEmail || null,
           updatedAt: new Date().toISOString()
         }
       });

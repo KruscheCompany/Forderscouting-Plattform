@@ -47,6 +47,28 @@
                 :placeholder="$t('administrativeAreas.selectFederalStates')" />
             </div>
           </div>
+          <div class="items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-14 no-margin">
+                {{ $t("administrativeAreas.financeContactEmail") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-input outlined type="email" class="no-shadow input-radius-6" v-model="form.financeContactEmail"
+                :placeholder="$t('administrativeAreas.financeContactEmail')" />
+            </div>
+          </div>
+          <div class="items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-14 no-margin">
+                {{ $t("administrativeAreas.personnelContactEmail") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-input outlined type="email" class="no-shadow input-radius-6" v-model="form.personnelContactEmail"
+                :placeholder="$t('administrativeAreas.personnelContactEmail')" />
+            </div>
+          </div>
           <div class="row q-col-gutter-sm q-mt-md">
             <div class="col">
               <q-btn :label="$t('category&Keyword.cancel')" outline v-close-popup size="16px" color="primary" no-caps
@@ -78,7 +100,9 @@ export default {
       form: {
         title: "",
         location: "",
-        federalStates: []
+        federalStates: [],
+        financeContactEmail: "",
+        personnelContactEmail: ""
       },
       municipality: {},
       isLoading: false
@@ -93,7 +117,9 @@ export default {
           {
             title: this.form.title,
             location: this.form.location,
-            federalStates: this.form.federalStates
+            federalStates: this.form.federalStates,
+            financeContactEmail: this.form.financeContactEmail,
+            personnelContactEmail: this.form.personnelContactEmail
           }
         );
         this.isLoading = false;
@@ -110,7 +136,9 @@ export default {
         if (
           this.form.title !== this.municipality.title ||
           this.form.location !== this.municipality.location ||
-          JSON.stringify(this.form.federalStates) !== JSON.stringify(this.municipality.federalStates)
+          JSON.stringify(this.form.federalStates) !== JSON.stringify(this.municipality.federalStates) ||
+          this.form.financeContactEmail !== this.municipality.financeContactEmail ||
+          this.form.personnelContactEmail !== this.municipality.personnelContactEmail
         ) {
           this.isLoading = true;
           const res = await this.$store.dispatch(
@@ -119,7 +147,9 @@ export default {
               id: this.editingId,
               title: this.form.title,
               location: this.form.location,
-              federalStates: this.form.federalStates
+              federalStates: this.form.federalStates,
+              financeContactEmail: this.form.financeContactEmail,
+              personnelContactEmail: this.form.personnelContactEmail
             }
           );
           this.isLoading = false;
@@ -148,6 +178,8 @@ export default {
           this.municipality = municipality;
           this.form.title = municipality.title;
           this.form.location = municipality.location;
+          this.form.financeContactEmail = municipality.financeContactEmail || "";
+          this.form.personnelContactEmail = municipality.personnelContactEmail || "";
           // Handle federal states - check if they exist and are in array format
           if (municipality.federalStates) {
             if (Array.isArray(municipality.federalStates)) {
@@ -174,6 +206,8 @@ export default {
         this.form.title = "";
         this.form.location = "";
         this.form.federalStates = [];
+        this.form.financeContactEmail = "";
+        this.form.personnelContactEmail = "";
         this.$emit("update", val);
       }
     },
