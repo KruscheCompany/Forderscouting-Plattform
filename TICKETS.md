@@ -7,7 +7,7 @@ Tracks Jira tickets finished in this repo (+ related BE repo commits).
 - New municipality contact-email fields (`financeContactEmail`/`personnelContactEmail`) power Finanzen/Personal recipient resolution; Fördermittelgeber resolves via the first linked funding guideline's `fundingGuideline[0].info.email` (the relation is manyToMany; first-linked is used as the recipient).
 - BE: new `vorpruefung-ticket` content-type; CSPRNG token, 2-month expiry, public by-token GET/POST routes (rate-limited, Public-role-scoped to exactly those two actions); 4-week reminder folded into the existing daily cron job.
 - FE: new `VorpruefungTicketCard.vue` (3× per project), read-only twin in the project view, hard gate on the application-process submit button until all three are Positiv, new public `/review/:token` page.
-- Commits: FE `d4b06e4..7b07140`, BE (Forderscouting-Plattform-API) `d96539d..2ddef5d`.
+- Commits: FE `a3b87b0..7b07140`, BE (Forderscouting-Plattform-API) `55bfdd8..2ddef5d`.
 
 ## PAV-210 — Landkreis (Rural District)
 - New organisational level "Landkreis" sits between federal state and municipality, m2m to both (mirrors the existing `municipality.federalStates`/`federal-state.municipalities` pattern); new `landkreis` content-type with a delete guard mirroring `municipality`'s (blocks deletion while any `user_details` are attached).
