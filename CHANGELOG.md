@@ -1,5 +1,13 @@
 # Änderungsprotokoll / Changelog
 
+## 6.1.0 — 2026-08-04
+
+### de
+- Bei der Eignungsprüfung können jetzt drei Vorprüfungen angefragt werden (Finanzen, Personal, Fördermittelgeber): Die zuständige Stelle erhält einen anonymen Link ohne Login und kann direkt online antworten (Positiv, Negativ oder Rücksprache nötig). Der Antragsprozess kann erst fortgesetzt werden, wenn alle drei Rückmeldungen positiv sind. Bleibt eine Antwort länger als vier Wochen aus, wird automatisch eine Erinnerung verschickt.
+
+### en
+- The aptitude step can now request three preliminary reviews (Finance, Personnel, Funding provider): the responsible contact receives an anonymous, no-login link and can respond directly online (Positive, Negative, or Follow-up needed). The application process can only continue once all three responses are positive. An automatic reminder is sent if a response is still missing after four weeks.
+
 ## 6.0.0 — 2026-08-03
 
 ### de
