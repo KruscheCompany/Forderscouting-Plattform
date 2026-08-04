@@ -368,11 +368,24 @@ export async function simpleUpdateProjectIdea(context, payload) {
   }
 }
 
+// vorpruefung-ticket's find/findOne/create/update actions are the untouched
+// Strapi v4 core-controller defaults (only resend/findByToken/respondByToken
+// are custom-overridden on the backend), so those responses still come back
+// wrapped as { id, attributes: {...} } instead of flat like the rest of this
+// app's custom-controller content-types. Flatten here to match what the rest
+// of the codebase (and this component tree) expects.
+function flattenVorpruefungTicket(entry) {
+  if (!entry) return entry;
+  const attrs = entry.attributes || entry;
+  return { id: entry.id, ...attrs };
+}
+
 export async function fetchVorpruefungTickets(context, payload) {
   const { projectId } = payload;
   try {
     const res = await api.get(`/api/vorpruefung-tickets?filters[project]=${projectId}`);
-    return res.data.data || res.data || [];
+    const raw = res.data.data || res.data || [];
+    return raw.map(flattenVorpruefungTicket);
   } catch (error) {
     Notify.create({
       type: "negative",
@@ -392,7 +405,8 @@ export async function createVorpruefungTicket(context, payload) {
       message: "Vorprüfung erfolgreich angefragt",
       type: "positive"
     });
-    return res.data.data || res.data;
+    const entry = res.data.data || res.data;
+    return flattenVorpruefungTicket(entry);
   } catch (error) {
     Notify.create({
       type: "negative",
@@ -408,7 +422,8 @@ export async function updateVorpruefungTicketNotes(context, payload) {
     const res = await api.put(`/api/vorpruefung-tickets/${id}`, {
       data: { notes }
     });
-    return res.data.data || res.data;
+    const entry = res.data.data || res.data;
+    return flattenVorpruefungTicket(entry);
   } catch (error) {
     Notify.create({
       type: "negative",
