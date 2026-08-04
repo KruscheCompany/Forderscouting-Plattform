@@ -98,6 +98,18 @@ export default {
     },
 
     async submitAptitude() {
+      const allGreen = ["finanzen", "personal", "foerdermittelgeber"].every(type => {
+        const t = this.ticketByType(type);
+        return t && t.status === "positiv";
+      });
+      if (!allGreen) {
+        this.$q.notify({
+          type: "warning",
+          message: this.$t("projectComponents.aptitude.vorpruefung.gateBlocked")
+        });
+        return;
+      }
+
       await this.$store.dispatch('project/simpleUpdateProjectIdea', {
         data: {
           id: this.createdProjectId,

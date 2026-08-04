@@ -44,7 +44,8 @@
         :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectAptitudeCreate ref="aptitudeRef" v-if="step === 'aptitude'" :created-project-id="createdProjectId"
-        :project-data="form" :current-tab="step" class="q-my-md" @aptitude-submitted="handleAptitudeSubmitted" />
+        :project-data="form" :current-tab="step" class="q-my-md" @aptitude-submitted="handleAptitudeSubmitted"
+        @tickets-updated="val => (aptitudeGateOpen = val)" />
 
       <ProjectViewAptitude
         v-if="step !== 'project' && step !== 'fundingCheck' && step !== 'qAndA' && step !== 'aptitude'" :project="form"
@@ -125,8 +126,9 @@
     <div class="q-mt-lg q-mb-xl">
       <q-card class="shadow-1 radius-20 bg-white q-pa-lg">
         <div class="row justify-center">
-          <q-btn :loading="isLoading" @click="manageSubmit" size="16px" color="primary"
-            class="text-white q-px-xl q-py-sm full-width" no-caps :label="$t('Publish')" />
+          <q-btn :loading="isLoading" :disable="step === 'aptitude' && !aptitudeGateOpen" @click="manageSubmit"
+            size="16px" color="primary" class="text-white q-px-xl q-py-sm full-width" no-caps
+            :label="$t('Publish')" />
         </div>
       </q-card>
     </div>
@@ -199,6 +201,7 @@ export default {
       tab: 'aiFundingCheck',
       secondaryTab: 'project',
       isLoading: false,
+      aptitudeGateOpen: false,
       createdProjectId: null, // Store the project ID after creation
       form: {}, // Store project data for passing to child components
       fundingCheckSteps: [
