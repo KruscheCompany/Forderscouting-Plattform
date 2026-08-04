@@ -31,6 +31,11 @@ const routes = [
         path: "/datenschutzerklaerung",
         name: "Datenschutzerklaerung",
         component: () => import("pages/Datenschutzerklaerung.vue")
+      },
+      {
+        path: "/review/:token",
+        name: "ReviewProject",
+        component: () => import("pages/ReviewProject.vue")
       }
     ]
   },
