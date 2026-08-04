@@ -33,17 +33,19 @@
         <q-card class="shadow-1 radius-20">
           <q-card-section>
             <h6 class="font-16 q-mb-sm">{{ $t('reviewPage.decisionLabel') }}</h6>
-            <q-option-group v-model="decisionType" type="radio" :options="decisionOptions" />
+            <q-form @submit="submit">
+              <q-option-group v-model="decisionType" type="radio" :options="decisionOptions" />
 
-            <q-checkbox v-model="wantsPhoneCall" :label="$t('reviewPage.wantsPhoneCall')" />
-            <q-checkbox v-model="wantsOnsiteMeeting" :label="$t('reviewPage.wantsOnsiteMeeting')" />
+              <q-checkbox v-model="wantsPhoneCall" :label="$t('reviewPage.wantsPhoneCall')" />
+              <q-checkbox v-model="wantsOnsiteMeeting" :label="$t('reviewPage.wantsOnsiteMeeting')" />
 
-            <q-input outlined type="textarea" rows="5" class="no-shadow input-radius-6 q-mt-md"
-              v-model="responseText" :label="$t('reviewPage.responseTextLabel')"
-              :rules="[val => !!val || $t('Required')]" />
+              <q-input outlined type="textarea" rows="5" class="no-shadow input-radius-6 q-mt-md"
+                v-model="responseText" :label="$t('reviewPage.responseTextLabel')"
+                :rules="[val => !!val || $t('Required')]" />
 
-            <q-btn unelevated no-caps color="primary" class="q-mt-md full-width" :loading="submitting"
-              :label="$t('reviewPage.submit')" @click="submit" />
+              <q-btn type="submit" unelevated no-caps color="primary" class="q-mt-md full-width"
+                :loading="submitting" :label="$t('reviewPage.submit')" />
+            </q-form>
           </q-card-section>
         </q-card>
       </div>

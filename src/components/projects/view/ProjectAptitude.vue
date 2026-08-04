@@ -7,12 +7,19 @@
           <p class="q-my-sm text-block" v-html="text"></p>
         </q-banner>
         <div class="q-mt-md">
-          <div v-for="type in ['finanzen', 'personal', 'foerdermittelgeber']" :key="type"
-            class="row items-center q-py-xs">
-            <q-icon name="mdi-circle" :color="statusColor(type)" size="14px" class="q-mr-sm" />
-            <div class="col font-14">{{ $t(`projectComponents.aptitude.vorpruefung.${type}`) }}</div>
-            <div v-if="ticketByType(type)" class="font-14 text-blue-grey-7">
-              {{ ticketByType(type).sentAt ? new Date(ticketByType(type).sentAt).toLocaleDateString('de-DE') : '' }}
+          <div v-for="type in ['finanzen', 'personal', 'foerdermittelgeber']" :key="type" class="q-mb-sm">
+            <div class="row items-center q-py-xs">
+              <q-icon name="mdi-circle" :color="statusColor(type)" size="14px" class="q-mr-sm" />
+              <div class="col font-14">{{ $t(`projectComponents.aptitude.vorpruefung.${type}`) }}</div>
+              <div v-if="ticketByType(type)" class="font-14 text-blue-grey-7">
+                {{ ticketByType(type).sentAt ? new Date(ticketByType(type).sentAt).toLocaleDateString('de-DE') : '' }}
+              </div>
+            </div>
+            <div v-if="ticketByType(type) && ticketByType(type).answeredAt" class="font-14 q-pl-lg">
+              <div>{{ statusLabel(type) }}</div>
+              <div v-if="ticketByType(type).wantsPhoneCall">{{ $t('projectComponents.aptitude.vorpruefung.wantsPhoneCall') }}</div>
+              <div v-if="ticketByType(type).wantsOnsiteMeeting">{{ $t('projectComponents.aptitude.vorpruefung.wantsOnsiteMeeting') }}</div>
+              <div class="q-mt-xs">{{ ticketByType(type).responseText }}</div>
             </div>
           </div>
         </div>
@@ -61,6 +68,13 @@ export default {
       const t = this.ticketByType(type);
       if (!t || !t.answeredAt) return t ? "orange" : "grey-5";
       return t.status === "positiv" ? "green" : "red";
+    },
+    statusLabel(type) {
+      const t = this.ticketByType(type);
+      if (!t) return "";
+      if (t.status === "positiv") return this.$t("projectComponents.aptitude.vorpruefung.statusPositiv");
+      if (t.status === "negativ") return this.$t("projectComponents.aptitude.vorpruefung.statusNegativ");
+      return this.$t("projectComponents.aptitude.vorpruefung.statusRuecksprache");
     }
   },
   mounted() {

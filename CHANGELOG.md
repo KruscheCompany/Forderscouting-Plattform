@@ -4,9 +4,11 @@
 
 ### de
 - Bei der Eignungsprüfung können jetzt drei Vorprüfungen angefragt werden (Finanzen, Personal, Fördermittelgeber): Die zuständige Stelle erhält einen anonymen Link ohne Login und kann direkt online antworten (Positiv, Negativ oder Rücksprache nötig). Der Antragsprozess kann erst fortgesetzt werden, wenn alle drei Rückmeldungen positiv sind. Bleibt eine Antwort länger als vier Wochen aus, wird automatisch eine Erinnerung verschickt.
+- In der Verwaltung der Gemeinden/Ämter können jetzt eine Kontakt-E-Mail für Finanzen und eine für Personal hinterlegt werden — dorthin werden die entsprechenden Vorprüfungsanfragen geschickt.
 
 ### en
 - The aptitude step can now request three preliminary reviews (Finance, Personnel, Funding provider): the responsible contact receives an anonymous, no-login link and can respond directly online (Positive, Negative, or Follow-up needed). The application process can only continue once all three responses are positive. An automatic reminder is sent if a response is still missing after four weeks.
+- Municipality administration can now store a finance and a personnel contact email — that's where the corresponding review requests are sent.
 
 ## 6.0.0 — 2026-08-03
 

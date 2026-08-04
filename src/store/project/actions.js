@@ -419,7 +419,7 @@ export async function createVorpruefungTicket(context, payload) {
 export async function updateVorpruefungTicketNotes(context, payload) {
   const { id, notes } = payload;
   try {
-    const res = await api.put(`/api/vorpruefung-tickets/${id}`, {
+    const res = await api.put(`/api/vorpruefung-tickets/${id}/notes`, {
       data: { notes }
     });
     const entry = res.data.data || res.data;
