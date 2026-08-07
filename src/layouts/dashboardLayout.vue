@@ -36,37 +36,58 @@
             :aria-label="$t('settings')">
           </q-btn>
           <q-btn icon="question_mark" flat round dark color="blue" class="mr-0" @click="isOpenDialog = !isOpenDialog"
-            :aria-label="$t('tutorialVideosForPlatform')">
+            :aria-label="$t('helpAndNewsPanelTitle')">
             <q-dialog v-model="isOpenDialog" position="right">
               <q-card style="width: 700px; max-width: 80vw; height: 95vh; max-height: 95vh">
                 <q-card-section class="scroll">
                   <div class="row" style="justify-content: space-between">
                     <h6 style="padding: 0px; margin: 0px">
-                      {{ $t("tutorialVideosForPlatform") }}
+                      {{ $t("helpAndNewsPanelTitle") }}
                     </h6>
                     <q-icon name="close" size="32" style="cursor: pointer" @click="isOpenDialog = !isOpenDialog" />
                   </div>
                   <q-separator class="bg-blue opacity-10" />
-                  <div class="q-mt-md">
-                    <q-card class="my-card" flat bordered>
-                      <h6 class="q-px-lg">
+
+                  <q-btn-toggle v-model="helpPanelView" spread no-caps unelevated toggle-color="blue" color="white"
+                    text-color="blue" class="q-mt-md border-blue" style="border: 1px solid #d0d0d0"
+                    :options="[
+                      { label: $t('tutorialVideosForPlatform'), value: 'videos' },
+                      { label: $t('whatsNew'), value: 'changelog' },
+                    ]" />
+
+                  <div v-if="helpPanelView === 'videos'" class="q-mt-md">
+                    <div class="q-mb-md">
+                      <p class="text-weight-medium">
                         {{ $t("howCanFundingPlatformSupportProjectWork") }}
-                      </h6>
+                      </p>
                       <video controls rounded poster="../assets/image1.png" style="width: 100%; height: auto">
                         <source
                           src="https://api.foerderscouting-plattform.de/uploads/Plattformpotentiale_d0f41f78dd.mp4" />
                       </video>
-                    </q-card>
-                  </div>
-                  <div class="q-mt-md">
-                    <q-card class="my-card" flat bordered>
-                      <h6 class="q-px-lg">
+                    </div>
+                    <div>
+                      <p class="text-weight-medium">
                         {{ $t("howDoesFundingPlatformWork") }}
-                      </h6>
+                      </p>
                       <video controls rounded poster="../assets/image2.png" style="width: 100%; height: auto">
                         <source src="https://api.foerderscouting-plattform.de/uploads/Projektarbeit_acbd6b13eb.mp4" />
                       </video>
-                    </q-card>
+                    </div>
+                  </div>
+
+                  <div v-else class="q-mt-md">
+                    <q-timeline color="blue">
+                      <q-timeline-entry v-for="entry in visibleChangelogEntries" :key="entry.version"
+                        :title="entry.version" :subtitle="entry.date" icon="new_releases">
+                        <ul class="q-my-none q-pl-md">
+                          <li v-for="(bullet, i) in changelogBullets(entry)" :key="i">{{ bullet }}</li>
+                        </ul>
+                      </q-timeline-entry>
+                    </q-timeline>
+                    <p v-if="changelogEntries.length > 5" class="text-blue cursor-pointer q-mb-none"
+                      @click="showAllChangelog = !showAllChangelog">
+                      {{ showAllChangelog ? $t("showLessChangelog") : $t("showMoreChangelog") }}
+                    </p>
                   </div>
                 </q-card-section>
               </q-card>
@@ -125,6 +146,7 @@
 import EssentialLink from "components/EssentialLink.vue";
 import logoutDialog from "components/user/authentication/logout.vue";
 import { fetchAllTranslations } from "boot/i18n";
+import { getChangelogEntries } from "src/services/changelogService";
 import {
   enable as enableDarkMode,
   disable as disableDarkMode,
@@ -146,9 +168,15 @@ export default {
       isEnabled: false,
       isOpenDialog: false,
       notificationsCount: 0,
+      changelogEntries: getChangelogEntries(),
+      showAllChangelog: false,
+      helpPanelView: "videos",
     };
   },
   methods: {
+    changelogBullets(entry) {
+      return this.$i18n.locale === "en-us" ? entry.en : entry.de;
+    },
     showCookieBox() {
       this.$store.commit("userCenter/changeShowCookieBox", true);
     },
@@ -235,6 +263,11 @@ export default {
     },
   },
   computed: {
+    visibleChangelogEntries() {
+      return this.showAllChangelog
+        ? this.changelogEntries
+        : this.changelogEntries.slice(0, 5);
+    },
     user() {
       return (
         !!this.$store.state.userCenter.user &&

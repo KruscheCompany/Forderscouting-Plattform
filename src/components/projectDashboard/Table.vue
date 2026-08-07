@@ -108,6 +108,7 @@
 
       <template v-slot:header="props">
         <q-tr class="tableHeader" :props="props">
+          <q-th v-if="isLeader" auto-width />
           <q-th v-for="col in props.cols" :key="col.name" :props="props" class="font-14 text-black">
             {{ col.label }}
           </q-th>
@@ -118,6 +119,10 @@
       <template v-slot:body="props">
         <q-tr :props="props">
 
+          <q-td v-if="isLeader" auto-width class="text-center">
+            <q-btn size="md" color="blue" round dense flat icon="mdi-star-outline"
+              :title="$t('ProjectDashboard.prioritize')" @click.stop="prioritizeRow(props.row)" />
+          </q-td>
           <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
             class="font-14 cursor-pointer">
             <template v-if="col.name === 'applicationProcess'">
@@ -400,6 +405,12 @@ export default {
       }
     },
 
+    async prioritizeRow(row) {
+      await this.$store.dispatch("project/addToPriorityList", { id: row.id });
+      this.getProjects();
+      this.updateDashboardStats();
+    },
+
     // Track expanded rows using unique IDs
     async toggleExpand(row) {
       const rowId = row.id || row.name; // Use ID or name as unique identifier
@@ -636,6 +647,9 @@ export default {
     },
     isAdmin() {
       return this.$store.getters["userCenter/isAdmin"];
+    },
+    isLeader() {
+      return this.$store.getters["userCenter/isLeader"];
     },
     loggedInUser() {
       return (

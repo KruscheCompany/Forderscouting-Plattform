@@ -18,7 +18,8 @@
         </div>
         <div class="info-column">
           <h3 class="section-label">{{ $t("Contact person") }}</h3>
-          <div class="section-content" v-if="funding.info?.contactName" v-html="sanitizeHtml(funding.info.contactName)">
+          <div class="section-content" v-if="funding.info?.contactFirstName || funding.info?.contactLastName"
+            v-html="sanitizeHtml([funding.info?.contactFirstName, funding.info?.contactLastName].filter(Boolean).join(' '))">
           </div>
         </div>
       </div>

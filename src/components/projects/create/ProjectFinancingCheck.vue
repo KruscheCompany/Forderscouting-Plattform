@@ -60,12 +60,15 @@ export default {
         ]
       },
       resetSteps: [
-        { name: 'guidelineContentCheck', title: 'Guideline Check (Content)', icon: 'mdi-clipboard-check', done: false },
-        { name: 'guidelineFormCheck', title: 'Guideline Check (Formalities)', icon: 'mdi-format-list-checks', done: false },
-        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false },
-        { name: 'projectDocumentsCoordination', title: 'Project Documents Coordination', icon: 'mdi-file-document-multiple', done: false },
-        { name: 'applicationDecision', title: 'Application Decision', icon: 'mdi-gavel', done: false },
-        { name: 'submissionSigning', title: 'Submission & Signing', icon: 'mdi-file-sign', done: false }
+        { name: 'taskPlan', title: 'task plan', icon: 'mdi-checkbox-multiple-marked', done: true },
+        { name: 'siteVisit', title: 'site visit', icon: 'mdi-map-marker', done: true },
+        { name: 'goalsAndRequirements', title: 'Goals and requirements', icon: 'mdi-target', done: true },
+        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false }
+      ],
+      tabs: [
+        { done: false, name: "aiFundingCheck", title: "AI funding check" },
+        { done: false, name: "projectDevelopment", title: "Project development" },
+        { done: false, name: "application", title: "application" }
       ],
       money: {
         thousands: ".",
@@ -86,7 +89,7 @@ export default {
     // Get updated steps with financingCheck marked as done
     getUpdatedSteps() {
       // Use existing steps from projectData if available, otherwise use default steps
-      const currentSteps = this.projectData.projectApplicationSteps || this.resetSteps;
+      const currentSteps = this.projectData.projectDevelopmentSteps || this.resetSteps;
 
       return currentSteps.map(step => {
         if (step.name === 'financingCheck') {
@@ -98,12 +101,25 @@ export default {
       });
     },
 
+    // Get updated tabs with projectDevelopment marked as done
+    getUpdatedTabs() {
+      const currentTabs = this.projectData.applicationProcessSteps || this.tabs;
+
+      return currentTabs.map(tab => {
+        if (tab.name === 'projectDevelopment') {
+          return { ...tab, done: true };
+        }
+        return { ...tab };
+      });
+    },
+
     async submitFinancingCheck() {
       await this.$store.dispatch('project/simpleUpdateProjectIdea', {
         data: {
           id: this.createdProjectId,
           financialPlan: this.financialPlan,
-          projectApplicationSteps: this.getUpdatedSteps()
+          projectDevelopmentSteps: this.getUpdatedSteps(),
+          applicationProcessSteps: this.getUpdatedTabs()
         }
       });
       this.$emit("financingCheck-submitted");

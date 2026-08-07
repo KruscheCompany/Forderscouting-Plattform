@@ -116,11 +116,14 @@ export default {
     },
     usersOptions() {
       const users = [];
-      const filteredUsers = this.users.filter(
-        (item) =>
-          item.user_detail.municipality.title ===
-          this.$store.state.userCenter.user.userDetails.municipality.title
-      );
+      const currentUserDetails = this.$store.state.userCenter.user.userDetails;
+      const currentScope =
+        currentUserDetails?.municipality || currentUserDetails?.landkreis;
+      const filteredUsers = this.users.filter((item) => {
+        const itemScope =
+          item.user_detail?.municipality || item.user_detail?.landkreis;
+        return !!currentScope && !!itemScope && itemScope.title === currentScope.title;
+      });
       filteredUsers.forEach((user) => {
         users.push({
           label: user.user_detail.fullName,

@@ -23,18 +23,20 @@
 
           <q-tab-panel name="Projektziele">
             <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-              :placeholder="$t('projectIdeaPlaceholder.describeProjectGoals')" v-model="localForm.details.goals" />
+              :placeholder="$t('projectIdeaPlaceholder.describeProjectGoals')" v-model="localForm.details.goals"
+              :rules="[(val) => !!val || $t('Required')]" />
           </q-tab-panel>
 
           <q-tab-panel name="Projektinhalt">
             <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
-              :placeholder="$t('projectIdeaPlaceholder.descripeProject')" v-model="localForm.details.content" />
+              :placeholder="$t('projectIdeaPlaceholder.descripeProject')" v-model="localForm.details.content"
+              :rules="[(val) => !!val || $t('Required')]" />
           </q-tab-panel>
 
           <q-tab-panel name="Nutzen/Wirkung">
             <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
               :placeholder="$t('newProjectIdeaForm.projectValue&Benefits')"
-              v-model="localForm.details.valuesAndBenefits" />
+              v-model="localForm.details.valuesAndBenefits" :rules="[(val) => !!val || $t('Required')]" />
           </q-tab-panel>
 
           <q-tab-panel name="Finanzplan">

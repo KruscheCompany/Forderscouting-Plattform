@@ -35,6 +35,27 @@ const routes = [
     ]
   },
   {
+    path: "/review/:token",
+    component: () => import("layouts/ReviewLayout.vue"),
+    children: [
+      {
+        path: "",
+        name: "ReviewProject",
+        component: () => import("pages/ReviewProject.vue")
+      }
+    ]
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("pages/Login.vue")
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: () => import("pages/Register.vue")
+  },
+  {
     path: "/dashboard",
     component: () => import("layouts/dashboardLayout.vue"),
     children: [
@@ -195,6 +216,19 @@ const routes = [
         },
         icon: "/icons/Government.svg",
         component: () => import("pages/dashboard/FederalStates.vue")
+      },
+      {
+        path: "/landkreise",
+        name: "Landkreise",
+        meta: {
+          title: "Landkreise",
+          titleDE: "Landkreise",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: true
+        },
+        icon: "/icons/Government.svg",
+        component: () => import("pages/dashboard/Landkreise.vue")
       },
       {
         path: "/Administation/Areas",

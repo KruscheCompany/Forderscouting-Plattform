@@ -41,7 +41,7 @@ export default function({ store } /* { ssrContext } */) {
       !store.getters["userCenter/isSignedIn"]
     ) {
       console.error("You need to be signed in");
-      next({ path: "/" });
+      next({ name: "Login" });
     } else {
       next();
     }

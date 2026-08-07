@@ -143,6 +143,10 @@ export default {
       type: Boolean,
       default: false
     },
+    isLeader: {
+      type: Boolean,
+      default: false
+    },
     loadingStates: {
       type: Object,
       default: () => ({
@@ -254,12 +258,7 @@ export default {
       );
     },
     showArchiveButton() {
-      return (
-        this.isAdmin ||
-        (this.project &&
-          this.project.owner &&
-          this.project.owner.id === this.loggedInUser.id)
-      );
+      return this.isAdmin || this.isLeader;
     }
   }
 };
