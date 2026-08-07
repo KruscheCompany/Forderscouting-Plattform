@@ -1,5 +1,41 @@
 # Änderungsprotokoll / Changelog
 
+## 6.4.0 — 2026-08-04
+
+### de
+- Die E-Mail für eine Vorprüfungsanfrage spricht die Ansprechperson jetzt mit Vor- und Nachnamen an und nennt die betreffende Förderrichtlinie.
+- Bei den Kontakt-E-Mails für Finanzen und Personal in der Gemeinde-/Amtsverwaltung sowie beim Kontakt einer Förderrichtlinie können jetzt Vor- und Nachname getrennt hinterlegt werden.
+
+### en
+- The email for a preliminary-review request now greets the contact person by first and last name and names the relevant funding guideline.
+- The finance and personnel contact emails in municipality administration, as well as a funding guideline's contact, now capture first and last name separately.
+
+## 6.3.0 — 2026-08-04
+
+### de
+- Die Entscheidungs-Auswahl auf der externen Vorprüfungs-Seite wurde neu gestaltet: Positiv/Negativ/Rücksprache nötig sind jetzt farbige Auswahlkacheln statt einfacher Radioknöpfe. Die Kontaktoptionen (Rückruf, Vor-Ort-Termin) werden nur noch eingeblendet, wenn "Rücksprache nötig" gewählt wird.
+
+### en
+- The decision picker on the external preliminary-review page has a new look: Positive/Negative/Follow-up needed are now colour-coded selection tiles instead of plain radio buttons. The contact options (call back, on-site meeting) now only appear when "Follow-up needed" is selected.
+
+## 6.2.1 — 2026-08-04
+
+### de
+- Der PDF-Download auf der externen Vorprüfungs-Seite (Link ohne Login) zeigt jetzt nur noch die dort tatsächlich sichtbaren Angaben (Projektdetails, Fördermittel-Treffer, Fragen & Antworten) statt einer unpassenden, unnötig aufwendigen Vorlage.
+
+### en
+- The PDF download on the external preliminary-review page (the no-login link) now shows only the information actually visible on that page (project details, funding matches, Q&A) instead of a mismatched, overly heavy template.
+
+## 6.2.0 — 2026-08-04
+
+### de
+- Die externe Vorprüfungs-Seite (der Link ohne Login) wurde neu gestaltet: eigener schlichter Kopfbereich, farbiger Status-Hinweis (ausstehend/genehmigt/abgelehnt/Rücksprache nötig), und die Projektangaben bleiben auch nach der Beantwortung sichtbar, statt durch eine leere Erfolgsmeldung ersetzt zu werden.
+- Bei der Eignungsprüfung wird die Beschreibung jetzt beim Verlassen des Textfelds automatisch gespeichert, mit sichtbarem Hinweis "Wird gespeichert…" / "Gespeichert".
+
+### en
+- The external preliminary-review page (the no-login link) has a new look: its own simple header, a colour-coded status indicator (pending/approved/declined/follow-up needed), and the project details stay visible after answering instead of being replaced by an empty success message.
+- In the aptitude step, the description is now saved automatically when leaving the field, with a visible "Saving…" / "Saved" indicator.
+
 ## 6.1.0 — 2026-08-04
 
 ### de
