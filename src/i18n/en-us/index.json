@@ -67,7 +67,14 @@
     "end": "Planned End",
     "created_at": "Creation Date",
     "createFunding": "Create Funding",
-    "visibility": "Visibility"
+    "visibility": "Visibility",
+    "eligibility": "Eligibility"
+  },
+  "eligibilityFilter": {
+    "all": "All",
+    "eligible": "Eligible",
+    "notEligible": "Not Eligible",
+    "filterTooltip": "Filter by eligibility"
   },
   "checkListCols": {
     "title": "Title",
@@ -230,7 +237,13 @@
     "createState": "Create State",
     "stateName": "State Name",
     "statesOverview": "States Overview",
-    "selectFederalStates": "Select Federal States"
+    "selectFederalStates": "Select Federal States",
+    "financeContactEmail": "Finance contact email",
+    "financeContactFirstName": "Finance contact first name",
+    "financeContactLastName": "Finance contact last name",
+    "personnelContactEmail": "Personnel contact email",
+    "personnelContactFirstName": "Personnel contact first name",
+    "personnelContactLastName": "Personnel contact last name"
   },
   "federalStates": {
     "overview": "Federal States Overview",
@@ -238,6 +251,15 @@
     "federalStateName": "Federal State",
     "edit": "Edit",
     "delete": "Delete"
+  },
+  "landkreise": {
+    "overview": "Landkreise Overview",
+    "createLandkreis": "Create Landkreis",
+    "landkreisName": "Landkreis",
+    "edit": "Edit",
+    "delete": "Delete",
+    "selectMunicipalities": "Select Municipalities",
+    "selectLandkreis": "Select Landkreis"
   },
   "DetailsAdministration": {
     "location": "Location",
@@ -342,6 +364,8 @@
     "title": "Title",
     "name": "Name",
     "nameSurname": "Name, Surname",
+    "firstName": "First name",
+    "lastName": "Last name",
     "administration": "Administration",
     "streetNr": "Street, Nr.",
     "postalCity/place": "Postal Code, City/Place",
@@ -546,6 +570,9 @@
   "editFederalState": "Edit Federal State",
   "deleteFederalState": "Delete Federal State",
   "deleteFederalStateMessage": "Are you sure you want to delete this federal state? This action cannot be undone.",
+  "editLandkreis": "Edit Landkreis",
+  "deleteLandkreis": "Delete Landkreis",
+  "deleteLandkreisMessage": "Are you sure you want to delete this Landkreis? This action cannot be undone.",
   "delete": "Delete",
   "Change Cookie settings": "Change Cookie settings",
   "No data": "No data available",
@@ -604,6 +631,26 @@
   "Nov": "Nov",
   "Dec": "Dec",
   "login": "Login",
+  "loginDialog": {
+    "tagline": "The digital assistance system for developing, funding, and implementing municipal projects — from idea to grant approval.",
+    "subtitle": "Access is currently limited to registered municipal users.",
+    "forgotPasswordTitle": "Reset password",
+    "forgotPasswordSubtitle": "Enter the email linked to your account. We'll send you a secure link to choose a new password.",
+    "checkInboxTitle": "Email on its way!",
+    "checkInboxMessage": "We've sent a reset link to {email}.",
+    "useAnotherEmail": "Use a different email address",
+    "noAccountYet": "No account yet?",
+    "sidePanelFooter": "Interkommunale Förderscouting-Plattform Nordfriesland · Heimat 2.0 (BMWSB)",
+    "emailPlaceholder": "name@amt-vioel.de",
+    "passwordPlaceholder": "••••••••"
+  },
+  "registerPage": {
+    "subtitle": "Request guest access to discover project ideas and funding for your municipality.",
+    "haveAccount": "Already registered?",
+    "successTitle": "Request sent!",
+    "successMessage": "We're reviewing your request and will reach out to {email} once your guest access is approved.",
+    "namePlaceholder": "First and last name"
+  },
   "guestRegistration": "Guest Registration",
   "ifYouWantToSeeMoreDocuments": "If you want to see more documents and checklists, please register.",
   "amtViol": "Amt Viöl",
@@ -611,6 +658,10 @@
   "imprint": "Imprint",
   "dataProtectionDeclaration": "Privacy Policy",
   "tutorialVideosForPlatform": "Tutorial videos for the platform",
+  "helpAndNewsPanelTitle": "Help & What's New",
+  "whatsNew": "What's New",
+  "showMoreChangelog": "Show more",
+  "showLessChangelog": "Show less",
   "howCanFundingPlatformSupportProjectWork": "How can the funding scouting platform support me in project work",
   "howDoesFundingPlatformWork": "How does the funding scouting platform work",
   "howDoICreateProjectIdea": "How do I create a project idea",
@@ -833,6 +884,7 @@
       "fehlanzeige": "No match - No suitable funding",
       "noFundingData": "No funding information available",
       "noProjectData": "No project data available for funding search",
+      "noProjectDataFields": "The following details from step 1 are missing for the funding search: {fields}. Please fill them in on the first step.",
       "successRefresh": "Funding options successfully updated",
       "errorRefresh": "Error updating funding options",
       "errorSaving": "Error saving funding selection",
@@ -844,7 +896,9 @@
       "aiAssessment": "AI Assessment",
       "aiGenerated": "AI-generated",
       "comingSoon": "Coming Soon",
-      "aiAssessmentTeaser": "Soon our AI will automatically analyze how well your project matches each funding guideline — with detailed reasoning and actionable recommendations."
+      "aiAssessmentTeaser": "Soon our AI will automatically analyze how well your project matches each funding guideline — with detailed reasoning and actionable recommendations.",
+      "showMore": "Show more funding guidelines",
+      "matchingLoading": "AI is searching for matching funding guidelines..."
     },
     "qAndA": {
       "title": "Open Questions & Answers",
@@ -853,7 +907,29 @@
     },
     "aptitude": {
       "title": "Recommendation for political committees",
-      "noRecommendation": "No recommendation available"
+      "noRecommendation": "No recommendation available",
+      "saving": "Saving...",
+      "saved": "Saved",
+      "vorpruefung": {
+        "finanzen": "Finance",
+        "personal": "Personnel",
+        "foerdermittelgeber": "Funding provider",
+        "notesPlaceholder": "Internal notes",
+        "send": "Send request",
+        "resend": "Resend",
+        "sentOn": "Sent on",
+        "answeredOn": "Answered on",
+        "statusPositiv": "Positive",
+        "statusNegativ": "Negative",
+        "statusRuecksprache": "Follow-up needed",
+        "wantsPhoneCall": "Phone call requested",
+        "wantsOnsiteMeeting": "On-site meeting requested",
+        "sendSuccess": "Review requested successfully",
+        "resendSuccess": "Review request resent",
+        "gateBlocked": "All three reviews must be answered positively before you can continue.",
+        "recipientEmail": "Will be sent to",
+        "recipientMissing": "No contact email on file. Please add one for the municipality/funding provider first."
+      }
     },
     "decision": {
       "title": "Basic decision",
@@ -899,6 +975,35 @@
       }
     }
   },
+  "reviewPage": {
+    "headerSubtitle": "Intermunicipal funding-scouting platform Nordfriesland",
+    "loading": "Loading...",
+    "invalidLinkTitle": "Invalid link",
+    "invalidLink": "This link is invalid or has expired.",
+    "pendingBanner": "Pending – this request is awaiting your response",
+    "alreadyAnswered": "You already responded on {date}. Thank you.",
+    "answeredBannerPositiv": "Approved – this request was answered positively on {date}",
+    "answeredBannerNegativ": "Declined – this request was answered negatively on {date}",
+    "answeredBannerRuecksprache": "Follow-up needed – answered on {date}",
+    "requestLabel": "Request",
+    "projectLabel": "Project",
+    "fundingProgramLabel": "Funding program",
+    "submittedByLabel": "Submitted by",
+    "submittedOnLabel": "Submitted on",
+    "projectDetailsLabel": "Project details",
+    "yourResponseLabel": "Your previous response",
+    "downloadPdf": "Download as PDF",
+    "decisionLabel": "Your decision",
+    "decisionPositiv": "Positive",
+    "decisionNegativ": "Negative",
+    "decisionRuecksprache": "Follow-up needed",
+    "contactOptionsLabel": "How can we reach you?",
+    "wantsPhoneCall": "Phone call requested",
+    "wantsOnsiteMeeting": "On-site meeting requested",
+    "responseTextLabel": "Your comments",
+    "submit": "Submit",
+    "submitSuccess": "Thank you for your response."
+  },
   "ProjectDashboard": {
     "activeProjects": "Active Projects",
     "totalProjects": "Total Projects",
@@ -909,6 +1014,21 @@
     "accessDenied": "Access denied to financial information",
     "accessError": "Error checking access permissions",
     "noFinancialData": "No financial data available",
-    "financialPlan": "Financial Plan"
+    "financialPlan": "Financial Plan",
+    "title": "Title",
+    "archivedApplications": "Archived Applications",
+    "owner": "Owner",
+    "municipality": "Municipality",
+    "plannedStart": "Planned Start",
+    "plannedEnd": "Planned End",
+    "prioritizedProjects": "Prioritised projects",
+    "selectMunicipalityPrompt": "Please select a municipality",
+    "noPrioritizedProjects": "No prioritised projects yet",
+    "prioritizedBy": "Prioritised by",
+    "prioritize": "Prioritise",
+    "removeFromPriorityList": "Remove from priority list",
+    "alreadyPrioritized": "This project idea is already prioritised.",
+    "prioritizeSuccess": "Project idea prioritised successfully",
+    "removePrioritySuccess": "Project idea removed from the priority list"
   }
 }

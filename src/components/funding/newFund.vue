@@ -40,9 +40,13 @@
             </div>
             <div class="col-12 col-md-9">
               <div class="row q-col-gutter-x-md q-col-gutter-y-lg">
-                <div class="col-12">
+                <div class="col-6">
                   <q-input outlined dense class="no-shadow input-radius-6"
-                    :placeholder="$t('projectIdeaPlaceholder.nameSurname')" v-model="form.info.contactName" />
+                    :placeholder="$t('projectIdeaPlaceholder.firstName')" v-model="form.info.contactFirstName" />
+                </div>
+                <div class="col-6">
+                  <q-input outlined dense class="no-shadow input-radius-6"
+                    :placeholder="$t('projectIdeaPlaceholder.lastName')" v-model="form.info.contactLastName" />
                 </div>
               </div>
             </div>
@@ -542,7 +546,8 @@ export default {
         provider: "",
         assessment: "",
         info: {
-          contactName: "",
+          contactFirstName: "",
+          contactLastName: "",
           phone: "",
           email: "",
           streetNo: "",

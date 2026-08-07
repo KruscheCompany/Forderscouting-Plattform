@@ -16,25 +16,25 @@
             {{ $t('projectComponents.contentDetails.startingConditionDescription') }}
           </h4>
           <q-banner rounded class="bg-grey-3 font-16">
-            <p class="q-my-sm text-block" v-html="startingCondition"></p>
+            <p class="q-my-sm text-block" v-html="sanitizeHtml(startingCondition)"></p>
           </q-banner>
         </q-tab-panel>
 
         <q-tab-panel name="Projektziele">
           <q-banner rounded class="bg-grey-3 font-16">
-            <p class="q-my-sm text-block" v-html="content"></p>
+            <p class="q-my-sm text-block" v-html="sanitizeHtml(content)"></p>
           </q-banner>
         </q-tab-panel>
 
         <q-tab-panel name="Projektinhalt">
           <q-banner rounded class="bg-grey-3 font-16">
-            <p class="q-my-sm text-block" v-html="goals"></p>
+            <p class="q-my-sm text-block" v-html="sanitizeHtml(goals)"></p>
           </q-banner>
         </q-tab-panel>
 
         <q-tab-panel name="Nutzen/Wirkung">
           <q-banner rounded class="bg-grey-3 font-16">
-            <p class="q-my-sm text-block" v-html="valuesAndBenefits"></p>
+            <p class="q-my-sm text-block" v-html="sanitizeHtml(valuesAndBenefits)"></p>
           </q-banner>
         </q-tab-panel>
 
@@ -46,7 +46,7 @@
               </h4>
 
               <q-banner rounded class="bg-grey-3 font-16">
-                <p class="q-my-sm text-block" v-html="financialPlanText"></p>
+                <p class="q-my-sm text-block" v-html="sanitizeHtml(financialPlanText)"></p>
               </q-banner>
             </div>
             <div class="col-4">
@@ -72,7 +72,7 @@
           </h4>
 
           <q-banner rounded class="bg-grey-3 font-16">
-            <p class="q-my-sm text-block" v-html="timeline"></p>
+            <p class="q-my-sm text-block" v-html="sanitizeHtml(timeline)"></p>
           </q-banner>
 
         </q-tab-panel>
@@ -87,7 +87,7 @@
               </h4>
               <q-banner rounded class="bg-grey-3 font-16" style="align-items: flex-start;"
                 :style="hasMedia ? 'min-height: 400px;' : 'min-height: 144px;'">
-                <p class="q-my-sm text-block" v-html="documentation"></p>
+                <p class="q-my-sm text-block" v-html="sanitizeHtml(documentation)"></p>
               </q-banner>
 
               <div v-if="hasFiles">
@@ -147,8 +147,10 @@
 
 <script>
 import ProjectMediaGallery from './ProjectMediaGallery.vue';
+import htmlSanitizer from 'src/mixins/htmlSanitizer';
 export default {
   name: "ProjectContentDetails",
+  mixins: [htmlSanitizer],
   emits: ['open-document-preview'],
   data() {
     return {

@@ -31,9 +31,27 @@
             </p>
           </div>
           <div class="col-9">
+            <q-btn-toggle
+              v-model="form.scope"
+              spread
+              no-caps
+              class="q-mb-sm no-shadow input-radius-6"
+              toggle-color="primary"
+              :options="[
+                { label: $t('userAdministration.administration'), value: 'municipality' },
+                { label: $t('landkreise.landkreisName'), value: 'landkreis' }
+              ]"
+              @input="onScopeChange"
+            />
             <MunicipalitySelect
+              v-if="form.scope === 'municipality'"
               :currentMunicipality="form.municipality"
               @update:municipality="form.municipality = $event"
+            />
+            <LandkreisSelect
+              v-else
+              :currentLandkreis="form.landkreis"
+              @update:landkreis="form.landkreis = $event"
             />
           </div>
         </div>
@@ -158,9 +176,11 @@
 import TransferDialog from "components/user/settings/TransferDialog.vue";
 import deleteDataDialog from "components/user/settings/deleteDataDialog.vue";
 import MunicipalitySelect from "components/Municipality/MunicipalitySelect.vue";
+import LandkreisSelect from "components/Landkreise/LandkreisSelect.vue";
 export default {
   components: {
     MunicipalitySelect,
+    LandkreisSelect,
     TransferDialog,
     deleteDataDialog
   },
@@ -176,12 +196,18 @@ export default {
         username: "",
         email: "",
         role: "",
-        municipality: { id: null, title: "" }
+        scope: "municipality",
+        municipality: { id: null, title: "" },
+        landkreis: { id: null, title: "" }
       },
       dataRight: ""
     };
   },
   methods: {
+    onScopeChange() {
+      this.form.municipality = { id: null, title: "" };
+      this.form.landkreis = { id: null, title: "" };
+    },
     getUserData() {
       const id = !!this.$route.params && this.$route.params.id;
       if (id) {
@@ -191,15 +217,18 @@ export default {
         this.currentUser = currentUser;
         this.form.username = currentUser.username;
         this.form.email = currentUser.email;
-        this.form.municipality.id = currentUser.user_detail.municipality.id;
-        this.form.municipality.title =
-          currentUser.user_detail.municipality.title;
+        if (currentUser.user_detail.municipality) {
+          this.form.scope = "municipality";
+          this.form.municipality.id = currentUser.user_detail.municipality.id;
+          this.form.municipality.title =
+            currentUser.user_detail.municipality.title;
+        } else if (currentUser.user_detail.landkreis) {
+          this.form.scope = "landkreis";
+          this.form.landkreis.id = currentUser.user_detail.landkreis.id;
+          this.form.landkreis.title = currentUser.user_detail.landkreis.title;
+        }
         this.form.role =
           currentUser.role.type === "authenticated" ? "user" : currentUser.role.type === "guest" ? "guest" : currentUser.role.type === "leader" ? "leader" : "admin";
-        // this.form.municipality = {
-        //   id: currentUser.user_detail.municipality.id,
-        //   title: currentUser.user_detail.municipality.title
-        // };
       } else {
         this.$router.push("/Administation/User");
       }
@@ -208,13 +237,14 @@ export default {
       this.$refs.updateUserForm.validate().then(async success => {
         if (success) {
           this.isLoading = true;
-          // TODO add loading to button
+          const { municipality, landkreis, scope, ...rest } = this.form;
+          const data =
+            scope === "municipality"
+              ? { ...rest, municipality: { id: municipality.id } }
+              : { ...rest, landkreis: { id: landkreis.id } };
           const res = await this.$store.dispatch("userCenter/updateUser", {
             id: this.$route.params.id,
-            data: {
-              ...this.form,
-              municipality: { id: this.form.municipality.id }
-            }
+            data
           });
           this.isLoading = false;
         } else {

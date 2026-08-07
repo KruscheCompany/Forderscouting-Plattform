@@ -25,54 +25,62 @@
         </q-banner>
       </div>
 
-      <div class="row q-col-gutter-sm q-pa-md">
-        <div class="col-12 col-sm-6 col-md-3 col-lg-3" v-for="(funding, index) in fundingMatches" :key="index">
-          <div class="funding-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
-            :class="{ 'selected': selectedCards.includes(index) }"
-            :style="!selectedCards.includes(index) ? getFundingCardStyle(funding.score) : {}" @click="toggleCard(index)"
-            @mouseenter="hoveredCard = index" @mouseleave="hoveredCard = null">
+      <draggable v-model="visibleOrderedMatches" filter=".funding-link-btn, .funding-link-btn *"
+        :prevent-on-filter="false" :disabled="isRefreshing" @change="onDragChange">
+        <!-- vuedraggable requires a transition-group (not tag/footer-slot) to animate enter/reorder -->
+        <transition-group name="funding-card-anim" tag="div" appear class="row q-col-gutter-sm q-px-md q-pt-md">
+          <div class="col-12 col-sm-6 col-md-3 col-lg-3" v-for="(funding, index) in visibleOrderedMatches"
+            :key="funding.external_id || funding.title"
+            :style="{ '--funding-enter-delay': (150 + Math.max(0, index - enterDelayBase) * 90) + 'ms' }">
+            <div class="funding-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
+              :class="{ 'selected': selectedCards.includes(index) }"
+              :style="!selectedCards.includes(index) ? getFundingCardStyle(funding.score) : {}"
+              @click="toggleCard(index)" @mouseenter="hoveredCard = index" @mouseleave="hoveredCard = null">
 
-            <!-- Card content with flex layout -->
-            <div class="card-content">
-              <!-- Top row with index and link button -->
-              <div class="row items-center justify-between q-mb-sm">
-                <div class="col">
-                  <div class="row items-center">
-                    <div class="funding-index text-weight-bold q-mr-sm" :style="{
-                      color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white',
-                      background: !selectedCards.includes(index)
-                        ? (getFundingCardStyle(funding.score).color === 'white' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)')
-                        : 'rgba(255,255,255,0.15)'
-                    }">
-                      {{ index + 1 }}
-                    </div>
-                    <div class="funding-score text-weight-bold">
-                      <q-icon name="star" size="16px" class="q-mr-xs" color="amber" />
-                      {{ (funding.score * 100).toFixed(2) }}%
+              <!-- Card content with flex layout -->
+              <div class="card-content">
+                <!-- Top row with index and link button -->
+                <div class="row items-center justify-between q-mb-sm">
+                  <div class="col">
+                    <div class="row items-center">
+                      <div class="funding-index text-weight-bold q-mr-sm" :style="{
+                        color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white',
+                        background: !selectedCards.includes(index)
+                          ? (getFundingCardStyle(funding.score).color === 'white' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)')
+                          : 'rgba(255,255,255,0.15)'
+                      }">
+                        {{ index + 1 }}
+                      </div>
+                      <div class="funding-score text-weight-bold">
+                        <q-icon name="star" size="16px" class="q-mr-xs" color="amber" />
+                        {{ (funding.score * 100).toFixed(2) }}%
+                      </div>
                     </div>
                   </div>
+                  <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
+                    :style="{ color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white' }"
+                    @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
+                    :disabled="!funding.external_id" />
                 </div>
-                <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
-                  :style="{ color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white' }"
-                  @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
-                  :disabled="!funding.external_id" />
-              </div>
 
-              <!-- Spacer to push title to bottom -->
-              <div class="flex-spacer"></div>
+                <!-- Spacer to push title to bottom -->
+                <div class="flex-spacer"></div>
 
-              <!-- Title at bottom -->
-              <div class="funding-title font-16 text-weight-medium q-mb-md">
-                {{ funding.title.length > 72 ? funding.title.substring(0, 72) + '...' : funding.title }}
-                <q-tooltip v-if="funding.title && funding.title.length > 72" anchor="bottom left" self="top left"
-                  content-style="font-size: 14px; max-width: 300px; white-space: normal;">
-                  {{ funding.title }}
-                </q-tooltip>
+                <!-- Title at bottom -->
+                <div class="funding-title font-16 text-weight-medium q-mb-md">
+                  {{ funding.title.length > 72 ? funding.title.substring(0, 72) + '...' : funding.title }}
+                  <q-tooltip v-if="funding.title && funding.title.length > 72" anchor="bottom left" self="top left"
+                    content-style="font-size: 14px; max-width: 300px; white-space: normal;">
+                    {{ funding.title }}
+                  </q-tooltip>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition-group>
+      </draggable>
 
+      <div class="row q-col-gutter-sm q-px-md q-pb-md q-mt-md">
         <!-- Refresh Card -->
         <div class="col-12 col-sm-6 col-md-3 col-lg-3">
           <div class="refresh-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
@@ -124,6 +132,12 @@
         </div>
       </div>
 
+      <!-- Show More -->
+      <div v-if="canShowMore" class="row justify-center q-pb-md">
+        <q-btn flat color="primary" icon="expand_more" :label="$t('projectComponents.fundingCheck.showMore')"
+          @click="showMoreMatches" />
+      </div>
+
       <!-- Funding Comparison Section Component -->
       <FundingComparisonSection :selectedCards="selectedCards" :projectData="projectData" />
 
@@ -137,6 +151,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import draggable from 'vuedraggable';
 import StartingConditionWarningDialog from 'src/components/dialogs/StartingConditionWarningDialog.vue';
 import FundingComparisonSection from 'src/components/projects/create/FundingComparisonSection.vue';
 
@@ -144,7 +159,8 @@ export default {
   name: "ProjectFundingCheckCreate",
   components: {
     StartingConditionWarningDialog,
-    FundingComparisonSection
+    FundingComparisonSection,
+    draggable
   },
   props: {
     currentTab: {
@@ -167,6 +183,10 @@ export default {
       selectedCards: [], // Array to store multiple selected cards
       selectedFunding: null,
       hoveredCard: null,
+      orderedMatches: [], // fundingMatches, reorderable via drag&drop
+      visibleCount: 12,
+      topSetSize: 12,
+      enterDelayBase: 0, // count of tiles already visible before the most recent reveal, so stagger delay resets per batch instead of growing forever
       isRefreshing: false,
       isSubmitting: false,
       showWarningDialog: false,
@@ -194,9 +214,14 @@ export default {
       return this.userDetails?.municipality || null;
     },
 
-    // Get user's federal states from municipality
+    // Get user's landkreis (mutually exclusive with municipality)
+    userLandkreis() {
+      return this.userDetails?.landkreis || null;
+    },
+
+    // Get user's federal states from municipality or landkreis
     userFederalStates() {
-      return this.userMunicipality?.federalStates || [];
+      return this.userMunicipality?.federalStates || this.userLandkreis?.federalStates || [];
     },
 
     // Get all fundings from store
@@ -210,7 +235,7 @@ export default {
 
     // Check if user has required data
     userDataValidation() {
-      const hasMunicipality = !!this.userMunicipality;
+      const hasMunicipality = !!this.userMunicipality || !!this.userLandkreis;
       const hasFederalStates = this.userFederalStates && this.userFederalStates.length > 0;
 
       return {
@@ -247,6 +272,20 @@ export default {
 
     isLoadingMatches() {
       return this.getLoadingFundingMatches || false;
+    },
+
+    // Visible slice of orderedMatches, writable so vuedraggable can reorder it in place
+    visibleOrderedMatches: {
+      get() {
+        return this.orderedMatches.slice(0, this.visibleCount);
+      },
+      set(newVal) {
+        this.orderedMatches.splice(0, this.visibleCount, ...newVal);
+      }
+    },
+
+    canShowMore() {
+      return this.visibleCount < this.orderedMatches.length;
     },
     // Computed property to get the originally selected funding indices
     originalSelectedFundingIndices() {
@@ -323,11 +362,14 @@ export default {
       }
     },
 
-    // Watch for changes in funding matches to show error if no matches
+    // Watch for changes in funding matches to show error if no matches, and re-seed
+    // orderedMatches for drag&drop (see syncOrderedMatches)
     fundingMatches(newMatches) {
+      const matches = newMatches || [];
+
       if (this.expandedFundingCheck && this.userDataValidation.isValid &&
         this.getFundingMatches && this.getFundingMatches.length > 0 &&
-        newMatches.length === 0) {
+        matches.length === 0) {
         this.$q.notify({
           color: 'warning',
           textColor: 'black',
@@ -338,6 +380,8 @@ export default {
           timeout: 5000
         });
       }
+
+      this.syncOrderedMatches(matches);
     },
 
     // Watch for changes in originalSelectedFundingIndices to set initial selections
@@ -366,7 +410,7 @@ export default {
     // Filter fundings by user's municipality and federal states
     filterFundingsByUserData(aiMatches) {
       if (this.isAdmin) {
-        return aiMatches.slice(0, 12);
+        return aiMatches;
       }
       const userFederalStateIds = this.userFederalStates.map(fs => fs.id);
 
@@ -396,7 +440,7 @@ export default {
           fundingFederalStates.some(fundingFs => fundingFs.id === userFsId)
         );
         return hasAllFederalStatesMatch;
-      }).slice(0, 12);
+      });
     },
 
     // Show error notification if user data is invalid
@@ -459,10 +503,17 @@ export default {
 
       try {
         // Check if projectData has the required data
-        if (!startingCondition || !goals || !content || !valuesAndBenefits || !financialPlan || !financialPlan.costAndFinance) {
+        const missingFields = [];
+        if (!startingCondition) missingFields.push(this.$t('newProjectIdeaForm.projectStartingCondition'));
+        if (!goals) missingFields.push(this.$t('newProjectIdeaForm.projectGoals'));
+        if (!content) missingFields.push(this.$t('newProjectIdeaForm.projectContent'));
+        if (!valuesAndBenefits) missingFields.push(this.$t('newProjectIdeaForm.projectValue&Benefits'));
+        if (!financialPlan || !financialPlan.costAndFinance) missingFields.push(this.$t('newProjectIdeaForm.financialPlan'));
+
+        if (missingFields.length > 0) {
           this.$q.notify({
             color: 'negative',
-            message: this.$t('projectComponents.fundingCheck.noProjectData'),
+            message: this.$t('projectComponents.fundingCheck.noProjectDataFields', { fields: missingFields.join(', ') }),
             icon: 'warning'
           });
           return;
@@ -599,13 +650,48 @@ export default {
     },
     // Get funding matches with selection status property
     getFundingMatchesWithSelection() {
-      const matches = this.fundingMatches || [];
+      const matches = this.orderedMatches || [];
 
       // Add selected property to all funding matches
       return matches.map((funding, index) => ({
         ...funding,
         selected: this.selectedCards.includes(index)
       }));
+    },
+
+    // Re-seed orderedMatches/visibleCount only when the underlying set of matches actually
+    // changes (e.g. after a refresh) - not on every reactive recompute, so a drag isn't lost
+    syncOrderedMatches(matches) {
+      const list = matches || [];
+      const newIds = new Set(list.map(f => f.external_id || f.title));
+      const currentIds = new Set(this.orderedMatches.map(f => f.external_id || f.title));
+      const sameSet = newIds.size === currentIds.size && [...newIds].every(id => currentIds.has(id));
+      if (!sameSet) {
+        this.orderedMatches = [...list];
+        this.visibleCount = Math.min(this.topSetSize, list.length);
+        this.enterDelayBase = 0;
+      }
+    },
+
+    showMoreMatches() {
+      this.enterDelayBase = this.visibleCount;
+      this.visibleCount = Math.min(this.visibleCount + 4, this.orderedMatches.length);
+    },
+
+    // Keep selectedCards pointing at the same tiles after a drag reorder
+    onDragChange(evt) {
+      const moved = evt && evt.moved;
+      if (!moved || moved.oldIndex === moved.newIndex) {
+        return;
+      }
+      const { oldIndex, newIndex } = moved;
+      this.selectedCards = this.selectedCards.map(index => {
+        if (index === 'fehlanzeige') return index;
+        if (index === oldIndex) return newIndex;
+        if (oldIndex < newIndex && index > oldIndex && index <= newIndex) return index - 1;
+        if (oldIndex > newIndex && index >= newIndex && index < oldIndex) return index + 1;
+        return index;
+      });
     },
     async submitFundingCheck() {
       this.isSubmitting = true;
@@ -667,6 +753,11 @@ export default {
         this.isSubmitting = false;
       }
     },
+  },
+
+  created() {
+    // Seed orderedMatches/visibleCount for drag&drop and the "show more" reveal
+    this.syncOrderedMatches(this.fundingMatches);
   },
 
   mounted() {
@@ -783,6 +874,22 @@ export default {
 
 .transition-all {
   transition: all 0.2s ease;
+}
+
+// Staggered fade+slide-in for funding cards (initial reveal & "show more"),
+// delay per card comes from --funding-enter-delay set on each v-for item
+.funding-card-anim-enter {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.funding-card-anim-enter-active {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition-delay: var(--funding-enter-delay, 0ms);
+}
+
+.funding-card-anim-move {
+  transition: transform 0.3s ease;
 }
 
 // Refresh Card Styles

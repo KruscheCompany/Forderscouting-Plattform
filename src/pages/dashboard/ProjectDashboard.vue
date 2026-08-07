@@ -2,19 +2,23 @@
   <q-page class="q-mt-lg" :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'">
     <div class="row q-col-gutter-md">
       <div class="col-6 col-md-2" v-for="(stat, index) in statistics" :key="index">
-        <div class="shadow-2 radius-20 q-pa-md" style="height: 105px"
+        <div class="shadow-2 radius-20 q-pa-md stat-card"
           :class="index === 0 ? 'total-projects' : index === 1 ? 'bg-yellow' : ''">
-          <p class="font-14 text-blue-grey-10 q-mt-xs q-mb-none">{{ stat.title }}</p>
-          <p class="font-24 text-weight-bold text-blue q-mb-sm">{{ stat.value }}</p>
+          <p class="font-14 text-blue-grey-10 q-mt-xs q-mb-none text-overflow">{{ stat.title }}</p>
+          <p class="stat-value text-weight-bold text-blue q-mb-sm">{{ stat.value }}</p>
         </div>
       </div>
     </div>
-    <projectDashboardTable @stats="(val) => (statsData = val)" />
+    <priorityTable @removed="onPriorityRemoved" />
+    <projectDashboardTable ref="dashboardTable" @stats="(val) => (statsData = val)" />
+    <archivedProjectsTable v-if="isLeader || isAdmin" />
   </q-page>
 </template>
 
 <script>
 import projectDashboardTable from "components/projectDashboard/Table.vue";
+import archivedProjectsTable from "components/projectDashboard/ArchivedTable.vue";
+import priorityTable from "components/projectDashboard/PriorityTable.vue";
 export default {
   name: "projectDashboard",
   data() {
@@ -24,8 +28,16 @@ export default {
   },
   components: {
     projectDashboardTable,
+    archivedProjectsTable,
+    priorityTable,
   },
   computed: {
+    isAdmin() {
+      return this.$store.getters["userCenter/isAdmin"];
+    },
+    isLeader() {
+      return this.$store.getters["userCenter/isLeader"];
+    },
     statistics() {
       return [
         {
@@ -62,6 +74,10 @@ export default {
     getProjectDashboardStats() {
       this.$store.dispatch("project/getProjectDashboardStats");
     },
+    onPriorityRemoved() {
+      this.$refs.dashboardTable.getProjects();
+      this.$refs.dashboardTable.updateDashboardStats();
+    },
     formatCurrency(value) {
       if (!value || value === '') {
         return 0;
@@ -95,6 +111,20 @@ export default {
 
   p {
     color: black !important;
+  }
+}
+
+.stat-card {
+  min-height: 105px;
+}
+
+.stat-value {
+  font-size: 24px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  @media (max-width: 599px) {
+    font-size: 18px;
   }
 }
 </style>

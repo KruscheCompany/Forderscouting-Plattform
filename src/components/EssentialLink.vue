@@ -43,9 +43,11 @@ export default {
   },
   computed: {
     dashboardRoutes() {
-      let routes = this.$router.options.routes[1].children;
+      const routes = this.$router.options.routes.find(
+        route => route.path === "/dashboard"
+      ).children;
       if (this.isGuest) {
-        routes.splice(4, 5);
+        return [...routes.slice(0, 4), ...routes.slice(9)];
       }
       return routes;
     },

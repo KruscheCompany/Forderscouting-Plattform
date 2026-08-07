@@ -57,6 +57,32 @@
               </template>
             </q-input>
           </div>
+          <div v-if="tab === 'fundings'" class="col-auto">
+            <q-btn round flat dense icon="filter_list" :color="eligibilityFilter !== 'all' ? 'primary' : 'grey-7'"
+              aria-label="Filter">
+              <q-menu anchor="bottom right" self="top right" class="radius-10 shadow-2" transition-show="jump-down"
+                transition-hide="jump-up">
+                <q-list style="min-width: 220px" separator padding>
+                  <q-item-label header class="font-12 text-weight-600 text-grey-7 q-pb-sm">
+                    {{ $t("eligibilityFilter.filterTooltip") }}
+                  </q-item-label>
+                  <q-item v-for="opt in eligibilityFilterOptions" :key="opt.value" clickable v-close-popup
+                    :active="eligibilityFilter === opt.value" active-class="bg-blue-1 text-primary"
+                    @click="eligibilityFilter = opt.value">
+                    <q-item-section avatar>
+                      <q-icon :name="opt.icon" :color="eligibilityFilter === opt.value ? 'primary' : opt.color"
+                        size="sm" />
+                    </q-item-section>
+                    <q-item-section class="text-weight-500">{{ opt.label }}</q-item-section>
+                    <q-item-section side v-if="eligibilityFilter === opt.value">
+                      <q-icon name="check" color="primary" size="xs" />
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+              <q-tooltip>{{ $t("eligibilityFilter.filterTooltip") }}</q-tooltip>
+            </q-btn>
+          </div>
           <div class="text-right">
             <q-btn color="blue" icon="add" unelevated :round="$q.screen.lt.md" filled
               class="mr-0 text-weight-600 q-mb-sm q-mt-sm" :class="$q.screen.gt.sm ? 'radius-6' : ''" no-caps
@@ -99,6 +125,14 @@
                 :class="props.row.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md">
                 {{ getStatusText(props.row.status) }}
               </q-badge>
+            </template>
+            <template v-else-if="col.name === 'applicationEligible'">
+              <div class="flex flex-center">
+                <q-icon :name="col.value ? 'check_circle' : 'cancel'"
+                  :color="col.value ? 'positive' : 'negative'" size="sm">
+                  <q-tooltip>{{ col.value ? $t('eligibilityFilter.eligible') : $t('eligibilityFilter.notEligible') }}</q-tooltip>
+                </q-icon>
+              </div>
             </template>
             <template v-else>
               <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
@@ -192,7 +226,8 @@ export default {
         "plannedEnd",
         "updatedAt",
         "applicationProcess",
-        "owner"
+        "owner",
+        "applicationEligible"
       ],
       deleteDialog: false,
       requestDialog: false,
@@ -202,7 +237,8 @@ export default {
       editIsLoading: false,
       deleteIsLoading: false,
       archiveIsLoading: false,
-      watchlistIsLoading: false
+      watchlistIsLoading: false,
+      eligibilityFilter: "all"
     };
   },
   methods: {
@@ -540,7 +576,9 @@ export default {
     loggedInUserMunicipality() {
       return (
         !!this.$store.state.userCenter.user &&
-        this.$store.state.userCenter.user.userDetails.municipality
+        !!this.$store.state.userCenter.user.userDetails &&
+        (this.$store.state.userCenter.user.userDetails.municipality ||
+          this.$store.state.userCenter.user.userDetails.landkreis)
       );
     },
     isInPage() {
@@ -552,19 +590,34 @@ export default {
         : this.fundingCols;
     },
     data() {
-      return this.tab == "projectIdeas"
-        ? !!this.$store.state.project.projects &&
-        this.$store.state.project.projects.filter((item) => {
-          return item.owner.id == this.loggedInUser.id || item.editors.filter((editor) => {
-            return editor.id == this.loggedInUser.id
-          }).length > 0
-        })
-        : !!this.$store.state.funding.fundings &&
+      if (this.tab == "projectIdeas") {
+        return !!this.$store.state.project.projects &&
+          this.$store.state.project.projects.filter((item) => {
+            return item.owner.id == this.loggedInUser.id || item.editors.filter((editor) => {
+              return editor.id == this.loggedInUser.id
+            }).length > 0
+          });
+      }
+      const fundings = !!this.$store.state.funding.fundings &&
         this.$store.state.funding.fundings.filter((item) => {
           return item.owner.id == this.loggedInUser.id || item.editors.filter((editor) => {
             return editor.id == this.loggedInUser.id
           }).length > 0
         });
+      if (!fundings) return fundings;
+      if (this.eligibilityFilter === "eligible") {
+        return fundings.filter(item => item.applicationEligible === true);
+      } else if (this.eligibilityFilter === "notEligible") {
+        return fundings.filter(item => item.applicationEligible !== true);
+      }
+      return fundings;
+    },
+    eligibilityFilterOptions() {
+      return [
+        { label: this.$t("eligibilityFilter.all"), value: "all", icon: "filter_list", color: "grey-7" },
+        { label: this.$t("eligibilityFilter.eligible"), value: "eligible", icon: "check_circle", color: "positive" },
+        { label: this.$t("eligibilityFilter.notEligible"), value: "notEligible", icon: "cancel", color: "negative" }
+      ];
     },
     projectCols() {
       return [
@@ -651,6 +704,13 @@ export default {
             const dateB = new Date(rowB.plannedEnd);
             return dateB - dateA;
           }
+        },
+        {
+          name: "applicationEligible",
+          align: "center",
+          label: this.$t("fundingsCol.eligibility"),
+          field: row => row.applicationEligible,
+          sortable: true
         }
       ];
     }

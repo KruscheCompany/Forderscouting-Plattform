@@ -1,5 +1,6 @@
 import { api } from "boot/axios";
 import { Notify } from "quasar";
+import { normalizeApplicationProcessSteps } from "./stepMigration";
 
 export async function getProjectIdeas(context) {
   try {
@@ -42,6 +43,86 @@ export async function getApplicationProcess(context, filters = {}) {
       type: "negative",
       message: error.response.data.error.message
     });
+  }
+}
+
+export async function getArchivedProjects(context) {
+  try {
+    const res = await api.get("/api/project/dashboard/archived");
+    context.commit("setArchivedProjects", res.data || []);
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+  }
+}
+
+export async function getPrioritizedProjects(context, payload = {}) {
+  try {
+    const { municipalityId } = payload;
+    const query = municipalityId ? `?municipality=${municipalityId}` : '';
+    const res = await api.get(`/api/prioritized-projects${query}`);
+    context.commit("setPrioritizedProjects", res.data || []);
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+  }
+}
+
+export async function addToPriorityList(context, payload) {
+  const { id } = payload;
+  if (!!id) {
+    try {
+      await api.post("/api/prioritized-projects", { data: { project: id } });
+      Notify.create({
+        message: "Projektidee erfolgreich priorisiert",
+        type: "positive"
+      });
+      context.dispatch("getPrioritizedProjects");
+    } catch (error) {
+      Notify.create({
+        type: "negative",
+        message: error.response.data.error.message
+      });
+      return false;
+    }
+  }
+}
+
+export async function removeFromPriorityList(context, payload) {
+  const { id } = payload;
+  if (!!id) {
+    try {
+      await api.delete(`/api/prioritized-projects/${id}`);
+      Notify.create({
+        message: "Projektidee erfolgreich aus der Priorisierung entfernt",
+        type: "positive"
+      });
+      context.dispatch("getPrioritizedProjects");
+    } catch (error) {
+      Notify.create({
+        type: "negative",
+        message: error.response.data.error.message
+      });
+      return false;
+    }
+  }
+}
+
+export async function reorderPriorityList(context, payload) {
+  const { order } = payload;
+  try {
+    await api.put("/api/prioritized-projects/reorder", { order });
+    context.dispatch("getPrioritizedProjects");
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    context.dispatch("getPrioritizedProjects");
   }
 }
 
@@ -287,6 +368,89 @@ export async function simpleUpdateProjectIdea(context, payload) {
   }
 }
 
+// vorpruefung-ticket's find/findOne/create/update actions are the untouched
+// Strapi v4 core-controller defaults (only resend/findByToken/respondByToken
+// are custom-overridden on the backend), so those responses still come back
+// wrapped as { id, attributes: {...} } instead of flat like the rest of this
+// app's custom-controller content-types. Flatten here to match what the rest
+// of the codebase (and this component tree) expects.
+function flattenVorpruefungTicket(entry) {
+  if (!entry) return entry;
+  const attrs = entry.attributes || entry;
+  return { id: entry.id, ...attrs };
+}
+
+export async function fetchVorpruefungTickets(context, payload) {
+  const { projectId } = payload;
+  try {
+    const res = await api.get(`/api/vorpruefung-tickets?filters[project]=${projectId}`);
+    const raw = res.data.data || res.data || [];
+    return raw.map(flattenVorpruefungTicket);
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    return [];
+  }
+}
+
+export async function createVorpruefungTicket(context, payload) {
+  const { projectId, type, notes } = payload;
+  try {
+    const res = await api.post("/api/vorpruefung-tickets", {
+      data: { project: projectId, type, notes: notes || "" }
+    });
+    Notify.create({
+      message: "Vorprüfung erfolgreich angefragt",
+      type: "positive"
+    });
+    const entry = res.data.data || res.data;
+    return flattenVorpruefungTicket(entry);
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    return false;
+  }
+}
+
+export async function updateVorpruefungTicketNotes(context, payload) {
+  const { id, notes } = payload;
+  try {
+    const res = await api.put(`/api/vorpruefung-tickets/${id}/notes`, {
+      data: { notes }
+    });
+    const entry = res.data.data || res.data;
+    return flattenVorpruefungTicket(entry);
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    return false;
+  }
+}
+
+export async function resendVorpruefungTicket(context, payload) {
+  const { id } = payload;
+  try {
+    await api.post(`/api/vorpruefung-tickets/${id}/resend`);
+    Notify.create({
+      message: "Vorprüfung erneut gesendet",
+      type: "positive"
+    });
+    return true;
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.error.message
+    });
+    return false;
+  }
+}
+
 // New action to update local state only
 export function updateLocalProjectState(context, payload) {
   const { data } = payload;
@@ -320,7 +484,7 @@ export async function getSpecificProject(context, payload) {
   if (id) {
     try {
       const res = await api.get(`/api/projects/${id}`);
-      context.commit("setSpecificProject", res.data);
+      context.commit("setSpecificProject", normalizeApplicationProcessSteps(res.data));
     } catch (error) {
       console.log("error", error);
       Notify.create({

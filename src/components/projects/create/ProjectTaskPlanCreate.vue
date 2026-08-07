@@ -78,8 +78,8 @@ export default {
       resetSteps: [
         { name: 'taskPlan', title: 'task plan', icon: 'mdi-checkbox-multiple-marked', done: true },
         { name: 'siteVisit', title: 'site visit', icon: 'mdi-map-marker', done: false },
-        { name: 'goals', title: 'goals', icon: 'mdi-target', done: false },
-        { name: 'requirements', title: 'requirements', icon: 'mdi-file-document', done: false }
+        { name: 'goalsAndRequirements', title: 'Goals and requirements', icon: 'mdi-target', done: false },
+        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false }
       ]
     };
   },

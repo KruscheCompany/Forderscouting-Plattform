@@ -430,8 +430,6 @@ export default {
     },
     dateFormatter,
     async view(row) {
-      const userMunicipality = this.$store.state.userCenter.user.userDetails.municipality
-        .id;
       const id = row && row.id;
       this.itemId = row && row.id;
       this.viewIsLoading = true;
@@ -705,9 +703,9 @@ export default {
         .filter(user => ownerUsernames.includes(user.username))
         .map(user => ({
           user: user.username,
-          location: user.user_detail &&
-            user.user_detail.municipality &&
-            user.user_detail.municipality.title || ''
+          location: (user.user_detail &&
+            (user.user_detail.municipality || user.user_detail.landkreis) &&
+            (user.user_detail.municipality || user.user_detail.landkreis).title) || ''
         }));
     },
     filter() {

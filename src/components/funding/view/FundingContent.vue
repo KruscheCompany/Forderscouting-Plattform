@@ -300,12 +300,12 @@
                         <p class="font-16 text-blue-grey-10 q-mb-sm q-mt-xs"
                           v-html="sanitizeHtml(funding.provider || '')"></p>
                       </div>
-                      <div v-if="!!funding.info && funding.info.contactName">
+                      <div v-if="!!funding.info && (funding.info.contactFirstName || funding.info.contactLastName)">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-md">
                           {{ $t("Contact person") }}
                         </h4>
                         <p class="font-16 text-blue-grey-10 q-mb-sm q-mt-xs"
-                          v-html="sanitizeHtml(funding.info?.contactName || '')"></p>
+                          v-html="sanitizeHtml([funding.info?.contactFirstName, funding.info?.contactLastName].filter(Boolean).join(' '))"></p>
                       </div>
                       <div v-if="funding.editors && funding.editors.length > 0 && isAdmin">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-md">

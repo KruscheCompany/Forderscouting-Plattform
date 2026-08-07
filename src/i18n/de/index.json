@@ -67,7 +67,14 @@
     "end": "Datum Ende",
     "created_at": "Erstelldatum",
     "createFunding": "Fördermittel erstellen",
-    "visibility": "Sichtbarkeit"
+    "visibility": "Sichtbarkeit",
+    "eligibility": "Antragstellung"
+  },
+  "eligibilityFilter": {
+    "all": "Alle",
+    "eligible": "Antragsberechtigt",
+    "notEligible": "Nicht berechtigt",
+    "filterTooltip": "Nach Antragstellung filtern"
   },
   "checkListCols": {
     "title": "Titel",
@@ -234,7 +241,13 @@
     "createState": "Gemeinde anlegen",
     "stateName": "Gemeinde",
     "statesOverview": "Gemeindeübersicht",
-    "selectFederalStates": "Bundesländer auswählen"
+    "selectFederalStates": "Bundesländer auswählen",
+    "financeContactEmail": "Kontakt-E-Mail Finanzen",
+    "financeContactFirstName": "Vorname Kontakt Finanzen",
+    "financeContactLastName": "Nachname Kontakt Finanzen",
+    "personnelContactEmail": "Kontakt-E-Mail Personal",
+    "personnelContactFirstName": "Vorname Kontakt Personal",
+    "personnelContactLastName": "Nachname Kontakt Personal"
   },
   "federalStates": {
     "overview": "Bundesländer-Übersicht",
@@ -243,6 +256,15 @@
     "edit": "Bearbeiten",
     "delete": "Löschen",
     "selectFederalStates": "Bundesländer auswählen"
+  },
+  "landkreise": {
+    "overview": "Landkreise-Übersicht",
+    "createLandkreis": "Landkreis anlegen",
+    "landkreisName": "Landkreis",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "selectMunicipalities": "Gemeinden auswählen",
+    "selectLandkreis": "Landkreis auswählen"
   },
   "DetailsAdministration": {
     "location": "Ort",
@@ -349,6 +371,8 @@
     "title": "Titel",
     "name": "Name",
     "nameSurname": "Name, Nachname",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
     "administration": "Verwaltung",
     "streetNr": "Straße, Hausnr.",
     "postalCity/place": "PLZ, Ort",
@@ -463,6 +487,9 @@
   "editFederalState": "Bundesland bearbeiten",
   "deleteFederalState": "Bundesland löschen",
   "deleteFederalStateMessage": "Wollen Sie dieses Bundesland wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
+  "editLandkreis": "Landkreis bearbeiten",
+  "deleteLandkreis": "Landkreis löschen",
+  "deleteLandkreisMessage": "Wollen Sie diesen Landkreis wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
   "approve": "Genehmigen",
   "addEditors": "Bearbeiter*innen hinzufügen",
   "Add Images": "Bilder hinzufügen",
@@ -663,6 +690,26 @@
   "Nov": "Nov",
   "Dec": "Dez",
   "login": "Login",
+  "loginDialog": {
+    "tagline": "Das digitale Assistenzsystem für die Entwicklung, Förderung und Umsetzung kommunaler Projekte — von der Idee zum Zuwendungsbescheid.",
+    "subtitle": "Der Zugang ist aktuell auf registrierte kommunale Nutzer:innen beschränkt.",
+    "forgotPasswordTitle": "Passwort zurücksetzen",
+    "forgotPasswordSubtitle": "Geben Sie die mit Ihrem Konto verknüpfte E-Mail-Adresse ein. Wir senden Ihnen einen sicheren Link, um ein neues Passwort festzulegen.",
+    "checkInboxTitle": "E-Mail unterwegs!",
+    "checkInboxMessage": "Wir haben einen Link zum Zurücksetzen an {email} geschickt.",
+    "useAnotherEmail": "Andere E-Mail-Adresse verwenden",
+    "noAccountYet": "Noch kein Konto?",
+    "sidePanelFooter": "Interkommunale Förderscouting-Plattform Nordfriesland · Heimat 2.0 (BMWSB)",
+    "emailPlaceholder": "name@amt-vioel.de",
+    "passwordPlaceholder": "••••••••"
+  },
+  "registerPage": {
+    "subtitle": "Fordern Sie einen Gastzugang an, um Projektideen und Fördermittel für Ihre Kommune zu entdecken.",
+    "haveAccount": "Bereits registriert?",
+    "successTitle": "Anfrage gesendet!",
+    "successMessage": "Wir prüfen Ihre Anfrage und melden uns unter {email}, sobald Ihr Gastzugang freigeschaltet ist.",
+    "namePlaceholder": "Vor- und Nachname"
+  },
   "guestRegistration": "Registrierung Gastzugang",
   "ifYouWantToSeeMoreDocuments": "Wenn Sie weitere Dokumente sowie Checklisten sehen möchten, dann registrieren Sie sich.",
   "amtViol": "Amt Viöl",
@@ -670,6 +717,10 @@
   "imprint": "Impressum",
   "dataProtectionDeclaration": "Datenschutzerklaerung",
   "tutorialVideosForPlatform": "Anleitungsvideos für die Plattform",
+  "helpAndNewsPanelTitle": "Hilfe & Neuigkeiten",
+  "whatsNew": "Neuigkeiten",
+  "showMoreChangelog": "Mehr anzeigen",
+  "showLessChangelog": "Weniger anzeigen",
   "howCanFundingPlatformSupportProjectWork": "Wie kann mich die Förderscouting-Plattform bei der Projektarbeit unterstützen",
   "howDoesFundingPlatformWork": "Wie funktioniert die Förderscouting-Plattform",
   "howDoICreateProjectIdea": "Wie lege ich eine Projektidee an",
@@ -899,6 +950,7 @@
       "fehlanzeige": "Fehlanzeige - Keine passende Förderung",
       "noFundingData": "Keine Förderinformationen verfügbar",
       "noProjectData": "Keine Projektdaten für die Fördersuche verfügbar",
+      "noProjectDataFields": "Folgende Angaben aus Schritt 1 fehlen für die Fördersuche: {fields}. Bitte ergänzen Sie diese im ersten Schritt.",
       "successRefresh": "Förderungen erfolgreich aktualisiert",
       "errorRefresh": "Fehler beim Aktualisieren der Förderungen",
       "errorSaving": "Fehler beim Speichern der Förderauswahl",
@@ -911,7 +963,9 @@
       "aiAssessment": "KI-Bewertung",
       "aiGenerated": "KI-generiert",
       "comingSoon": "Demnächst verfügbar",
-      "aiAssessmentTeaser": "Bald wird unsere KI automatisch analysieren, wie gut Ihr Projekt zu den jeweiligen Förderrichtlinien passt — mit detaillierter Begründung und Handlungsempfehlungen."
+      "aiAssessmentTeaser": "Bald wird unsere KI automatisch analysieren, wie gut Ihr Projekt zu den jeweiligen Förderrichtlinien passt — mit detaillierter Begründung und Handlungsempfehlungen.",
+      "showMore": "Weitere Förderrichtlinien anzeigen",
+      "matchingLoading": "KI sucht passende Förderrichtlinien..."
     },
     "qAndA": {
       "title": "Offene Fragen & Antworten",
@@ -921,7 +975,29 @@
     "aptitude": {
       "title": "Empfehlung für politische Gremien",
       "noRecommendation": "Keine Empfehlung verfügbar",
-      "description": "Kurzer Aufgabentext (Wer hatte die Idee? Wie wurde die Idee entwickelt? Was ist der Kontext in der Gemeinde/ Stadt?)"
+      "description": "Kurzer Aufgabentext (Wer hatte die Idee? Wie wurde die Idee entwickelt? Was ist der Kontext in der Gemeinde/ Stadt?)",
+      "saving": "Wird gespeichert...",
+      "saved": "Gespeichert",
+      "vorpruefung": {
+        "finanzen": "Finanzen",
+        "personal": "Personal",
+        "foerdermittelgeber": "Fördermittelgeber",
+        "notesPlaceholder": "Interne Notizen",
+        "send": "Anfrage senden",
+        "resend": "Erneut senden",
+        "sentOn": "Gesendet am",
+        "answeredOn": "Beantwortet am",
+        "statusPositiv": "Positiv",
+        "statusNegativ": "Negativ",
+        "statusRuecksprache": "Rücksprache nötig",
+        "wantsPhoneCall": "Telefonischer Rückruf gewünscht",
+        "wantsOnsiteMeeting": "Vor-Ort-Termin gewünscht",
+        "sendSuccess": "Vorprüfung erfolgreich angefragt",
+        "resendSuccess": "Vorprüfung erneut gesendet",
+        "gateBlocked": "Alle drei Vorprüfungen müssen positiv beantwortet sein, bevor Sie fortfahren können.",
+        "recipientEmail": "Wird gesendet an",
+        "recipientMissing": "Keine Kontakt-E-Mail hinterlegt. Bitte zuerst bei der Gemeinde/Fördermittelgeber ergänzen."
+      }
     },
     "decision": {
       "title": "Grundsatzbeschluss",
@@ -980,32 +1056,22 @@
       "description": "Kurzer Aufgabentext",
       "noContent": "Keine Beschreibung des Standortbesuchs verfügbar"
     },
-    "goals": {
-      "title": "Ziele definieren",
-      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Ziele definiert? Welche Ziele wurden definiert?",
-      "noContent": "Keine Ziele definiert"
-    },
-    "requirements": {
-      "title": "Anforderungen definieren",
-      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Anforderungen definiert? Welche Anforderungen wurden definiert?",
-      "noContent": "Keine Anforderungen definiert"
+    "goalsAndRequirements": {
+      "title": "Ziele und Anforderungen definieren",
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Ziele und Anforderungen definiert? Welche Ziele und Anforderungen wurden definiert?",
+      "noContent": "Keine Ziele und Anforderungen definiert"
     },
     "guidelineContentCheck": {
-      "title": "Richtlinien-Check (Langfassung)",
-      "description": "Kurzer Aufgabentext - Bitte vergesst den inhaltlichen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
+      "title": "Richtlinien-Check (Inhalt und Formalitäten) Langfassung",
+      "description": "Kurzer Aufgabentext - Bitte vergesst den inhaltlichen und formalen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
       "noContent": "Keine Beschreibung des Richtlinien-Checks verfügbar",
       "uploadsTitle": "Uploads",
-      "uploadsDescription": "Hier könnt ihr Dateien hochladen, die ihr im Rahmen des Richtlinien-Checks verwendet habt (z.B. Auszüge aus der Richtlinie, Merkblätter, Antragsformulare etc.)"
-    },
-    "guidelineFormCheck": {
-      "title": "Richtlinien-Check (Langfassung)",
+      "uploadsDescription": "Hier könnt ihr Dateien hochladen, die ihr im Rahmen des Richtlinien-Checks verwendet habt (z.B. Auszüge aus der Richtlinie, Merkblätter, Antragsformulare etc.)",
       "bulletPointTitle": "Infos zur Antragsstellung (Langfassung XFLB - Part Antragstellung)",
-      "description": "Kurzer Aufgabentext - Bitte vergesst den formalen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
       "documents": "Unterlagen",
       "procedure": "Verfahrensablauf",
       "applicationDeadline": "Antragsfrist",
-      "applicationCost": "Beantragungskosten",
-      "noContent": "Keine Beschreibung der Abstimmung der Projektunterlagen verfügbar"
+      "applicationCost": "Beantragungskosten"
     },
     "applicationDecision": {
       "title": "Antragsbeschluss",
@@ -1033,6 +1099,35 @@
       "title": "Finanzierungs-Check"
     }
   },
+  "reviewPage": {
+    "headerSubtitle": "Interkommunale Förderscouting-Plattform Nordfriesland",
+    "loading": "Wird geladen...",
+    "invalidLinkTitle": "Link ungültig",
+    "invalidLink": "Dieser Link ist ungültig oder abgelaufen.",
+    "pendingBanner": "Ausstehend – Diese Anfrage wartet auf Ihre Bearbeitung",
+    "alreadyAnswered": "Sie haben bereits am {date} geantwortet. Vielen Dank.",
+    "answeredBannerPositiv": "Genehmigt – Diese Anfrage wurde am {date} positiv beantwortet",
+    "answeredBannerNegativ": "Abgelehnt – Diese Anfrage wurde am {date} negativ beantwortet",
+    "answeredBannerRuecksprache": "Rücksprache nötig – beantwortet am {date}",
+    "requestLabel": "Anfrage",
+    "projectLabel": "Projekt",
+    "fundingProgramLabel": "Förderprogramm",
+    "submittedByLabel": "Eingereicht von",
+    "submittedOnLabel": "Eingereicht am",
+    "projectDetailsLabel": "Projektdetails",
+    "yourResponseLabel": "Ihre bisherige Antwort",
+    "downloadPdf": "Als PDF herunterladen",
+    "decisionLabel": "Ihre Entscheidung",
+    "decisionPositiv": "Positiv",
+    "decisionNegativ": "Negativ",
+    "decisionRuecksprache": "Rücksprache nötig",
+    "contactOptionsLabel": "Wie dürfen wir Sie erreichen?",
+    "wantsPhoneCall": "Telefonischer Rückruf gewünscht",
+    "wantsOnsiteMeeting": "Vor-Ort-Termin gewünscht",
+    "responseTextLabel": "Ihre Anmerkungen",
+    "submit": "Absenden",
+    "submitSuccess": "Vielen Dank für Ihre Antwort."
+  },
   "ProjectDashboard": {
     "activeProjects": "Aktive Projekte",
     "totalProjects": "Gesamtprojekte",
@@ -1050,7 +1145,21 @@
     "financialPlan": "Finanzplan",
     "accessDenied": "Zugriff auf Finanzinformationen verweigert",
     "accessError": "Fehler bei der Überprüfung der Zugriffsberechtigungen",
-    "locations": "Ort"
+    "locations": "Ort",
+    "archivedApplications": "Archivierte Projektideen",
+    "owner": "Besitzer*in",
+    "municipality": "Gemeinde",
+    "plannedStart": "Geplanter Beginn",
+    "plannedEnd": "Geplantes Ende",
+    "prioritizedProjects": "Priorisierte Projekte",
+    "selectMunicipalityPrompt": "Bitte wählen Sie eine Gemeinde aus",
+    "noPrioritizedProjects": "Noch keine priorisierten Projekte",
+    "prioritizedBy": "Priorisiert von",
+    "prioritize": "Priorisieren",
+    "removeFromPriorityList": "Aus Priorisierung entfernen",
+    "alreadyPrioritized": "Diese Projektidee ist bereits priorisiert.",
+    "prioritizeSuccess": "Projektidee erfolgreich priorisiert",
+    "removePrioritySuccess": "Projektidee erfolgreich aus der Priorisierung entfernt"
   },
   "aiFundingCheck": "KI-Fördermittelcheck",
   "AI funding check": "KI-Fördermittelcheck",
@@ -1071,10 +1180,8 @@
   "Speicherdatum": "Speicherdatum",
   "task plan": "Aufgabenplan",
   "site visit": " ggf. Begehung",
-  "goals": "Ziele definieren",
-  "requirements": "Anforderungen definieren",
-  "Guideline Check (Content)": "Richtlinien-Check (Inhalt)",
-  "Guideline Check (Formalities)": "Richtlinien-Check (Formalitäten)",
+  "Goals and requirements": "Ziele und Anforderungen definieren",
+  "Guideline Check (Content)": "Richtlinien-Check (Inhalt und Formalitäten)",
   "Financing Check": "Finanzierungs-Check",
   "Project Documents Coordination": "Abstimmung Projektunterlagenn",
   "Application Decision": "Antragsbeschluss",

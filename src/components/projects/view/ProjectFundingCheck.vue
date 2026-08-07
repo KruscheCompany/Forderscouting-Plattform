@@ -103,7 +103,7 @@ export default {
   computed: {
     fundingMatches() {
       return (
-        (this.project && this.project.fundingMatches.filter((funding) => !funding.isFehlanzeige)) ||
+        (this.project && (this.project.fundingMatches || []).filter((funding) => !funding.isFehlanzeige)) ||
         this.$t('projectComponents.fundingCheck.noFundingData')
       );
     },

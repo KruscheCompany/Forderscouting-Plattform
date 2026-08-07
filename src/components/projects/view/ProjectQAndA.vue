@@ -11,7 +11,7 @@
                   {{ question.text }}
                 </h4>
                 <q-banner rounded class="bg-grey-3 font-16">
-                  <p class="q-my-sm text-block" v-html="question.answer || $t('projectComponents.qAndA.noAnswer')"></p>
+                  <p class="q-my-sm text-block" v-html="sanitizeHtml(question.answer || $t('projectComponents.qAndA.noAnswer'))"></p>
                 </q-banner>
               </q-item-section>
             </q-item>
@@ -26,8 +26,11 @@
 </template>
 
 <script>
+import htmlSanitizer from 'src/mixins/htmlSanitizer';
+
 export default {
   name: "ProjectQAndA",
+  mixins: [htmlSanitizer],
   data() {
     return {
       expandedQAndA: this.currentTab === "qAndA", // Expand by default if currentTab is 'qAndA'
