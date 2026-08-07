@@ -97,7 +97,11 @@ export async function tempMunicipality(context, payload) {
 }
 
 export async function createMunicipality(context, payload) {
-  const { title, location, federalStates, financeContactEmail, personnelContactEmail } = payload;
+  const {
+    title, location, federalStates,
+    financeContactEmail, financeContactFirstName, financeContactLastName,
+    personnelContactEmail, personnelContactFirstName, personnelContactLastName
+  } = payload;
   if (!!title && !!location) {
     try {
       const res = await api.post("/api/municipalities", {
@@ -106,7 +110,11 @@ export async function createMunicipality(context, payload) {
           location,
           federalStates: federalStates || [],
           financeContactEmail: financeContactEmail || null,
-          personnelContactEmail: personnelContactEmail || null
+          financeContactFirstName: financeContactFirstName || null,
+          financeContactLastName: financeContactLastName || null,
+          personnelContactEmail: personnelContactEmail || null,
+          personnelContactFirstName: personnelContactFirstName || null,
+          personnelContactLastName: personnelContactLastName || null
         }
       });
       context.commit("addMunicipality", res.data.data);
@@ -156,7 +164,11 @@ export async function createState(context, payload) {
 }
 
 export async function editMunicipality(context, payload) {
-  const { id, title, location, federalStates, financeContactEmail, personnelContactEmail } = payload;
+  const {
+    id, title, location, federalStates,
+    financeContactEmail, financeContactFirstName, financeContactLastName,
+    personnelContactEmail, personnelContactFirstName, personnelContactLastName
+  } = payload;
   if (!!id && !!title && !!location) {
     try {
       const res = await api.put(`/api/municipalities/${id}`, {
@@ -165,7 +177,11 @@ export async function editMunicipality(context, payload) {
           location,
           federalStates: federalStates || [],
           financeContactEmail: financeContactEmail || null,
+          financeContactFirstName: financeContactFirstName || null,
+          financeContactLastName: financeContactLastName || null,
           personnelContactEmail: personnelContactEmail || null,
+          personnelContactFirstName: personnelContactFirstName || null,
+          personnelContactLastName: personnelContactLastName || null,
           updatedAt: new Date().toISOString()
         }
       });

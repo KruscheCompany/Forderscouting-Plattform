@@ -239,7 +239,11 @@
     "statesOverview": "States Overview",
     "selectFederalStates": "Select Federal States",
     "financeContactEmail": "Finance contact email",
-    "personnelContactEmail": "Personnel contact email"
+    "financeContactFirstName": "Finance contact first name",
+    "financeContactLastName": "Finance contact last name",
+    "personnelContactEmail": "Personnel contact email",
+    "personnelContactFirstName": "Personnel contact first name",
+    "personnelContactLastName": "Personnel contact last name"
   },
   "federalStates": {
     "overview": "Federal States Overview",
@@ -360,6 +364,8 @@
     "title": "Title",
     "name": "Name",
     "nameSurname": "Name, Surname",
+    "firstName": "First name",
+    "lastName": "Last name",
     "administration": "Administration",
     "streetNr": "Street, Nr.",
     "postalCity/place": "Postal Code, City/Place",

@@ -243,7 +243,11 @@
     "statesOverview": "Gemeindeübersicht",
     "selectFederalStates": "Bundesländer auswählen",
     "financeContactEmail": "Kontakt-E-Mail Finanzen",
-    "personnelContactEmail": "Kontakt-E-Mail Personal"
+    "financeContactFirstName": "Vorname Kontakt Finanzen",
+    "financeContactLastName": "Nachname Kontakt Finanzen",
+    "personnelContactEmail": "Kontakt-E-Mail Personal",
+    "personnelContactFirstName": "Vorname Kontakt Personal",
+    "personnelContactLastName": "Nachname Kontakt Personal"
   },
   "federalStates": {
     "overview": "Bundesländer-Übersicht",
@@ -367,6 +371,8 @@
     "title": "Titel",
     "name": "Name",
     "nameSurname": "Name, Nachname",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
     "administration": "Verwaltung",
     "streetNr": "Straße, Hausnr.",
     "postalCity/place": "PLZ, Ort",
