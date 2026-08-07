@@ -274,14 +274,11 @@ export default {
             streetNo: this.userDetails.streetNo,
             postalCode: this.userDetails.postalCode,
           },
-          municipality: {
-            id:
-              (this.userDetails.municipality && this.userDetails.municipality.id) ||
-              this.selectedLandkreisMunicipality,
-          },
-          owner: {
-            id: this.user && this.user.id,
-          },
+          municipality:
+            (this.userDetails.municipality && this.userDetails.municipality.id) ||
+            this.selectedLandkreisMunicipality ||
+            null,
+          owner: (this.user && this.user.id) || null,
         };
 
         // Submit to store
