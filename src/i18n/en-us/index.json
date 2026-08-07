@@ -902,6 +902,8 @@
     "aptitude": {
       "title": "Recommendation for political committees",
       "noRecommendation": "No recommendation available",
+      "saving": "Saving...",
+      "saved": "Saved",
       "vorpruefung": {
         "finanzen": "Finance",
         "personal": "Personnel",
@@ -918,7 +920,9 @@
         "wantsOnsiteMeeting": "On-site meeting requested",
         "sendSuccess": "Review requested successfully",
         "resendSuccess": "Review request resent",
-        "gateBlocked": "All three reviews must be answered positively before you can continue."
+        "gateBlocked": "All three reviews must be answered positively before you can continue.",
+        "recipientEmail": "Will be sent to",
+        "recipientMissing": "No contact email on file. Please add one for the municipality/funding provider first."
       }
     },
     "decision": {

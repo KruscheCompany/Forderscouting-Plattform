@@ -1,19 +1,30 @@
 <template>
   <div class="q-mb-md q-pa-md radius-10" style="border: 1px solid #e0e0e0;">
     <div class="row items-center no-wrap">
-      <q-checkbox v-if="!ticket" v-model="checked" class="q-mr-sm" />
-      <q-icon v-else name="mdi-circle" :color="statusColor" size="18px" class="q-mr-sm" />
+      <q-icon name="mdi-circle" :color="ticket ? statusColor : 'grey-5'" size="18px" class="q-mr-sm" />
       <div class="col font-16 text-weight-600">
         {{ $t(`projectComponents.aptitude.vorpruefung.${type}`) }}
       </div>
-      <q-btn v-if="!ticket" :disable="!checked" :loading="sending" unelevated no-caps dense
-        :color="checked ? 'warning' : 'primary'" class="q-px-md"
+      <q-btn v-if="!ticket" :disable="!recipientEmail" :loading="sending" unelevated no-caps dense
+        color="primary" class="q-px-md"
         :label="$t('projectComponents.aptitude.vorpruefung.send')" @click="send" />
       <q-btn v-else-if="!ticket.answeredAt" :loading="sending" unelevated no-caps dense outline color="primary"
         class="q-px-md" :label="$t('projectComponents.aptitude.vorpruefung.resend')" @click="resend" />
     </div>
 
+    <div v-if="!ticket" class="font-14 q-mt-xs" :class="recipientEmail ? 'text-blue-grey-7' : 'text-negative'">
+      <template v-if="recipientEmail">
+        {{ $t('projectComponents.aptitude.vorpruefung.recipientEmail') }}: {{ recipientEmail }}
+      </template>
+      <template v-else>
+        {{ $t('projectComponents.aptitude.vorpruefung.recipientMissing') }}
+      </template>
+    </div>
+
     <div v-if="ticket && ticket.sentAt" class="font-14 text-blue-grey-7 q-mt-xs">
+      <template v-if="ticket.reviewerContact">
+        {{ $t('projectComponents.aptitude.vorpruefung.recipientEmail') }}: {{ ticket.reviewerContact }}<br />
+      </template>
       {{ $t('projectComponents.aptitude.vorpruefung.sentOn') }}: {{ formatDate(ticket.sentAt) }}
       <template v-if="ticket.answeredAt">
         &middot; {{ $t('projectComponents.aptitude.vorpruefung.answeredOn') }}: {{ formatDate(ticket.answeredAt) }}
@@ -50,11 +61,14 @@ export default {
     ticket: {
       type: Object,
       default: null
+    },
+    recipientEmail: {
+      type: String,
+      default: null
     }
   },
   data() {
     return {
-      checked: false,
       sending: false,
       notes: this.ticket ? this.ticket.notes || "" : ""
     };

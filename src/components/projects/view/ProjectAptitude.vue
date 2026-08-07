@@ -15,6 +15,9 @@
                 {{ ticketByType(type).sentAt ? new Date(ticketByType(type).sentAt).toLocaleDateString('de-DE') : '' }}
               </div>
             </div>
+            <div v-if="ticketByType(type) && ticketByType(type).reviewerContact" class="font-14 text-blue-grey-7 q-pl-lg">
+              {{ $t('projectComponents.aptitude.vorpruefung.recipientEmail') }}: {{ ticketByType(type).reviewerContact }}
+            </div>
             <div v-if="ticketByType(type) && ticketByType(type).answeredAt" class="font-14 q-pl-lg">
               <div>{{ statusLabel(type) }}</div>
               <div v-if="ticketByType(type).wantsPhoneCall">{{ $t('projectComponents.aptitude.vorpruefung.wantsPhoneCall') }}</div>

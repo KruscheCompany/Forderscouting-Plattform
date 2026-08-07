@@ -7,14 +7,24 @@
           <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
             {{ $t('projectComponents.aptitude.description') }}
           </h4>
-          <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" v-model="aptitude" />
+          <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" v-model="aptitude"
+            @blur="saveAptitude" />
+          <div class="row items-center q-gutter-xs q-mt-xs font-13 text-blue-grey-6" style="min-height: 20px;">
+            <q-spinner v-if="saveState === 'saving'" size="16px" color="blue-grey-6" />
+            <q-icon v-else-if="saveState === 'saved'" name="check_circle" color="positive" size="16px" />
+            <span v-if="saveState === 'saving'">{{ $t('projectComponents.aptitude.saving') }}</span>
+            <span v-else-if="saveState === 'saved'">{{ $t('projectComponents.aptitude.saved') }}</span>
+          </div>
           <div class="q-mt-md">
             <VorpruefungTicketCard type="finanzen" :project-id="createdProjectId"
-              :ticket="ticketByType('finanzen')" @ticket-created="loadTickets" />
+              :ticket="ticketByType('finanzen')" :recipient-email="recipientEmail('finanzen')"
+              @ticket-created="loadTickets" />
             <VorpruefungTicketCard type="personal" :project-id="createdProjectId"
-              :ticket="ticketByType('personal')" @ticket-created="loadTickets" />
+              :ticket="ticketByType('personal')" :recipient-email="recipientEmail('personal')"
+              @ticket-created="loadTickets" />
             <VorpruefungTicketCard type="foerdermittelgeber" :project-id="createdProjectId"
-              :ticket="ticketByType('foerdermittelgeber')" @ticket-created="loadTickets" />
+              :ticket="ticketByType('foerdermittelgeber')" :recipient-email="recipientEmail('foerdermittelgeber')"
+              @ticket-created="loadTickets" />
           </div>
         </div>
       </q-card-section>
@@ -49,6 +59,9 @@ export default {
     return {
       expandedAptitude: this.currentTab === "aptitude",
       aptitude: this.projectData.details.aptitude || "",
+      savedAptitude: this.projectData.details.aptitude || "",
+      saveState: null,
+      saveStateTimeout: null,
       vorpruefungTickets: [],
       resetSteps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
@@ -68,9 +81,37 @@ export default {
   mounted() {
     this.loadTickets();
   },
+  beforeDestroy() {
+    clearTimeout(this.saveStateTimeout);
+  },
   methods: {
     ticketByType(type) {
       return this.vorpruefungTickets.find(t => t.type === type) || null;
+    },
+    async saveAptitude() {
+      if (this.aptitude === this.savedAptitude) return;
+      clearTimeout(this.saveStateTimeout);
+      this.saveState = 'saving';
+      await this.$store.dispatch('project/simpleUpdateProjectIdea', {
+        data: {
+          id: this.createdProjectId,
+          details: {
+            id: this.projectData.details.id,
+            aptitude: this.aptitude
+          }
+        }
+      });
+      this.savedAptitude = this.aptitude;
+      this.saveState = 'saved';
+      this.saveStateTimeout = setTimeout(() => {
+        this.saveState = null;
+      }, 3000);
+    },
+    recipientEmail(type) {
+      if (type === "finanzen") return this.projectData.municipality?.financeContactEmail || null;
+      if (type === "personal") return this.projectData.municipality?.personnelContactEmail || null;
+      if (type === "foerdermittelgeber") return this.projectData.fundingGuideline?.[0]?.info?.email || null;
+      return null;
     },
     async loadTickets() {
       this.vorpruefungTickets = await this.$store.dispatch("project/fetchVorpruefungTickets", {

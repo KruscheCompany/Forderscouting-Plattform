@@ -970,6 +970,8 @@
       "title": "Empfehlung für politische Gremien",
       "noRecommendation": "Keine Empfehlung verfügbar",
       "description": "Kurzer Aufgabentext (Wer hatte die Idee? Wie wurde die Idee entwickelt? Was ist der Kontext in der Gemeinde/ Stadt?)",
+      "saving": "Wird gespeichert...",
+      "saved": "Gespeichert",
       "vorpruefung": {
         "finanzen": "Finanzen",
         "personal": "Personal",
@@ -986,7 +988,9 @@
         "wantsOnsiteMeeting": "Vor-Ort-Termin gewünscht",
         "sendSuccess": "Vorprüfung erfolgreich angefragt",
         "resendSuccess": "Vorprüfung erneut gesendet",
-        "gateBlocked": "Alle drei Vorprüfungen müssen positiv beantwortet sein, bevor Sie fortfahren können."
+        "gateBlocked": "Alle drei Vorprüfungen müssen positiv beantwortet sein, bevor Sie fortfahren können.",
+        "recipientEmail": "Wird gesendet an",
+        "recipientMissing": "Keine Kontakt-E-Mail hinterlegt. Bitte zuerst bei der Gemeinde/Fördermittelgeber ergänzen."
       }
     },
     "decision": {
