@@ -87,7 +87,8 @@
     "projectBtn": "Project Ideas",
     "fundingsBtn": "Fundings",
     "checkListBtn": "Implementation Checklist",
-    "importFundingBtn": "Import Funding"
+    "importFundingBtn": "Import Funding",
+    "applicationProcessBtn": "Application process"
   },
   "fundingsInfo": {
     "current": "Current funding information",
@@ -163,7 +164,8 @@
     "edit": "Edit",
     "removeBookmark": "Remove from Bookmarks",
     "archive": "Archive",
-    "delete": "Delete"
+    "delete": "Delete",
+    "bookmark": "Bookmark"
   },
   "myNetworkHome": {
     "myNetwork": "My Network",
@@ -196,7 +198,8 @@
     "noEditorsInvited": "No editors Invited",
     "noLinksSet": "No links set",
     "type": "Type",
-    "visibility": "Visibility"
+    "visibility": "Visibility",
+    "generalInformation": "General information"
   },
   "category&Keyword": {
     "category": "Category",
@@ -223,7 +226,8 @@
     "deleteKPopupText": "Do you really want to delete the tag? It will be removed from all documents.",
     "deleteCategorey": "Delete Category",
     "deleteKeyword": "Delete Keyword/Tag",
-    "editKeyword/Tag": "Edit Keyword/Tag"
+    "editKeyword/Tag": "Edit Keyword/Tag",
+    "tags": "Tags"
   },
   "administrativeAreas": {
     "createAdministration": "Create Administration",
@@ -250,7 +254,8 @@
     "createFederalState": "Create Federal State",
     "federalStateName": "Federal State",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "selectFederalStates": "Select federal states"
   },
   "landkreise": {
     "overview": "Landkreise Overview",
@@ -329,7 +334,9 @@
     "uploads": "Uploads",
     "saveDraft": "Save Draft",
     "publish": "Publish",
-    "financialPlan": "Financial Plan"
+    "financialPlan": "Financial Plan",
+    "editDraft": "Edit draft",
+    "timeline": "Timeline"
   },
   "userSelector": {
     "title": "Select User"
@@ -384,7 +391,10 @@
     "link": "Add Link",
     "plannedStartDate": "Start date",
     "plannedEndDate": "End date",
-    "selectFiles": "Select Files"
+    "selectFiles": "Select Files",
+    "visibility": "This document is available for viewing to all users.",
+    "describeProjectTimeline": "Timeline documentation",
+    "describeProjectDocumentation": "Project documentation"
   },
   "visibility": {
     "onlyMe": "Only for me",
@@ -898,7 +908,8 @@
       "comingSoon": "Coming Soon",
       "aiAssessmentTeaser": "Soon our AI will automatically analyze how well your project matches each funding guideline — with detailed reasoning and actionable recommendations.",
       "showMore": "Show more funding guidelines",
-      "matchingLoading": "AI is searching for matching funding guidelines..."
+      "matchingLoading": "AI is searching for matching funding guidelines...",
+      "Project funding comparison": "Project funding comparison"
     },
     "qAndA": {
       "title": "Open Questions & Answers",
@@ -929,7 +940,8 @@
         "gateBlocked": "All three reviews must be answered positively before you can continue.",
         "recipientEmail": "Will be sent to",
         "recipientMissing": "No contact email on file. Please add one for the municipality/funding provider first."
-      }
+      },
+      "description": "Short task text (Who had the idea? How was the idea developed? What is the context in the municipality/city?)"
     },
     "decision": {
       "title": "Basic decision",
@@ -972,7 +984,63 @@
         "Zeitplan": "Timeline",
         "Uploads": "Uploads",
         "Links": "Links"
-      }
+      },
+      "financialPlanDescription": "Short task text",
+      "timelineDescription": "Short task text",
+      "uploadsDescription": "Short task text"
+    },
+    "taskPlan": {
+      "title": "Task planning",
+      "newTaskPlaceholder": "Enter new task",
+      "description": "Short task text - Which method was used to plan tasks? Which tasks were planned?"
+    },
+    "siteVisit": {
+      "title": "Site visit",
+      "descriptionPlaceholder": "Enter description of the site visit",
+      "description": "Short task text",
+      "noContent": "No description of the site visit available"
+    },
+    "goalsAndRequirements": {
+      "title": "Define goals and requirements",
+      "description": "Short task text - Which method was used to define goals and requirements? Which goals and requirements were defined?",
+      "noContent": "No goals and requirements defined"
+    },
+    "guidelineContentCheck": {
+      "title": "Guideline check (content and formalities) long version",
+      "description": "Short task text - Please don't forget the content and formal comparison with the long version of the guideline. Here you can document important passages with page numbers",
+      "noContent": "No description of the guideline check available",
+      "uploadsTitle": "Uploads",
+      "uploadsDescription": "Here you can upload files that you used as part of the guideline check (e.g. excerpts from the guideline, information sheets, application forms etc.)",
+      "bulletPointTitle": "Information on the application process (long version XFLB - application part)",
+      "documents": "Documents",
+      "procedure": "Procedure",
+      "applicationDeadline": "Application deadline",
+      "applicationCost": "Application costs"
+    },
+    "applicationDecision": {
+      "title": "Application decision",
+      "description": "Upload files (application decision, minutes excerpt)",
+      "noFilesUploaded": "No files uploaded"
+    },
+    "submissionSigning": {
+      "title": "Signing & Application submission",
+      "selectionLabel": "Upload project application documents",
+      "pendingDecision": "Application decision pending",
+      "sentToFunding": "sent to funding",
+      "sentToFundingBody": "Application submitted to the funding body",
+      "grantNotice": "Grant notice",
+      "rejectionNotice": "Rejection notice",
+      "noSelectionError": "Please make a decision on the application",
+      "successMessage": "Notice successfully saved",
+      "errorMessage": "Error saving the notice"
+    },
+    "documentsCoordination": {
+      "title": "Project documents coordination",
+      "description": "Short task text",
+      "noContent": "No description of the project documents coordination available"
+    },
+    "financingCheck": {
+      "title": "Financing check"
     }
   },
   "reviewPage": {
@@ -1029,6 +1097,156 @@
     "removeFromPriorityList": "Remove from priority list",
     "alreadyPrioritized": "This project idea is already prioritised.",
     "prioritizeSuccess": "Project idea prioritised successfully",
-    "removePrioritySuccess": "Project idea removed from the priority list"
+    "removePrioritySuccess": "Project idea removed from the priority list",
+    "municipalities": "Administrative areas",
+    "status": "Status",
+    "investive": "Investive/ non-investive",
+    "categories": "Categories",
+    "applicationProcess": "Application process",
+    "locations": "Location"
+  },
+  "projectIdea": "Project ideas",
+  "Request to duplicate a document made by | ": "Request to duplicate a document made by | ",
+  "confirm": "Confirm",
+  "adminstrationLocation": "Administration location",
+  "editAdministration": "Edit administration",
+  "deleteAdministration": "Delete administration",
+  "deleteAdministrationMessage": "Do you really want to delete this administration? This action cannot be undone.",
+  "approve": "Approve",
+  "Add Files": "Add Files",
+  "Select Files": "Select Files",
+  "funding provider": "Funding provider",
+  "Contact person": "Contact person",
+  "Funding goal": "Funding goal",
+  "What is funded?": "What is funded?",
+  "What is not funded?": "What is not funded?",
+  "Who will be funded?": "Who will be funded?",
+  "Conditions for Applicants": "Conditions for Applicants",
+  "Funding rates": "Funding rate(s)",
+  "Own contribution": "Own contribution",
+  "Accumulability": "Accumulability",
+  "Basis for assessment": "Basis for assessment",
+  "Funding Period": "Funding Period",
+  "Notes to the funding period": "Notes on the funding period",
+  "Link to project ideas (optional)": "Link to project ideas (optional)",
+  "Link to implementation checklist (optional)": "Link to implementation checklist (optional)",
+  "Links to the fundings": "Links to the fundings",
+  "official title": "Official title of the funding provider",
+  "Name, Surname": "Name, Surname",
+  "Street, Nr": {
+    "": "Street, Nr."
+  },
+  "Postal Code, City": "Postal Code, City",
+  "Telefon": "Telephone",
+  "Add funding rate": "Add funding rate",
+  "Yes": "Yes",
+  "No": "No",
+  "would like to access document": "would like to access document",
+  "Description": "Description:",
+  "This website uses Cookies": "This website uses Cookies",
+  "essential": "Essential Cookies",
+  "userPrefrence": "User preferences",
+  "essenitialDesc": "These cookies are necessary for the proper functioning of our website and cannot be switched off in our systems. They are usually only set in response to actions made by you which amount to a request for services, such as setting your privacy preferences, logging in or filling in forms. You can set your browser to block these cookies or to alert you about them, but some parts of the website will not work as a result. These cookies do not store any personally identifiable information.",
+  "userPrefrenceDesc": "These cookies are used to store your preferences and settings for our website. They are not essential for the website to function and you can opt out of them at any time. This includes your language setting, dark mode and logging out without confirmation.",
+  "acceptMyPrefrences": "Accept my preferences",
+  "acceptEssentials": "Accept essentials",
+  "You don't have access to this Project Idea": "You don't have access to this Project Idea",
+  "You don't have access to this Funding": "You don't have access to this Funding",
+  "You don't have access to this Checklist": "You don't have access to this Checklist",
+  "Would you like to request a duplication?": "Would you like to request a duplication?",
+  "Would you like to request view access?": "Would you like to request view access?",
+  "Would you like to request edit access?": "Would you like to request edit access?",
+  "Would you like to request null access?": "Would you like to request null access?",
+  "Select Municipality": "Select Municipality",
+  "No User": "No User",
+  "fundingScoutingPlatform": "Funding Scouting Platform",
+  "warningMessage": "The changes you made will result in a reset.",
+  "warningMessageDetail": "The changes you made will result in a reset of all subsequent steps.",
+  "warningMessageAction": "This action cannot be undone.",
+  "Cancel": "Cancel",
+  "Continue": "Continue",
+  "Projektidee erfolgreich bearbeitet": "Project idea successfully edited",
+  "aiFundingCheck": "AI funding check",
+  "AI funding check": "AI funding check",
+  "Zuwendungsbescheid": "Grant notice",
+  "Ablehnungsbescheid": "Rejection notice",
+  "In Bearbeitung": "In progress",
+  "application": "Application submission",
+  "Application": "Application submission",
+  "projectDevelopment": "Project development",
+  "Project development": "Project development",
+  "Project Description": "Needs assessment project description",
+  "Funding Check": "Funding guideline check",
+  "Open Questions": "Open Questions",
+  "Aptitude": "Aptitude test",
+  "Basic decision": "Basic decision",
+  "Publish": "Save",
+  "Erstelldatum": "Creation date",
+  "Speicherdatum": "Save date",
+  "task plan": "Task plan",
+  "site visit": "if applicable, site visit",
+  "Goals and requirements": "Define goals and requirements",
+  "Guideline Check (Content)": "Guideline Check (Content and formalities)",
+  "Financing Check": "Financing Check",
+  "Project Documents Coordination": "Project documents coordination",
+  "Application Decision": "Application decision",
+  "Submission & Signing": "Submission & Signing",
+  "Application process completed successfully": "Application process completed successfully",
+  "No decision was made on the application": "No decision was made on the application",
+  "Project successfully created": "Project successfully created",
+  "updatedAt": "Save date",
+  "Home": "Home",
+  "Data Overview": "Data Overview",
+  "Project Dashboard": "Project Dashboard",
+  "My Watchlist": "My Watchlist",
+  "Categories & Keywords/Tags": "Categories & Keywords/Tags",
+  "User Administration": "User Administration",
+  "User Administation": "User Administration",
+  "Federal States": "Federal States",
+  "My Network": "My Network",
+  "User Data": "User Data",
+  "Email Center": "Email Center",
+  "States": "Municipalities",
+  "Administrative areas": "Administrative areas",
+  "Details for the Administration": "Details for the Administration",
+  "Statistics & Archive": "Statistics & Archive",
+  "Translations": "Translations",
+  "Edit Project Dashboard": "Edit Project Dashboard",
+  "Details of the project Idea": "Details of the project Idea",
+  "Notifications": "Notifications",
+  "My Data": "My Data",
+  "My Community Data": "My Community Data",
+  "Settings": "Settings",
+  "New Project Ideas": "New Project Ideas",
+  "Edit project Idea": "Edit project Idea",
+  "New Funding": "New Funding",
+  "Edit Funding": "Edit Funding",
+  "Details of the Funding": "Details of the Funding",
+  "New Implementation checklist": "New Implementation checklist",
+  "Details of the Implementation checklist": "Details of the Implementation checklist",
+  "Edit Checklist": "Edit Checklist",
+  "help": {
+    "fundingProvider": "Name of the institution or authority offering the funding.",
+    "contactPerson": "Contact person for questions regarding the funding.",
+    "inviteEditor": "Users who are allowed to edit this funding.",
+    "contactDetails": "Address, phone and email of the funding body.",
+    "categories": "Topics and categories of this funding.",
+    "tags": "Keywords for better discoverability.",
+    "fundingGoal": "Purpose or objective of the funding.",
+    "whatIsFunded": "Which measures or expenses are eligible for funding.",
+    "whatIsNotFunded": "Which measures or costs are excluded.",
+    "whoWillBeFunded": "Which target groups or organizations are eligible.",
+    "conditionsForApplicants": "Requirements and criteria for applicants.",
+    "fundingRates": "Available funding rates and their conditions.",
+    "ownContribution": "Required own contribution in percent.",
+    "accumulability": "Whether this funding can be combined with others.",
+    "linksToFundings": "References to related funding programs.",
+    "basisForAssessment": "Criteria or basis of assessment for decisions.",
+    "fundingPeriod": "Time frame for applications and project implementation.",
+    "notesToFundingPeriod": "Further notes on deadlines or timeframes.",
+    "projectLinks": "External links to the guideline or application documents.",
+    "uploads": "Uploaded files for the funding (e.g. guidelines, forms).",
+    "projectContent": "Linked project ideas, examples and notes.",
+    "Create Missing Translations": "Create Missing Translations"
   }
 }
