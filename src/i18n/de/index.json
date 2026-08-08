@@ -393,7 +393,8 @@
     "plannedStartDate": "Beginn",
     "plannedEndDate": "Ende",
     "describeProjectTimeline": "Dokumentation Zeitplan",
-    "describeProjectDocumentation": "Dokumentation Projekt"
+    "describeProjectDocumentation": "Dokumentation Projekt",
+    "selectFiles": "Dateien auswählen"
   },
   "visibility": {
     "onlyMe": "Nur für mich",
@@ -1243,5 +1244,7 @@
     "uploads": "Hochgeladene Dateien zur Förderung (z. B. Richtlinien, Formulare).",
     "projectContent": "Verknüpfte Projektideen, Beispiele und Hinweise.",
     "Create Missing Translations": "Create Missing Translations"
-  }
+  },
+  "would like to access documents": "möchte auf die Dokumente zugreifen",
+  "Implementation checklimst": "Umsetzungscheckliste"
 }

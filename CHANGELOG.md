@@ -1,5 +1,13 @@
 # Änderungsprotokoll / Changelog
 
+## 6.4.1 — 2026-08-08
+
+### de
+- Fehlende oder englischsprachige Textstellen in der deutschen und englischen Oberfläche wurden ergänzt bzw. korrigiert, sodass Texte in beiden Sprachen jetzt vollständig übersetzt angezeigt werden.
+
+### en
+- Missing or untranslated text in the German and English interface has been filled in, so labels now display fully translated in both languages.
+
 ## 6.4.0 — 2026-08-04
 
 ### de
