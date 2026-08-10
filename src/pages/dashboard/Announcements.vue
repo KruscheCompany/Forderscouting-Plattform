@@ -59,10 +59,13 @@ export default {
     }
   },
   methods: {
+    stripUnsupportedChars(value) {
+      return value ? value.replace(/[\u{10000}-\u{10FFFF}]/gu, "") : value;
+    },
     async publish() {
       await this.$store.dispatch("notifications/publishRibbon", {
-        message: this.message,
-        linkLabel: this.linkLabel || null,
+        message: this.stripUnsupportedChars(this.message),
+        linkLabel: this.stripUnsupportedChars(this.linkLabel) || null,
         linkUrl: this.linkUrl || null
       });
       this.message = "";
