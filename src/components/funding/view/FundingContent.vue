@@ -977,11 +977,7 @@ export default {
       const printContent = document.querySelector('.funding-print-template');
 
       if (!printContent) {
-        this.$q.notify({
-          type: 'negative',
-          message: 'Print content not found',
-          position: 'top'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('Print content not found') });
         return;
       }
 
@@ -1025,11 +1021,7 @@ export default {
       this.pdfIsLoading = false;
       this.$q.loading.hide();
       if (event && event.blobUrl) {
-        this.$q.notify({
-          color: 'positive',
-          message: this.$t('PDF generated successfully') || 'PDF generated successfully',
-          icon: 'check_circle'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('PDF generated successfully') || 'PDF generated successfully' });
       }
     }
   },

@@ -151,6 +151,19 @@ const routes = [
         component: () => import("pages/dashboard/AdminUser.vue")
       },
       {
+        path: "/Administation/Announcements",
+        name: "AdministationAnnouncements",
+        meta: {
+          title: "System Announcements",
+          titleDE: "Systemhinweise",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: true
+        },
+        icon: "/icons/Publish.svg",
+        component: () => import("pages/dashboard/Announcements.vue")
+      },
+      {
         path: "/Administation/User/:id",
         name: "AdministationUserDetails",
         meta: {

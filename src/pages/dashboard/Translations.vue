@@ -115,10 +115,7 @@ export default {
         this.changedKeys = [];
       } catch (error) {
         console.error("Failed to load translations:", error);
-        this.$q.notify({
-          type: "negative",
-          message: "Failed to load translations",
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Failed to load translations") });
       } finally {
         this.loading = false;
       }
@@ -219,35 +216,16 @@ export default {
         // Handle results
         if (failedUpdates.length > 0) {
           console.warn("Some translations couldn't be updated:", failedUpdates);
-          this.$q.notify({
-            type: "warning",
-            message: `${failedUpdates.length} translations couldn't be updated.`,
-            multiLine: true,
-            actions: [
-              {
-                label: "Details",
-                color: "white",
-                handler: () => {
-                  console.log("Failed updates:", failedUpdates);
-                },
-              },
-            ],
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "warning", title: this.$t("translationsUpdateFailedCount", { count: failedUpdates.length }) });
         } else {
-          this.$q.notify({
-            type: "positive",
-            message: "Translations saved successfully",
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t("Translations saved successfully") });
         }
 
         // Refresh data after save
         await this.loadTranslations();
       } catch (error) {
         console.error("Failed to save translations:", error);
-        this.$q.notify({
-          type: "negative",
-          message: "Failed to save changes",
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Failed to save changes") });
       } finally {
         this.saving = false;
       }
@@ -300,10 +278,7 @@ export default {
 
         if (created.length > 0) {
           console.log("Created missing translations:", created);
-          this.$q.notify({
-            type: "positive",
-            message: `Created ${created.length} missing translations`,
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t("translationsCreatedCount", { count: created.length }) });
         }
       } catch (error) {
         console.error("Error creating missing translations:", error);

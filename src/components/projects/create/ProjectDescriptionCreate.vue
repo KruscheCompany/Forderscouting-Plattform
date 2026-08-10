@@ -298,11 +298,7 @@ export default {
         // Check if the response indicates success
         if (res && res.data && projectId) {
           // Handle success (redirect, show notification, etc.)
-          this.$q.notify({
-            color: 'positive',
-            message: this.$t('Project successfully created'),
-            icon: 'check'
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('Project successfully created') });
 
           // Emit event to parent with project data
           this.$emit('project-created', {
@@ -313,11 +309,7 @@ export default {
 
         } else if (this.editing) {
           // For editing, success might not return data but still be successful
-          this.$q.notify({
-            color: 'positive',
-            message: this.$t('Project successfully updated'),
-            icon: 'check'
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('Project successfully updated') });
 
           // Emit event to parent with project data
           this.$emit('project-created', {
@@ -340,11 +332,7 @@ export default {
         }
 
         // Show notification about validation errors
-        this.$q.notify({
-          color: 'negative',
-          message: this.$t('Please fix the highlighted errors before submitting'),
-          icon: 'error'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('Please fix the highlighted errors before submitting') });
       }
 
       this.startingConditionReset = false;
@@ -380,11 +368,7 @@ export default {
         errorMessage = error.message || this.$t('Error creating project');
       }
 
-      this.$q.notify({
-        color: 'negative',
-        message: errorMessage,
-        icon: 'error'
-      });
+      this.$store.dispatch("notifications/pushToast", { kind: "negative", title: errorMessage });
 
       this.isLoading = false;
     },

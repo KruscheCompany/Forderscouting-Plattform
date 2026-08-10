@@ -220,10 +220,7 @@ export default {
             this.form.federalStates = [];
           }
         } else {
-          this.$q.notify({
-            type: "negative",
-            message: "Bitte wählen Sie einen anderen Titel oder anderen Ort aus"
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Bitte wählen Sie einen anderen Titel oder anderen Ort aus") });
         }
       }
     },

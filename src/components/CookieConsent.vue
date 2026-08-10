@@ -181,10 +181,7 @@ export default {
               consent,
             });
           } catch (error) {
-            this.$q.notify({
-              type: "negative",
-              message: error?.response?.data?.error?.message || "Fehler beim Speichern."
-            });
+            this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error?.response?.data?.error?.message || this.$t("Fehler beim Speichern.") });
           }
         }
       }
