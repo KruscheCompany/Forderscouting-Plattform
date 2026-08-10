@@ -1,5 +1,9 @@
 <template>
   <q-page class="q-mt-lg q-pb-md" :class="$q.screen.lt.md ? 'q-mx-md' : 'q-mx-xl'">
+    <div v-if="loading" class="flex flex-center" style="min-height: 300px">
+      <q-spinner color="primary" size="3em" :thickness="3" />
+    </div>
+    <div v-else :class="{ 'notif-reveal': !hasAnimated }" @animationend="hasAnimated = true">
     <q-card v-if="Object.keys(data).length === 0" class="full-height full-width bg-white radius-20 shadow-1">
       <q-card-section>
         <div class="row">
@@ -111,6 +115,7 @@
         </q-card-section>
       </q-card>
     </div>
+    </div>
     <q-dialog v-if="dialog" v-model="dialog">
       <q-card>
         <q-card-section>
@@ -150,6 +155,8 @@ export default {
   data() {
     return {
       data: [],
+      loading: true,
+      hasAnimated: false,
       dialog: false,
       currentFundingComment: null,
       inviteUserDialog: false,
@@ -219,6 +226,7 @@ export default {
       this.$api.get("/api/user/notification").then((response) => {
         this.data = response.data;
         this.prepData();
+        this.loading = false;
       });
     },
     getIcon(type) {
@@ -357,4 +365,20 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.notif-reveal {
+  animation: notif-reveal-anim 0.4s ease-out;
+}
+
+@keyframes notif-reveal-anim {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
