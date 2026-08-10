@@ -12,7 +12,7 @@
       :title="$t('systemRibbon.close')"
       @click="dismiss"
     >
-      <img class="nb-ribbon__close-logo" src="/AMTVIÖL-Projektkompass-Bildmarke-RGB.png" alt="" />
+      <img class="nb-ribbon__close-logo" src="/AMTVIOEL-Projektkompass-Bildmarke-RGB.png" alt="" />
     </div>
   </RibbonBar>
 </template>
