@@ -370,15 +370,7 @@ export default {
       if (this.expandedFundingCheck && this.userDataValidation.isValid &&
         this.getFundingMatches && this.getFundingMatches.length > 0 &&
         matches.length === 0) {
-        this.$q.notify({
-          color: 'warning',
-          textColor: 'black',
-          iconColor: 'black',
-          message: this.$t('projectComponents.fundingCheck.noMatchingFundings'),
-          icon: 'info',
-          position: 'top',
-          timeout: 5000
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "warning", title: this.$t('projectComponents.fundingCheck.noMatchingFundings') });
       }
 
       this.syncOrderedMatches(matches);
@@ -446,13 +438,7 @@ export default {
     // Show error notification if user data is invalid
     showUserDataError() {
       if (!this.userDataValidation.isValid) {
-        this.$q.notify({
-          color: 'negative',
-          message: this.userDataValidation.errorMessage,
-          icon: 'warning',
-          position: 'top',
-          timeout: 5000
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.userDataValidation.errorMessage });
       }
     },
 
@@ -511,11 +497,7 @@ export default {
         if (!financialPlan || !financialPlan.costAndFinance) missingFields.push(this.$t('newProjectIdeaForm.financialPlan'));
 
         if (missingFields.length > 0) {
-          this.$q.notify({
-            color: 'negative',
-            message: this.$t('projectComponents.fundingCheck.noProjectDataFields', { fields: missingFields.join(', ') }),
-            icon: 'warning'
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('projectComponents.fundingCheck.noProjectDataFields', { fields: missingFields.join(', ') }) });
           return;
         }
 
@@ -529,19 +511,11 @@ export default {
           finances
         });
 
-        this.$q.notify({
-          color: 'positive',
-          message: this.$t('projectComponents.fundingCheck.successRefresh'),
-          icon: 'check'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('projectComponents.fundingCheck.successRefresh') });
 
       } catch (error) {
         console.error('Error refreshing funding matches:', error);
-        this.$q.notify({
-          color: 'negative',
-          message: this.$t('projectComponents.fundingCheck.errorRefresh'),
-          icon: 'error'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('projectComponents.fundingCheck.errorRefresh') });
       } finally {
         this.isRefreshing = false;
         this.isLoading = false;
@@ -703,11 +677,7 @@ export default {
         const hasSelection = fundingMatchesWithSelection.some(funding => funding.selected) || this.selectedCards.includes('fehlanzeige');
 
         if (!hasSelection) {
-          this.$q.notify({
-            color: 'negative',
-            message: this.$t('projectComponents.fundingCheck.pleaseSelect'),
-            icon: 'warning'
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('projectComponents.fundingCheck.pleaseSelect') });
           return;
         }
 

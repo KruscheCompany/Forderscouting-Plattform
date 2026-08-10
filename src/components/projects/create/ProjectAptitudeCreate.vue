@@ -144,10 +144,7 @@ export default {
         return t && t.status === "positiv";
       });
       if (!allGreen) {
-        this.$q.notify({
-          type: "warning",
-          message: this.$t("projectComponents.aptitude.vorpruefung.gateBlocked")
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "warning", title: this.$t("projectComponents.aptitude.vorpruefung.gateBlocked") });
         return;
       }
 

@@ -26,7 +26,7 @@
               <div class="col-auto">
                 <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.type") }}</p>
                 <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
-                  {{ $t("dashboard.projectIdeaBtn") }}
+                  {{ $t("myDataHome.projectIdeaBtn") }}
                 </p>
               </div>
               <div class="col-auto">

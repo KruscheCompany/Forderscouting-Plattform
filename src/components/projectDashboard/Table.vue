@@ -452,20 +452,14 @@ export default {
           this.$set(this.expandedRows, rowId, true);
         } else {
           // If access is denied, show a notification
-          this.$q.notify({
-            type: "negative",
-            message: this.$t("ProjectDashboard.accessDenied") || "Access denied to financial information"
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("ProjectDashboard.accessDenied") || "Access denied to financial information" });
 
           // Keep row collapsed
           this.$set(this.expandedRows, rowId, false);
         }
       } catch (error) {
         console.error("Error validating access for financial data:", error);
-        this.$q.notify({
-          type: "negative",
-          message: this.$t("ProjectDashboard.accessError") || "Error checking access permissions"
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("ProjectDashboard.accessError") || "Error checking access permissions" });
 
         // Keep row collapsed on error
         this.$set(this.expandedRows, rowId, false);

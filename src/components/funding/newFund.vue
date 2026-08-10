@@ -796,11 +796,7 @@ export default {
       this.$store.dispatch("municipality/getMunicipalities");
 
       if (this.form.archived && !isAdmin) {
-        this.$q.notify({
-          message: this.$t("Der Zugang zu archivierten Dokumenten ist nicht möglich"),
-          color: "negative",
-          position: "top"
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Der Zugang zu archivierten Dokumenten ist nicht möglich") });
         this.$router.go(-1);
 
       }

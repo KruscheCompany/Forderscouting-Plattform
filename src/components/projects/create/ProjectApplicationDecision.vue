@@ -50,7 +50,6 @@
 
 <script>
 import { api } from "boot/axios";
-import { Notify } from "quasar";
 
 export default {
   name: "ProjectApplicationDecision",
@@ -152,10 +151,7 @@ export default {
         await api.delete(`api/upload/files/${file.id}`);
       } catch (error) {
         console.error("Error deleting file:", error);
-        Notify.create({
-          type: "negative",
-          message: error.response?.data?.error?.message || "Error deleting file"
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response?.data?.error?.message || "Error deleting file" });
       }
     },
 
@@ -247,10 +243,7 @@ export default {
         this.$emit("applicationDecision-submitted");
       } catch (error) {
         console.error("Error submitting application decision:", error);
-        Notify.create({
-          type: "negative",
-          message: error.response?.data?.error?.message || "Error uploading files"
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response?.data?.error?.message || "Error uploading files" });
       }
     }
   },

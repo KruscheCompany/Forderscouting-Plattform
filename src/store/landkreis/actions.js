@@ -1,5 +1,5 @@
 import { api } from "boot/axios";
-import { Notify } from "quasar";
+import { i18n } from "boot/i18n";
 
 export async function getLandkreise(context) {
   try {
@@ -26,11 +26,11 @@ export async function getLandkreise(context) {
     context.commit("setLandkreise", landkreise);
   } catch (error) {
     console.error("error :>> ", error);
-    Notify.create({
-      position: "top-right",
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -41,17 +41,18 @@ export async function createLandkreis(context, payload) {
       const res = await api.post("/api/landkreise", {
         data: { title, federalStates, municipalities }
       });
-      Notify.create({
-        message: "Landkreis erfolgreich hinzugefügt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Landkreis erfolgreich hinzugefügt") },
+        { root: true }
+      );
       context.dispatch("getLandkreise");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -64,17 +65,18 @@ export async function editLandkreis(context, payload) {
       const res = await api.put(`/api/landkreise/${id}`, {
         data: { title, federalStates, municipalities, updatedAt: new Date().toISOString() }
       });
-      Notify.create({
-        message: "Landkreis erfolgreich aktualisiert",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Landkreis erfolgreich aktualisiert") },
+        { root: true }
+      );
       context.dispatch("getLandkreise");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -85,17 +87,18 @@ export async function deleteLandkreis(context, payload) {
   if (!!id) {
     try {
       const res = await api.delete(`/api/landkreise/${id}`);
-      Notify.create({
-        message: "Landkreis erfolgreich gelöscht",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Landkreis erfolgreich gelöscht") },
+        { root: true }
+      );
       context.dispatch("getLandkreise");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }

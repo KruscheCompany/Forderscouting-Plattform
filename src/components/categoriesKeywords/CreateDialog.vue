@@ -131,10 +131,7 @@ export default {
             this.createDialogInput = "";
           }
         } else {
-          this.$q.notify({
-            type: "negative",
-            message: "Bitte wählen Sie einen anderen Titel aus"
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Bitte wählen Sie einen anderen Titel aus") });
         }
       }
     },

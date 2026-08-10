@@ -221,11 +221,7 @@ export default {
   },
   methods: {
     rejected() {
-      this.$q.notify({
-        color: "negative",
-        textColor: "white",
-        message: "Bitte stellen Sie sicher, dass Sie ein Bild hochladen"
-      });
+      this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Bitte stellen Sie sicher, dass Sie ein Bild hochladen") });
     },
     async uploadImage() {
       if (this.newImg != null) {

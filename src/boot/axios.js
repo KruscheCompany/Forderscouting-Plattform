@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { boot } from "quasar/wrappers";
 import axios from "axios";
+import { i18n } from "boot/i18n";
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_MAIN_URL
@@ -37,6 +38,7 @@ export default ({ app, store, router }) => {
         config.headers.Authorization = null;
       }
     }
+    config.headers["Accept-Language"] = i18n.locale === "en-us" ? "en" : "de";
     return config;
   });
 

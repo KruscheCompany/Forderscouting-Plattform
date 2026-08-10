@@ -1,5 +1,5 @@
 import { api } from "boot/axios";
-import { Notify } from "quasar";
+import { i18n } from "boot/i18n";
 
 export async function getMunicipalities(context) {
   try {
@@ -7,11 +7,11 @@ export async function getMunicipalities(context) {
     context.commit("setMunicipalities", res.data);
   } catch (error) {
     console.error("error :>> ", error);
-    Notify.create({
-      position: "top-right",
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -21,11 +21,11 @@ export async function getSimplifiedMunicipalities(context) {
     context.commit("setMunicipalitiesSimplified", res.data);
   } catch (error) {
     console.error("error :>> ", error);
-    Notify.create({
-      position: "top-right",
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -35,11 +35,11 @@ export async function getStates(context) {
     context.commit("setStates", res.data);
   } catch (error) {
     console.error("error :>> ", error);
-    Notify.create({
-      position: "top-right",
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -56,11 +56,11 @@ export async function getLocationsByMunicipality(context, { municipalityId }) {
     return res.data;
   } catch (error) {
     console.error("error :>> ", error);
-    Notify.create({
-      position: "top-right",
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -70,11 +70,11 @@ export async function getGroupedStates(context) {
     context.commit("setGroupedStates", res.data);
   } catch (error) {
     console.error("error :>> ", error);
-    Notify.create({
-      position: "top-right",
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -84,11 +84,11 @@ export async function getMunicipalitiesPublic(context) {
     context.commit("setMunicipalities", res.data.municipalities);
   } catch (error) {
     console.error("error :>> ", error);
-    Notify.create({
-      position: "top-right",
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -118,17 +118,18 @@ export async function createMunicipality(context, payload) {
         }
       });
       context.commit("addMunicipality", res.data.data);
-      Notify.create({
-        message: "Verwaltungsbereich erfolgreich hinzugefügt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Verwaltungsbereich erfolgreich hinzugefügt") },
+        { root: true }
+      );
       context.dispatch("getMunicipalities");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -147,17 +148,18 @@ export async function createState(context, payload) {
         }
       });
       // context.commit("addState", res.data);
-      Notify.create({
-        message: "Geminde erfolgreich hinzugefügt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Geminde erfolgreich hinzugefügt") },
+        { root: true }
+      );
       context.dispatch("getStates");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -187,17 +189,18 @@ export async function editMunicipality(context, payload) {
       });
       console.log("res :>> ", res);
       context.commit("editMunicipality", res.data.data);
-      Notify.create({
-        message: "Verwaltungsbereich erfolgreich aktualisiert",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Verwaltungsbereich erfolgreich aktualisiert") },
+        { root: true }
+      );
       context.dispatch("getMunicipalities");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -216,17 +219,18 @@ export async function editState(context, payload) {
         }
       });
       // context.commit("editState", res.data.data);
-      Notify.create({
-        message: "Bundesland erfolgreich aktualisiert",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Bundesland erfolgreich aktualisiert") },
+        { root: true }
+      );
       context.dispatch("getStates");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -238,17 +242,18 @@ export async function delteMunicipality(context, payload) {
     try {
       const res = await api.delete(`/api/municipalities/${id}`);
       context.commit("deleteMunicipality", res.data.data && res.data.data.id);
-      Notify.create({
-        message: "Verwaltungsbereich erfolgreich gelöscht",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Verwaltungsbereich erfolgreich gelöscht") },
+        { root: true }
+      );
       context.dispatch("getMunicipalities");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -260,17 +265,18 @@ export async function deleteState(context, payload) {
     try {
       const res = await api.delete(`/api/locations/${id}`);
       context.commit("deleteState", res.data.data && res.data.data.id);
-      Notify.create({
-        message: "Bundesland erfolgreich gelöscht",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Bundesland erfolgreich gelöscht") },
+        { root: true }
+      );
       context.dispatch("getStates");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }

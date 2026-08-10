@@ -1,5 +1,5 @@
 import { api } from "boot/axios";
-import { Notify } from "quasar";
+import { i18n } from "boot/i18n";
 
 export async function getFederalStates(context) {
   try {
@@ -7,11 +7,11 @@ export async function getFederalStates(context) {
     context.commit("setFederalStates", res.data);
   } catch (error) {
     console.error("error :>> ", error);
-    Notify.create({
-      position: "top-right",
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -22,17 +22,18 @@ export async function createFederalState(context, payload) {
       const res = await api.post("/api/federal-states", {
         data: { title }
       });
-      Notify.create({
-        message: "Bundesland erfolgreich hinzugefügt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Bundesland erfolgreich hinzugefügt") },
+        { root: true }
+      );
       context.dispatch("getFederalStates");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -45,17 +46,18 @@ export async function editFederalState(context, payload) {
       const res = await api.put(`/api/federal-states/${id}`, {
         data: { title, updatedAt: new Date().toISOString() }
       });
-      Notify.create({
-        message: "Bundesland erfolgreich aktualisiert",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Bundesland erfolgreich aktualisiert") },
+        { root: true }
+      );
       context.dispatch("getFederalStates");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -66,17 +68,18 @@ export async function deleteFederalState(context, payload) {
   if (!!id) {
     try {
       const res = await api.delete(`/api/federal-states/${id}`);
-      Notify.create({
-        message: "Bundesland erfolgreich gelöscht",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Bundesland erfolgreich gelöscht") },
+        { root: true }
+      );
       context.dispatch("getFederalStates");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
