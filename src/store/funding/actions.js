@@ -1,15 +1,16 @@
 import { api } from "boot/axios";
-import { Notify } from "quasar";
+import { i18n } from "boot/i18n";
 
 export async function getFundings(context) {
   try {
     const res = await api.get("/api/fundings");
     context.commit("setFundings", res.data);
   } catch (error) {
-    Notify.create({
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -18,10 +19,11 @@ export async function getFundingsWithArchived(context) {
     const res = await api.get("/api/fundings?withArchived=true");
     context.commit("setFundingsWithArchived", res.data);
   } catch (error) {
-    Notify.create({
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -50,19 +52,21 @@ export async function createNewFunding(context, payload) {
         });
         console.log("mediaUploadRes", mediaUploadRes);
       }
-      Notify.create({
-        message: "Neue Förder-Kurzinfo erfolgreich hinzugefügt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Neue Förder-Kurzinfo erfolgreich hinzugefügt") },
+        { root: true }
+      );
       // context.dispatch("getProjectIdeas");
       // this.$router.push({ path: "/user/data?tab=fundings" });
       this.$router.go(-1);
     } catch (error) {
       console.log("error.response", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -90,10 +94,11 @@ export async function uploadFiles(context, payload) {
       console.log("fileRes", fileRes);
     } catch (error) {
       console.log("files error.response", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       // return false;
     }
   }
@@ -122,10 +127,11 @@ export async function uploadMedia(context, payload) {
           });
         } catch (error) {
           console.log("media error.response", error.response);
-          Notify.create({
-            type: "negative",
-            message: error.response.data.error.message
-          });
+          context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
         }
       });
       return Promise.all(promises);
@@ -144,10 +150,11 @@ export async function deleteFilesAndMedia(context, payload) {
         console.log("deleteRes", deleteRes);
       } catch (error) {
         console.log("files error.response", error.response);
-        Notify.create({
-          type: "negative",
-          message: error.response.data.error.message
-        });
+        context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
         // return false;
       }
     });
@@ -240,10 +247,11 @@ export async function editFunding(context, payload) {
         }
       }
 
-      Notify.create({
-        message: "Förder-Kurzinfo erfolgreich bearbeitet",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Förder-Kurzinfo erfolgreich bearbeitet") },
+        { root: true }
+      );
       // context.dispatch("getProjectIdeas");
       // this.$router.push({
       //   path: "/user/data?tab=fundings"
@@ -251,10 +259,11 @@ export async function editFunding(context, payload) {
       this.$router.go(-1);
     } catch (error) {
       console.error("error", error);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -270,10 +279,11 @@ export async function getSpecificFunding(context, payload) {
       // return res.data.id;
     } catch (error) {
       console.log("error", error);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
     }
   }
 }
@@ -300,16 +310,18 @@ export async function requestAccess(context, payload) {
           guest: guest
         }
       });
-      Notify.create({
-        message: "Förder-Kurzinfo Anfrage gesendet",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Förder-Kurzinfo Anfrage gesendet") },
+        { root: true }
+      );
       context.dispatch("getFundings");
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -323,17 +335,19 @@ export async function archiveFunding(context, payload) {
         data: { archived: true }
       });
       console.log("res", res);
-      Notify.create({
-        message: "Förder-Kurzinfo erfolgreich archiviert",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Förder-Kurzinfo erfolgreich archiviert") },
+        { root: true }
+      );
       context.commit("archiveFunding");
       context.dispatch("getFundings");
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -347,16 +361,18 @@ export async function addToWatchlist(context, payload) {
         data: { funding: id }
       });
       console.log("res", res);
-      Notify.create({
-        message: "Förder-Kurzinfo zur Merkliste hinzugefügt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Förder-Kurzinfo zur Merkliste hinzugefügt") },
+        { root: true }
+      );
       context.dispatch("getFundings");
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -371,16 +387,18 @@ export async function addComment(context, payload) {
       const res = await api.post("/api/funding-comments", {
         data: { comment, funding: fundingId, owner: userId }
       });
-      Notify.create({
-        message: "Kommentar erfolgreich hinzugefügt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Kommentar erfolgreich hinzugefügt") },
+        { root: true }
+      );
       context.dispatch("getSpecificFunding", { id: fundingId });
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -392,16 +410,18 @@ export async function removeFromWatchlist(context, payload) {
     try {
       const res = await api.delete(`/api/watchlists/${id}`);
       console.log("res", res);
-      Notify.create({
-        message: "Förder-Kurzinfo erfolgreich von der Merkliste entfernt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Förder-Kurzinfo erfolgreich von der Merkliste entfernt") },
+        { root: true }
+      );
       context.dispatch("getProjectIdeas");
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -413,16 +433,18 @@ export async function deleteFunding(context, payload) {
     try {
       const res = await api.delete(`/api/fundings/${id}`);
       context.commit("deleteFunding", res.data.data && res.data.data.id);
-      Notify.create({
-        message: "Förder-Kurzinfo erfolgreich gelöscht",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Förder-Kurzinfo erfolgreich gelöscht") },
+        { root: true }
+      );
       context.dispatch("getFundings");
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }

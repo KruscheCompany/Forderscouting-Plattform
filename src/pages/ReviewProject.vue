@@ -222,12 +222,9 @@ export default {
         this.submitted = true;
         this.ticket = { ...this.ticket, responseText: this.responseText };
       } catch (error) {
-        this.$q.notify({
-          type: "negative",
-          message: error.response && error.response.data && error.response.data.error
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response && error.response.data && error.response.data.error
             ? error.response.data.error.message
-            : "Fehler beim Absenden."
-        });
+            : "Fehler beim Absenden." });
       } finally {
         this.submitting = false;
       }

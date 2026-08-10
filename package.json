@@ -1,6 +1,6 @@
 {
   "name": "Projektkompass",
-  "version": "6.4.1",
+  "version": "6.6.3",
   "description": "Das Projekt „Interkommunale Förderscouting-Plattform Nordfriesland“ ist ein Modellvorhaben im Rahmen der Förderinitiative „Heimat 2.0“ des Bundesministeriums für Wohnen, Stadtentwicklung und Bauwesen (BMWSB) in Zusammenarbeit mit dem Bundesinstitut für Bau-, Stadt- und Raumforschung (BBSR).",
   "productName": "Projektkompass Kommune",
   "author": "",
@@ -19,6 +19,7 @@
     "dompurify": "^3.3.0",
     "js-cookie": "^3.0.1",
     "quasar": "^1.22.10",
+    "socket.io-client": "^4.8.1",
     "v-money": "^0.8.1",
     "vue-html2pdf": "file:./src/libs/vue-html2pdf",
     "vue-i18n": "^8.0.0",

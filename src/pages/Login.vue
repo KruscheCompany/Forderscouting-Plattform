@@ -88,7 +88,8 @@
                       <q-icon v-if="loginSuccess" name="check" size="20px" class="login-btn-icon" />
                       <template v-else>{{ $t("login") }}</template>
                       <template v-slot:loading>
-                        <span></span>
+                        <span class="login-btn-fill" :style="{ width: loginProgress + '%' }"></span>
+                        <span class="login-btn-percent">{{ loginProgress }}%</span>
                       </template>
                     ></q-btn>
                   </div>
@@ -198,6 +199,15 @@
 <script>
 import AnimatedJourneyMapBackground from "components/AnimatedJourneyMapBackground.vue";
 
+const LOGIN_PROGRESS_STAGES = [
+  "Logging you in...",
+  "Getting user details",
+  "Getting Categories",
+  "Getting Tags",
+  "Getting Municipalities",
+  "Getting users"
+];
+
 export default {
   name: "Login",
   components: {
@@ -215,24 +225,37 @@ export default {
       },
       errorMsg: "",
       isLoading: false,
+      loginProgress: 0,
       shake: false,
       loginSuccess: false,
       resetSuccess: false,
       sentToEmail: ""
     };
   },
+  watch: {
+    "$store.state.userCenter.loadingMessages"(message) {
+      if (!this.isLoading) return;
+      const idx = LOGIN_PROGRESS_STAGES.indexOf(message);
+      if (idx !== -1) {
+        this.loginProgress = Math.round(((idx + 1) / LOGIN_PROGRESS_STAGES.length) * 100);
+      }
+    }
+  },
   methods: {
     async login() {
       this.$refs.loginForm.validate().then(async success => {
         if (success) {
           this.isLoading = true;
+          this.loginProgress = 8;
           const res = await this.$store.dispatch("userCenter/login", this.form);
           this.isLoading = false;
           this.errorMsg = res;
           if (res === true) {
+            this.loginProgress = 100;
             this.loginSuccess = true;
             this.errorMsg = "";
           } else {
+            this.loginProgress = 0;
             this.shake = true;
             setTimeout(() => {
               this.shake = false;
@@ -260,10 +283,7 @@ export default {
             res = true;
           } catch (error) {
             console.log("error :>> ", error.response);
-            this.$q.notify({
-              type: "negative",
-              message: error.response.data.error.message
-            });
+            this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response.data.error.message });
             res = false;
           }
           this.isLoading = false;
@@ -372,19 +392,27 @@ export default {
   position: relative;
   overflow: hidden;
 }
-.login-btn-loading::after {
-  content: "";
+.login-btn-loading {
+  background: #e7ebfb !important;
+}
+.login-btn-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: #000055;
+  transition: width 0.25s ease;
+}
+.login-btn-percent {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(0, 0, 85, 0.18) 45%,
-    rgba(0, 0, 85, 0.18) 55%,
-    transparent 100%
-  );
-  transform: translateX(-100%);
-  animation: login-btn-sweep 1.1s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff !important;
+  mix-blend-mode: difference;
+  font-weight: 700;
+  font-size: 15px;
 }
 .login-card-shake {
   animation: login-shake 0.4s ease;
@@ -467,10 +495,6 @@ export default {
   0% { opacity: 0; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
 }
-@keyframes login-btn-sweep {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
 
 @media (max-width: 700px) {
   .login-side-panel {
@@ -482,13 +506,13 @@ export default {
   .login-card-shake,
   .reset-envelope,
   .login-btn-icon,
-  .login-btn-loading::after,
   .login-form-inner .q-tab-panels,
   .login-side-middle,
   .login-side-footer {
     animation: none !important;
   }
-  .login-input >>> .q-field__control {
+  .login-input >>> .q-field__control,
+  .login-btn-fill {
     transition: none !important;
   }
 }

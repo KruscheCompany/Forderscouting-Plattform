@@ -120,7 +120,7 @@
                         </div>
                         <div class="col-12 q-mt-sm">
                           <q-btn :label="!!imgPreview(image).caption
-                            ? $t('Edit caption')
+                            ? $t('Edit Caption')
                             : $t('Add Caption')
                             " @click.prevent.stop="addCaption(image, index)" text-color="primary" dense
                             class="radius-6" no-caps flat>

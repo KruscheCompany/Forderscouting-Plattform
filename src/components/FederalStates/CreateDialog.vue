@@ -72,10 +72,7 @@ export default {
           this.form.title = "";
         }
       } else {
-        this.$q.notify({
-          type: "negative",
-          message: "Bitte füllen Sie alle Felder aus"
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Bitte füllen Sie alle Felder aus") });
       }
     },
     async editFederalState() {
@@ -95,10 +92,7 @@ export default {
             this.form.title = "";
           }
         } else {
-          this.$q.notify({
-            type: "negative",
-            message: "Bitte wählen Sie einen anderen Titel aus"
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Bitte wählen Sie einen anderen Titel aus") });
         }
       }
     },

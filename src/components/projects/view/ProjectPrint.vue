@@ -528,15 +528,9 @@ export default {
     hasGenerated(event) {
       this.$q.loading.hide();
       if (event.success) {
-        this.$q.notify({
-          type: 'positive',
-          message: 'PDF generated successfully'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('PDF generated successfully') });
       } else {
-        this.$q.notify({
-          type: 'negative',
-          message: 'Failed to generate PDF'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('Failed to generate PDF') });
       }
     },
   }

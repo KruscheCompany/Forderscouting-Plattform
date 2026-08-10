@@ -301,6 +301,7 @@ export default {
               funding_expirey: noti.id,
             },
           });
+          this.getData();
           break;
         case "fundingComments":
           await this.$api.post("/api/read-notifications", {
@@ -332,13 +333,26 @@ export default {
         default:
           break;
       }
+      this.$store.dispatch("notifications/fetchNotificationsCount");
     },
     updateNotifications(noti, index) {
       this.data[noti.createdAt.split("T")[0]].splice(index, 1);
+      this.$store.dispatch("notifications/fetchNotificationsCount");
+    },
+    onLiveNotification() {
+      this.getData();
     },
   },
   mounted() {
     this.getData();
+    if (this.$socket) {
+      this.$socket.on("notification", this.onLiveNotification);
+    }
+  },
+  beforeDestroy() {
+    if (this.$socket) {
+      this.$socket.off("notification", this.onLiveNotification);
+    }
   },
 };
 </script>

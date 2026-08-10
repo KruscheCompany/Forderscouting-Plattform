@@ -489,10 +489,7 @@ export default {
     },
     async handleSubmissionSigningSubmitted(status) {
       if (status !== null) {
-        this.$q.notify({
-          color: 'positive',
-          message: `${this.$t('Application process completed successfully')}`
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "positive", title: `${this.$t('Application process completed successfully')}` });
 
         // Redirect to view page after successful completion
         if (this.createdProjectId) {
@@ -503,10 +500,7 @@ export default {
         }
       } else {
         // No decision made
-        this.$q.notify({
-          color: 'warning',
-          message: this.$t('No decision was made on the application')
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "warning", title: this.$t('No decision was made on the application') });
         this.form = { ...this.form, ...JSON.parse(JSON.stringify(this.project)) };
       }
     },

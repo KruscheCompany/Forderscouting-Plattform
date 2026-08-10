@@ -1,16 +1,16 @@
 import { api } from "boot/axios";
-import { Notify } from "quasar";
+import { i18n } from "boot/i18n";
 
 export async function getCategories(context) {
   try {
     const res = await api.get("/api/categories");
     context.commit("setCategories", res.data);
   } catch (error) {
-    Notify.create({
-      position: "top-right",
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -19,11 +19,11 @@ export async function getSimplifiedCategories(context) {
     const res = await api.get("/api/category/simple");
     context.commit("setCategoriesSimplified", res.data);
   } catch (error) {
-    Notify.create({
-      position: "top-right",
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
     return false;
   }
 }
@@ -34,17 +34,18 @@ export async function addCategory(context, payload) {
     try {
       const res = await api.post("/api/categories", { data: { title: name } });
       context.commit("addCategory", res.data.data);
-      Notify.create({
-        message: "Kategorie erfolgreich hinzugefügt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Kategorie erfolgreich hinzugefügt") },
+        { root: true }
+      );
       context.dispatch("getCategories");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -59,17 +60,18 @@ export async function editCategory(context, payload) {
         data: { title: title, updatedAt: new Date().toISOString() }
       });
       context.commit("editCategory", res.data.data);
-      Notify.create({
-        message: "Kategorie erfolgreich geändert",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Kategorie erfolgreich geändert") },
+        { root: true }
+      );
       context.dispatch("getCategories");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -81,17 +83,18 @@ export async function deleteCategory(context, payload) {
     try {
       const res = await api.delete(`/api/categories/${id}`);
       context.commit("deleteCategory", res.data.data && res.data.data.id);
-      Notify.create({
-        message: "Kategorie erfolgreich gelöscht",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Kategorie erfolgreich gelöscht") },
+        { root: true }
+      );
       context.dispatch("getCategories");
     } catch (error) {
-      Notify.create({
-        position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }

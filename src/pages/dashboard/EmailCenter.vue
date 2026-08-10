@@ -322,12 +322,7 @@ export default {
       }
 
       if (!userGroup || !subject || !body) {
-        this.$q.notify({
-          message: this.$t("pleaseFillAllFields"),
-          color: "negative",
-          position: "top",
-          timeout: 2000,
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("pleaseFillAllFields") });
         this.isLoading = false;
         return;
       }
@@ -349,21 +344,11 @@ export default {
           console.error("Error sending email:", error);
           return false;
         }
-        this.$q.notify({
-          message: this.$t("emailSent"),
-          color: "positive",
-          position: "top",
-          timeout: 2000,
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t("emailSent") });
         this.cancelDialog();
       } catch (error) {
         console.error("Error sending email:", error);
-        this.$q.notify({
-          message: this.$t("emailNotSent"),
-          color: "negative",
-          position: "top",
-          timeout: 2000,
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("emailNotSent") });
       } finally {
         this.isLoading = false;
         this.getData();

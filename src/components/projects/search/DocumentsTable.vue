@@ -94,10 +94,7 @@ export default {
         await this.prepData(res.data);
         this.loading = false;
       } catch (error) {
-        this.$q.notify({
-          type: "negative",
-          message: error.response.data.error.message
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response.data.error.message });
         this.loading = false;
       }
     },

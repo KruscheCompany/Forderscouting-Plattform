@@ -1,5 +1,55 @@
 # Änderungsprotokoll / Changelog
 
+## 6.6.3 — 2026-08-10
+
+### de
+- Die Benachrichtigungs-Einblendung oben rechts bleibt jetzt sichtbar, bis Sie sie tatsächlich gesehen haben — sie verschwindet nicht mehr im Hintergrund, während Sie in einem anderen Tab oder Programm sind.
+- Browser-Benachrichtigungen werden jetzt auch auf Geräten zuverlässig zugestellt, auf denen sie bisher trotz erteilter Erlaubnis nicht angezeigt wurden.
+
+### en
+- The notification pop-up top-right now stays visible until you've actually seen it — it no longer disappears in the background while you're on another tab or app.
+- Browser notifications now reliably arrive on devices where they previously didn't show up despite permission being granted.
+
+## 6.6.2 — 2026-08-10
+
+### de
+- Zahlreiche Erfolgs-, Hinweis- und Fehlermeldungen, die bisher nur auf Deutsch angezeigt wurden (z. B. beim Anlegen von Kategorien, Bundesländern oder Landkreisen, oder bei fehlender Berechtigung), werden jetzt auch korrekt auf Englisch angezeigt.
+
+### en
+- Many success, info, and error messages that previously only showed in German (e.g. when creating categories, federal states, or rural districts, or when access is denied) are now correctly shown in English too.
+
+## 6.6.1 — 2026-08-09
+
+### de
+- Alle Erfolgs- und Fehlermeldungen in der Plattform (z. B. beim Speichern, Löschen oder bei einem Fehler) erscheinen jetzt im selben neuen Design wie die Benachrichtigungs-Einblendungen oben rechts.
+
+### en
+- All success and error messages across the platform (e.g. when saving, deleting, or on an error) now appear in the same new design as the notification pop-ups top-right.
+
+## 6.6.0 — 2026-08-08
+
+### de
+- Neue Benachrichtigungen erscheinen jetzt zusätzlich als kurze Einblendung oben rechts, direkt während Sie in der Plattform arbeiten — kein Wechsel zur Glocke mehr nötig, um mitzubekommen, dass etwas Neues da ist.
+- Neu: Administrator*innen können einen Systemhinweis (z. B. für ein Wartungsfenster) veröffentlichen, der als durchgehendes Banner oben im Bereich aller angemeldeten Nutzer*innen erscheint, bis er zurückgezogen oder von der jeweiligen Person geschlossen wird.
+
+### en
+- New notifications now also show as a brief pop-up top-right, right while you're working in the platform — no need to check the bell to notice something new arrived.
+- New: admins can publish a system notice (e.g. for a maintenance window) that shows as a banner across the top of the app for every logged-in user, until it's withdrawn or closed by that person.
+
+## 6.5.0 — 2026-08-08
+
+### de
+- Benachrichtigungen (Glocken-Symbol) erscheinen jetzt sofort, ohne dass die Seite neu geladen werden muss — bei einem neuen Beitrittsantrag, einem neuen Kommentar zu einer Fördermittel, einer neuen Zugriffsanfrage oder einer bald ablaufenden Fördermittel.
+- Beim ersten Login fragt die Plattform, ob sie Ihnen Benachrichtigungen direkt im Browser anzeigen darf, auch wenn der Tab gerade nicht im Vordergrund ist.
+- Die Anzahl ungelesener Benachrichtigungen im Glocken-Symbol wird jetzt korrekt aktualisiert, sobald Sie etwas als gelesen markieren — vorher blieb die Zahl bis zum Neuladen der Seite stehen.
+- Eine bald ablaufende Fördermittel, die Sie als gelesen markiert haben, verschwindet jetzt sofort aus der Liste statt erst nach einem manuellen Neuladen.
+
+### en
+- Notifications (bell icon) now appear immediately, with no page reload needed — for a new join request, a new comment on a funding, a new access request, or a funding opportunity about to expire.
+- On first login, the platform asks whether it may show you notifications directly in the browser, even when the tab isn't in the foreground.
+- The unread count on the bell icon now updates correctly as soon as you mark something as read — previously the number stayed stale until the page was reloaded.
+- An expiring-funding notification you've marked as read now disappears from the list immediately instead of only after a manual reload.
+
 ## 6.4.1 — 2026-08-08
 
 ### de

@@ -23,14 +23,14 @@
             :aria-label="$t('toggleDarkMode')">
           </q-btn>
           <q-btn icon="notifications" to="/user/notifications" flat round dark color="blue" class="mr-0"
-            :aria-label="$t('notifications')">
+            :aria-label="$t('notificationsPageLabel')">
             <q-badge v-if="notificationsCount > 0" rounded color="red" floating>{{ notificationsCount }}</q-badge>
           </q-btn>
           <q-btn v-if="isGuest" icon="person" to="/community/data?tab=projectIdeas" flat round dark color="blue"
             class="mr-0" :aria-label="$t('communityData')">
           </q-btn>
           <q-btn v-else icon="person" to="/user/data?tab=projectIdeas" flat round dark color="blue" class="mr-0"
-            :aria-label="$t('myData')">
+            :aria-label="$t('myDataPageLabel')">
           </q-btn>
           <q-btn icon="settings" to="/user/settings?tab=generalData" flat round dark color="blue" class="mr-0"
             :aria-label="$t('settings')">
@@ -137,14 +137,18 @@
 
     <logoutDialog :dialogState="logoutDialog" @update="logoutDialog = $event" />
     <q-page-container>
+      <SystemRibbon />
       <router-view />
     </q-page-container>
+    <NotificationToastStack />
   </q-layout>
 </template>
 
 <script>
 import EssentialLink from "components/EssentialLink.vue";
 import logoutDialog from "components/user/authentication/logout.vue";
+import NotificationToastStack from "components/notifications/NotificationToastStack.vue";
+import SystemRibbon from "components/notifications/SystemRibbon.vue";
 import { fetchAllTranslations } from "boot/i18n";
 import { getChangelogEntries } from "src/services/changelogService";
 import {
@@ -158,6 +162,8 @@ export default {
   components: {
     EssentialLink,
     logoutDialog,
+    NotificationToastStack,
+    SystemRibbon,
   },
   data() {
     return {
@@ -167,7 +173,6 @@ export default {
       themeIcon: "mdi-white-balance-sunny",
       isEnabled: false,
       isOpenDialog: false,
-      notificationsCount: 0,
       changelogEntries: getChangelogEntries(),
       showAllChangelog: false,
       helpPanelView: "videos",
@@ -241,26 +246,6 @@ export default {
         if (this.cookiePrefrence) localStorage.setItem("darkmode", false);
       }
     },
-    getNotificationsCount() {
-      this.$api
-        .get("/api/user/notification")
-        .then((response) => {
-          const data = response && response.data ? response.data : {};
-          const fundingComments = Array.isArray(data.fundingComments) ? data.fundingComments.length : 0;
-          const fundingExpirey = Array.isArray(data.fundingExpirey) ? data.fundingExpirey.length : 0;
-          const guest = Array.isArray(data.guest) ? data.guest.length : 0;
-          const requests = Array.isArray(data.requests) ? data.requests.length : 0;
-
-          this.notificationsCount = fundingComments + fundingExpirey + guest + requests;
-        })
-        .catch((err) => {
-          // Fail-safe: log and set notificationsCount to 0 on error
-          // (avoid throwing unhandled errors during rendering)
-          // eslint-disable-next-line no-console
-          console.error("Error fetching notifications:", err);
-          this.notificationsCount = 0;
-        });
-    },
   },
   computed: {
     visibleChangelogEntries() {
@@ -283,6 +268,9 @@ export default {
     isGuest() {
       return this.$store.getters["userCenter/isGuest"];
     },
+    notificationsCount() {
+      return this.$store.getters["notifications/notificationsCount"];
+    },
   },
   mounted() {
     console.log("dev? ", process.env.DEV);
@@ -291,7 +279,7 @@ export default {
     console.log("router", this.$router.currentRoute);
     this.checkLanguage();
     this.checkDarkMode();
-    this.getNotificationsCount();
+    this.$store.dispatch("notifications/fetchNotificationsCount");
   },
 };
 </script>

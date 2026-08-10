@@ -159,11 +159,7 @@ export default {
       const validFiles = files.filter(file => this.isValidFile(file));
 
       if (validFiles.length !== files.length) {
-        this.$q.notify({
-          type: 'warning',
-          message: this.$t('importFunding.rejectedFiles'),
-          position: 'top'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "warning", title: this.$t('importFunding.rejectedFiles') });
       }
 
       validFiles.forEach(file => {
@@ -212,11 +208,7 @@ export default {
 
     async handleImport() {
       if (this.uploadedFiles.length === 0) {
-        this.$q.notify({
-          type: 'warning',
-          message: this.$t('importFunding.selectAtLeastOneFile'),
-          position: 'top'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "warning", title: this.$t('importFunding.selectAtLeastOneFile') });
         return;
       }
 
@@ -231,22 +223,14 @@ export default {
           }
         }
 
-        this.$q.notify({
-          type: 'positive',
-          message: this.$t('importFunding.importSuccess'),
-          position: 'top'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('importFunding.importSuccess') });
 
         // Close dialog
         this.closeDialog();
 
       } catch (error) {
         console.error('Import failed:', error);
-        this.$q.notify({
-          type: 'negative',
-          message: this.$t('importFunding.importError'),
-          position: 'top'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('importFunding.importError') });
       } finally {
         this.isUploading = false;
       }
@@ -283,11 +267,7 @@ export default {
         this.$set(this.uploadedFiles[index], 'uploaded', false);
         this.$set(this.uploadedFiles[index], 'progress', 0);
 
-        this.$q.notify({
-          type: 'negative',
-          message: this.$t('importFunding.uploadError', { fileName: fileData.name, error: error.message }),
-          position: 'top'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('importFunding.uploadError', { fileName: fileData.name, error: error.message }) });
 
         throw error;
       }
