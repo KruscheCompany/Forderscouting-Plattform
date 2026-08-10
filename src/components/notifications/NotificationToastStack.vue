@@ -20,7 +20,7 @@
         :aria-label="$t('systemRibbon.close')"
         @click.stop="dismiss(toast.id)"
       >
-        <img class="nb-toast__logo" src="/AMTVIÖL-Projektkompass-Bildmarke-RGB.png" alt="" />
+        <img class="nb-toast__logo" src="/AMTVIOEL-Projektkompass-Bildmarke-RGB.png" alt="" />
         <div class="nb-toast__close-label">{{ $t("systemRibbon.close") }}</div>
       </div>
       <div class="nb-toast__bar" :style="{ background: kindColor(toast.kind) }" />
