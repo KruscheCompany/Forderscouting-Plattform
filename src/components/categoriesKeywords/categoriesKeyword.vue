@@ -67,23 +67,39 @@
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td auto-width v-for="col in props.cols" :key="col.name" :props="props" class="font-14">
-            {{ col.value }}
+            <q-chip v-if="col.name === 'status'" dense text-color="white"
+              :color="props.row.status === 'pending' ? 'orange-6' : 'green-6'" :label="col.value" />
+            <template v-else>{{ col.value }}</template>
           </q-td>
           <q-td class="text-right" auto-width>
             <q-btn size="md" color="primary" round flat dense icon="more_vert" aria-label="Optionen">
               <q-menu transition-show="jump-down" transition-hide="jump-up">
                 <q-list style="min-width: 140px">
-                  <q-item clickable v-close-popup @click="prepEditDialog(props.row)">
-                    <q-item-section><span class="text-right font-14">
-                        {{ $t("category&Keyword.edit") }}
-                        <q-icon size="sm" class="text-blue" name="edit" /></span></q-item-section>
-                  </q-item>
+                  <template v-if="props.row.status === 'pending'">
+                    <q-item clickable v-close-popup @click="approveTag(props.row)">
+                      <q-item-section><span class="text-right font-14 text-positive">
+                          {{ $t("category&Keyword.approve") }}
+                          <q-icon size="sm" name="check_circle" /></span></q-item-section>
+                    </q-item>
+                    <q-item clickable v-close-popup @click="rejectTag(props.row)">
+                      <q-item-section><span class="text-right font-14 text-red">
+                          {{ $t("category&Keyword.reject") }}
+                          <q-icon size="sm" name="cancel" /></span></q-item-section>
+                    </q-item>
+                  </template>
+                  <template v-else>
+                    <q-item clickable v-close-popup @click="prepEditDialog(props.row)">
+                      <q-item-section><span class="text-right font-14">
+                          {{ $t("category&Keyword.edit") }}
+                          <q-icon size="sm" class="text-blue" name="edit" /></span></q-item-section>
+                    </q-item>
 
-                  <q-item clickable v-close-popup @click="prepDeleteDialog(props.row)">
-                    <q-item-section><span class="text-right font-14 text-red">
-                        {{ $t("category&Keyword.delete") }}
-                        <q-icon size="sm" name="delete" /></span></q-item-section>
-                  </q-item>
+                    <q-item clickable v-close-popup @click="prepDeleteDialog(props.row)">
+                      <q-item-section><span class="text-right font-14 text-red">
+                          {{ $t("category&Keyword.delete") }}
+                          <q-icon size="sm" name="delete" /></span></q-item-section>
+                    </q-item>
+                  </template>
                 </q-list>
               </q-menu>
             </q-btn>
@@ -113,8 +129,7 @@ export default {
       createDialog: false,
       deleteDialog: false,
       itemId: null,
-      filter: "",
-      visibleColumns: ["title", "projectIdeas", "fundings"]
+      filter: ""
     };
   },
   methods: {
@@ -126,11 +141,18 @@ export default {
       this.itemId = !!row.id ? row.id : "";
       this.createDialog = true;
     },
+    approveTag(row) {
+      this.$store.dispatch("tag/editTag", { id: row.id, title: row.title, status: "approved" });
+    },
+    rejectTag(row) {
+      this.$store.dispatch("tag/deleteTag", { id: row.id });
+    },
     getData(tab) {
       if (tab === "categories") {
         this.$store.dispatch("category/getCategories");
       } else {
         this.$store.dispatch("tag/getTags");
+        this.$store.dispatch("tag/getPendingTags");
       }
     }
   },
@@ -147,14 +169,19 @@ export default {
     apiData() {
       return this.tab == "categories"
         ? this.$store.state.category.categories
-        : this.$store.state.tag.tags;
+        : [...this.$store.state.tag.tags, ...this.$store.state.tag.pendingTags];
     },
     isInPage() {
       // return this.$router.currentRoute.fullPath == "/catkeytags";
       return true;
     },
+    visibleColumns() {
+      return this.tab == "categories"
+        ? ["title", "projectIdeas", "fundings"]
+        : ["title", "status", "projectIdeas", "fundings"];
+    },
     columns() {
-      return [
+      const cols = [
         {
           name: "id",
           label: "id",
@@ -170,20 +197,31 @@ export default {
           align: "left"
         },
         {
+          name: "status",
+          label: this.$t("category&Keyword.status"),
+          align: "left",
+          field: row =>
+            row.status === "pending"
+              ? this.$t("category&Keyword.statusPending")
+              : this.$t("category&Keyword.statusApproved"),
+          sortable: true
+        },
+        {
           name: "projectIdeas",
           align: "left",
           label: this.$t("myData.projectIdeas"),
-          field: row => (!!row.dataSet.projects && row.dataSet.projects) || 0,
+          field: row => (!!row.dataSet && !!row.dataSet.projects && row.dataSet.projects) || 0,
           sortable: true
         },
         {
           name: "fundings",
           align: "left",
           label: this.$t("myData.fundings"),
-          field: row => (!!row.dataSet.fundings && row.dataSet.fundings) || 0,
+          field: row => (!!row.dataSet && !!row.dataSet.fundings && row.dataSet.fundings) || 0,
           sortable: true
         }
       ];
+      return cols;
     }
   },
   mounted() {

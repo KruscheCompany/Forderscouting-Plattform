@@ -135,46 +135,6 @@
           </p>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12">
-          <q-separator class="bg-blue opacity-10" />
-        </div>
-      </div>
-      <div class="row items-baseline">
-        <div class="col-12 col-md-3 col-lg-2 col-xl-2">
-          <p class="font-16 no-margin">
-            {{ $t("newProjectIdeaForm.filterCategories") }}
-          </p>
-        </div>
-        <div class="col-12 col-md-9 col-lg-10 col-xl-10">
-          <Categories :requiresValidation="true" :editing="editingCategories" @update:category="updateCategories" />
-        </div>
-      </div>
-      <div class="row items-baseline">
-        <div class="col-12 col-md-3 col-lg-2 col-xl-2">
-          <p class="font-16 no-margin">{{ $t("Tags") }}</p>
-        </div>
-        <div class="col-12 col-md-9 col-lg-10 col-xl-10">
-          <Tags :requiresValidation="true" :editing="editingTags" @update:tag="updateTags" />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <q-separator class="bg-blue opacity-10" />
-        </div>
-      </div>
-      <div class="row items-center q-mb-md">
-        <div class="col-12 col-md-3 col-lg-2 col-xl-2">
-          <p class="font-16 no-margin">
-            {{ $t("newProjectIdeaForm.investive/non-investive") }}
-          </p>
-        </div>
-        <div class="col-12 col-md-9 col-lg-10 col-xl-10">
-          <q-btn-toggle v-model="localForm.details.investive" spread no-caps :rules="[(val) => !!val || $t('Required')]"
-            toggle-color="yellow" padding="12px 10px" color="transparent" toggle-text-color="black" text-color="black"
-            class="no-shadow toggleGap" :options="investiveNoninvestiveOptions" />
-        </div>
-      </div>
     </q-form>
   </q-expansion-item>
 </template>
@@ -182,8 +142,6 @@
 <script>
 import UserSelect from "components/user/UserSelect.vue";
 import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
-import Categories from "components/projects/create/Categories.vue";
-import Tags from "components/projects/create/Tags.vue";
 import { scroll } from "quasar";
 const { getScrollTarget, setScrollPosition } = scroll;
 export default {
@@ -192,8 +150,6 @@ export default {
   components: {
     UserSelect,
     MunicipalityCities,
-    Categories,
-    Tags,
   },
   props: {
     currentTab: {
@@ -220,13 +176,8 @@ export default {
           streetNo: "",
           postalCode: "",
         },
-        details: {
-          investive: true,
-        },
         municipality: "",
         editors: [],
-        categories: [],
-        tags: [],
       },
       isLoading: false,
       dataLoaded: true,
@@ -245,14 +196,6 @@ export default {
     },
 
     // Stable computed properties for child component props
-    editingCategories() {
-      return this.project?.categories || [];
-    },
-
-    editingTags() {
-      return this.project?.tags || [];
-    },
-
     editingEditors() {
       return this.project?.editors || [];
     },
@@ -272,12 +215,6 @@ export default {
         { label: this.$t("visibility.listedOnly"), value: "listed only" },
       ];
     },
-    investiveNoninvestiveOptions() {
-      return [
-        { label: this.$t("Investive"), value: true },
-        { label: this.$t("Non-Investive"), value: false },
-      ];
-    },
   },
   watch: {
     currentTab(newTab) {
@@ -294,12 +231,6 @@ export default {
     },
     updateEditors(editors) {
       this.localForm.editors = editors;
-    },
-    updateCategories(categories) {
-      this.localForm.categories = categories;
-    },
-    updateTags(tags) {
-      this.localForm.tags = tags;
     },
     async validateForm() {
       if (this.$refs.newProjectIdeaForm) {
@@ -326,13 +257,8 @@ export default {
           streetNo: formData.info?.streetNo || "",
           postalCode: formData.info?.postalCode || "",
         },
-        details: {
-          investive: typeof formData.details?.investive === 'boolean' ? formData.details.investive : true,
-        },
         municipality: formData.municipality || "",
         editors: formData.editors || [],
-        categories: formData.categories || [],
-        tags: formData.tags || [],
       };
     }
   },

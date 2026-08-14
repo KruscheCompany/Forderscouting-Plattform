@@ -33,3 +33,11 @@ export function setFundingQuestions(state, payload) {
 export function setLoadingFundingQuestions(state, loading) {
   state.isLoadingFundingQuestions = loading;
 }
+
+export function setTaxonomySuggestions(state, suggestions) {
+  state.taxonomySuggestions = suggestions;
+}
+
+export function setLoadingTaxonomy(state, loading) {
+  state.isLoadingTaxonomy = loading;
+}

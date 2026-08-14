@@ -255,7 +255,8 @@ export default {
         links: [],
         media: null,
         files: null,
-      }
+      },
+      taxonomySuggestTimeout: null,
     };
   },
   components: {
@@ -271,6 +272,16 @@ export default {
     currentTab(newTab) {
       this.expanded = newTab === "project";
     },
+    "localForm.details.content"(val) {
+      clearTimeout(this.taxonomySuggestTimeout);
+      if (!val || val.length < 30) return;
+      this.taxonomySuggestTimeout = setTimeout(() => {
+        this.$store.dispatch("ai/suggestTaxonomy", { content: val });
+      }, 800);
+    },
+  },
+  beforeDestroy() {
+    clearTimeout(this.taxonomySuggestTimeout);
   },
   methods: {
     emitFormData() {

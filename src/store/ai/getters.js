@@ -21,3 +21,11 @@ export function getQuestionsForFunding(state) {
 export function getLoadingFundingQuestions(state) {
   return state.isLoadingFundingQuestions || false;
 }
+
+export function getTaxonomySuggestions(state) {
+  return state.taxonomySuggestions;
+}
+
+export function getLoadingTaxonomy(state) {
+  return state.isLoadingTaxonomy || false;
+}

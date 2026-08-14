@@ -17,7 +17,9 @@
     "viaEmail": "PER EMAIL",
     "saveEmails": "Sichere E-Mails",
     "saveChanges": "Änderungen speichern",
-    "viewEditRequest": "Anfrage zu meinen Dokumenten ansehen/bearbeiten"
+    "viewEditRequest": "Anfrage zu meinen Dokumenten ansehen/bearbeiten",
+    "tagPendingApproval": "Ein neues Schlagwort wartet auf Genehmigung",
+    "tagReviewDecision": "Entscheidung über mein vorgeschlagenes Schlagwort"
   },
   "notificationsUser": {
     "viewBtn": "Ansehen",
@@ -32,6 +34,8 @@
       "fundingComments": "Ein neuer Kommentar wurde zu einer Fördermittel hinzugefügt.",
       "requests": "Es gibt eine neue Zugriffsanfrage.",
       "fundingExpirey": "Eine Fördermittel läuft bald aus.",
+      "tagPendingApproval": "Ein neues Schlagwort wartet auf Genehmigung.",
+      "tagReviewDecision": "Ihr vorgeschlagenes Schlagwort wurde bearbeitet.",
       "kind": {
         "info": "Information",
         "warn": "Frist",
@@ -265,6 +269,11 @@
     "cancel": "Abbrechen",
     "edit": "Bearbeiten",
     "delete": "Löschen",
+    "status": "Status",
+    "statusPending": "Ausstehend",
+    "statusApproved": "Genehmigt",
+    "approve": "Genehmigen",
+    "reject": "Ablehnen",
     "deleteCPopupTitle": "Kategorie löschen",
     "deleteCPopupText": "Möchten Sie diese Kategorien wirklich löschen? Es wird aus allen Dokumenten entfernt.",
     "deletePopupButton": "Bestätigen",
@@ -365,6 +374,15 @@
     "inviteEditors": "Bearbeiter*in einladen",
     "visibility": "Sichtbarkeit",
     "filterCategories": "Filterkategorien",
+    "categorizationCard": "Kategorien & Schlagwörter",
+    "categorizationBadge": "Vorschläge aus Ihrer Projektbeschreibung",
+    "categorizationBadgeFundingGoal": "Vorschläge aus Ihrem Förderziel",
+    "filterCategoriesHint": "Grobe Einordnung für die Programm-Suche.",
+    "tagsHint": "Feine Begriffe für Suche und Matching.",
+    "acceptAllSuggestions": "Alle Vorschläge übernehmen",
+    "investiveHint": "Bestimmt die möglichen Förderarten.",
+    "investiveDescription": "Bauliche Maßnahmen, Sanierung, Ausstattung, Anschaffungen.",
+    "nonInvestiveDescription": "Konzepte, Personal, Beteiligung, Veranstaltungen, Betrieb.",
     "tags": "Tags",
     "projectStartingCondition": "Ausgangssituation",
     "projectContent": "Projektinhalt",
@@ -388,10 +406,29 @@
     "title": "Benutzer*in auswählen"
   },
   "categorySelector": {
-    "title": "Kategorien auswählen"
+    "title": "Kategorien auswählen",
+    "suggested": "Vorschlag",
+    "aiSuggestions": "KI-Vorschläge",
+    "addMore": "Kategorie hinzufügen",
+    "noResults": "Keine Ergebnisse",
+    "searchPlaceholder": "Kategorie suchen",
+    "fixedListHint": "Kategorien sind eine feste Liste.",
+    "aiTag": "KI",
+    "hintWithSelection": "Gestrichelt = KI-Vorschlag, antippen zum Übernehmen. Ausgefüllt = ausgewählt, antippen zum Entfernen.",
+    "hintEmpty": "Noch keine Kategorie ausgewählt."
   },
   "tagsSelector": {
-    "title": "Schlagwörter auswählen"
+    "title": "Schlagwörter auswählen",
+    "suggested": "Vorschlag",
+    "generated": "KI-Vorschlag (neu)",
+    "maxReached": "Maximal 50 Schlagwörter auswählbar",
+    "suggestedHeader": "Vorschläge",
+    "generatedHeader": "Neue KI-Vorschläge",
+    "addMore": "Schlagwort hinzufügen",
+    "noResults": "Keine Ergebnisse",
+    "searchPlaceholder": "Schlagwort suchen",
+    "pendingNote": "Neue Schlagwörter werden als „ausstehend“ markiert, bis eine Administratorin sie freigibt.",
+    "pendingBadge": "Ausstehende Freigabe"
   },
   "estimatedCost": {
     "costName": "Kostenpositionen",
@@ -501,6 +538,9 @@
   "noNotifications": "Keine Benachrichtigungen",
   "noNotificationsDesc": "Es wurden keine Benachrichtigungen für Sie gesendet.",
   "New user request access to the platform": "Neuer Benutzer hat Zugriff auf die Plattform angefordert",
+  "A new tag suggestion needs review": "Ein neuer Schlagwort-Vorschlag wartet auf Prüfung",
+  "Your suggested tag was approved": "Ihr vorgeschlagenes Schlagwort wurde genehmigt",
+  "Your suggested tag was rejected": "Ihr vorgeschlagenes Schlagwort wurde abgelehnt",
   "Request to edit a document made by | ": "Anfrage zum Bearbeiten eines Dokuments von | ",
   "Request to view a document made by | ": "Anfrage zum Ansehen eines Dokuments von | ",
   "Request to duplicate a document made by | ": "Antrag auf Vervielfältigung eines Dokuments, gestellt von | ",
