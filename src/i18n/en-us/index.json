@@ -17,7 +17,9 @@
     "viaEmail": "VIA EMAIL",
     "saveEmails": "Save E-Mails",
     "saveChanges": "Save Changes",
-    "viewEditRequest": "View/Edit Request to my documents"
+    "viewEditRequest": "View/Edit Request to my documents",
+    "tagPendingApproval": "A new tag is waiting for approval",
+    "tagReviewDecision": "Decision on my suggested tag"
   },
   "notificationsUser": {
     "viewBtn": "View",
@@ -32,6 +34,8 @@
       "fundingComments": "A new comment was added to a funding.",
       "requests": "There is a new access request.",
       "fundingExpirey": "A funding opportunity is expiring soon.",
+      "tagPendingApproval": "A new tag is waiting for approval.",
+      "tagReviewDecision": "Your suggested tag has been reviewed.",
       "kind": {
         "info": "Information",
         "warn": "Deadline",
@@ -264,6 +268,11 @@
     "cancel": "Cancel",
     "edit": "Edit",
     "delete": "Delete",
+    "status": "Status",
+    "statusPending": "Pending",
+    "statusApproved": "Approved",
+    "approve": "Approve",
+    "reject": "Reject",
     "deleteCPopupTitle": "Delete category",
     "deleteCPopupText": "Do you really want to delete the category? It will be removed from all documents.",
     "deletePopupButton": "Confirm",
@@ -365,6 +374,15 @@
     "inviteEditors": "Invite Editors",
     "visibility": "Visibility",
     "filterCategories": "Filter Categories",
+    "categorizationCard": "Categories & Tags",
+    "categorizationBadge": "Suggestions generated from your project description",
+    "categorizationBadgeFundingGoal": "Suggestions generated from your funding goal",
+    "filterCategoriesHint": "Broad buckets used to match funding programmes.",
+    "tagsHint": "Specific terms for search and matching.",
+    "acceptAllSuggestions": "Accept all suggestions",
+    "investiveHint": "Determines which funding types apply.",
+    "investiveDescription": "Construction, refurbishment, equipment, purchases.",
+    "nonInvestiveDescription": "Concepts, staff, participation, events, operations.",
     "tags": "Tags",
     "projectStartingCondition": "Starting Condition",
     "projectContent": "Project Content",
@@ -388,10 +406,29 @@
     "title": "Select User"
   },
   "categorySelector": {
-    "title": "Select Categories"
+    "title": "Select Categories",
+    "suggested": "Suggested",
+    "aiSuggestions": "AI suggestions",
+    "addMore": "Add category",
+    "noResults": "No results",
+    "searchPlaceholder": "Search categories",
+    "fixedListHint": "Categories are a fixed list.",
+    "aiTag": "AI",
+    "hintWithSelection": "Dashed = AI suggestion, tap to accept. Filled = selected, tap to remove.",
+    "hintEmpty": "No category selected yet."
   },
   "tagsSelector": {
-    "title": "Select Tag"
+    "title": "Select Tag",
+    "suggested": "Suggested",
+    "generated": "AI suggestion (new)",
+    "maxReached": "Maximum of 50 tags selectable",
+    "suggestedHeader": "Suggestions",
+    "generatedHeader": "New AI suggestions",
+    "addMore": "Add tag",
+    "noResults": "No results",
+    "searchPlaceholder": "Search tags",
+    "pendingNote": "New tags are marked pending review until an admin approves them.",
+    "pendingBadge": "Pending review"
   },
   "fundingSelector": {
     "title": "Select Funding",
@@ -508,6 +545,9 @@
   "noNotifications": "No Notifcations",
   "noNotificationsDesc": "You dont have any notifications for the day.",
   "New user request access to the platform": "New user request access to the platform",
+  "A new tag suggestion needs review": "A new tag suggestion needs review",
+  "Your suggested tag was approved": "Your suggested tag was approved",
+  "Your suggested tag was rejected": "Your suggested tag was rejected",
   "Request to edit a document made by | ": "Request to edit a document made by | ",
   "Request to view a document made by | ": "Request to view a document made by | ",
   "Comment to a funding made by | ": "Comment to a funding made by | ",

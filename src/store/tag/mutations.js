@@ -6,6 +6,10 @@ export function setTagsSimplified(state, payload) {
   state.tagsSimplified = payload;
 }
 
+export function setPendingTags(state, payload) {
+  state.pendingTags = payload;
+}
+
 export function addTag(state, payload) {
   if (!!payload) {
     state.tags.push({
