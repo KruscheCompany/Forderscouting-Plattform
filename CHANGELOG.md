@@ -1,5 +1,23 @@
 # Änderungsprotokoll / Changelog
 
+## 6.7.0 — 2026-08-14
+
+### de
+- Beim Anlegen und Bearbeiten von Projekten und Förderungen schlägt eine KI jetzt passende Kategorien und Schlagwörter anhand des eingegebenen Texts vor — ein Klick übernimmt einen Vorschlag, „Alle Vorschläge übernehmen“ übernimmt sie auf einmal.
+- Neue, von der KI vorgeschlagene Schlagwörter werden erst nach Prüfung durch eine Administratorin für alle sichtbar. Administratorinnen werden benachrichtigt, sobald ein neues Schlagwort auf Prüfung wartet, und können es direkt aus der Benachrichtigung heraus genehmigen oder ablehnen.
+- Wer ein Schlagwort vorgeschlagen hat, wird benachrichtigt, sobald darüber entschieden wurde.
+- In den Benachrichtigungs-Einstellungen lässt sich jetzt separat festlegen, ob man über ausstehende Schlagwort-Prüfungen und über Entscheidungen zu eigenen Vorschlägen informiert werden möchte.
+- In der Projekt- und Förderansicht sowie beim Bearbeiten ist an einem Schlagwort jetzt erkennbar, wenn es noch auf Genehmigung wartet.
+- Der Bereich „Kategorien & Schlagwörter“ beim Bearbeiten einer Förderung ist jetzt immer sichtbar und optisch an die restliche Seite angepasst.
+
+### en
+- When creating or editing projects and funding entries, AI now suggests matching categories and tags based on the text you've entered — click a suggestion to accept it, or use "Accept all suggestions" to take them all at once.
+- New AI-suggested tags only become visible platform-wide after an admin reviews them. Admins are notified as soon as a new tag needs review and can approve or reject it directly from the notification.
+- Whoever suggested a tag is notified once a decision has been made on it.
+- Notification settings now let you separately choose whether to be notified about pending tag reviews and about decisions on your own suggestions.
+- On the project and funding view/edit pages, a tag now clearly shows when it's still waiting for approval.
+- The "Categories & Tags" section when editing a funding entry is now always visible and matches the visual style of the rest of the page.
+
 ## 6.6.3 — 2026-08-10
 
 ### de

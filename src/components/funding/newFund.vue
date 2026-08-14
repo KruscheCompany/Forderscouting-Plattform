@@ -393,29 +393,6 @@
           </div>
           <div class="row items-baseline">
             <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">{{ $t("Filter Categories") }}</p>
-            </div>
-            <div class="col-12 col-md-9">
-              <Categories :requiresValidation="true" :editing="!!funding ? funding.categories : []"
-                @update:category="form.categories = $event" />
-            </div>
-          </div>
-          <div class="row items-baseline">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">{{ $t("Tags") }}</p>
-            </div>
-            <div class="col-12 col-md-9">
-              <Tags :requiresValidation="true" :editing="!!funding ? funding.tags : []"
-                @update:tag="form.tags = $event" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
-          <div class="row items-baseline">
-            <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
                 {{ $t("Funding goal") }}
               </p>
@@ -425,6 +402,23 @@
                 :toolbar="editorToolbar" />
             </div>
           </div>
+
+          <CategorizationCard :collapsible="false" :requiresValidation="true" :noShadow="true"
+            badgeSource="fundingGoal"
+            :editingCategories="!!funding ? funding.categories : []"
+            :editingTags="!!funding ? funding.tags : []"
+            :suggested="taxonomySuggestions && taxonomySuggestions.categories && taxonomySuggestions.categories.suggested"
+            :tagsSuggested="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.suggested"
+            :tagsGenerated="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.generated"
+            :loading="isLoadingTaxonomy" @update:category="form.categories = $event"
+            @update:tag="form.tags = $event" />
+
+          <div class="row">
+            <div class="col-12">
+              <q-separator class="bg-blue opacity-10" />
+            </div>
+          </div>
+
           <div class="row items-baseline">
             <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
@@ -513,21 +507,21 @@ import { scroll } from "quasar";
 const { getScrollTarget, setScrollPosition } = scroll;
 import { dateFormatter } from "src/boot/dateFormatter";
 import UserSelect from "components/user/UserSelect.vue";
-import Categories from "components/projects/create/Categories.vue";
-import Tags from "components/projects/create/Tags.vue";
+import CategorizationCard from "components/projects/create/CategorizationCard.vue";
 import FundingRate from "src/components/funding/FundingRate.vue";
 import FundingCalls from "src/components/funding/FundingCalls.vue";
 import Links from "src/components/projects/create/Links.vue";
 import ProjectIdeas from "components/funding/ProjectIdeas.vue";
 import Fundings from "components/funding/Fundings.vue";
 import ImageDialog from "components/ImageDialog.vue";
+import htmlSanitizer from "src/mixins/htmlSanitizer.js";
 
 export default {
   name: "newFund",
+  mixins: [htmlSanitizer],
   components: {
     UserSelect,
-    Categories,
-    Tags,
+    CategorizationCard,
     FundingRate,
     FundingCalls,
     Links,
@@ -587,7 +581,8 @@ export default {
         { label: "Nein", value: false }
       ],
       isLoading: false,
-      dataLoaded: true
+      dataLoaded: true,
+      taxonomySuggestTimeout: null
     };
   },
   methods: {
@@ -675,9 +670,13 @@ export default {
         if (success) {
           this.isLoading = true;
           await this.checkOptionalParameters();
+          // Tags not yet created in the backend (id: null, from an AI suggestion) are only
+          // created now - at save/publish time - not the moment they're selected in the form.
+          const tags = await this.$store.dispatch("tag/resolvePendingTags", this.form.tags);
           const res = await this.$store.dispatch("funding/createNewFunding", {
             data: {
               ...this.form,
+              tags,
               federalStates: this.form.federalStates.map(fs => fs.id),
               municipalities: this.form.municipalities.map(m => m.id),
               published: published,
@@ -706,9 +705,13 @@ export default {
         if (success) {
           this.isLoading = true;
           await this.checkOptionalParameters();
+          // Tags not yet created in the backend (id: null, from an AI suggestion) are only
+          // created now - at save/publish time - not the moment they're selected in the form.
+          const tags = await this.$store.dispatch("tag/resolvePendingTags", this.form.tags);
           const res = await this.$store.dispatch("funding/editFunding", {
             data: {
               ...this.form,
+              tags,
               federalStates: this.form.federalStates.map(fs => fs.id),
               municipalities: this.form.municipalities.map(m => m.id),
               published: published
@@ -943,12 +946,33 @@ export default {
           selectedFederalStateTitles.includes(fs.title)
         );
       });
+    },
+    taxonomySuggestions() {
+      return this.$store.getters["ai/getTaxonomySuggestions"];
+    },
+    isLoadingTaxonomy() {
+      return this.$store.getters["ai/getLoadingTaxonomy"];
+    }
+  },
+  watch: {
+    "form.details.goal": {
+      handler(val) {
+        clearTimeout(this.taxonomySuggestTimeout);
+        const content = this.stripHtml(val || "").trim();
+        if (content.length < 30) return;
+        this.taxonomySuggestTimeout = setTimeout(() => {
+          this.$store.dispatch("ai/suggestTaxonomy", { content }).catch(() => {});
+        }, 800);
+      }
     }
   },
   mounted() {
     // if (!!this.funding && !!this.$route.params.id) {
     this.setData();
     // }
+  },
+  beforeDestroy() {
+    clearTimeout(this.taxonomySuggestTimeout);
   }
 };
 </script>

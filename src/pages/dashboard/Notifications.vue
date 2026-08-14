@@ -38,7 +38,13 @@
                       ? $t("Comment to a funding made by | ")
                       : noti.typeOfNoti == "requests"
                         ? $t(`Request to ${noti.type} a document made by | `)
-                        : ""
+                        : noti.typeOfNoti == "tagPendingApproval"
+                          ? $t("A new tag suggestion needs review")
+                          : noti.typeOfNoti == "tagReviewDecision"
+                            ? noti.decision == "approved"
+                              ? $t("Your suggested tag was approved")
+                              : $t("Your suggested tag was rejected")
+                            : ""
               }}
 
               <span class="text-blue">{{
@@ -63,7 +69,9 @@
                         ? noti.project != null
                           ? noti.project.title
                           : noti.funding.title
-                        : ""
+                        : noti.typeOfNoti == "tagPendingApproval" || noti.typeOfNoti == "tagReviewDecision"
+                          ? noti.title
+                          : ""
               }}
             </p>
           </div>
@@ -97,6 +105,20 @@
               </p>
             </q-btn>
             <q-btn @click="declineReq(noti, index)" v-if="noti.typeOfNoti == 'guest' || noti.typeOfNoti == 'requests'"
+              color="red" unelevated class="radius-6 q-ml-md text-weight-600"
+              :class="$q.screen.lt.md ? 'full-width q-mb-md' : ''" dense no-caps>
+              <p class="q-mb-none q-mx-md q-my-sm">
+                {{ $t("notificationsUser.declineBtn") }}
+              </p>
+            </q-btn>
+            <q-btn @click="approveTagFromNotification(noti, index)" v-if="noti.typeOfNoti == 'tagPendingApproval'"
+              color="blue" unelevated class="radius-6 q-ml-md text-weight-600"
+              :class="$q.screen.lt.md ? 'full-width q-mb-md' : ''" dense no-caps>
+              <p class="q-mb-none q-mx-md q-my-sm">
+                {{ $t("notificationsUser.acceptBtn") }}
+              </p>
+            </q-btn>
+            <q-btn @click="rejectTagFromNotification(noti, index)" v-if="noti.typeOfNoti == 'tagPendingApproval'"
               color="red" unelevated class="radius-6 q-ml-md text-weight-600"
               :class="$q.screen.lt.md ? 'full-width q-mb-md' : ''" dense no-caps>
               <p class="q-mb-none q-mx-md q-my-sm">
@@ -207,6 +229,14 @@ export default {
             funding.createdAt = plannedEnd.toISOString().split("T")[0];
             data.push({ ...funding, typeOfNoti: "fundingExpirey" });
           });
+        } else if (item === "pendingTags") {
+          this.data[item].forEach((tag) => {
+            data.push({ ...tag, typeOfNoti: "tagPendingApproval" });
+          });
+        } else if (item === "tagDecisions") {
+          this.data[item].forEach((decision) => {
+            data.push({ ...decision, typeOfNoti: "tagReviewDecision" });
+          });
         }
       }
       data.sort((a, b) => {
@@ -234,6 +264,7 @@ export default {
       else if (type == "fundingComments") return "description";
       else if (type == "guest") return "person";
       else if (type == "requests") return "person_add";
+      else if (type == "tagPendingApproval" || type == "tagReviewDecision") return "sell";
     },
     async view(noti, isFunding = false) {
       console.log(this.loggedInUser);
@@ -299,6 +330,14 @@ export default {
       }
       this.updateNotifications(noti, index);
     },
+    async approveTagFromNotification(noti, index) {
+      await this.$store.dispatch("tag/editTag", { id: noti.id, title: noti.title, status: "approved" });
+      this.updateNotifications(noti, index);
+    },
+    async rejectTagFromNotification(noti, index) {
+      await this.$store.dispatch("tag/deleteTag", { id: noti.id });
+      this.updateNotifications(noti, index);
+    },
     async markAsRead(noti) {
       const notificationType = noti.typeOfNoti;
       switch (notificationType) {
@@ -334,6 +373,24 @@ export default {
             data: {
               user: this.loggedInUser.id,
               request: noti.id,
+            },
+          });
+          this.getData();
+          break;
+        case "tagPendingApproval":
+          await this.$api.post("/api/read-notifications", {
+            data: {
+              user: this.loggedInUser.id,
+              tag_pending: noti.id,
+            },
+          });
+          this.getData();
+          break;
+        case "tagReviewDecision":
+          await this.$api.post("/api/read-notifications", {
+            data: {
+              user: this.loggedInUser.id,
+              tag_decision: noti.id,
             },
           });
           this.getData();

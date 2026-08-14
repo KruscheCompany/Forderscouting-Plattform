@@ -1,5 +1,8 @@
 import { api } from "boot/axios";
 
+let taxonomyAbortController = null;
+let taxonomyRequestId = 0;
+
 export async function uploadFundingFile(context, payload) {
   const { fileData, admin_id, onUploadProgress, authToken } = payload;
 
@@ -103,5 +106,48 @@ export async function getFundingQuestions(context, payload) {
     throw error;
   } finally {
     context.commit('setLoadingFundingQuestions', false);
+  }
+}
+
+export async function suggestTaxonomy(context, payload) {
+  const { content, maxSuggestions = 8, maxGenerated = 5 } = payload;
+
+  // Cancel any in-flight suggest request so a slow response can't overwrite a newer one
+  if (taxonomyAbortController) {
+    taxonomyAbortController.abort();
+  }
+  const controller = new AbortController();
+  taxonomyAbortController = controller;
+  const requestId = ++taxonomyRequestId;
+
+  context.commit('setLoadingTaxonomy', true);
+
+  try {
+    const response = await api.post(
+      '/api/tags/proxy-suggest',
+      { content, maxSuggestions, maxGenerated },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        signal: controller.signal
+      }
+    );
+
+    if (requestId !== taxonomyRequestId) return response; // superseded by a newer request
+
+    context.commit('setTaxonomySuggestions', response.data);
+    return response;
+
+  } catch (error) {
+    if (requestId !== taxonomyRequestId) return; // aborted in favor of a newer request
+
+    console.error('suggestTaxonomy: vendor call failed', error);
+    context.commit('setTaxonomySuggestions', null);
+    return;
+  } finally {
+    if (requestId === taxonomyRequestId) {
+      context.commit('setLoadingTaxonomy', false);
+    }
   }
 }

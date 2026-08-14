@@ -143,31 +143,6 @@
               <q-separator class="bg-blue opacity-10" />
             </div>
           </div>
-          <div class="row items-baseline">
-            <div class="col-12 col-md-4">
-              <p class="font-16 no-margin">
-                {{ $t("newProjectIdeaForm.filterCategories") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-8">
-              <Categories :requiresValidation="true" :editing="!!project ? project.categories : []"
-                @update:category="form.categories = $event" />
-            </div>
-          </div>
-          <div class="row items-baseline">
-            <div class="col-12 col-md-4">
-              <p class="font-16 no-margin">{{ $t("Tags") }}</p>
-            </div>
-            <div class="col-12 col-md-8">
-              <Tags :requiresValidation="true" :editing="!!project ? project.tags : []"
-                @update:tag="form.tags = $event" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
           <!-- Project Starting Condition -->
           <div class="row items-baseline">
             <div class="col-12 col-md-4">
@@ -181,18 +156,23 @@
             </div>
           </div>
           <!-- Project Starting Condition End -->
-          <div class="row items-baseline">
-            <div class="col-12 col-md-4">
-              <p class="font-16 no-margin">
-                {{ $t("newProjectIdeaForm.projectContent") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-8">
+          <q-expansion-item default-opened class="shadow-1 overflow-hidden radius-20 col-12 q-mt-md bg-white"
+            header-class="bg-white text-black" :label="$t('newProjectIdeaForm.projectContent')">
+            <div class="q-pa-md">
               <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6"
                 :placeholder="$t('projectIdeaPlaceholder.descripeProject')" v-model="form.details.content"
                 :rules="[(val) => !!val || $t('Required')]" />
             </div>
-          </div>
+          </q-expansion-item>
+
+          <CategorizationCard :requiresValidation="true" :editingCategories="!!project ? project.categories : []"
+            :editingTags="!!project ? project.tags : []"
+            :suggested="taxonomySuggestions && taxonomySuggestions.categories && taxonomySuggestions.categories.suggested"
+            :tagsSuggested="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.suggested"
+            :tagsGenerated="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.generated"
+            :loading="isLoadingTaxonomy" :investive="form.details.investive" @update:category="form.categories = $event"
+            @update:tag="form.tags = $event" @update:investive="form.details.investive = $event" />
+
           <div class="row items-baseline">
             <div class="col-12 col-md-4">
               <p class="font-16 no-margin">
@@ -231,18 +211,6 @@
           <div class="row">
             <div class="col-12">
               <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
-          <div class="row items-center">
-            <div class="col-12 col-md-4">
-              <p class="font-16 no-margin">
-                {{ $t("newProjectIdeaForm.investive/non-investive") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-8">
-              <q-btn-toggle v-model="form.details.investive" spread no-caps :rules="[(val) => !!val || $t('Required')]"
-                toggle-color="yellow" padding="12px 10px" color="transparent" toggle-text-color="black"
-                text-color="black" class="no-shadow toggleGap" :options="investiveNoninvestiveOptions" />
             </div>
           </div>
           <div class="row items-center">
@@ -462,8 +430,7 @@
 import { scroll } from "quasar";
 const { getScrollTarget, setScrollPosition } = scroll;
 import UserSelect from "components/user/UserSelect.vue";
-import Categories from "components/projects/create/Categories.vue";
-import Tags from "components/projects/create/Tags.vue";
+import CategorizationCard from "components/projects/create/CategorizationCard.vue";
 import EstimatedCost from "src/components/projects/create/EstimatedCost.vue";
 import Links from "components/projects/create/Links.vue";
 import Fundings from "components/funding/Fundings.vue";
@@ -475,8 +442,7 @@ export default {
   name: "newProjectIdea",
   components: {
     UserSelect,
-    Categories,
-    Tags,
+    CategorizationCard,
     EstimatedCost,
     MunicipalityCities,
     Links,
@@ -523,6 +489,7 @@ export default {
       isLoading: false,
       dataLoaded: true,
       selectedLandkreisMunicipality: null,
+      taxonomySuggestTimeout: null,
     };
   },
   methods: {
@@ -577,9 +544,11 @@ export default {
         if (success) {
           this.isLoading = true;
           await this.checkOptionalParameters();
+          const tags = await this.$store.dispatch("tag/resolvePendingTags", this.form.tags);
           const res = await this.$store.dispatch("project/createNewProjectIdea", {
             data: {
               ...this.form,
+              tags,
               published: published,
               info: {
                 ...this.form.info,
@@ -623,9 +592,11 @@ export default {
         if (success) {
           this.isLoading = true;
           await this.checkOptionalParameters();
+          const tags = await this.$store.dispatch("tag/resolvePendingTags", this.form.tags);
           const res = await this.$store.dispatch("project/editProjectIdea", {
             data: {
               ...this.form,
+              tags,
               published: published,
             },
           });
@@ -753,12 +724,6 @@ export default {
         },
       ];
     },
-    investiveNoninvestiveOptions() {
-      return [
-        { label: this.$t("Investive"), value: true },
-        { label: this.$t("Non-Investive"), value: false },
-      ];
-    },
     projectStatuses() {
       return [
         { label: this.$t("projectStatusesOptions.idea"), value: "Idea" },
@@ -776,11 +741,30 @@ export default {
         },
       ];
     },
+    taxonomySuggestions() {
+      return this.$store.getters["ai/getTaxonomySuggestions"];
+    },
+    isLoadingTaxonomy() {
+      return this.$store.getters["ai/getLoadingTaxonomy"];
+    },
+  },
+  watch: {
+    "form.details.content": {
+      handler(val) {
+        clearTimeout(this.taxonomySuggestTimeout);
+        const content = (val || "").trim();
+        if (content.length < 30) return;
+        this.taxonomySuggestTimeout = setTimeout(() => {
+          this.$store.dispatch("ai/suggestTaxonomy", { content }).catch(() => {});
+        }, 800);
+      },
+    },
   },
   mounted() {
     this.setData();
   },
   beforeDestroy() {
+    clearTimeout(this.taxonomySuggestTimeout);
     this.$q.loading.hide();
   },
 };

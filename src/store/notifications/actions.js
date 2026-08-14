@@ -8,7 +8,7 @@ export async function fetchNotificationsCount(context) {
   try {
     const response = await api.get("/api/user/notification");
     const data = (response && response.data) || {};
-    const count = ["fundingComments", "fundingExpirey", "guest", "requests"].reduce(
+    const count = ["fundingComments", "fundingExpirey", "guest", "requests", "pendingTags", "tagDecisions"].reduce(
       (total, key) => total + (Array.isArray(data[key]) ? data[key].length : 0),
       0
     );
@@ -22,7 +22,9 @@ const TOAST_KIND_BY_NOTIFICATION_TYPE = {
   guest: "info",
   fundingComments: "info",
   requests: "info",
-  fundingExpirey: "warn"
+  fundingExpirey: "warn",
+  tagPendingApproval: "info",
+  tagReviewDecision: "info"
 };
 
 export async function onLiveNotification(context, payload) {
