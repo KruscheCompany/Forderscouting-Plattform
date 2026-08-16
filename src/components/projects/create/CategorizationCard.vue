@@ -45,21 +45,24 @@
         <div class="cc-field-content-col">
           <div class="cc-inv-grid">
             <div class="cc-inv-card" :class="{ 'cc-inv-card--active': investive === true }"
-              @click="$emit('update:investive', true)">
+              @click="$emit('update:investive', !investive)">
               <div class="cc-inv-card-top">
-                <div class="cc-inv-radio" :class="{ 'cc-inv-radio--active': investive === true }" />
+                <div class="cc-inv-checkbox" :class="{ 'cc-inv-checkbox--active': investive === true }" />
                 <div class="cc-inv-title">{{ $t("Investive") }}</div>
               </div>
               <div class="cc-inv-desc">{{ $t("newProjectIdeaForm.investiveDescription") }}</div>
             </div>
-            <div class="cc-inv-card" :class="{ 'cc-inv-card--active': investive === false }"
-              @click="$emit('update:investive', false)">
+            <div class="cc-inv-card" :class="{ 'cc-inv-card--active': nonInvestive === true }"
+              @click="$emit('update:nonInvestive', !nonInvestive)">
               <div class="cc-inv-card-top">
-                <div class="cc-inv-radio" :class="{ 'cc-inv-radio--active': investive === false }" />
+                <div class="cc-inv-checkbox" :class="{ 'cc-inv-checkbox--active': nonInvestive === true }" />
                 <div class="cc-inv-title">{{ $t("Non-Investive") }}</div>
               </div>
               <div class="cc-inv-desc">{{ $t("newProjectIdeaForm.nonInvestiveDescription") }}</div>
             </div>
+          </div>
+          <div v-if="requiresValidation === true && !investive && !nonInvestive" class="cc-error">
+            {{ $t("Required") }}
           </div>
         </div>
       </div>
@@ -73,7 +76,7 @@ import Tags from "components/projects/create/Tags.vue";
 
 export default {
   name: "CategorizationCard",
-  emits: ["update:category", "update:tag", "update:investive"],
+  emits: ["update:category", "update:tag", "update:investive", "update:nonInvestive"],
   components: {
     Categories,
     Tags
@@ -126,6 +129,10 @@ export default {
     investive: {
       type: Boolean,
       default: null
+    },
+    nonInvestive: {
+      type: Boolean,
+      default: null
     }
   },
   data() {
@@ -135,7 +142,7 @@ export default {
   },
   computed: {
     showInvestive() {
-      return this.investive !== null;
+      return this.investive !== null || this.nonInvestive !== null;
     },
     badgeText() {
       return this.badgeSource === "fundingGoal"
@@ -243,19 +250,25 @@ export default {
   gap: 10px;
 }
 
-.cc-inv-radio {
+.cc-inv-checkbox {
   width: 18px;
   height: 18px;
-  border-radius: 50%;
+  border-radius: 5px;
   border: 1.5px solid #c3cbe8;
   background: #fff;
   box-sizing: border-box;
   flex: 0 0 auto;
 
   &--active {
-    border: 5px solid #1b2a78;
+    border: 1.5px solid #1b2a78;
     background: #f2ec4a;
   }
+}
+
+.cc-error {
+  font-size: 12px;
+  color: #d60000;
+  margin-top: 10px;
 }
 
 .cc-inv-title {

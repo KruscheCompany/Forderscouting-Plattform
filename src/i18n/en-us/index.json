@@ -19,7 +19,8 @@
     "saveChanges": "Save Changes",
     "viewEditRequest": "View/Edit Request to my documents",
     "tagPendingApproval": "A new tag is waiting for approval",
-    "tagReviewDecision": "Decision on my suggested tag"
+    "tagReviewDecision": "Decision on my suggested tag",
+    "fundingSuggestion": "New AI funding suggestions for my project"
   },
   "notificationsUser": {
     "viewBtn": "View",
@@ -27,7 +28,9 @@
     "declineBtn": "Decline",
     "viewFundingBtn": "View Funding",
     "markAsRead": "Mark as read",
+    "markAsReadError": "Failed to mark notification as read.",
     "documentAccessRequest": "would like to access document",
+    "newSuggestions": "new funding suggestions",
     "push": {
       "title": "New notification",
       "guest": "A new user wants to join the platform.",
@@ -36,6 +39,7 @@
       "fundingExpirey": "A funding opportunity is expiring soon.",
       "tagPendingApproval": "A new tag is waiting for approval.",
       "tagReviewDecision": "Your suggested tag has been reviewed.",
+      "fundingSuggestions": "There are new funding suggestions for your project.",
       "kind": {
         "info": "Information",
         "warn": "Deadline",
@@ -350,7 +354,94 @@
     "municipalities": "Municipalities",
     "projectTotalDups": "Project idea duplications",
     "checklistTotalDups": "Checklist duplications",
-    "totalDups": "Total duplications"
+    "totalDups": "Total duplications",
+    "aiSuggestions": {
+      "title": "AI Funding Suggestions",
+      "total": "Total suggestions",
+      "notified": "Notified",
+      "accepted": "Accepted",
+      "ignored": "Ignored",
+      "pending": "Pending",
+      "acceptanceRate": "Acceptance rate",
+      "scoreBucket": "Score range"
+    },
+    "marketing": {
+      "loadError": "Failed to load statistics.",
+      "funding": {
+        "title": "Funding volume unlocked",
+        "subtitle": "Across all {total} project ideas on the platform",
+        "total": "Total investment",
+        "totalNote": "Total project volume documented by municipalities, capital and non-capital combined.",
+        "requested": "Funding requested",
+        "requestedNote": "of total project volume",
+        "secured": "Already granted",
+        "securedNote": "of requested funding secured"
+      },
+      "growth": {
+        "title": "Growth over time",
+        "subtitle": "Projects, funding information and users — last 12 months. Hover a month for exact figures.",
+        "modeNew": "New per month",
+        "modeCum": "Cumulative",
+        "range6m": "6 months",
+        "range12m": "12 months",
+        "seriesProjects": "Project ideas",
+        "seriesFundings": "Funding information",
+        "seriesUsers": "Users",
+        "readoutHeading": "{months}-month read-out",
+        "readoutNewProjects": "New project ideas (12 m)",
+        "readoutNewUsers": "New users (12 m)",
+        "readoutNewFundings": "New funding records (12 m)",
+        "readoutAvgProjects": "Avg. new projects / month",
+        "readoutNote": "Every month added projects, users and funding records — no month-over-month decline in the window."
+      },
+      "funnel": {
+        "title": "Success funnel",
+        "subtitle": "Every project idea by workflow status, from draft to decision.",
+        "rateLabel": "Success rate",
+        "inProgress": "In progress",
+        "sentToFunding": "Submitted",
+        "grantNotice": "Granted",
+        "rejectionNotice": "Rejected"
+      },
+      "regional": {
+        "title": "Regional reach",
+        "subtitle": "Municipalities with at least one project idea on the platform.",
+        "active": "municipalities active",
+        "coverage": "coverage",
+        "gap": "{count} municipalities have not submitted a project idea yet",
+        "leaderboard": "Top municipalities by projects"
+      },
+      "topics": {
+        "title": "Topic focus",
+        "subtitle": "Most used categories across all project ideas.",
+        "modeCategories": "Categories",
+        "modeTags": "Tags",
+        "empty": "No data yet."
+      },
+      "stories": {
+        "title": "Success stories",
+        "subtitle": "Largest approved projects — status \"granted\", sorted by funding amount",
+        "granted": "granted",
+        "amountLabel": "Funding",
+        "empty": "No granted projects with recorded funding amounts yet."
+      },
+      "ai": {
+        "badge": "Efficiency",
+        "title": "AI-assisted matching saves time",
+        "summary": "Suggestions are matched automatically from project descriptions. {rate}% of reviewed suggestions were accepted — roughly {hours} hours of manual programme search saved.",
+        "subTotal": "in total",
+        "subNotified": "notified",
+        "subAccepted": "became matches",
+        "subIgnored": "dismissed",
+        "subRate": "of reviewed"
+      },
+      "details": {
+        "title": "All metrics",
+        "subtitle": "Raw counters, AI score ranges and the archived-records table — for administrators.",
+        "show": "Show all",
+        "hide": "Hide"
+      }
+    }
   },
   "statsTable": {
     "title": "Title",
@@ -383,6 +474,7 @@
     "investiveHint": "Determines which funding types apply.",
     "investiveDescription": "Construction, refurbishment, equipment, purchases.",
     "nonInvestiveDescription": "Concepts, staff, participation, events, operations.",
+    "investiveBoth": "Investive & Non-Investive",
     "tags": "Tags",
     "projectStartingCondition": "Starting Condition",
     "projectContent": "Project Content",
@@ -428,7 +520,8 @@
     "noResults": "No results",
     "searchPlaceholder": "Search tags",
     "pendingNote": "New tags are marked pending review until an admin approves them.",
-    "pendingBadge": "Pending review"
+    "pendingBadge": "Pending review",
+    "aiGeneratedBadge": "AI-generated"
   },
   "fundingSelector": {
     "title": "Select Funding",
@@ -552,6 +645,7 @@
   "Request to view a document made by | ": "Request to view a document made by | ",
   "Comment to a funding made by | ": "Comment to a funding made by | ",
   "Funding opportunity expires | ": "Funding opportunity expires | ",
+  "New funding suggestions for | ": "New funding suggestions for | ",
   "New Comment on Funding": "New Comment on Funding",
   "says": "says",
   "Select Data": "Select Data",
@@ -996,7 +1090,23 @@
       "aiAssessmentTeaser": "Soon our AI will automatically analyze how well your project matches each funding guideline — with detailed reasoning and actionable recommendations.",
       "showMore": "Show more funding guidelines",
       "matchingLoading": "AI is searching for matching funding guidelines...",
-      "Project funding comparison": "Project funding comparison"
+      "dragToReorder": "Drag to reorder",
+      "dragHint": "Tip: Drag the cards by the handle to change their order.",
+      "Project funding comparison": "Project funding comparison",
+      "newSuggestionTitle": "New AI funding suggestion",
+      "match": "match",
+      "suggestionRankHint": "would rank #{rank} of {total}",
+      "suggestionCounter": "Suggestion {position} of {total}",
+      "acceptSuggestion": "Accept",
+      "ignoreSuggestion": "Ignore",
+      "viewGuideline": "View guideline",
+      "undo": "Undo",
+      "suggestionAcceptedUndo": "Suggestion accepted and added to your funding options.",
+      "suggestionIgnoredUndo": "Suggestion ignored — it won't be suggested again for this project.",
+      "errorIgnoreSuggestion": "Error ignoring the funding suggestion",
+      "addedBadge": "New",
+      "ignoreDialogTitle": "Ignore this suggestion?",
+      "ignoreDialogDetail": "This funding suggestion will be permanently dismissed and won't be suggested again for this project."
     },
     "qAndA": {
       "title": "Open Questions & Answers",

@@ -12,7 +12,10 @@ export async function fetchNotificationsCount(context) {
       (total, key) => total + (Array.isArray(data[key]) ? data[key].length : 0),
       0
     );
-    context.commit("setNotificationsCount", count);
+    const fundingSuggestionsCount = Array.isArray(data.fundingSuggestions)
+      ? data.fundingSuggestions.reduce((total, group) => total + (group.suggestions ? group.suggestions.length : 0), 0)
+      : 0;
+    context.commit("setNotificationsCount", count + fundingSuggestionsCount);
   } catch (error) {
     context.commit("setNotificationsCount", 0);
   }
@@ -24,7 +27,8 @@ const TOAST_KIND_BY_NOTIFICATION_TYPE = {
   requests: "info",
   fundingExpirey: "warn",
   tagPendingApproval: "info",
-  tagReviewDecision: "info"
+  tagReviewDecision: "info",
+  fundingSuggestions: "info"
 };
 
 export async function onLiveNotification(context, payload) {

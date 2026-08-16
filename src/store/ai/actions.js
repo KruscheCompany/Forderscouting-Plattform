@@ -151,3 +151,16 @@ export async function suggestTaxonomy(context, payload) {
     }
   }
 }
+
+export function resetTaxonomySuggestions(context) {
+  // Abort any in-flight request and invalidate its id so a late response
+  // can't repopulate state after the reset (e.g. navigating edit -> create).
+  if (taxonomyAbortController) {
+    taxonomyAbortController.abort();
+    taxonomyAbortController = null;
+  }
+  taxonomyRequestId++;
+
+  context.commit('setTaxonomySuggestions', null);
+  context.commit('setLoadingTaxonomy', false);
+}

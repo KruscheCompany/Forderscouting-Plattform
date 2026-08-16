@@ -104,7 +104,15 @@
           >
             <q-card>
               <q-card-section style="background-color: #e7efff;">
-                {{ project.details.investive ? $t("Investive") : $t("Non-Investive") }}
+                {{
+                  project.details.investive === true && project.details.nonInvestive === true
+                    ? $t("newProjectIdeaForm.investiveBoth")
+                    : project.details.investive === true
+                      ? $t("Investive")
+                      : project.details.nonInvestive === true || project.details.investive === false
+                        ? $t("Non-Investive")
+                        : ""
+                }}
               </q-card-section>
             </q-card>
           </q-expansion-item>

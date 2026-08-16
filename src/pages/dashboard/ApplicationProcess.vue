@@ -652,6 +652,7 @@ export default {
 
   },
   mounted() {
+    this.$store.dispatch("ai/resetTaxonomySuggestions");
     this.setData();
   },
   beforeDestroy() {
