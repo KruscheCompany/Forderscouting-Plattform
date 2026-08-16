@@ -1,5 +1,69 @@
 # Änderungsprotokoll / Changelog
 
+## 6.12.0 — 2026-08-16
+
+### de
+- Neue KI-Fördervorschläge werden jetzt einzeln zur Prüfung angezeigt: Sie können jeden Vorschlag direkt übernehmen (er erscheint dann als neue Option in Ihrer Förderliste) oder endgültig ignorieren (er wird für dieses Projekt nicht erneut vorgeschlagen). Außerdem wurde ein Fehler behoben, durch den das Ändern der Kartenreihenfolge per Drag & Drop fälschlicherweise die Rückfrage zum Zurücksetzen ausgelöst hat.
+
+### en
+- New AI funding suggestions are now reviewed one at a time: you can accept a suggestion directly (it then appears as a new option in your funding list) or permanently ignore it (it won't be suggested again for this project). Also fixed a bug where simply reordering the funding cards by drag-and-drop incorrectly triggered the reset confirmation prompt.
+
+## 6.11.0 — 2026-08-16
+
+### de
+- Die Seite „Statistik & Archiv" wurde neu gestaltet: Administrator*innen sehen jetzt zuerst das erschlossene Fördervolumen, das Wachstum von Projektideen/Förderinfos/Nutzer*innen über die letzten 12 Monate, die Erfolgsquote vom Entwurf bis zur Bewilligung, die Beteiligung der Kommunen, die häufigsten Themen und Schlagwörter sowie die größten bewilligten Projekte. Damit lässt sich der Nutzen der Plattform besser gegenüber Kommunen und Entscheidungsträger*innen präsentieren. Die bisherigen Rohzahlen und die Archiv-Tabelle sind weiterhin vorhanden, jetzt eingeklappt unter „Alle Kennzahlen".
+
+### en
+- The "Statistics & Archive" page has been redesigned: administrators now first see the funding volume unlocked, the growth of project ideas/funding information/users over the last 12 months, the success rate from draft to approval, municipal participation, the most common topics and tags, and the largest approved projects. This makes it easier to present the platform's impact to municipalities and decision-makers. The previous raw counters and archive table are still available, now collapsed under "All metrics".
+
+## 6.10.0 — 2026-08-16
+
+### de
+- Wenn die KI eine neue passende Förderung für Ihre Projektidee findet, werden Sie und alle Bearbeiter*innen des Projekts jetzt darüber benachrichtigt (in der Plattform und optional per E-Mail, je nach Ihren Benachrichtigungseinstellungen). Die neuen Vorschläge können direkt im Fördercheck-Schritt Ihrer Projektidee übernommen werden. Administrator*innen sehen außerdem eine neue Statistik dazu in der Übersicht, die zeigt, wie viele Vorschläge angenommen bzw. abgelehnt wurden.
+
+### en
+- When the AI finds a new matching funding opportunity for your project idea, you and all editors of the project are now notified (in the platform and optionally by email, depending on your notification settings). The new suggestions can be applied directly in the funding-check step of your project idea. Admins also see a new statistics section in the overview showing how many suggestions were accepted vs. ignored.
+
+## 6.9.1 — 2026-08-15
+
+### de
+- Die automatische Erinnerung bei ausstehenden Vorprüfungen wird jetzt bereits nach zwei Wochen versendet statt erst nach vier.
+
+### en
+- The automatic reminder for outstanding preliminary reviews is now sent after two weeks instead of four.
+
+## 6.9.0 — 2026-08-15
+
+### de
+- Schlagwörter, die von der KI vorgeschlagen und von einer Administratorin freigegeben wurden, sind in der Projekt- und Förderungsansicht sowie im PDF-Export jetzt mit einem kleinen Symbol gekennzeichnet.
+
+### en
+- Tags that were suggested by AI and approved by an admin are now marked with a small icon in the project and funding views, and in the PDF export.
+
+## 6.8.0 — 2026-08-15
+
+### de
+- Bei „Investiv/ Nicht-investiv“ können jetzt beide Optionen gleichzeitig ausgewählt werden, statt nur eine.
+
+### en
+- "Investive/Non-Investive" now lets you select both options at once instead of only one.
+
+## 6.7.2 — 2026-08-15
+
+### de
+- Die Tabelle „Priorisierte Projektideen“ im Projekt-Dashboard zeigt jetzt auch Speicherdatum, Bearbeitungsstand und Status an, genau wie die Tabelle darunter. Ein Klick auf eine priorisierte Projektidee öffnet sie jetzt ebenfalls.
+
+### en
+- The "Prioritized project ideas" table on the project dashboard now also shows the save date, processing stage, and status, matching the table below it. Clicking a prioritized project idea now opens it as well.
+
+## 6.7.1 — 2026-08-14
+
+### de
+- E-Mails, die von der Plattform automatisch versendet werden (z. B. Benachrichtigungen, Erinnerungen, Zugriffsanfragen), sehen jetzt einheitlich aus und tragen durchgängig das Projektkompass-Kommune-Branding.
+
+### en
+- Emails sent automatically by the platform (e.g. notifications, reminders, access requests) now share one consistent, branded look.
+
 ## 6.7.0 — 2026-08-14
 
 ### de

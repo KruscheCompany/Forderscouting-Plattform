@@ -6,14 +6,14 @@
       </q-card-section>
       <q-card-section align="left">
         <h6 class="text-center font-20 q-mt-md q-mb-none">
-          {{ $t('warningMessage') }}
+          {{ title || $t('warningMessage') }}
         </h6>
         <div class="items-center text-center">
           <p class="text-body2">
-            {{ $t(`warningMessageDetail`) }}
+            {{ detail || $t(`warningMessageDetail`) }}
           </p>
-          <p class="text-body2">
-            {{ $t('warningMessageAction') }}
+          <p class="text-body2" v-if="action !== ''">
+            {{ action || $t('warningMessageAction') }}
           </p>
         </div>
       </q-card-section>
@@ -21,8 +21,8 @@
         <div class="row justify-center q-gutter-md">
           <q-btn :label="$t('Cancel')" outline size="14px" color="primary" no-caps class="no-shadow radius-6 q-px-xl"
             @click="handleCancel" />
-          <q-btn :label="$t('Continue')" unelevated :loading="loading" size="14px" color="orange" no-caps
-            class="no-shadow radius-6 q-px-xl q-py-sm" @click="handleConfirm" />
+          <q-btn :label="confirmLabel || $t('Continue')" unelevated :loading="loading" size="14px"
+            :color="confirmColor" no-caps class="no-shadow radius-6 q-px-xl q-py-sm" @click="handleConfirm" />
         </div>
       </q-card-section>
     </q-card>
@@ -40,6 +40,26 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    title: {
+      type: String,
+      default: null
+    },
+    detail: {
+      type: String,
+      default: null
+    },
+    action: {
+      type: String,
+      default: null
+    },
+    confirmLabel: {
+      type: String,
+      default: null
+    },
+    confirmColor: {
+      type: String,
+      default: 'orange'
     }
   },
   emits: ['update:modelValue', 'confirm', 'cancel'],

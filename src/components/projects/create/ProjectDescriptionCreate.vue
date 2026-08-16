@@ -63,6 +63,7 @@ export default {
           goals: "",
           valuesAndBenefits: "",
           investive: true,
+          nonInvestive: false,
           timeline: "",
           uploadsDescription: "",
         },
@@ -243,6 +244,7 @@ export default {
           fundingCheckSteps: this.getResetSteps(),
         };
         this.form.details.investive = JSON.parse(JSON.stringify(this.form.details.investive));
+        this.form.details.nonInvestive = JSON.parse(JSON.stringify(this.form.details.nonInvestive));
 
         await this.performSubmission();
       } catch (error) {

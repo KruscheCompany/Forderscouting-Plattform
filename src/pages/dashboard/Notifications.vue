@@ -44,7 +44,9 @@
                             ? noti.decision == "approved"
                               ? $t("Your suggested tag was approved")
                               : $t("Your suggested tag was rejected")
-                            : ""
+                            : noti.typeOfNoti == "fundingSuggestions"
+                              ? $t("New funding suggestions for | ")
+                              : ""
               }}
 
               <span class="text-blue">{{
@@ -54,7 +56,9 @@
                     ? noti.owner.username
                     : noti.typeOfNoti == "requests" && noti.user != null
                       ? noti.user.username
-                      : ""
+                      : noti.typeOfNoti == "fundingSuggestions" && noti.project != null
+                        ? noti.project.title
+                        : ""
               }}</span>
             </p>
             <p class="font-14 q-mb-none">
@@ -71,7 +75,9 @@
                           : noti.funding.title
                         : noti.typeOfNoti == "tagPendingApproval" || noti.typeOfNoti == "tagReviewDecision"
                           ? noti.title
-                          : ""
+                          : noti.typeOfNoti == "fundingSuggestions"
+                            ? `${(noti.suggestions || []).length} ${$t('notificationsUser.newSuggestions')}`
+                            : ""
               }}
             </p>
           </div>
@@ -82,7 +88,8 @@
             <q-btn @click="view(noti)" v-if="
               noti.typeOfNoti == 'fundingComments' ||
               noti.typeOfNoti == 'fundingExpirey' ||
-              noti.typeOfNoti == 'requests'
+              noti.typeOfNoti == 'requests' ||
+              noti.typeOfNoti == 'fundingSuggestions'
             " color="
               blue" unelevated outline class="radius-6 text-weight-600"
               :class="$q.screen.lt.md ? 'full-width q-mb-md' : ''" no-caps dense>
@@ -237,6 +244,10 @@ export default {
           this.data[item].forEach((decision) => {
             data.push({ ...decision, typeOfNoti: "tagReviewDecision" });
           });
+        } else if (item === "fundingSuggestions") {
+          this.data[item].forEach((group) => {
+            data.push({ ...group, typeOfNoti: "fundingSuggestions" });
+          });
         }
       }
       data.sort((a, b) => {
@@ -265,9 +276,9 @@ export default {
       else if (type == "guest") return "person";
       else if (type == "requests") return "person_add";
       else if (type == "tagPendingApproval" || type == "tagReviewDecision") return "sell";
+      else if (type == "fundingSuggestions") return "lightbulb";
     },
     async view(noti, isFunding = false) {
-      console.log(this.loggedInUser);
       if (noti.typeOfNoti == "fundingComments" && isFunding) {
         this.$router.push({ path: `/user/newFunding/${noti.funding.id}` });
       } else if (noti.typeOfNoti == "fundingComments") {
@@ -297,6 +308,11 @@ export default {
             this.$router.push({ path: `/user/newFunding/${noti.funding.id}` });
           }
         }
+      } else if (noti.typeOfNoti == "fundingSuggestions" && noti.project != null) {
+        this.$router.push({
+          path: `/application/process/edit/${noti.project.id}`,
+          query: { step: "fundingCheck" },
+        });
       }
     },
     acceptReq(noti, index) {
@@ -393,6 +409,24 @@ export default {
               tag_decision: noti.id,
             },
           });
+          this.getData();
+          break;
+        case "fundingSuggestions":
+          try {
+            await Promise.all(
+              (noti.suggestions || []).map((suggestion) =>
+                this.$api.post("/api/read-notifications", {
+                  data: {
+                    user: this.loggedInUser.id,
+                    funding_suggestion: suggestion.id,
+                  },
+                })
+              )
+            );
+          } catch (error) {
+            console.error("Error marking funding suggestions as read:", error);
+            this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("notificationsUser.markAsReadError") });
+          }
           this.getData();
           break;
         default:

@@ -170,8 +170,9 @@
             :suggested="taxonomySuggestions && taxonomySuggestions.categories && taxonomySuggestions.categories.suggested"
             :tagsSuggested="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.suggested"
             :tagsGenerated="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.generated"
-            :loading="isLoadingTaxonomy" :investive="form.details.investive" @update:category="form.categories = $event"
-            @update:tag="form.tags = $event" @update:investive="form.details.investive = $event" />
+            :loading="isLoadingTaxonomy" :investive="form.details.investive" :nonInvestive="form.details.nonInvestive"
+            @update:category="form.categories = $event" @update:tag="form.tags = $event"
+            @update:investive="form.details.investive = $event" @update:nonInvestive="form.details.nonInvestive = $event" />
 
           <div class="row items-baseline">
             <div class="col-12 col-md-4">
@@ -474,6 +475,7 @@ export default {
           valuesAndBenefits: "",
           partner: "",
           investive: true,
+          nonInvestive: false,
           status: "",
         },
         fundingGuideline: [],
@@ -541,6 +543,10 @@ export default {
     submitNewProjectIdea(val) {
       const published = val;
       this.$refs.newProjectIdeaForm.validate().then(async (success) => {
+        if (success && !this.form.details.investive && !this.form.details.nonInvestive) {
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Required") });
+          return;
+        }
         if (success) {
           this.isLoading = true;
           await this.checkOptionalParameters();
@@ -589,6 +595,10 @@ export default {
     editProjectIdea(val) {
       const published = val;
       this.$refs.newProjectIdeaForm.validate().then(async (success) => {
+        if (success && !this.form.details.investive && !this.form.details.nonInvestive) {
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Required") });
+          return;
+        }
         if (success) {
           this.isLoading = true;
           await this.checkOptionalParameters();
@@ -761,6 +771,7 @@ export default {
     },
   },
   mounted() {
+    this.$store.dispatch("ai/resetTaxonomySuggestions");
     this.setData();
   },
   beforeDestroy() {

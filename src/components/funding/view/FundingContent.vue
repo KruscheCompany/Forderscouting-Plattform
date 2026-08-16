@@ -605,6 +605,9 @@
                             <q-icon v-if="tag.status === 'pending'" name="hourglass_empty" size="14px" class="q-ml-xs">
                               <q-tooltip>{{ $t("tagsSelector.pendingBadge") }}</q-tooltip>
                             </q-icon>
+                            <q-icon v-else-if="tag.source === 'ai'" name="auto_awesome" size="14px" class="q-ml-xs">
+                              <q-tooltip>{{ $t("tagsSelector.aiGeneratedBadge") }}</q-tooltip>
+                            </q-icon>
                           </q-chip>
                         </div>
                       </div>
