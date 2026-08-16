@@ -133,7 +133,7 @@
           <h4 class="subsection-label">{{ $t("Tags") }}</h4>
           <div class="tags-container">
             <span v-for="(tag, index) in funding.tags" :key="index" class="tag">
-              {{ tag.title }}
+              {{ tag.title }}<span v-if="tag.source === 'ai'" :title="$t('tagsSelector.aiGeneratedBadge')"> ✦</span>
             </span>
           </div>
         </div>

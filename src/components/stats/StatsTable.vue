@@ -1,8 +1,8 @@
 <template>
   <div class="q-my-lg">
-    <q-table class="radius-20 shadow-1 pagination-no-shadow" :class="expanded ? 'yellowBg' : ''" :data="data"
-      :columns="columns" row-key="name" :hide-header="!isInPage" :visible-columns="visibleColumns" :filter="filter"
-      :filter-method="filterTable" :pagination="{
+    <q-table class="radius-20 shadow-1 pagination-no-shadow" style="border: 1px solid rgb(233, 237, 249);"
+      :class="expanded ? 'yellowBg' : ''" :data="data" :columns="columns" row-key="name" :hide-header="!isInPage"
+      :visible-columns="visibleColumns" :filter="filter" :filter-method="filterTable" :pagination="{
         sortBy: 'id',
         descending: true,
         page: 1,

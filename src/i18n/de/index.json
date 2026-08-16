@@ -19,7 +19,8 @@
     "saveChanges": "Änderungen speichern",
     "viewEditRequest": "Anfrage zu meinen Dokumenten ansehen/bearbeiten",
     "tagPendingApproval": "Ein neues Schlagwort wartet auf Genehmigung",
-    "tagReviewDecision": "Entscheidung über mein vorgeschlagenes Schlagwort"
+    "tagReviewDecision": "Entscheidung über mein vorgeschlagenes Schlagwort",
+    "fundingSuggestion": "Neue KI-Fördervorschläge für mein Projekt"
   },
   "notificationsUser": {
     "viewBtn": "Ansehen",
@@ -27,7 +28,9 @@
     "declineBtn": "Ablehnen",
     "viewFundingBtn": "Förderung ansehen",
     "markAsRead": "Als gelesen markieren",
+    "markAsReadError": "Benachrichtigung konnte nicht als gelesen markiert werden.",
     "documentAccessRequest": "möchte auf das Dokument zugreifen",
+    "newSuggestions": "neue Fördervorschläge",
     "push": {
       "title": "Neue Benachrichtigung",
       "guest": "Ein neuer Nutzer möchte der Plattform beitreten.",
@@ -36,6 +39,7 @@
       "fundingExpirey": "Eine Fördermittel läuft bald aus.",
       "tagPendingApproval": "Ein neues Schlagwort wartet auf Genehmigung.",
       "tagReviewDecision": "Ihr vorgeschlagenes Schlagwort wurde bearbeitet.",
+      "fundingSuggestions": "Es gibt neue Fördervorschläge für Ihr Projekt.",
       "kind": {
         "info": "Information",
         "warn": "Frist",
@@ -350,7 +354,94 @@
     "municipalities": "Verwaltung",
     "projectTotalDups": "vervielfältigte Projektideen",
     "checklistTotalDups": "vervielfältigt Umsetzungschecklisten",
-    "totalDups": "Überschneidungen insgesamt"
+    "totalDups": "Überschneidungen insgesamt",
+    "aiSuggestions": {
+      "title": "KI-Fördervorschläge",
+      "total": "Vorschläge insgesamt",
+      "notified": "Benachrichtigt",
+      "accepted": "Übernommen",
+      "ignored": "Abgelehnt",
+      "pending": "Ausstehend",
+      "acceptanceRate": "Übernahmequote",
+      "scoreBucket": "Score-Bereich"
+    },
+    "marketing": {
+      "loadError": "Statistiken konnten nicht geladen werden.",
+      "funding": {
+        "title": "Fördervolumen erschlossen",
+        "subtitle": "Über alle {total} Projektideen der Plattform",
+        "total": "Gesamtinvestition",
+        "totalNote": "Gesamtes von den Kommunen dokumentiertes Projektvolumen, investiv und nicht-investiv.",
+        "requested": "Fördermittel beantragt",
+        "requestedNote": "des Gesamtvolumens",
+        "secured": "Bereits bewilligt",
+        "securedNote": "der beantragten Fördermittel bewilligt"
+      },
+      "growth": {
+        "title": "Wachstum über die Zeit",
+        "subtitle": "Projektideen, Förderinfos und Nutzer*innen — letzte 12 Monate. Monat für genaue Werte anzeigen.",
+        "modeNew": "Neu pro Monat",
+        "modeCum": "Kumuliert",
+        "range6m": "6 Monate",
+        "range12m": "12 Monate",
+        "seriesProjects": "Projektideen",
+        "seriesFundings": "Förderinfos",
+        "seriesUsers": "Nutzer*innen",
+        "readoutHeading": "{months}-Monats-Überblick",
+        "readoutNewProjects": "Neue Projektideen (12 M.)",
+        "readoutNewUsers": "Neue Nutzer*innen (12 M.)",
+        "readoutNewFundings": "Neue Förderinfos (12 M.)",
+        "readoutAvgProjects": "Ø neue Projekte / Monat",
+        "readoutNote": "In jedem Monat kamen Projekte, Nutzer*innen und Förderinfos hinzu — kein Rückgang im Betrachtungszeitraum."
+      },
+      "funnel": {
+        "title": "Erfolgstrichter",
+        "subtitle": "Jede Projektidee nach Bearbeitungsstatus, vom Entwurf bis zur Entscheidung.",
+        "rateLabel": "Erfolgsquote",
+        "inProgress": "In Bearbeitung",
+        "sentToFunding": "Eingereicht",
+        "grantNotice": "Bewilligt",
+        "rejectionNotice": "Abgelehnt"
+      },
+      "regional": {
+        "title": "Regionale Reichweite",
+        "subtitle": "Kommunen mit mindestens einer Projektidee auf der Plattform.",
+        "active": "aktive Kommunen",
+        "coverage": "Abdeckung",
+        "gap": "{count} Kommunen haben noch keine Projektidee eingereicht",
+        "leaderboard": "Top-Kommunen nach Projektideen"
+      },
+      "topics": {
+        "title": "Themenschwerpunkte",
+        "subtitle": "Am häufigsten genutzte Kategorien über alle Projektideen.",
+        "modeCategories": "Kategorien",
+        "modeTags": "Schlagwörter",
+        "empty": "Noch keine Daten vorhanden."
+      },
+      "stories": {
+        "title": "Erfolgsgeschichten",
+        "subtitle": "Größte bewilligte Projekte — Status „bewilligt“, sortiert nach Fördermitteln",
+        "granted": "bewilligt",
+        "amountLabel": "Fördermittel",
+        "empty": "Noch keine bewilligten Projekte mit hinterlegten Fördermitteln vorhanden."
+      },
+      "ai": {
+        "badge": "Effizienz",
+        "title": "KI-gestützte Zuordnung spart Zeit",
+        "summary": "Vorschläge werden automatisch aus Projektbeschreibungen zugeordnet. {rate}% der geprüften Vorschläge wurden übernommen — das spart rund {hours} Stunden manuelle Programmsuche.",
+        "subTotal": "insgesamt",
+        "subNotified": "benachrichtigt",
+        "subAccepted": "wurden übernommen",
+        "subIgnored": "verworfen",
+        "subRate": "der geprüften"
+      },
+      "details": {
+        "title": "Alle Kennzahlen",
+        "subtitle": "Rohzähler, KI-Score-Bereiche und die Archiv-Tabelle — für Administrator*innen.",
+        "show": "Anzeigen",
+        "hide": "Ausblenden"
+      }
+    }
   },
   "statsTable": {
     "title": "Titel",
@@ -383,6 +474,7 @@
     "investiveHint": "Bestimmt die möglichen Förderarten.",
     "investiveDescription": "Bauliche Maßnahmen, Sanierung, Ausstattung, Anschaffungen.",
     "nonInvestiveDescription": "Konzepte, Personal, Beteiligung, Veranstaltungen, Betrieb.",
+    "investiveBoth": "Investiv & Nicht-investiv",
     "tags": "Tags",
     "projectStartingCondition": "Ausgangssituation",
     "projectContent": "Projektinhalt",
@@ -428,7 +520,8 @@
     "noResults": "Keine Ergebnisse",
     "searchPlaceholder": "Schlagwort suchen",
     "pendingNote": "Neue Schlagwörter werden als „ausstehend“ markiert, bis eine Administratorin sie freigibt.",
-    "pendingBadge": "Ausstehende Freigabe"
+    "pendingBadge": "Ausstehende Freigabe",
+    "aiGeneratedBadge": "KI-generiert"
   },
   "estimatedCost": {
     "costName": "Kostenpositionen",
@@ -546,6 +639,7 @@
   "Request to duplicate a document made by | ": "Antrag auf Vervielfältigung eines Dokuments, gestellt von | ",
   "Comment to a funding made by | ": "Kommentar zu einem Fördermittel von | ",
   "Funding opportunity expires | ": "Fördermöglichkeit läuft aus | ",
+  "New funding suggestions for | ": "Neue Fördervorschläge für | ",
   "New Comment on Funding": "Neuer Kommentar zu einem Fördermittel",
   "says": "sagt",
   "Select Data": "Daten auswählen",
@@ -1053,7 +1147,23 @@
       "comingSoon": "Demnächst verfügbar",
       "aiAssessmentTeaser": "Bald wird unsere KI automatisch analysieren, wie gut Ihr Projekt zu den jeweiligen Förderrichtlinien passt — mit detaillierter Begründung und Handlungsempfehlungen.",
       "showMore": "Weitere Förderrichtlinien anzeigen",
-      "matchingLoading": "KI sucht passende Förderrichtlinien..."
+      "matchingLoading": "KI sucht passende Förderrichtlinien...",
+      "dragToReorder": "Ziehen, um Reihenfolge zu ändern",
+      "dragHint": "Tipp: Ziehen Sie die Karten am Symbol, um ihre Reihenfolge zu ändern.",
+      "newSuggestionTitle": "Neuer KI-Fördervorschlag",
+      "match": "Übereinstimmung",
+      "suggestionRankHint": "würde auf Platz {rank} von {total} stehen",
+      "suggestionCounter": "Vorschlag {position} von {total}",
+      "acceptSuggestion": "Übernehmen",
+      "ignoreSuggestion": "Ignorieren",
+      "viewGuideline": "Richtlinie ansehen",
+      "undo": "Rückgängig",
+      "suggestionAcceptedUndo": "Vorschlag übernommen und zu Ihren Fördermöglichkeiten hinzugefügt.",
+      "suggestionIgnoredUndo": "Vorschlag ignoriert – wird für dieses Projekt nicht erneut vorgeschlagen.",
+      "errorIgnoreSuggestion": "Fehler beim Ignorieren des Fördervorschlags",
+      "addedBadge": "Neu",
+      "ignoreDialogTitle": "Vorschlag ignorieren?",
+      "ignoreDialogDetail": "Dieser Fördervorschlag wird endgültig verworfen und Ihnen für dieses Projekt nicht erneut vorgeschlagen."
     },
     "qAndA": {
       "title": "Offene Fragen & Antworten",

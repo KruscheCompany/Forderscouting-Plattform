@@ -194,7 +194,9 @@
 <script>
 import { dateFormatter } from "src/boot/dateFormatter";
 import RequestAccessDialog from "components/data/RequestAccessDialog.vue";
+import projectStatusLabels from "src/mixins/projectStatusLabels";
 export default {
+  mixins: [projectStatusLabels],
   name: "projectDashboardTable",
   components: {
     RequestAccessDialog,
@@ -302,109 +304,6 @@ export default {
 
       await this.$store.dispatch("municipality/getLocationsByMunicipality", params);
     },
-    getLastCompletedStepColor(applicationProcessSteps) {
-      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
-        return 'primary'; // Default color
-      }
-
-      // Filter the steps that are done
-      const completedSteps = applicationProcessSteps.filter(step => step.done);
-
-      // If no completed steps, return default
-      if (completedSteps.length === 0) {
-        return 'primary';
-      }
-
-      // Get the last completed step
-      const lastCompletedStep = completedSteps[completedSteps.length - 1];
-
-      // Determine color based on the name of the last completed step
-      switch (lastCompletedStep.name) {
-        case 'aiFundingCheck':
-          return 'primary'; // Blue
-        case 'projectDevelopment':
-          return 'blue-2'; // Light Blue
-        case 'application':
-          return 'blue-1'; // Green
-        default:
-          return 'primary'; // Default color
-      }
-    },
-    getLastCompletedStep(applicationProcessSteps) {
-      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
-        return this.$t("aiFundingCheck");
-      }
-
-      // Filter the steps that are done
-      const completedSteps = applicationProcessSteps.filter(step => step.done);
-
-      // If no completed steps, return default
-      if (completedSteps.length === 0) {
-        return this.$t("aiFundingCheck");
-      }
-
-      // Get the last completed step
-      const lastCompletedStep = completedSteps[completedSteps.length - 1];
-
-      // Try to use translation key based on the name property first
-      // If not available, use the title directly, and if that's not available either, use a default
-      const translationKey = `${lastCompletedStep.name}`;
-      return this.$t(translationKey) ? this.$t(translationKey) : (lastCompletedStep.title || this.$t("aiFundingCheck"));
-    },
-
-    getLastCompletedStepTextColor(applicationProcessSteps) {
-      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
-        return 'white'; // Default text color
-      }
-
-      // Filter the steps that are done
-      const completedSteps = applicationProcessSteps.filter(step => step.done);
-
-      // If no completed steps, return default
-      if (completedSteps.length === 0) {
-        return 'white';
-      }
-
-      // Get the last completed step
-      const lastCompletedStep = completedSteps[completedSteps.length - 1];
-
-      // Determine text color based on the name of the last completed step
-      switch (lastCompletedStep.name) {
-        case 'aiFundingCheck':
-          return 'white'; // Blue badge - white text
-        case 'projectDevelopment':
-          return 'black'; // Light Blue badge - black text
-        case 'application':
-          return 'black'; // Green badge - black text
-        default:
-          return 'white'; // Default text color
-      }
-    },
-
-    getStatusText(status) {
-      if (status === "sentToFunding") {
-        return this.$t('projectComponents.submissionSigning.sentToFunding');
-      } else if (status === "grantNotice") {
-        return this.$t('Zuwendungsbescheid'); // Granted
-      } else if (status === "rejectionNotice") {
-        return this.$t('Ablehnungsbescheid'); // Rejected
-      } else {
-        return this.$t('In Bearbeitung'); // In progress (null)
-      }
-    },
-
-    getStatusColor(status) {
-      if (status === "grantNotice") {
-        return 'green'; // Granted - green badge
-      } else if (status === "rejectionNotice") {
-        return 'red'; // Rejected - red badge
-      } else if (status === "sentToFunding") {
-        return 'blue'; // Sent to funding - blue badge
-      } else {
-        return 'yellow'; // In progress - yellow badge
-      }
-    },
-
     async prioritizeRow(row) {
       await this.$store.dispatch("project/addToPriorityList", { id: row.id });
       this.getProjects();
@@ -563,33 +462,27 @@ export default {
         }
       } catch (error) {
         console.error("Error in view function:", error);
-        // Default to the old permission check in case of API failure
-        if (
-          row.visibility === "listed only" &&
-          (!!row.owner && row.owner.id) !==
-          (!!this.loggedInUser && this.loggedInUser.id) &&
-          !this.isAdmin
-        ) {
-          const hasReaderAccess =
-            !!row.readers &&
-            row.readers.filter(
-              (user) => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          const hasEditorAccess =
-            !!row.editors &&
-            row.editors.filter(
-              (user) => user.id === (!!this.loggedInUser && this.loggedInUser.id)
-            );
-          if (hasReaderAccess.length > 0 || hasEditorAccess.length > 0) {
-            this.$router.push({ path: `/application/process/view/${id}` });
-          } else {
-            this.itemId = id;
-            this.itemType = "view";
-            this.requestDialog = true;
-          }
-        } else {
+        // API call failed - fall back to a best-effort client-side check using data
+        // already on hand. Defaults to requiring access approval (fail closed) unless
+        // the user is clearly the owner, an admin, or the project is open to all users.
+        const isOwner = !!row.owner && !!this.loggedInUser && row.owner.id === this.loggedInUser.id;
+        if (this.isAdmin || isOwner || row.visibility === "all users") {
           this.$router.push({ path: `/application/process/view/${id}` });
+          return;
         }
+        if (row.visibility === "listed only") {
+          const hasReaderAccess =
+            !!row.readers && row.readers.some((user) => !!this.loggedInUser && user.id === this.loggedInUser.id);
+          const hasEditorAccess =
+            !!row.editors && row.editors.some((user) => !!this.loggedInUser && user.id === this.loggedInUser.id);
+          if (hasReaderAccess || hasEditorAccess) {
+            this.$router.push({ path: `/application/process/view/${id}` });
+            return;
+          }
+        }
+        this.itemId = id;
+        this.itemType = "view";
+        this.requestDialog = true;
       }
     },
     getSelectedFunding(row) {

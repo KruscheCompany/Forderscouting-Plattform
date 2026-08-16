@@ -4,8 +4,9 @@
     :suggested="taxonomySuggestions && taxonomySuggestions.categories && taxonomySuggestions.categories.suggested"
     :tagsSuggested="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.suggested"
     :tagsGenerated="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.generated"
-    :loading="isLoadingTaxonomy" :investive="localForm.details.investive" @update:category="updateCategories"
-    @update:tag="updateTags" @update:investive="localForm.details.investive = $event" />
+    :loading="isLoadingTaxonomy" :investive="localForm.details.investive" :nonInvestive="localForm.details.nonInvestive"
+    @update:category="updateCategories" @update:tag="updateTags"
+    @update:investive="localForm.details.investive = $event" @update:nonInvestive="localForm.details.nonInvestive = $event" />
 </template>
 
 <script>
@@ -32,6 +33,7 @@ export default {
       localForm: {
         details: {
           investive: true,
+          nonInvestive: false,
         },
         categories: [],
         tags: [],
@@ -66,12 +68,13 @@ export default {
       this.localForm.tags = tags;
     },
     async validateForm() {
-      return true;
+      return this.localForm.details.investive === true || this.localForm.details.nonInvestive === true;
     },
     setData(formData) {
       this.localForm = {
         details: {
           investive: typeof formData.details?.investive === 'boolean' ? formData.details.investive : true,
+          nonInvestive: typeof formData.details?.nonInvestive === 'boolean' ? formData.details.nonInvestive : false,
         },
         categories: formData.categories || [],
         tags: formData.tags || [],
