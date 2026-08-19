@@ -384,16 +384,15 @@ export default {
 
       // Check if we're creating a new project from scratch (no projectId in URL)
       if (!this.$route.params.projectId) {
-        // Redirect to edit route with the new project ID and a query param to trigger funding match
-        this.$router.push({
+        // Update the URL to the edit route for the new project, without waiting for a
+        // remount (ApplicationProcess/EditApplicationProcess share the same component
+        // instance, so mounted()/setData() won't re-run to pick up a query param here)
+        this.$router.replace({
           name: 'EditApplicationProcess',
-          params: { projectId: data.id },
-          query: { triggerFundingMatch: hasStartingConditionChanged || !this.form.fundingMatches ? '1' : '0' }
+          params: { projectId: data.id }
         });
-        return; // Stop execution here as we're redirecting
       }
 
-      // Original logic for existing projects
       if (hasStartingConditionChanged || !this.form.fundingMatches) {
         this.handleFundingMatch(data.projectData);
       } else {
@@ -558,11 +557,7 @@ export default {
           this.$refs.projectDescriptionRef.setData();
         }
 
-        // If coming from a redirect (has triggerFundingMatch query), trigger the AI match now
-        // that form is populated from the freshly-fetched project. Otherwise use the normal behavior
-        if (this.$route.query.triggerFundingMatch === '1') {
-          await this.handleFundingMatch(this.form);
-        } else if (this.$route.query.tab) {
+        if (this.$route.query.tab) {
           // Restore tab and step from view mode navigation
           this.tab = this.$route.query.tab;
           if (this.$route.query.step) {
