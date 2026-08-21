@@ -167,7 +167,6 @@
 
           <CategorizationCard :requiresValidation="true" :editingCategories="!!project ? project.categories : []"
             :editingTags="!!project ? project.tags : []"
-            :suggested="taxonomySuggestions && taxonomySuggestions.categories && taxonomySuggestions.categories.suggested"
             :tagsSuggested="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.suggested"
             :tagsGenerated="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.generated"
             :loading="isLoadingTaxonomy" :investive="form.details.investive" :nonInvestive="form.details.nonInvestive"

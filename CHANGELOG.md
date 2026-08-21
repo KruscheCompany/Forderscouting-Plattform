@@ -1,5 +1,99 @@
 # Änderungsprotokoll / Changelog
 
+## 6.18.1 — 2026-08-21
+
+### de
+- Beim Einladen einer neuen Person wird die Nutzerliste jetzt automatisch aktualisiert; die Tabelle lässt sich zusätzlich nach dem letzten Änderungsdatum sortieren.
+- Kleinere Anpassung an der Ankündigungsleiste (Abstand zum Link behoben).
+
+### en
+- Inviting a new person now refreshes the user list automatically; the table can also be sorted by last updated date.
+- Small spacing fix on the announcement ribbon's link.
+
+## 6.18.0 — 2026-08-20
+
+### de
+- Beim Anlegen oder Bearbeiten eines Verwaltungsbereichs sowie einer Gemeinde kann jetzt zusätzlich zum Bundesland auch der Landkreis ausgewählt werden.
+
+### en
+- When creating or editing an administrative area or a municipality, the Landkreis (district) can now be selected in addition to the federal state.
+
+## 6.17.0 — 2026-08-20
+
+### de
+- Bei der Rückmeldung zu einer Vorprüfung-Anfrage können Prüfer:innen jetzt bis zu 5 Terminvorschläge angeben, wenn eine Rücksprache gewünscht ist (mindestens einer ist erforderlich).
+
+### en
+- When responding to a Vorprüfung request, reviewers can now suggest up to 5 possible dates when a follow-up is requested (at least one is required).
+
+## 6.16.1 — 2026-08-20
+
+### de
+- Im Prüfschritt „Eignung“ des Antragsprozesses wurde das Textfeld für die Aufgabenbeschreibung entfernt.
+
+### en
+- In the "Aptitude" review step of the application process, removed the task description text field.
+
+## 6.16.0 — 2026-08-20
+
+### de
+- Die Suche und alle Filter im Projekt-Dashboard befinden sich jetzt an einer zentralen Stelle oberhalb der drei Tabellen und wirken auf „Priorisierte Projektideen“, „Warteliste“ und „Archivierte Projektideen“ gleichzeitig, statt dass jede Tabelle ihre eigene Suche/Filterleiste hatte.
+
+### en
+- Search and all filters on the project dashboard now live in one place above the three tables and apply to "Prioritized project ideas", "Wait List", and "Archived project ideas" at once, instead of each table having its own search/filter bar.
+
+## 6.15.2 — 2026-08-20
+
+### de
+- Beim Anlegen und Bearbeiten einer Projektidee muss der Standort jetzt angegeben werden. Bereits gespeicherte Projektideen ohne Standort lassen sich weiterhin problemlos öffnen.
+- In den Tabellen „Priorisierte Projektideen“, „Antragsprozesse“ und „Archivierte Projektideen“ zeigt die Spalte jetzt den Standort der Projektidee an statt der Gemeinde.
+- Die Tabelle „Antragsprozesse“ im Projekt-Dashboard heißt jetzt „Warteliste“ und lässt sich wie die anderen Tabellen per Klick auf die Überschrift auf- und zuklappen.
+- Im Projekt-Dashboard wurde der Leerraum zwischen den Tabellenüberschriften und den Tabellen entfernt, und jede Überschrift („Priorisierte Projektideen“, „Warteliste“, „Archivierte Projektideen“) hat jetzt eine eigene Farbe zur besseren Unterscheidung.
+- Überschrift und Tabelle der drei Dashboard-Tabellen bilden jetzt eine einzige durchgehende Karte statt zwei separater Kästen mit Schatten und abgerundeten Ecken an der Nahtstelle.
+- Die Farbunterscheidung der drei Tabellen-Überschriften erfolgt jetzt über eine dezente Hintergrundfarbe statt nur über die Textfarbe.
+- Kontrast der Überschriften „Archivierte Projektideen“ und „Warteliste“ verbessert (kräftigerer Hintergrund).
+
+### en
+- The location must now be filled in when creating or editing a project idea. Previously saved project ideas without a location still open without issue.
+- In the "Prioritized project ideas", "Application processes", and "Archived project ideas" tables, the column now shows the project idea's location instead of the municipality.
+- The "Application processes" table on the project dashboard is now called "Wait List" and can be collapsed/expanded by clicking its header, matching the other tables.
+- On the project dashboard, removed the empty space between each table's header and its table, and gave each header ("Prioritized project ideas", "Wait List", "Archived project ideas") its own color so they're easier to tell apart.
+- The header and table of each of the three dashboard tables now form one continuous card instead of two separate boxes with a shadow and rounded corners at the seam.
+- The color distinction between the three table headers now uses a subtle background tint instead of just the text color.
+- Improved contrast on the "Archived project ideas" and "Wait List" headers (stronger background).
+
+## 6.15.1 — 2026-08-19
+
+### de
+- Bei der Kategorien-Auswahl für Projektideen und Förderinfos werden keine KI-vorgeschlagenen Kategorien mehr angezeigt. Schlagwort-Vorschläge per KI sind davon nicht betroffen.
+
+### en
+- AI-suggested categories are no longer shown when choosing categories for project ideas and funding info. AI tag suggestions are not affected.
+
+## 6.15.0 — 2026-08-19
+
+### de
+- Wenn eine externe Ansprechperson bei der Vorprüfung „Rücksprache nötig“ auswählt, muss sie jetzt angeben, wie sie erreichbar ist (Telefon und/oder vor Ort) und einen bevorzugten Termin (Datum & Uhrzeit) auswählen, bevor sie ihre Antwort absenden kann. Der gewählte Termin wird auch im Vorprüfungs-Schritt der Projektidee angezeigt.
+
+### en
+- When an external contact selects "Follow-up needed" during a review, they must now specify how they can be reached (phone and/or on-site) and choose a preferred date & time before they can submit their response. The selected appointment is also shown in the project's review step.
+
+## 6.14.0 — 2026-08-19
+
+### de
+- In der Tabelle „Archivierte Projektideen“ kann eine Projektidee jetzt per Klick auf das neue Symbol direkt wieder aus dem Archiv zurückgeholt werden.
+
+### en
+- In the "Archived project ideas" table, a project idea can now be restored from the archive directly via the new icon button.
+
+## 6.13.0 — 2026-08-19
+
+### de
+- Die drei Tabellen im Projekt-Dashboard („Priorisierte Projektideen“, „Antragsprozesse“ und „Archivierte Projektideen“) sehen jetzt einheitlich aus und zeigen überall die Spalten Speicherdatum, Gemeinde, Antragsweg und Status. Die Tabellen „Priorisierte Projektideen“ und „Archivierte Projektideen“ haben jetzt außerdem eine Suchleiste mit Filtermöglichkeiten sowie einen pro Zeile aufklappbaren Finanzplan, genau wie die Tabelle „Antragsprozesse“.
+
+### en
+- The three tables on the project dashboard ("Prioritized project ideas", "Application processes", and "Archived project ideas") now share the same look and all show the save date, municipality, application step, and status columns. The "Prioritized project ideas" and "Archived project ideas" tables now also have a search bar with filters and a per-row expandable financial plan, matching the "Application processes" table.
+
 ## 6.12.0 — 2026-08-16
 
 ### de

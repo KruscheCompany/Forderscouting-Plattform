@@ -100,6 +100,20 @@
           <div class="row items-center">
             <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
+                {{ $t("Select Rural Districts") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-select outlined dense v-model="form.landkreise" multiple use-chips
+                :options="filteredLandkreise" option-label="title" class="no-shadow input-radius-6"
+                :placeholder="$t('Select Rural Districts')" options-selected-class="text-primary"
+                :disable="!form.federalStates || form.federalStates.length === 0">
+              </q-select>
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
                 {{ $t("Select Municipalities") }}
               </p>
             </div>
@@ -299,17 +313,6 @@
                 :options="accumulabilityOptions" />
             </div>
           </div>
-          <div v-if="form.accumulability" class="row items-center">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                {{ $t("Link to fundings") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <Fundings :requiresValidation="false" :editing="funding.fundingsLinkedTo"
-                @update:linkToFunding="form.fundingsLinkedTo = $event" />
-            </div>
-          </div>
           <div class="row items-baseline">
             <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
@@ -374,18 +377,6 @@
               </div>
             </div>
           </div>
-          <div class="row items-center">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                {{ $t("Link to project ideas (optional)") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <ProjectIdeas :editing="!!funding ? funding.projects : []"
-                @update:linkToProject="form.projects = $event" />
-            </div>
-          </div>
-
           <div class="row">
             <div class="col-12">
               <q-separator class="bg-blue opacity-10" />
@@ -407,7 +398,6 @@
             badgeSource="fundingGoal"
             :editingCategories="!!funding ? funding.categories : []"
             :editingTags="!!funding ? funding.tags : []"
-            :suggested="taxonomySuggestions && taxonomySuggestions.categories && taxonomySuggestions.categories.suggested"
             :tagsSuggested="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.suggested"
             :tagsGenerated="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.generated"
             :loading="isLoadingTaxonomy" @update:category="form.categories = $event"
@@ -511,8 +501,6 @@ import CategorizationCard from "components/projects/create/CategorizationCard.vu
 import FundingRate from "src/components/funding/FundingRate.vue";
 import FundingCalls from "src/components/funding/FundingCalls.vue";
 import Links from "src/components/projects/create/Links.vue";
-import ProjectIdeas from "components/funding/ProjectIdeas.vue";
-import Fundings from "components/funding/Fundings.vue";
 import ImageDialog from "components/ImageDialog.vue";
 import htmlSanitizer from "src/mixins/htmlSanitizer.js";
 
@@ -525,8 +513,6 @@ export default {
     FundingRate,
     FundingCalls,
     Links,
-    ProjectIdeas,
-    Fundings,
     ImageDialog
   },
   data() {
@@ -562,6 +548,7 @@ export default {
         notes: "",
         editors: [],
         federalStates: [],
+        landkreise: [],
         municipalities: [],
         rates: [],
         links: [],
@@ -678,6 +665,7 @@ export default {
               ...this.form,
               tags,
               federalStates: this.form.federalStates.map(fs => fs.id),
+              landkreise: this.form.landkreise.map(lk => lk.id),
               municipalities: this.form.municipalities.map(m => m.id),
               published: published,
               owner: {
@@ -713,6 +701,7 @@ export default {
               ...this.form,
               tags,
               federalStates: this.form.federalStates.map(fs => fs.id),
+              landkreise: this.form.landkreise.map(lk => lk.id),
               municipalities: this.form.municipalities.map(m => m.id),
               published: published
               // owner: {
@@ -797,6 +786,7 @@ export default {
       this.$store.dispatch("userCenter/getUsers");
       this.$store.dispatch("federalState/getFederalStates");
       this.$store.dispatch("municipality/getMunicipalities");
+      this.$store.dispatch("landkreis/getLandkreise");
 
       if (this.form.archived && !isAdmin) {
         this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Der Zugang zu archivierten Dokumenten ist nicht möglich") });
@@ -944,6 +934,32 @@ export default {
 
         return municipality.federalStates.some(fs =>
           selectedFederalStateTitles.includes(fs.title)
+        );
+      });
+    },
+    landkreiseList() {
+      const landkreise = this.$store.state.landkreis.landkreise;
+      return Array.isArray(landkreise)
+        ? [...landkreise].sort((a, b) => a.title.localeCompare(b.title))
+        : [];
+    },
+    filteredLandkreise() {
+      if (!this.form.federalStates || this.form.federalStates.length === 0) {
+        // If no federal states selected, only show already-selected rural districts
+        return this.form.landkreise || [];
+      }
+
+      const selectedFederalStateIds = this.form.federalStates.map(fs => fs.id);
+      const selectedLandkreisIds = (this.form.landkreise || []).map(lk => lk.id);
+
+      return this.landkreiseList.filter(landkreis => {
+        // Always include already-selected rural districts
+        if (selectedLandkreisIds.includes(landkreis.id)) {
+          return true;
+        }
+
+        return (landkreis.federalStates || []).some(fsId =>
+          selectedFederalStateIds.includes(fsId)
         );
       });
     },

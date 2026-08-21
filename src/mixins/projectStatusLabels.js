@@ -30,6 +30,14 @@ export default {
       const translationKey = `${lastCompletedStep.name}`;
       return this.$te(translationKey) ? this.$t(translationKey) : (lastCompletedStep.title || this.$t("aiFundingCheck"));
     },
+    getLastCompletedStepValue(applicationProcessSteps) {
+      if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
+        return "aiFundingCheck";
+      }
+      const completedSteps = applicationProcessSteps.filter((step) => step.done);
+      if (completedSteps.length === 0) return "aiFundingCheck";
+      return completedSteps[completedSteps.length - 1].name;
+    },
     getLastCompletedStepTextColor(applicationProcessSteps) {
       if (!applicationProcessSteps || !Array.isArray(applicationProcessSteps) || applicationProcessSteps.length === 0) {
         return "white";

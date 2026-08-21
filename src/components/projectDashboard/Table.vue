@@ -1,118 +1,31 @@
 <template>
-  <div class="q-my-lg">
-    <q-table class="radius-20 shadow-1 pagination-no-shadow" :class="expanded ? 'yellowBg' : ''"
-      :data="applicationProcess || []" :columns="columns" row-key="name" :visible-columns="visibleColumns" :pagination="{
+  <q-expansion-item v-model="sectionExpanded" header-class="bg-blue-2 q-px-md"
+    expand-icon-class="text-blue" class="q-mt-md q-mb-lg radius-20 shadow-1 overflow-hidden bg-white">
+    <template v-slot:header>
+      <q-item-section avatar>
+        <q-icon name="mdi-clock-outline" color="blue" />
+      </q-item-section>
+      <q-item-section>
+        <span class="font-16 text-weight-600 text-blue">{{ $t("ProjectDashboard.waitlist") }}</span>
+      </q-item-section>
+    </template>
+
+    <q-table flat class="pagination-no-shadow" :class="filtersExpanded ? 'yellowBg' : ''"
+      :data="applicationProcess || []" :columns="columns" row-key="name" :visible-columns="visibleColumns"
+      :table-style="{ tableLayout: 'fixed' }" :pagination="{
         sortBy: 'updatedAt',
         descending: true,
         page: 1,
         rowsPerPage: 10,
       }" :rows-per-page-label="$t('Records per page')" :no-data-label="$t('No data')"
       :no-results-label="$t('No results')" ref="table">
-      <template v-slot:top>
-        <div class="col-12">
-          <q-expansion-item header-class="no-padding items-center" expand-icon-class="hidden" v-model="expanded"
-            expand-icon-toggle>
-            <template v-slot:header>
-              <div class="col-8 col-md-4">
-                <q-input clearable borderless outlined class="bg-white input-radius-6 no-shadow q-mb-sm q-mt-sm"
-                  v-model="search" :placeholder="$t('Search')" dense role="searchbox">
-                  <template v-slot:prepend>
-                    <q-icon name="search" />
-                  </template>
-                </q-input>
-              </div>
-              <q-space />
-              <div class="col-md-4 text-right">
-                <q-btn no-caps @click="expanded = !expanded" icon="filter_alt" color="primary" class="radius-6" flat
-                  label="Filter">
-                </q-btn>
-              </div>
-            </template>
-
-            <div class="row q-px-xs q-mt-md q-col-gutter-x-lg">
-
-              <div class="col-6 col-md-4" v-if="isAdmin">
-                <p class="text-black q-mb-xs font-16">
-                  {{ $t("ProjectDashboard.municipalities") }}
-                </p>
-                <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
-                  :label="$t('Search')" multiple filled :options="municipalityOptions" v-model="selectedMunicipalities"
-                  option-value="id" option-label="title">
-                </q-select>
-              </div>
-
-              <div class="col-6 col-md-4">
-                <p class="text-black q-mb-xs font-16">
-                  {{ $t("ProjectDashboard.applicationProcess") }}
-                </p>
-                <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
-                  :label="$t('Search')" multiple filled :options="applicationStepOptions"
-                  v-model="selectedApplicationSteps" option-value="value" option-label="title">
-                </q-select>
-              </div>
-
-              <div class="col-6 col-md-4">
-                <p class="text-black q-mb-xs font-16">
-                  {{ $t("ProjectDashboard.status") }}
-                </p>
-                <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
-                  :label="$t('Search')" multiple filled :options="statusOptions" v-model="selectedStatus"
-                  option-value="value" option-label="title">
-                </q-select>
-              </div>
-
-              <div class="col-6" :class="isAdmin ? 'col-md-3' : 'col-md-4'">
-                <p class="text-black q-mb-xs font-16">
-                  {{ $t("ProjectDashboard.locations") }}
-                </p>
-                <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
-                  :label="$t('Search')" multiple filled :options="locationOptions" v-model="selectedLocations"
-                  option-value="title" option-label="title">
-                </q-select>
-              </div>
-
-              <div class="col-6" :class="isAdmin ? 'col-md-3' : 'col-md-4'">
-                <p class="text-black q-mb-xs font-16">
-                  {{ $t("ProjectDashboard.investive") }}
-                </p>
-                <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
-                  :label="$t('Search')" multiple filled :options="investiveOptions" v-model="selectedInvestive"
-                  option-value="value" option-label="title">
-                </q-select>
-              </div>
-
-              <div class="col-6" :class="isAdmin ? 'col-md-3' : 'col-md-4'">
-                <p class="text-black q-mb-xs font-16">
-                  {{ $t("ProjectDashboard.categories") }}
-                </p>
-                <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
-                  :label="$t('Search')" multiple filled :options="categoryOptions" v-model="selectedCategories"
-                  option-value="id" option-label="title">
-                </q-select>
-              </div>
-
-              <div class="col-6" :class="isAdmin ? 'col-md-3' : 'col-md-4'">
-                <p class="text-black q-mb-xs font-16">
-                  {{ $t("Tags") }}
-                </p>
-                <q-select clearable class="no-shadow q-mb-lg input-radius-4" color="primary" bg-color="white"
-                  :label="$t('Search')" multiple filled :options="tagKeywordsOptions" v-model="tagsKeywords"
-                  option-value="id" option-label="title">
-                </q-select>
-              </div>
-
-            </div>
-          </q-expansion-item>
-        </div>
-      </template>
-
       <template v-slot:header="props">
         <q-tr class="tableHeader" :props="props">
           <q-th v-if="isLeader" auto-width />
-          <q-th v-for="col in props.cols" :key="col.name" :props="props" class="font-14 text-black">
+          <q-th v-for="col in props.cols" :key="col.name" :props="props" :style="col.headerStyle" class="font-14 text-black">
             {{ col.label }}
           </q-th>
-          <q-th auto-width />
+          <q-th :style="{ width: expandColumnWidth }" />
         </q-tr>
       </template>
 
@@ -123,7 +36,7 @@
             <q-btn size="md" color="blue" round dense flat icon="mdi-star-outline"
               :title="$t('ProjectDashboard.prioritize')" @click.stop="prioritizeRow(props.row)" />
           </q-td>
-          <q-td @click="view(props.row)" auto-width v-for="col in props.cols" :key="col.name" :props="props"
+          <q-td @click="view(props.row)" v-for="col in props.cols" :key="col.name" :props="props" :style="col.style"
             class="font-14 cursor-pointer">
             <template v-if="col.name === 'applicationProcess'">
               <q-badge color="primary" class="text-white q-py-sm q-px-md" :style="stepBadgeStyle" v-if="!props.row.applicationProcessSteps">
@@ -153,86 +66,55 @@
               }}
             </template>
           </q-td>
-          <q-td auto-width class="text-center">
+          <q-td :style="{ width: expandColumnWidth }" class="text-center">
             <q-btn size="md" color="blue" round dense @click="toggleExpand(props.row)"
               :icon="isExpanded(props.row) ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
           </q-td>
         </q-tr>
-        <q-tr class="financial-plan-container" v-show="isExpanded(props.row)" :props="props">
-          <q-td colspan="100%">
-            <div class="text-left q-pa-md">
-              <template v-if="props.row.financialPlan && props.row.financialPlan.costAndFinance">
-                <div class="financial-grid">
-                  <div v-for="(item, index) in props.row.financialPlan.costAndFinance" :key="index"
-                    class="financial-grid-row">
-                    <p class="font-14 text-weight-bold text-blue q-mb-none">{{ item.title }}: </p>
-                    <div class="row items-center">
-                      <p class="font-14 text-blue q-mb-none">{{ formatCurrency(item.value) }}</p>
-                      <p v-if="item.title === 'Fördermittel'"
-                        class="font-14 text-blue q-ml-sm q-mb-none text-weight-bold">{{
-                          getSelectedFunding(props.row) }}</p>
-                      <q-btn v-if="item.title === 'Fördermittel' && props.row.fundingMatches?.length" flat dense round
-                        size="sm" icon="mdi-arrow-top-right-thin-circle-outline"
-                        @click.stop="openFundingLink(props.row.external_id)" class="funding-link-btn"
-                        :disabled="!props.row.external_id" />
-                    </div>
-                  </div>
-                </div>
-              </template>
-              <div v-else class="text-black">{{ $t('ProjectDashboard.noFinancialData') }}</div>
-            </div>
-          </q-td>
-        </q-tr>
+        <FinancialPlanRow :visible="isExpanded(props.row)" :financial-plan="getFinancialPlan(props.row)"
+          :funding-matches="props.row.fundingMatches" :external-id="props.row.external_id" />
       </template>
 
     </q-table>
     <RequestAccessDialog :id="projectId" tab="projectIdeas" type="view" :dialogState="requestDialog"
       @update="(requestDialog = $event), (projectId = null), (itemType = null)" />
-  </div>
+  </q-expansion-item>
 </template>
 
 <script>
 import { dateFormatter } from "src/boot/dateFormatter";
 import RequestAccessDialog from "components/data/RequestAccessDialog.vue";
+import FinancialPlanRow from "components/projectDashboard/FinancialPlanRow.vue";
 import projectStatusLabels from "src/mixins/projectStatusLabels";
+import applicationFilterOptions from "src/mixins/applicationFilterOptions";
+import financialPlanExpand from "src/mixins/financialPlanExpand";
+import { APPLICATION_TABLE_COLUMN_WIDTHS as COLUMN_WIDTHS } from "src/constants/applicationTableColumns";
 export default {
-  mixins: [projectStatusLabels],
+  mixins: [projectStatusLabels, applicationFilterOptions, financialPlanExpand],
   name: "projectDashboardTable",
   components: {
     RequestAccessDialog,
+    FinancialPlanRow,
+  },
+  props: {
+    search: { type: String, default: "" },
+    selectedMunicipalities: { type: Array, default: null },
+    selectedApplicationSteps: { type: Array, default: null },
+    selectedStatus: { type: Array, default: null },
+    selectedLocations: { type: Array, default: null },
+    selectedInvestive: { type: Array, default: null },
+    selectedCategories: { type: Array, default: null },
+    tagsKeywords: { type: Array, default: null },
+    filtersExpanded: { type: Boolean, default: false },
   },
   data() {
     return {
-      expanded: false,
-      expandedRows: {}, // To track expanded rows individually
-      search: "",
+      sectionExpanded: true,
       searchTimeout: null,
-      visibleColumns: ["title", "updatedAt", "applicationProcess", "status"],
+      visibleColumns: ["title", "updatedAt", "location", "applicationProcess", "status"],
       requestDialog: false,
       filter: "",
       projectId: null,
-      selectedCategories: null,
-      selectedStatus: null,
-      selectedInvestive: null,
-      selectedMunicipalities: null,
-      selectedLocations: null,
-      selectedApplicationSteps: null,
-      tagsKeywords: null,
-      statusOptions: [
-        { value: "sentToFunding", title: this.$t('projectComponents.submissionSigning.sentToFunding') },
-        { value: "grantNotice", title: this.$t('Zuwendungsbescheid') },
-        { value: "rejectionNotice", title: this.$t('Ablehnungsbescheid') },
-        { value: "inProgress", title: this.$t('In Bearbeitung') }
-      ],
-      investiveOptions: [
-        { value: true, title: this.$t('Investive') },
-        { value: false, title: this.$t('Non-Investive') },
-      ],
-      applicationStepOptions: [
-        { value: "aiFundingCheck", title: this.$t('aiFundingCheck') },
-        { value: "projectDevelopment", title: this.$t('projectDevelopment') },
-        { value: "application", title: this.$t('application') }
-      ],
     };
   },
   methods: {
@@ -284,110 +166,10 @@ export default {
       // Get project application process data with filters
       await this.$store.dispatch("project/getApplicationProcess", filters);
     },
-    async getCategories() {
-      await this.$store.dispatch("category/getSimplifiedCategories");
-    },
-    async getTags() {
-      await this.$store.dispatch("tag/getSimplifiedTags");
-    },
-    async getMunicipalities() {
-      await this.$store.dispatch("municipality/getSimplifiedMunicipalities");
-    },
-    async getLocations() {
-      // Only send municipality ID if a municipality is selected
-      const params = {};
-
-      // If admin has selected municipalities, send all as comma-separated
-      if (this.isAdmin && this.selectedMunicipalities && this.selectedMunicipalities.length) {
-        params.municipalityId = this.selectedMunicipalities.map(item => item.id || item).join(',');
-      }
-
-      await this.$store.dispatch("municipality/getLocationsByMunicipality", params);
-    },
     async prioritizeRow(row) {
       await this.$store.dispatch("project/addToPriorityList", { id: row.id });
       this.getProjects();
       this.updateDashboardStats();
-    },
-
-    // Track expanded rows using unique IDs
-    async toggleExpand(row) {
-      const rowId = row.id || row.name; // Use ID or name as unique identifier
-
-      // If already expanded, just collapse it
-      if (this.expandedRows[rowId]) {
-        this.$set(this.expandedRows, rowId, false);
-        return;
-      }
-
-      // If not expanded, validate access before expanding
-      try {
-        // Validate access using the API
-        const validationResult = await this.$store.dispatch("project/validateApplicationAccess", rowId);
-
-        // If access is granted, store the financial data and expand the row
-        if (validationResult.accessGranted) {
-          // Update the row's financial plan with data from API
-          if (validationResult.financialPlan) {
-            // Update financial plan in Vuex store
-            this.$store.commit("project/setFinancialPlan", validationResult.financialPlan);
-
-            // Update the current row's financial plan data for display
-            // We need to use Vue's reactivity system to ensure the UI updates
-            const updatedRow = { ...row, financialPlan: validationResult.financialPlan };
-
-            // Find index of the row in application process and update it
-            if (this.applicationProcess) {
-              const index = this.applicationProcess.findIndex(item => item.id === rowId);
-              if (index !== -1) {
-                const updatedProcess = [...this.applicationProcess];
-                updatedProcess[index] = updatedRow;
-                this.$store.commit("project/setApplicationProcess", updatedProcess);
-              }
-            }
-          }
-
-          // Expand the row
-          this.$set(this.expandedRows, rowId, true);
-        } else {
-          // If access is denied, show a notification
-          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("ProjectDashboard.accessDenied") || "Access denied to financial information" });
-
-          // Keep row collapsed
-          this.$set(this.expandedRows, rowId, false);
-        }
-      } catch (error) {
-        console.error("Error validating access for financial data:", error);
-        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("ProjectDashboard.accessError") || "Error checking access permissions" });
-
-        // Keep row collapsed on error
-        this.$set(this.expandedRows, rowId, false);
-      }
-    },
-
-    isExpanded(row) {
-      const rowId = row.id || row.name; // Use ID or name as unique identifier
-      return !!this.expandedRows[rowId];
-    },
-    formatCurrency(value) {
-      if (!value || value === '') {
-        return 0;
-      }
-
-      // Convert to number if it's a string
-      const numValue = typeof value === 'string' ? parseFloat(value.replace(/[.,]/g, match => match === ',' ? '.' : '')) : value;
-
-      if (isNaN(numValue)) {
-        return value; // Return original value if not a number
-      }
-
-      // Format using German locale (thousands: ".", decimal: ",")
-      return new Intl.NumberFormat('de-DE', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }).format(numValue);
     },
 
     async updateDashboardStats() {
@@ -485,17 +267,6 @@ export default {
         this.requestDialog = true;
       }
     },
-    getSelectedFunding(row) {
-      const funding = row.fundingMatches?.find(funding => funding.selected);
-      return funding ? funding.title : '';
-    },
-    openFundingLink(externalId) {
-      if (externalId) {
-        // Construct URL to funding details page
-        const url = `/user/newFunding/${externalId}`;
-        window.open(url, '_blank');
-      }
-    },
   },
   computed: {
     columns() {
@@ -507,6 +278,7 @@ export default {
           align: "left",
           field: "title",
           sortable: true,
+          style: "overflow: hidden; white-space: nowrap; text-overflow: ellipsis;",
         },
         {
           name: "updatedAt",
@@ -515,6 +287,17 @@ export default {
           field: "updatedAt",
           sortable: true,
           format: (val) => (val ? dateFormatter(val) : ""),
+          style: `width: ${COLUMN_WIDTHS.updatedAt}`,
+          headerStyle: `width: ${COLUMN_WIDTHS.updatedAt}`,
+        },
+        {
+          name: "location",
+          align: "left",
+          label: this.$t("ProjectDashboard.locations"),
+          field: (row) => row.info?.location,
+          sortable: true,
+          style: `width: ${COLUMN_WIDTHS.location}; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;`,
+          headerStyle: `width: ${COLUMN_WIDTHS.location}`,
         },
         {
           name: "applicationProcess",
@@ -522,6 +305,8 @@ export default {
           label: this.$t("ProjectDashboard.applicationProcess"),
           field: "applicationProcessSteps",
           sortable: true,
+          style: `width: ${COLUMN_WIDTHS.applicationProcess}`,
+          headerStyle: `width: ${COLUMN_WIDTHS.applicationProcess}`,
         },
         {
           name: "status",
@@ -529,8 +314,13 @@ export default {
           label: this.$t("ProjectDashboard.status"),
           field: "status",
           sortable: true,
+          style: `width: ${COLUMN_WIDTHS.status}`,
+          headerStyle: `width: ${COLUMN_WIDTHS.status}`,
         },
       ];
+    },
+    expandColumnWidth() {
+      return COLUMN_WIDTHS.expand;
     },
     isAdmin() {
       return this.$store.getters["userCenter/isAdmin"];
@@ -547,97 +337,9 @@ export default {
     applicationProcess() {
       return this.$store.state.project.applicationProcess;
     },
-    categoryOptions() {
-      return this.$store.state.category.categoriesSimplified;
-    },
-    tagKeywordsOptions() {
-      return this.$store.state.tag.tagsSimplified;
-    },
-    locationOptions() {
-      return this.$store.state.municipality.locationsSimplified;
-    },
-    municipalityOptions() {
-      return this.$store.state.municipality.municipalitiesSimplified;
-    },
-    stepBadgeStyle() {
-      const texts = [
-        this.$t('aiFundingCheck'),
-        this.$t('projectDevelopment'),
-        this.$t('application'),
-      ];
-      const maxLen = Math.max(...texts.map(t => (t || '').length));
-      return { minWidth: (maxLen * 7.5 + 40) + 'px', justifyContent: 'center' };
-    },
-    statusBadgeStyle() {
-      const texts = [
-        this.$t('projectComponents.submissionSigning.sentToFunding'),
-        this.$t('Zuwendungsbescheid'),
-        this.$t('Ablehnungsbescheid'),
-        this.$t('In Bearbeitung'),
-      ];
-      const maxLen = Math.max(...texts.map(t => (t || '').length));
-      return { minWidth: (maxLen * 7.5 + 40) + 'px', justifyContent: 'center' };
-    },
   },
   mounted() {
-    // Load saved filters from localStorage
-    try {
-      const savedFilters = JSON.parse(localStorage.getItem("projectDashboardFilters") || "{}");
-
-      // Apply saved filters if they exist
-      if (savedFilters) {
-        if (savedFilters.search) this.search = savedFilters.search;
-
-        if (savedFilters.selectedCategories) {
-          this.selectedCategories = savedFilters.selectedCategories;
-        }
-
-        if (savedFilters.selectedStatus) {
-          this.selectedStatus = savedFilters.selectedStatus;
-        }
-
-        if (savedFilters.selectedInvestive) {
-          this.selectedInvestive = savedFilters.selectedInvestive;
-        }
-
-        if (savedFilters.selectedLocations) {
-          this.selectedLocations = savedFilters.selectedLocations;
-        }
-
-        if (this.isAdmin && savedFilters.selectedMunicipalities) {
-          this.selectedMunicipalities = savedFilters.selectedMunicipalities;
-        }
-
-        if (savedFilters.tagsKeywords) {
-          this.tagsKeywords = savedFilters.tagsKeywords;
-        }
-
-        if (savedFilters.selectedApplicationSteps) {
-          this.selectedApplicationSteps = savedFilters.selectedApplicationSteps;
-        }
-
-        if (savedFilters.expanded !== undefined) {
-          this.expanded = savedFilters.expanded;
-        }
-      }
-    } catch (error) {
-      console.error("Error loading saved filters:", error);
-    }
-
-    // Load required data
-    this.getCategories();
-    this.getTags();
-
-    // Only fetch municipalities for admin users
-    if (this.isAdmin) {
-      this.getMunicipalities();
-    }
-
-    // Get locations and projects after loading municipalities
-    this.$nextTick(() => {
-      this.getLocations();
-      this.getProjects(); // This will also update dashboard stats
-    });
+    this.getProjects();
 
     // Apply saved pagination settings
     this.$nextTick(() => {
@@ -655,25 +357,6 @@ export default {
     });
   },
   beforeDestroy() {
-    // Save filter selections
-    try {
-      const filtersToSave = {
-        search: this.search || "",
-        selectedCategories: this.selectedCategories || null,
-        selectedStatus: this.selectedStatus || null,
-        selectedInvestive: this.selectedInvestive || null,
-        selectedLocations: this.selectedLocations || null,
-        selectedMunicipalities: this.selectedMunicipalities || null,
-        selectedApplicationSteps: this.selectedApplicationSteps || null,
-        tagsKeywords: this.tagsKeywords || null,
-        expanded: this.expanded
-      };
-
-      localStorage.setItem("projectDashboardFilters", JSON.stringify(filtersToSave));
-    } catch (error) {
-      console.error("Error saving filters:", error);
-    }
-
     // Save pagination settings
     if (this.$refs.table) {
       try {
@@ -708,7 +391,6 @@ export default {
       }
     },
     selectedMunicipalities() {
-      this.getLocations();
       this.getProjects();
       this.updateDashboardStats();
     },
@@ -739,32 +421,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.yellowBg .q-table__top {
-  background: $yellow-10;
-  transition: all 0.2s ease-in-out;
-}
-
-.financial-plan {
-  // background: white;
-  min-height: 105px;
-  max-height: 105px;
-
-  &-container {
-    background-color: #f5f5f5;
-  }
-}
-
-.financial-grid {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  align-items: center;
-  column-gap: 12px;
-  row-gap: 4px;
-
-  .financial-grid-row {
-    display: contents;
-  }
-}
-</style>

@@ -78,7 +78,8 @@
                 :value="!!project ? localForm.info.email : !!user && user.email" disable />
             </div>
             <div class="col-12">
-              <MunicipalityCities :currentMunicipality="localForm.info.location" @update:city="updateLocation" />
+              <MunicipalityCities :currentMunicipality="localForm.info.location" :is-required="true"
+                @update:city="updateLocation" />
             </div>
           </div>
         </div>
@@ -122,7 +123,7 @@
               </template>
             </template>
           </q-select>
-          <p class="font-16 q-mb-none q-mt-md text-grey">
+          <p class="font-16 q-mt-none q-mb-md text-grey">
             {{
               localForm.visibility === "only for me"
                 ? $t("visibility.docOnlyMe")

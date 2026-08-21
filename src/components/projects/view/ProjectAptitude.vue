@@ -3,9 +3,6 @@
     <q-expansion-item class="shadow-1 overflow-hidden radius-20" :label="$t('projectComponents.aptitude.title')"
       header-class="bg-white text-black" v-model="expandedAptitude">
       <q-card-section>
-        <q-banner rounded class="bg-grey-3 font-16">
-          <p class="q-my-sm text-block" v-html="text"></p>
-        </q-banner>
         <div class="q-mt-md">
           <div v-for="type in ['finanzen', 'personal', 'foerdermittelgeber']" :key="type" class="q-mb-sm">
             <div class="row items-center q-py-xs">
@@ -22,6 +19,10 @@
               <div>{{ statusLabel(type) }}</div>
               <div v-if="ticketByType(type).wantsPhoneCall">{{ $t('projectComponents.aptitude.vorpruefung.wantsPhoneCall') }}</div>
               <div v-if="ticketByType(type).wantsOnsiteMeeting">{{ $t('projectComponents.aptitude.vorpruefung.wantsOnsiteMeeting') }}</div>
+              <div v-if="ticketByType(type).suggestedDates && ticketByType(type).suggestedDates.length">
+                {{ $t('projectComponents.aptitude.vorpruefung.suggestedDates') }}:
+                {{ ticketByType(type).suggestedDates.map(formatDateTime).join(', ') }}
+              </div>
               <div class="q-mt-xs">{{ ticketByType(type).responseText }}</div>
             </div>
           </div>
@@ -57,20 +58,19 @@ export default {
       this.expandedAptitude = newTab === "aptitude";
     }
   },
-  computed: {
-    // Get the text for the aptitude section
-    text() {
-      return this.project.details.aptitude || this.$t('projectComponents.aptitude.noRecommendation');
-    }
-  },
   methods: {
     ticketByType(type) {
       return this.vorpruefungTickets.find(t => t.type === type) || null;
     },
+    formatDateTime(value) {
+      return new Date(value).toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' });
+    },
     statusColor(type) {
       const t = this.ticketByType(type);
       if (!t || !t.answeredAt) return t ? "orange" : "grey-5";
-      return t.status === "positiv" ? "green" : "red";
+      if (t.status === "positiv") return "green";
+      if (t.status === "ruecksprache") return "orange";
+      return "red";
     },
     statusLabel(type) {
       const t = this.ticketByType(type);

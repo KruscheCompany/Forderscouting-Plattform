@@ -35,6 +35,10 @@
       <div>{{ statusLabel }}</div>
       <div v-if="ticket.wantsPhoneCall">{{ $t('projectComponents.aptitude.vorpruefung.wantsPhoneCall') }}</div>
       <div v-if="ticket.wantsOnsiteMeeting">{{ $t('projectComponents.aptitude.vorpruefung.wantsOnsiteMeeting') }}</div>
+      <div v-if="ticket.suggestedDates && ticket.suggestedDates.length">
+        {{ $t('projectComponents.aptitude.vorpruefung.suggestedDates') }}:
+        {{ ticket.suggestedDates.map(formatDateTime).join(', ') }}
+      </div>
       <div class="q-mt-xs">{{ ticket.responseText }}</div>
     </div>
 
@@ -82,6 +86,7 @@ export default {
     statusColor() {
       if (!this.ticket.answeredAt) return "orange";
       if (this.ticket.status === "positiv") return "green";
+      if (this.ticket.status === "ruecksprache") return "orange";
       return "red";
     },
     statusLabel() {
@@ -93,6 +98,9 @@ export default {
   methods: {
     formatDate(value) {
       return new Date(value).toLocaleDateString("de-DE");
+    },
+    formatDateTime(value) {
+      return new Date(value).toLocaleString("de-DE", { dateStyle: "medium", timeStyle: "short" });
     },
     async send() {
       this.sending = true;

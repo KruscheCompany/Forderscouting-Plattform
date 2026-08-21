@@ -4,11 +4,6 @@
       header-class="bg-white text-black" v-model="expandedAptitude">
       <q-card-section>
         <div>
-          <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
-            {{ $t('projectComponents.aptitude.description') }}
-          </h4>
-          <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" v-model="aptitude"
-            @blur="saveAptitude" />
           <div class="row items-center q-gutter-xs q-mt-xs font-13 text-blue-grey-6" style="min-height: 20px;">
             <q-spinner v-if="saveState === 'saving'" size="16px" color="blue-grey-6" />
             <q-icon v-else-if="saveState === 'saved'" name="check_circle" color="positive" size="16px" />
