@@ -1,7 +1,6 @@
 <template>
   <CategorizationCard :current-tab="currentTab" :requiresValidation="true" :editingCategories="editingCategories"
     :editingTags="editingTags"
-    :suggested="taxonomySuggestions && taxonomySuggestions.categories && taxonomySuggestions.categories.suggested"
     :tagsSuggested="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.suggested"
     :tagsGenerated="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.generated"
     :loading="isLoadingTaxonomy" :investive="localForm.details.investive" :nonInvestive="localForm.details.nonInvestive"

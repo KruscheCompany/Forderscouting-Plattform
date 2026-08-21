@@ -21,8 +21,8 @@
           <div class="cc-field-desc">{{ $t("newProjectIdeaForm.filterCategoriesHint") }}</div>
         </div>
         <div class="cc-field-content-col">
-          <Categories :requiresValidation="requiresValidation" :editing="editingCategories" :suggested="suggested"
-            :loading="loading" @update:category="$emit('update:category', $event)" />
+          <Categories :requiresValidation="requiresValidation" :editing="editingCategories"
+            @update:category="$emit('update:category', $event)" />
         </div>
       </div>
 
@@ -107,10 +107,6 @@ export default {
       default: () => []
     },
     editingTags: {
-      type: Array,
-      default: () => []
-    },
-    suggested: {
       type: Array,
       default: () => []
     },

@@ -6,13 +6,6 @@
         <span class="cc-chip-x">×</span>
       </div>
 
-      <div v-for="opt in suggestedOptions" :key="'sug-' + opt.id" class="cc-chip cc-chip--suggested"
-        @click="toggle(opt)">
-        <span class="cc-chip-star">✦</span>{{ opt.title }}
-      </div>
-
-      <q-spinner-dots v-if="loading" size="16px" style="color: #4759c4" />
-
       <div class="cc-add-btn" :class="{ 'cc-add-btn--active': open }">
         <span class="cc-add-plus">+</span>{{ $t("categorySelector.addMore") }}
         <q-menu anchor="bottom left" self="top left" :offset="[0, 8]" :content-style="{ boxShadow: 'none' }"
@@ -28,7 +21,6 @@
                   <span v-if="isSelected(opt.id)">✓</span>
                 </div>
                 <div class="cc-picker-row-label">{{ opt.title }}</div>
-                <div v-if="opt.isSuggested" class="cc-ai-tag">✦ {{ $t("categorySelector.aiTag") }}</div>
               </div>
               <div v-if="filteredOptions.length === 0" class="cc-picker-empty">
                 {{ $t("categorySelector.noResults") }}
@@ -60,14 +52,6 @@ export default {
     editing: {
       type: Array,
       default: () => []
-    },
-    suggested: {
-      type: Array,
-      default: () => []
-    },
-    loading: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
@@ -99,9 +83,8 @@ export default {
       this.emitUpdate();
     },
     emitUpdate() {
-      const categories = this.model.map(cat => ({ id: cat.id }));
-      this.$emit("update:category", categories.length > 0 ? categories : []);
-      this.setTempCategories(categories);
+      this.$emit("update:category", this.model.length > 0 ? this.model : []);
+      this.setTempCategories(this.model.map(cat => ({ id: cat.id })));
     },
     //Set the selected categories temporarily in the store to be accessible in other components
     setTempCategories(categories) {
@@ -110,16 +93,10 @@ export default {
   },
   computed: {
     allCategories() {
-      const suggestedTitles = new Set((this.suggested || []).map(title => title.toLowerCase()));
       return this.$store.state.category.categories.map(cat => ({
         id: cat.id,
-        title: cat.title,
-        isSuggested: suggestedTitles.has(cat.title.toLowerCase())
+        title: cat.title
       }));
-    },
-    suggestedOptions() {
-      const suggestedIds = new Set(this.allCategories.filter(cat => cat.isSuggested).map(cat => cat.id));
-      return this.allCategories.filter(cat => suggestedIds.has(cat.id) && !this.isSelected(cat.id));
     },
     filteredOptions() {
       const needle = this.query.trim().toLowerCase();
@@ -180,21 +157,6 @@ export default {
   }
 }
 
-.cc-chip--suggested {
-  background: transparent;
-  border: 1.5px dashed #b8c2ee;
-  color: #5b6592;
-  padding: 0 14px;
-  gap: 7px;
-
-  &:hover {
-    border-style: solid;
-    border-color: #1b2a78;
-    color: #1b2a78;
-    background: #f7f8fe;
-  }
-}
-
 .cc-chip-x {
   width: 18px;
   height: 18px;
@@ -205,11 +167,6 @@ export default {
   justify-content: center;
   font-size: 12px;
   line-height: 1;
-}
-
-.cc-chip-star {
-  font-size: 11px;
-  color: #4759c4;
 }
 
 .cc-add-btn {
@@ -325,15 +282,6 @@ export default {
     align-items: center;
     justify-content: center;
   }
-}
-
-.cc-ai-tag {
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: #4759c4;
-  margin-left: auto;
 }
 
 .cc-picker-footer {

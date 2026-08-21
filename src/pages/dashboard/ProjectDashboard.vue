@@ -9,9 +9,29 @@
         </div>
       </div>
     </div>
-    <priorityTable @removed="onPriorityRemoved" />
-    <projectDashboardTable ref="dashboardTable" @stats="(val) => (statsData = val)" />
-    <archivedProjectsTable v-if="isLeader || isAdmin" />
+    <ApplicationTableFilters :expanded.sync="filtersExpanded" :search.sync="search" :is-admin="isAdmin"
+      :municipality-options="municipalityOptions" :application-step-options="applicationStepOptions"
+      :status-options="statusOptions" :investive-options="investiveOptions" :category-options="categoryOptions"
+      :tag-keywords-options="tagKeywordsOptions" :location-options="locationOptions"
+      :selected-municipalities.sync="selectedMunicipalities" :selected-application-steps.sync="selectedApplicationSteps"
+      :selected-status.sync="selectedStatus" :selected-locations.sync="selectedLocations"
+      :selected-investive.sync="selectedInvestive" :selected-categories.sync="selectedCategories"
+      :tags-keywords.sync="tagsKeywords" class="bg-white radius-20 shadow-1 q-pa-md q-mt-lg q-mb-lg" />
+
+    <priorityTable @removed="onPriorityRemoved" :search="search" :filters-expanded="filtersExpanded"
+      :selected-application-steps="selectedApplicationSteps" :selected-status="selectedStatus"
+      :selected-locations="selectedLocations" :selected-investive="selectedInvestive"
+      :selected-categories="selectedCategories" :tags-keywords="tagsKeywords" />
+    <projectDashboardTable ref="dashboardTable" @stats="(val) => (statsData = val)" :search="search"
+      :filters-expanded="filtersExpanded" :selected-municipalities="selectedMunicipalities"
+      :selected-application-steps="selectedApplicationSteps" :selected-status="selectedStatus"
+      :selected-locations="selectedLocations" :selected-investive="selectedInvestive"
+      :selected-categories="selectedCategories" :tags-keywords="tagsKeywords" />
+    <archivedProjectsTable v-if="isLeader || isAdmin" @unarchived="onProjectUnarchived" :search="search"
+      :filters-expanded="filtersExpanded" :selected-municipalities="selectedMunicipalities"
+      :selected-application-steps="selectedApplicationSteps" :selected-status="selectedStatus"
+      :selected-locations="selectedLocations" :selected-investive="selectedInvestive"
+      :selected-categories="selectedCategories" :tags-keywords="tagsKeywords" />
   </q-page>
 </template>
 
@@ -19,17 +39,30 @@
 import projectDashboardTable from "components/projectDashboard/Table.vue";
 import archivedProjectsTable from "components/projectDashboard/ArchivedTable.vue";
 import priorityTable from "components/projectDashboard/PriorityTable.vue";
+import ApplicationTableFilters from "components/projectDashboard/ApplicationTableFilters.vue";
+import applicationFilterOptions from "src/mixins/applicationFilterOptions";
 export default {
   name: "projectDashboard",
+  mixins: [applicationFilterOptions],
   data() {
     return {
       statsData: {},
+      filtersExpanded: false,
+      search: "",
+      selectedCategories: null,
+      selectedStatus: null,
+      selectedInvestive: null,
+      selectedMunicipalities: null,
+      selectedLocations: null,
+      selectedApplicationSteps: null,
+      tagsKeywords: null,
     };
   },
   components: {
     projectDashboardTable,
     archivedProjectsTable,
     priorityTable,
+    ApplicationTableFilters,
   },
   computed: {
     isAdmin() {
@@ -37,6 +70,18 @@ export default {
     },
     isLeader() {
       return this.$store.getters["userCenter/isLeader"];
+    },
+    categoryOptions() {
+      return this.$store.state.category.categoriesSimplified;
+    },
+    tagKeywordsOptions() {
+      return this.$store.state.tag.tagsSimplified;
+    },
+    locationOptions() {
+      return this.$store.state.municipality.locationsSimplified;
+    },
+    municipalityOptions() {
+      return this.$store.state.municipality.municipalitiesSimplified;
     },
     statistics() {
       return [
@@ -74,7 +119,27 @@ export default {
     getProjectDashboardStats() {
       this.$store.dispatch("project/getProjectDashboardStats");
     },
+    async getCategories() {
+      await this.$store.dispatch("category/getSimplifiedCategories");
+    },
+    async getTags() {
+      await this.$store.dispatch("tag/getSimplifiedTags");
+    },
+    async getMunicipalities() {
+      await this.$store.dispatch("municipality/getSimplifiedMunicipalities");
+    },
+    async getLocations() {
+      const params = {};
+      if (this.isAdmin && this.selectedMunicipalities && this.selectedMunicipalities.length) {
+        params.municipalityId = this.selectedMunicipalities.map((item) => item.id || item).join(',');
+      }
+      await this.$store.dispatch("municipality/getLocationsByMunicipality", params);
+    },
     onPriorityRemoved() {
+      this.$refs.dashboardTable.getProjects();
+      this.$refs.dashboardTable.updateDashboardStats();
+    },
+    onProjectUnarchived() {
       this.$refs.dashboardTable.getProjects();
       this.$refs.dashboardTable.updateDashboardStats();
     },
@@ -99,9 +164,58 @@ export default {
       }).format(numValue);
     },
   },
+  created() {
+    try {
+      const savedFilters = JSON.parse(localStorage.getItem("projectDashboardFilters") || "{}");
+
+      if (savedFilters.search) this.search = savedFilters.search;
+      if (savedFilters.selectedCategories) this.selectedCategories = savedFilters.selectedCategories;
+      if (savedFilters.selectedStatus) this.selectedStatus = savedFilters.selectedStatus;
+      if (savedFilters.selectedInvestive) this.selectedInvestive = savedFilters.selectedInvestive;
+      if (savedFilters.selectedLocations) this.selectedLocations = savedFilters.selectedLocations;
+      if (this.isAdmin && savedFilters.selectedMunicipalities) this.selectedMunicipalities = savedFilters.selectedMunicipalities;
+      if (savedFilters.tagsKeywords) this.tagsKeywords = savedFilters.tagsKeywords;
+      if (savedFilters.selectedApplicationSteps) this.selectedApplicationSteps = savedFilters.selectedApplicationSteps;
+      if (savedFilters.expanded !== undefined) this.filtersExpanded = savedFilters.expanded;
+    } catch (error) {
+      console.error("Error loading saved filters:", error);
+    }
+  },
   mounted() {
     this.getProjectDashboardStats();
-  }
+    this.getCategories();
+    this.getTags();
+
+    if (this.isAdmin) {
+      this.getMunicipalities();
+    }
+
+    this.getLocations();
+  },
+  beforeDestroy() {
+    try {
+      const filtersToSave = {
+        search: this.search || "",
+        selectedCategories: this.selectedCategories || null,
+        selectedStatus: this.selectedStatus || null,
+        selectedInvestive: this.selectedInvestive || null,
+        selectedLocations: this.selectedLocations || null,
+        selectedMunicipalities: this.selectedMunicipalities || null,
+        selectedApplicationSteps: this.selectedApplicationSteps || null,
+        tagsKeywords: this.tagsKeywords || null,
+        expanded: this.filtersExpanded,
+      };
+
+      localStorage.setItem("projectDashboardFilters", JSON.stringify(filtersToSave));
+    } catch (error) {
+      console.error("Error saving filters:", error);
+    }
+  },
+  watch: {
+    selectedMunicipalities() {
+      this.getLocations();
+    },
+  },
 };
 </script>
 

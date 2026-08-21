@@ -1,16 +1,16 @@
 <template>
-  <q-expansion-item v-if="showSection" v-model="expanded" header-class="radius-20 shadow-1 bg-white q-px-md"
-    expand-icon-class="text-blue" class="q-mt-md q-mb-lg">
+  <q-expansion-item v-if="showSection" v-model="expanded" header-class="bg-amber-1 q-px-md"
+    expand-icon-class="text-blue" class="q-mt-md q-mb-lg radius-20 shadow-1 overflow-hidden bg-white">
     <template v-slot:header>
       <q-item-section avatar>
-        <q-icon name="mdi-star" color="blue" />
+        <q-icon name="mdi-star" color="amber-9" />
       </q-item-section>
       <q-item-section>
-        <span class="font-16 text-weight-600">{{ $t("ProjectDashboard.prioritizedProjects") }}</span>
+        <span class="font-16 text-weight-600 text-amber-9">{{ $t("ProjectDashboard.prioritizedProjects") }}</span>
       </q-item-section>
     </template>
 
-    <div class="bg-white radius-20 shadow-1 overflow-hidden priority-table q-mt-md">
+    <div class="priority-table">
       <div v-if="isAdmin" class="q-pa-md" :class="{ 'priority-selector-border': selectedMunicipality }">
         <p class="text-black q-mb-xs font-14">{{ $t("ProjectDashboard.municipalities") }}</p>
         <q-select clearable class="no-shadow input-radius-4" style="max-width: 320px" color="primary"
@@ -32,14 +32,18 @@
         <p class="text-blue-grey-7 font-14 q-mt-sm q-mb-none">{{ $t("ProjectDashboard.noPrioritizedProjects") }}</p>
       </div>
 
-      <q-table v-else flat class="radius-20 shadow-1 pagination-no-shadow" :data="localList" :columns="columns"
-        row-key="id" :pagination.sync="pagination" hide-bottom>
+      <q-table v-else flat class="pagination-no-shadow" :class="filtersExpanded ? 'yellowBg' : ''"
+        :data="filteredList" :columns="columns"
+        row-key="id" :table-style="{ tableLayout: 'fixed' }" :pagination.sync="pagination"
+        :rows-per-page-label="$t('Records per page')"
+        :no-data-label="$t('No data')" :no-results-label="$t('No results')" hide-bottom>
         <template v-slot:header="props">
           <q-tr class="tableHeader" :props="props">
             <q-th v-if="isLeader" auto-width />
-            <q-th v-for="col in props.cols" :key="col.name" :props="props" class="font-14 text-black">
+            <q-th v-for="col in props.cols" :key="col.name" :props="props" :style="col.headerStyle" class="font-14 text-black">
               {{ col.label }}
             </q-th>
+            <q-th :style="{ width: expandColumnWidth }" />
             <q-th v-if="isLeader" auto-width />
           </q-tr>
         </template>
@@ -50,34 +54,47 @@
             <q-td v-if="isLeader" auto-width class="priority-col-handle">
               <q-icon name="mdi-drag" size="sm" :class="isSorted ? 'text-grey-5' : 'drag-handle cursor-pointer'" />
             </q-td>
-            <q-td v-for="col in props.cols" :key="col.name" :props="props" class="font-14 cursor-pointer"
-              :class="{ 'text-overflow': col.name === 'title', 'text-blue-grey-7 text-overflow': col.name === 'prioritizedBy' }"
+            <q-td v-for="col in props.cols" :key="col.name" :props="props" :style="col.style" class="font-14 cursor-pointer"
               @click="view(props.row.project)">
               <template v-if="col.name === 'applicationProcess'">
-                <q-badge color="primary" class="text-white q-py-xs q-px-sm" v-if="!props.row.project.applicationProcessSteps">
+                <q-badge color="primary" class="text-white q-py-sm q-px-md" :style="stepBadgeStyle" v-if="!props.row.project.applicationProcessSteps">
                   {{ $t("aiFundingCheck") }}
                 </q-badge>
                 <q-badge :color="getLastCompletedStepColor(props.row.project.applicationProcessSteps)"
                   :text-color="getLastCompletedStepTextColor(props.row.project.applicationProcessSteps)"
-                  class="q-py-xs q-px-sm" v-else>
+                  class="text-white q-py-sm q-px-md" :style="stepBadgeStyle" v-else>
                   {{ getLastCompletedStep(props.row.project.applicationProcessSteps) }}
                 </q-badge>
               </template>
               <template v-else-if="col.name === 'status'">
                 <q-badge :color="getStatusColor(props.row.project.status)"
-                  :class="props.row.project.status === null ? 'text-black' : 'text-white'" class="q-py-xs q-px-sm">
+                  :class="props.row.project.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md" :style="statusBadgeStyle">
                   {{ getStatusText(props.row.project.status) }}
                 </q-badge>
               </template>
               <template v-else>
-                {{ col.value }}
+                <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
+                  content-style="font-size: 14px">
+                  {{ col.value }}
+                </q-tooltip>
+                {{
+                  col.value && col.value.length > 125
+                    ? col.value.substring(0, 125) + "..."
+                    : col.value
+                }}
               </template>
+            </q-td>
+            <q-td :style="{ width: expandColumnWidth }" class="text-center">
+              <q-btn size="md" color="blue" round dense @click.stop="toggleExpand(props.row)"
+                :icon="isExpanded(props.row) ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
             </q-td>
             <q-td v-if="isLeader" auto-width class="text-right">
               <q-btn flat dense round size="sm" icon="close" color="grey-8"
                 :title="$t('ProjectDashboard.removeFromPriorityList')" @click.stop="remove(props.row)" />
             </q-td>
           </q-tr>
+          <FinancialPlanRow :visible="isExpanded(props.row)" :financial-plan="getFinancialPlan(props.row)"
+            :funding-matches="props.row.project.fundingMatches" :external-id="props.row.project.external_id" />
         </template>
       </q-table>
     </div>
@@ -89,13 +106,28 @@
 <script>
 import { dateFormatter } from "src/boot/dateFormatter";
 import RequestAccessDialog from "components/data/RequestAccessDialog.vue";
+import FinancialPlanRow from "components/projectDashboard/FinancialPlanRow.vue";
 import projectStatusLabels from "src/mixins/projectStatusLabels";
+import applicationFilterOptions from "src/mixins/applicationFilterOptions";
+import financialPlanExpand from "src/mixins/financialPlanExpand";
+import { APPLICATION_TABLE_COLUMN_WIDTHS as COLUMN_WIDTHS } from "src/constants/applicationTableColumns";
 
 export default {
   name: "PriorityTable",
-  mixins: [projectStatusLabels],
+  mixins: [projectStatusLabels, applicationFilterOptions, financialPlanExpand],
   components: {
     RequestAccessDialog,
+    FinancialPlanRow,
+  },
+  props: {
+    search: { type: String, default: "" },
+    selectedApplicationSteps: { type: Array, default: null },
+    selectedStatus: { type: Array, default: null },
+    selectedLocations: { type: Array, default: null },
+    selectedInvestive: { type: Array, default: null },
+    selectedCategories: { type: Array, default: null },
+    tagsKeywords: { type: Array, default: null },
+    filtersExpanded: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -124,8 +156,51 @@ export default {
     isSorted() {
       return !!this.pagination.sortBy;
     },
+    expandColumnWidth() {
+      return COLUMN_WIDTHS.expand;
+    },
+    filteredList() {
+      const searchTerm = (this.search || "").trim().toLowerCase();
+      const statusValues = (this.selectedStatus || []).map((item) => (item.value !== undefined ? item.value : item));
+      const stepValues = (this.selectedApplicationSteps || []).map((item) => item.value || item);
+      const categoryIds = (this.selectedCategories || []).map((item) => item.id || item);
+      const tagIds = (this.tagsKeywords || []).map((item) => item.id || item);
+      const locationTitles = (this.selectedLocations || []).map((item) => item.title || item);
+      const investiveValues = (this.selectedInvestive || []).map((item) => (item.value !== undefined ? item.value : item));
+
+      return this.localList.filter((row) => {
+        const project = row.project || {};
+
+        if (searchTerm.length >= 3 && !(project.title || "").toLowerCase().includes(searchTerm)) {
+          return false;
+        }
+        if (statusValues.length && !statusValues.includes(project.status)) {
+          return false;
+        }
+        if (stepValues.length && !stepValues.includes(this.getLastCompletedStepValue(project.applicationProcessSteps))) {
+          return false;
+        }
+        if (categoryIds.length) {
+          const projectCategoryIds = (project.categories || []).map((c) => c.id);
+          if (!categoryIds.some((id) => projectCategoryIds.includes(id))) return false;
+        }
+        if (tagIds.length) {
+          const projectTagIds = (project.tags || []).map((t) => t.id);
+          if (!tagIds.some((id) => projectTagIds.includes(id))) return false;
+        }
+        if (locationTitles.length && !locationTitles.includes(project.info?.location)) {
+          return false;
+        }
+        if (investiveValues.length) {
+          const details = project.details || {};
+          const matches = investiveValues.some((v) => (v === true ? !!details.investive : v === false ? !!details.nonInvestive : false));
+          if (!matches) return false;
+        }
+        return true;
+      });
+    },
     columns() {
-      const cols = [
+      return [
         {
           name: "title",
           required: true,
@@ -133,6 +208,7 @@ export default {
           align: "left",
           field: (row) => row.project.title,
           sortable: true,
+          style: "overflow: hidden; white-space: nowrap; text-overflow: ellipsis;",
         },
         {
           name: "updatedAt",
@@ -141,6 +217,17 @@ export default {
           field: (row) => row.project.updatedAt,
           sortable: true,
           format: (val) => (val ? this.formatDate(val) : ""),
+          style: `width: ${COLUMN_WIDTHS.updatedAt}`,
+          headerStyle: `width: ${COLUMN_WIDTHS.updatedAt}`,
+        },
+        {
+          name: "location",
+          align: "left",
+          label: this.$t("ProjectDashboard.locations"),
+          field: (row) => row.project.info?.location,
+          sortable: true,
+          style: `width: ${COLUMN_WIDTHS.location}; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;`,
+          headerStyle: `width: ${COLUMN_WIDTHS.location}`,
         },
         {
           name: "applicationProcess",
@@ -148,6 +235,8 @@ export default {
           label: this.$t("ProjectDashboard.applicationProcess"),
           field: (row) => this.getLastCompletedStep(row.project.applicationProcessSteps),
           sortable: true,
+          style: `width: ${COLUMN_WIDTHS.applicationProcess}`,
+          headerStyle: `width: ${COLUMN_WIDTHS.applicationProcess}`,
         },
         {
           name: "status",
@@ -155,18 +244,10 @@ export default {
           label: this.$t("ProjectDashboard.status"),
           field: (row) => this.getStatusText(row.project.status),
           sortable: true,
+          style: `width: ${COLUMN_WIDTHS.status}`,
+          headerStyle: `width: ${COLUMN_WIDTHS.status}`,
         },
       ];
-      if (this.isAdmin) {
-        cols.push({
-          name: "prioritizedBy",
-          align: "left",
-          label: this.$t("ProjectDashboard.prioritizedBy"),
-          field: (row) => this.prioritizedByName(row),
-          sortable: true,
-        });
-      }
-      return cols;
     },
     prioritizedProjects() {
       return this.$store.state.project.prioritizedProjects;
@@ -194,8 +275,8 @@ export default {
     },
   },
   methods: {
-    prioritizedByName(row) {
-      return row.prioritizedBy?.user_detail?.fullName || row.prioritizedBy?.username || "";
+    resolveProject(row) {
+      return row.project;
     },
     async fetchList() {
       this.loading = true;
@@ -280,9 +361,7 @@ export default {
     },
   },
   mounted() {
-    if (this.isAdmin) {
-      this.$store.dispatch("municipality/getSimplifiedMunicipalities");
-    } else {
+    if (!this.isAdmin) {
       this.fetchList();
     }
   },
@@ -300,11 +379,5 @@ export default {
 
 .priority-col-handle {
   width: 32px;
-}
-
-.text-overflow {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 </style>
