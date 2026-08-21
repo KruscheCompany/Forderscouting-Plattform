@@ -9,7 +9,7 @@
       row-key="name"
       :visible-columns="visibleColumns"
       :pagination="{
-        sortBy: 'id',
+        sortBy: 'updatedAt',
         descending: true,
         page: 1,
         rowsPerPage: 10
@@ -137,6 +137,7 @@
     <InviteUser
       :dialogState="inviteUserDialog"
       @update="inviteUserDialog = $event"
+      @invited="getData"
     />
     <TransferDialog
       :fromId="currentUser"
@@ -159,6 +160,7 @@
 import TransferDialog from "components/user/settings/TransferDialog.vue";
 import deleteDataDialog from "components/user/settings/deleteDataDialog.vue";
 import InviteUser from "components/user/management/InviteUser.vue";
+import { dateFormatter } from "src/boot/dateFormatter";
 export default {
   name: "Roles",
   components: {
@@ -210,6 +212,14 @@ export default {
           align: "left",
           field: row => row.email,
           format: val => `${val}`,
+          sortable: true
+        },
+        {
+          name: "updatedAt",
+          label: this.$t("userAdministration.updatedAt"),
+          align: "left",
+          field: row => row.updatedAt,
+          format: val => (val ? dateFormatter(val) : ""),
           sortable: true
         },
         {

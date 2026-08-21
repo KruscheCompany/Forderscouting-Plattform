@@ -212,6 +212,7 @@ export default {
           });
           this.isLoading = false;
           if (res !== false) {
+            this.$emit("invited");
             if (this.guestEmail.length > 0) {
               this.$store.dispatch("userCenter/deleteGuestRequest", {
                 id: this.notification.id
