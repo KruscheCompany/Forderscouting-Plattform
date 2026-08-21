@@ -5,13 +5,8 @@
       <div class="nb-ribbon__label">{{ $t("systemRibbon.label") }}</div>
       <div class="nb-ribbon__divider" />
       <div class="nb-ribbon__message">{{ displayMessage }}</div>
-      <a
-        v-if="linkUrl"
-        class="nb-ribbon__link"
-        :href="linkUrl"
-        target="_blank"
-        rel="noopener"
-      >{{ linkLabel || $t('systemRibbon.linkDefaultLabel') }}</a>
+      <a v-if="linkUrl" class="nb-ribbon__link" :href="linkUrl" target="_blank" rel="noopener">{{ linkLabel ||
+        $t('systemRibbon.linkDefaultLabel') }}</a>
     </div>
     <slot />
   </div>
@@ -97,7 +92,7 @@ export default {
 }
 
 .nb-ribbon__message {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
   font-size: 13.5px;
   color: #fff;
@@ -105,8 +100,6 @@ export default {
 
 .nb-ribbon__link {
   flex-shrink: 0;
-  margin-left: auto;
-  padding-left: 14px;
   font-size: 13px;
   font-weight: 700;
   color: #f2ec4a;
@@ -119,22 +112,45 @@ export default {
 }
 
 @keyframes nbExpandFull {
-  from { width: 72px; }
-  to { width: 100%; }
+  from {
+    width: 72px;
+  }
+
+  to {
+    width: 100%;
+  }
 }
 
 @keyframes nbContent {
-  from { opacity: 0; transform: translateX(14px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes nbDot {
-  0% { box-shadow: 0 0 0 0 currentColor; opacity: 0.9; }
-  70% { box-shadow: 0 0 0 8px transparent; }
-  100% { box-shadow: 0 0 0 0 transparent; opacity: 0.9; }
+  0% {
+    box-shadow: 0 0 0 0 currentColor;
+    opacity: 0.9;
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px transparent;
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+    opacity: 0.9;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .nb-ribbon,
   .nb-ribbon__content {
     animation: nbFade 150ms linear both !important;
@@ -146,7 +162,12 @@ export default {
 }
 
 @keyframes nbFade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 </style>
