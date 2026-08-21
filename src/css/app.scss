@@ -1,6 +1,11 @@
 .q-table th {
   color: $blue-5;
 }
+
+.yellowBg .q-table__top {
+  background: $yellow-10;
+  transition: all 0.2s ease-in-out;
+}
 .border-yellow {
   border: 2px solid $yellow;
 }

@@ -78,7 +78,8 @@
                 :value="!!project ? localForm.info.email : !!user && user.email" disable />
             </div>
             <div class="col-12">
-              <MunicipalityCities :currentMunicipality="localForm.info.location" @update:city="updateLocation" />
+              <MunicipalityCities :currentMunicipality="localForm.info.location" :is-required="true"
+                @update:city="updateLocation" />
             </div>
           </div>
         </div>

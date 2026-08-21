@@ -48,9 +48,27 @@ export async function getApplicationProcess(context, filters = {}) {
   }
 }
 
-export async function getArchivedProjects(context) {
+export async function getArchivedProjects(context, filters = {}) {
   try {
-    const res = await api.get("/api/project/dashboard/archived");
+    let queryParams = '';
+
+    if (Object.keys(filters).length > 0) {
+      queryParams = '?';
+      const params = [];
+
+      if (filters.search) params.push(`search=${encodeURIComponent(filters.search)}`);
+      if (filters.municipality) params.push(`municipality=${filters.municipality}`);
+      if (filters.location) params.push(`location=${filters.location}`);
+      if (filters.status) params.push(`status=${filters.status}`);
+      if (filters.investive) params.push(`investive=${filters.investive}`);
+      if (filters.categories) params.push(`categories=${filters.categories}`);
+      if (filters.tags) params.push(`tags=${filters.tags}`);
+      if (filters.applicationStep) params.push(`applicationStep=${filters.applicationStep}`);
+
+      queryParams += params.join('&');
+    }
+
+    const res = await api.get(`/api/project/dashboard/archived${queryParams}`);
     context.commit("setArchivedProjects", res.data || []);
   } catch (error) {
     context.dispatch(
@@ -622,6 +640,30 @@ export async function archiveProjectIdea(context, payload) {
       );
       context.commit("archiveProject");
       context.dispatch("getProjectIdeas");
+    } catch (error) {
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+      return false;
+    }
+  }
+}
+
+export async function unarchiveProjectIdea(context, payload) {
+  const { id } = payload;
+  if (!!id) {
+    try {
+      await api.put(`/api/projects/${id}`, {
+        data: { archived: false }
+      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Projektidee erfolgreich wiederhergestellt") },
+        { root: true }
+      );
+      context.dispatch("getArchivedProjects");
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
