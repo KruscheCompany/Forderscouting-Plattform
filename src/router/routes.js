@@ -476,6 +476,11 @@ const routes = [
     ]
   },
   {
+    path: "/maintenance",
+    name: "Maintenance",
+    component: () => import("pages/Maintenance.vue")
+  },
+  {
     path: "/:catchAll(.*)*",
     component: () => import("pages/Error404.vue"),
   }
