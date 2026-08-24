@@ -32,7 +32,10 @@ export default ({ app, store, router }) => {
       !!store.state.userCenter.user && store.state.userCenter.user.jwt;
     if (token) {
       // Checking if the url is not login because we should have Auth header there. Login witll not work
-      if (config.url !== "/api/auth/local") {
+      if (
+        config.url !== "/api/auth/local" &&
+        config.url !== "/api/maintenance-mode"
+      ) {
         config.headers.Authorization = `Bearer ${token}`;
       } else {
         config.headers.Authorization = null;

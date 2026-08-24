@@ -27,9 +27,7 @@ export default {
       }
     );
     this.maintenancePollTimer = setInterval(() => {
-      if (!this.$store.state.general.maintenanceEnabled) {
-        this.$store.dispatch("general/fetchMaintenanceStatus");
-      }
+      this.$store.dispatch("general/fetchMaintenanceStatus");
     }, MAINTENANCE_POLL_INTERVAL_MS);
   },
   beforeDestroy() {

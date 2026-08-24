@@ -36,6 +36,10 @@ export default function({ store } /* { ssrContext } */) {
       next({ name: "Maintenance" });
       return;
     }
+    if (!store.state.general.maintenanceEnabled && to.name === "Maintenance") {
+      next({ path: "/" });
+      return;
+    }
     if (
       to.matched.some(record => record.meta.requireAuth) &&
       !store.getters["userCenter/isSignedIn"]
