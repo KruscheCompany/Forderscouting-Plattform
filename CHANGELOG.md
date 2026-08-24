@@ -1,5 +1,21 @@
 # Änderungsprotokoll / Changelog
 
+## 6.20.0 — 2026-08-24
+
+### de
+- Wenn eine Wartung für einen späteren Zeitpunkt geplant ist, wird oben auf der Seite ein Hinweisbanner mit dem geplanten Zeitpunkt (in Ihrer Zeitzone) und einer Nachricht angezeigt. Der Hinweis kann ausgeblendet werden und erscheint erst wieder, wenn ein neuer Termin geplant wird.
+
+### en
+- When a maintenance window is scheduled for later, a banner now appears at the top of the page showing the scheduled time (in your local time zone) and a message. The banner can be dismissed and only reappears if a new time is scheduled.
+
+## 6.19.0 — 2026-08-24
+
+### de
+- Die Plattform kann jetzt bei Bedarf mit einer Wartungsmeldung vorübergehend für alle Nutzer*innen gesperrt werden, sofort oder zu einem geplanten Zeitpunkt.
+
+### en
+- The platform can now be temporarily locked for all users with a maintenance notice, either immediately or at a scheduled time.
+
 ## 6.18.1 — 2026-08-21
 
 ### de

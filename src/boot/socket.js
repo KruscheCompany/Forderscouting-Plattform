@@ -52,6 +52,10 @@ function connect(store, router, token) {
     store.commit("notifications/setActiveRibbon", ribbon);
   });
 
+  socket.on("maintenanceMode", (payload) => {
+    store.commit("general/SET_MAINTENANCE", payload);
+  });
+
   Vue.prototype.$socket = socket;
 }
 

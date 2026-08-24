@@ -53,6 +53,7 @@
       </q-toolbar>
     </q-header>
     <q-page-container>
+      <MaintenanceBanner />
       <router-view />
       <div v-if="$router.currentRoute.path != '/'" class="bg-yellow-10 q-py-xl">
         <div class="row container">
@@ -105,8 +106,12 @@
 
 <script>
 import { date } from "quasar";
+import MaintenanceBanner from "components/notifications/MaintenanceBanner.vue";
 export default {
   name: "MainLayout",
+  components: {
+    MaintenanceBanner
+  },
   data() {
     return {
       currentYear: date.formatDate(Date.now(), "YYYY")
