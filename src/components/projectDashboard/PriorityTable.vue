@@ -1,12 +1,12 @@
 <template>
-  <q-expansion-item v-if="showSection" v-model="expanded" header-class="bg-amber-1 q-px-md"
+  <q-expansion-item v-if="showSection" v-model="expanded" header-class="bg-green-1 q-px-md"
     expand-icon-class="text-blue" class="q-mt-md q-mb-lg radius-20 shadow-1 overflow-hidden bg-white">
     <template v-slot:header>
       <q-item-section avatar>
-        <q-icon name="mdi-star" color="amber-9" />
+        <q-icon name="mdi-star" color="green-9" />
       </q-item-section>
       <q-item-section>
-        <span class="font-16 text-weight-600 text-amber-9">{{ $t("ProjectDashboard.prioritizedProjects") }}</span>
+        <span class="font-16 text-weight-600 text-green-9">{{ $t("ProjectDashboard.prioritizedProjects") }}</span>
       </q-item-section>
     </template>
 

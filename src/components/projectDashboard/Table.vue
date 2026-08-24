@@ -1,12 +1,12 @@
 <template>
-  <q-expansion-item v-model="sectionExpanded" header-class="bg-blue-2 q-px-md"
+  <q-expansion-item v-model="sectionExpanded" header-class="bg-orange-1 q-px-md"
     expand-icon-class="text-blue" class="q-mt-md q-mb-lg radius-20 shadow-1 overflow-hidden bg-white">
     <template v-slot:header>
       <q-item-section avatar>
-        <q-icon name="mdi-clock-outline" color="blue" />
+        <q-icon name="mdi-clock-outline" color="orange-9" />
       </q-item-section>
       <q-item-section>
-        <span class="font-16 text-weight-600 text-blue">{{ $t("ProjectDashboard.waitlist") }}</span>
+        <span class="font-16 text-weight-600 text-orange-9">{{ $t("ProjectDashboard.waitlist") }}</span>
       </q-item-section>
     </template>
 
