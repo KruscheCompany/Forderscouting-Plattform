@@ -31,9 +31,11 @@ export default {
   padding: 24px;
   text-align: center;
 }
+
 .maintenance-card {
-  max-width: 480px;
+  max-width: 620px;
 }
+
 .maintenance-message {
   white-space: pre-line;
   margin-top: 16px;

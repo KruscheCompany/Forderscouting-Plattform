@@ -62,6 +62,11 @@
       "permissionAsk": "Berechtigung anfragen"
     }
   },
+  "maintenanceBanner": {
+    "label": "Wartung",
+    "message": "Am {date} wird die Plattform für Wartungsarbeiten kurzzeitig nicht erreichbar sein. {message}",
+    "close": "Schließen"
+  },
   "System Announcements": "Systemhinweise",
   "systemRibbon": {
     "label": "Systemhinweis",

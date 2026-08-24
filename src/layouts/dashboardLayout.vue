@@ -137,6 +137,7 @@
 
     <logoutDialog :dialogState="logoutDialog" @update="logoutDialog = $event" />
     <q-page-container>
+      <MaintenanceBanner />
       <SystemRibbon />
       <router-view />
     </q-page-container>
@@ -149,6 +150,7 @@ import EssentialLink from "components/EssentialLink.vue";
 import logoutDialog from "components/user/authentication/logout.vue";
 import NotificationToastStack from "components/notifications/NotificationToastStack.vue";
 import SystemRibbon from "components/notifications/SystemRibbon.vue";
+import MaintenanceBanner from "components/notifications/MaintenanceBanner.vue";
 import { fetchAllTranslations } from "boot/i18n";
 import { getChangelogEntries } from "src/services/changelogService";
 import {
@@ -164,6 +166,7 @@ export default {
     logoutDialog,
     NotificationToastStack,
     SystemRibbon,
+    MaintenanceBanner,
   },
   data() {
     return {

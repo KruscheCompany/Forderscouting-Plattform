@@ -2,7 +2,7 @@
   <div class="nb-ribbon" :class="{ 'nb-ribbon--muted': muted, 'nb-ribbon--static': !animated }">
     <div class="nb-ribbon__content">
       <div class="nb-ribbon__dot" />
-      <div class="nb-ribbon__label">{{ $t("systemRibbon.label") }}</div>
+      <div class="nb-ribbon__label">{{ label || $t("systemRibbon.label") }}</div>
       <div class="nb-ribbon__divider" />
       <div class="nb-ribbon__message">{{ displayMessage }}</div>
       <a v-if="linkUrl" class="nb-ribbon__link" :href="linkUrl" target="_blank" rel="noopener">{{ linkLabel ||
@@ -16,6 +16,7 @@
 export default {
   name: "RibbonBar",
   props: {
+    label: { type: String, default: null },
     message: { type: String, default: "" },
     linkLabel: { type: String, default: null },
     linkUrl: { type: String, default: null },
