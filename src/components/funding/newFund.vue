@@ -40,9 +40,13 @@
             </div>
             <div class="col-12 col-md-9">
               <div class="row q-col-gutter-x-md q-col-gutter-y-lg">
-                <div class="col-12">
+                <div class="col-6">
                   <q-input outlined dense class="no-shadow input-radius-6"
-                    :placeholder="$t('projectIdeaPlaceholder.nameSurname')" v-model="form.info.contactName" />
+                    :placeholder="$t('projectIdeaPlaceholder.firstName')" v-model="form.info.contactFirstName" />
+                </div>
+                <div class="col-6">
+                  <q-input outlined dense class="no-shadow input-radius-6"
+                    :placeholder="$t('projectIdeaPlaceholder.lastName')" v-model="form.info.contactLastName" />
                 </div>
               </div>
             </div>
@@ -90,6 +94,20 @@
                 option-label="title" class="no-shadow input-radius-6"
                 :placeholder="$t('federalStates.selectFederalStates')"
                 :rules="[val => (val && val.length > 0) || $t('Required')]" options-selected-class="text-primary">
+              </q-select>
+            </div>
+          </div>
+          <div class="row items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-16 no-margin">
+                {{ $t("Select Rural Districts") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-select outlined dense v-model="form.landkreise" multiple use-chips
+                :options="filteredLandkreise" option-label="title" class="no-shadow input-radius-6"
+                :placeholder="$t('Select Rural Districts')" options-selected-class="text-primary"
+                :disable="!form.federalStates || form.federalStates.length === 0">
               </q-select>
             </div>
           </div>
@@ -295,17 +313,6 @@
                 :options="accumulabilityOptions" />
             </div>
           </div>
-          <div v-if="form.accumulability" class="row items-center">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                {{ $t("Link to fundings") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <Fundings :requiresValidation="false" :editing="funding.fundingsLinkedTo"
-                @update:linkToFunding="form.fundingsLinkedTo = $event" />
-            </div>
-          </div>
           <div class="row items-baseline">
             <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
@@ -370,41 +377,6 @@
               </div>
             </div>
           </div>
-          <div class="row items-center">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">
-                {{ $t("Link to project ideas (optional)") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <ProjectIdeas :editing="!!funding ? funding.projects : []"
-                @update:linkToProject="form.projects = $event" />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-12">
-              <q-separator class="bg-blue opacity-10" />
-            </div>
-          </div>
-          <div class="row items-baseline">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">{{ $t("Filter Categories") }}</p>
-            </div>
-            <div class="col-12 col-md-9">
-              <Categories :requiresValidation="true" :editing="!!funding ? funding.categories : []"
-                @update:category="form.categories = $event" />
-            </div>
-          </div>
-          <div class="row items-baseline">
-            <div class="col-12 col-md-3">
-              <p class="font-16 no-margin">{{ $t("Tags") }}</p>
-            </div>
-            <div class="col-12 col-md-9">
-              <Tags :requiresValidation="true" :editing="!!funding ? funding.tags : []"
-                @update:tag="form.tags = $event" />
-            </div>
-          </div>
           <div class="row">
             <div class="col-12">
               <q-separator class="bg-blue opacity-10" />
@@ -421,6 +393,22 @@
                 :toolbar="editorToolbar" />
             </div>
           </div>
+
+          <CategorizationCard :collapsible="false" :requiresValidation="true" :noShadow="true"
+            badgeSource="fundingGoal"
+            :editingCategories="!!funding ? funding.categories : []"
+            :editingTags="!!funding ? funding.tags : []"
+            :tagsSuggested="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.suggested"
+            :tagsGenerated="taxonomySuggestions && taxonomySuggestions.tags && taxonomySuggestions.tags.generated"
+            :loading="isLoadingTaxonomy" @update:category="form.categories = $event"
+            @update:tag="form.tags = $event" />
+
+          <div class="row">
+            <div class="col-12">
+              <q-separator class="bg-blue opacity-10" />
+            </div>
+          </div>
+
           <div class="row items-baseline">
             <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
@@ -509,26 +497,22 @@ import { scroll } from "quasar";
 const { getScrollTarget, setScrollPosition } = scroll;
 import { dateFormatter } from "src/boot/dateFormatter";
 import UserSelect from "components/user/UserSelect.vue";
-import Categories from "components/projects/create/Categories.vue";
-import Tags from "components/projects/create/Tags.vue";
+import CategorizationCard from "components/projects/create/CategorizationCard.vue";
 import FundingRate from "src/components/funding/FundingRate.vue";
 import FundingCalls from "src/components/funding/FundingCalls.vue";
 import Links from "src/components/projects/create/Links.vue";
-import ProjectIdeas from "components/funding/ProjectIdeas.vue";
-import Fundings from "components/funding/Fundings.vue";
 import ImageDialog from "components/ImageDialog.vue";
+import htmlSanitizer from "src/mixins/htmlSanitizer.js";
 
 export default {
   name: "newFund",
+  mixins: [htmlSanitizer],
   components: {
     UserSelect,
-    Categories,
-    Tags,
+    CategorizationCard,
     FundingRate,
     FundingCalls,
     Links,
-    ProjectIdeas,
-    Fundings,
     ImageDialog
   },
   data() {
@@ -542,7 +526,8 @@ export default {
         provider: "",
         assessment: "",
         info: {
-          contactName: "",
+          contactFirstName: "",
+          contactLastName: "",
           phone: "",
           email: "",
           streetNo: "",
@@ -563,6 +548,7 @@ export default {
         notes: "",
         editors: [],
         federalStates: [],
+        landkreise: [],
         municipalities: [],
         rates: [],
         links: [],
@@ -582,7 +568,8 @@ export default {
         { label: "Nein", value: false }
       ],
       isLoading: false,
-      dataLoaded: true
+      dataLoaded: true,
+      taxonomySuggestTimeout: null
     };
   },
   methods: {
@@ -670,10 +657,15 @@ export default {
         if (success) {
           this.isLoading = true;
           await this.checkOptionalParameters();
+          // Tags not yet created in the backend (id: null, from an AI suggestion) are only
+          // created now - at save/publish time - not the moment they're selected in the form.
+          const tags = await this.$store.dispatch("tag/resolvePendingTags", this.form.tags);
           const res = await this.$store.dispatch("funding/createNewFunding", {
             data: {
               ...this.form,
+              tags,
               federalStates: this.form.federalStates.map(fs => fs.id),
+              landkreise: this.form.landkreise.map(lk => lk.id),
               municipalities: this.form.municipalities.map(m => m.id),
               published: published,
               owner: {
@@ -701,10 +693,15 @@ export default {
         if (success) {
           this.isLoading = true;
           await this.checkOptionalParameters();
+          // Tags not yet created in the backend (id: null, from an AI suggestion) are only
+          // created now - at save/publish time - not the moment they're selected in the form.
+          const tags = await this.$store.dispatch("tag/resolvePendingTags", this.form.tags);
           const res = await this.$store.dispatch("funding/editFunding", {
             data: {
               ...this.form,
+              tags,
               federalStates: this.form.federalStates.map(fs => fs.id),
+              landkreise: this.form.landkreise.map(lk => lk.id),
               municipalities: this.form.municipalities.map(m => m.id),
               published: published
               // owner: {
@@ -789,13 +786,10 @@ export default {
       this.$store.dispatch("userCenter/getUsers");
       this.$store.dispatch("federalState/getFederalStates");
       this.$store.dispatch("municipality/getMunicipalities");
+      this.$store.dispatch("landkreis/getLandkreise");
 
       if (this.form.archived && !isAdmin) {
-        this.$q.notify({
-          message: this.$t("Der Zugang zu archivierten Dokumenten ist nicht möglich"),
-          color: "negative",
-          position: "top"
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Der Zugang zu archivierten Dokumenten ist nicht möglich") });
         this.$router.go(-1);
 
       }
@@ -942,12 +936,59 @@ export default {
           selectedFederalStateTitles.includes(fs.title)
         );
       });
+    },
+    landkreiseList() {
+      const landkreise = this.$store.state.landkreis.landkreise;
+      return Array.isArray(landkreise)
+        ? [...landkreise].sort((a, b) => a.title.localeCompare(b.title))
+        : [];
+    },
+    filteredLandkreise() {
+      if (!this.form.federalStates || this.form.federalStates.length === 0) {
+        // If no federal states selected, only show already-selected rural districts
+        return this.form.landkreise || [];
+      }
+
+      const selectedFederalStateIds = this.form.federalStates.map(fs => fs.id);
+      const selectedLandkreisIds = (this.form.landkreise || []).map(lk => lk.id);
+
+      return this.landkreiseList.filter(landkreis => {
+        // Always include already-selected rural districts
+        if (selectedLandkreisIds.includes(landkreis.id)) {
+          return true;
+        }
+
+        return (landkreis.federalStates || []).some(fsId =>
+          selectedFederalStateIds.includes(fsId)
+        );
+      });
+    },
+    taxonomySuggestions() {
+      return this.$store.getters["ai/getTaxonomySuggestions"];
+    },
+    isLoadingTaxonomy() {
+      return this.$store.getters["ai/getLoadingTaxonomy"];
+    }
+  },
+  watch: {
+    "form.details.goal": {
+      handler(val) {
+        clearTimeout(this.taxonomySuggestTimeout);
+        const content = this.stripHtml(val || "").trim();
+        if (content.length < 30) return;
+        this.taxonomySuggestTimeout = setTimeout(() => {
+          this.$store.dispatch("ai/suggestTaxonomy", { content }).catch(() => {});
+        }, 800);
+      }
     }
   },
   mounted() {
     // if (!!this.funding && !!this.$route.params.id) {
     this.setData();
     // }
+  },
+  beforeDestroy() {
+    clearTimeout(this.taxonomySuggestTimeout);
   }
 };
 </script>

@@ -136,7 +136,7 @@
                         <div v-if="project.tags && project.tags.length > 0">
                           <q-chip v-for="(tag, index) in project.tags" :key="index" square size="16px" color="yellow-10"
                             text-color="blue">
-                            {{ tag.title }}
+                            {{ tag.title }}<span v-if="tag.source === 'ai'" :title="$t('tagsSelector.aiGeneratedBadge')"> ✦</span>
                           </q-chip>
                         </div>
                         <div v-else>{{ $t("projectContent.noTagsSet") }}</div>
@@ -156,12 +156,17 @@
                         <p class="q-mb-sm">
                           {{
                             !!project.details &&
-                              project.details.investive === true
-                              ? $t("Investive")
+                              project.details.investive === true &&
+                              project.details.nonInvestive === true
+                              ? $t("newProjectIdeaForm.investiveBoth")
                               : !!project.details &&
-                                project.details.investive === false
-                                ? $t("Non-Investive")
-                                : ""
+                                project.details.investive === true
+                                ? $t("Investive")
+                                : !!project.details &&
+                                  (project.details.nonInvestive === true ||
+                                    project.details.investive === false)
+                                  ? $t("Non-Investive")
+                                  : ""
                           }}
                         </p>
                       </div>
@@ -415,10 +420,10 @@
                       </h4>
 
                       <div class="q-ml-md font-16">
-                        <p class="q-mb-sm text-block" v-html="!!project.details &&
+                        <p class="q-mb-sm text-block" v-html="sanitizeHtml(!!project.details &&
                           !!project.details.startingCondition
                           ? project.details.startingCondition
-                          : 'No Project Starting Condition found'
+                          : 'No Project Starting Condition found')
                           "></p>
                       </div>
                     </q-card-section>
@@ -428,9 +433,9 @@
                         {{ $t("projectContent.projectContent") }}
                       </h4>
                       <div class="q-ml-md font-16">
-                        <p class="q-mb-sm text-block" v-html="!!project.details && !!project.details.content
+                        <p class="q-mb-sm text-block" v-html="sanitizeHtml(!!project.details && !!project.details.content
                           ? project.details.content
-                          : 'No Project Content found'
+                          : 'No Project Content found')
                           "></p>
                       </div>
                     </q-card-section>
@@ -442,7 +447,7 @@
                       </h4>
                       <div class="q-ml-md font-16">
                         <p class="q-mb-sm text-block"
-                          v-html="!!project.details ? project.details.goals : 'No Project Goals found'">
+                          v-html="sanitizeHtml(!!project.details ? project.details.goals : 'No Project Goals found')">
                         </p>
                       </div>
                     </q-card-section>
@@ -454,9 +459,9 @@
                         {{ $t("projectContent.projectValue&Benefits") }}
                       </h4>
                       <div class="q-ml-md font-16">
-                        <p class="q-mb-sm text-block" v-html="!!project.details
+                        <p class="q-mb-sm text-block" v-html="sanitizeHtml(!!project.details
                           ? project.details.valuesAndBenefits
-                          : 'No Project Goals found'
+                          : 'No Project Goals found')
                           "></p>
                       </div>
                     </q-card-section>
@@ -492,7 +497,9 @@
 <script>
 import VueHtml2pdf from "vue-html2pdf";
 import { dateFormatter } from "src/boot/dateFormatter";
+import htmlSanitizer from "src/mixins/htmlSanitizer";
 export default {
+  mixins: [htmlSanitizer],
   data() {
     return {
       slide: 1
@@ -528,15 +535,9 @@ export default {
     hasGenerated(event) {
       this.$q.loading.hide();
       if (event.success) {
-        this.$q.notify({
-          type: 'positive',
-          message: 'PDF generated successfully'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('PDF generated successfully') });
       } else {
-        this.$q.notify({
-          type: 'negative',
-          message: 'Failed to generate PDF'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('Failed to generate PDF') });
       }
     },
   }

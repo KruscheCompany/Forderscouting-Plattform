@@ -1,9 +1,6 @@
 <template>
   <q-layout view="lhh lpR fFf">
-    <q-header
-      :class="{ dimmed: loginDialog }"
-      class="light-blue text-white no-shadow"
-    >
+    <q-header class="light-blue text-white no-shadow">
       <q-toolbar class="q-my-sm navContainer ">
         <!-- TODO Fix toolbar title taking full width -->
         <q-toolbar-title>
@@ -32,7 +29,7 @@
           />
         </q-toolbar-title>
         <q-btn
-          @click="loginDialog = true"
+          :to="{ name: 'Login' }"
           color="yellow"
           unelevated
           class="q-mr-sm radius-6"
@@ -45,7 +42,7 @@
           </p>
         </q-btn>
         <q-btn
-            @click="signupDialogState = true"
+            :to="{ name: 'Register' }"
             color="yellow"
             unelevated
             class="mr-0 radius-6"
@@ -55,13 +52,9 @@
         </q-btn>
       </q-toolbar>
     </q-header>
-    <LoginDialog :dialogState="loginDialog" @update="loginDialog = $event" />
-    <signupDialog
-      :dialogState="signupDialogState"
-      @update="signupDialogState = $event"
-    />
     <q-page-container>
-      <router-view :class="{ dimmed: loginDialog }" />
+      <MaintenanceBanner />
+      <router-view />
       <div v-if="$router.currentRoute.path != '/'" class="bg-yellow-10 q-py-xl">
         <div class="row container">
           <div v-if="$q.screen.gt.sm" class="col-2">
@@ -75,7 +68,7 @@
               {{ $t("ifYouWantToSeeMoreDocuments") }}
             </p>
             <q-btn
-              @click="signupDialogState = true"
+              :to="{ name: 'Register' }"
               color="blue"
               unelevated
               class="mr-0 radius-6"
@@ -113,19 +106,15 @@
 
 <script>
 import { date } from "quasar";
-import LoginDialog from "components/user/authentication/LoginDialog.vue";
-import signupDialog from "components/user/authentication/signupDialog.vue";
+import MaintenanceBanner from "components/notifications/MaintenanceBanner.vue";
 export default {
   name: "MainLayout",
   components: {
-    LoginDialog,
-    signupDialog
+    MaintenanceBanner
   },
   data() {
     return {
-      currentYear: date.formatDate(Date.now(), "YYYY"),
-      loginDialog: false,
-      signupDialogState: false
+      currentYear: date.formatDate(Date.now(), "YYYY")
     };
   },
   methods: {

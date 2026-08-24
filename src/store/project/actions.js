@@ -1,15 +1,17 @@
 import { api } from "boot/axios";
-import { Notify } from "quasar";
+import { i18n } from "boot/i18n";
+import { normalizeApplicationProcessSteps } from "./stepMigration";
 
 export async function getProjectIdeas(context) {
   try {
     const res = await api.get("/api/projects");
     context.commit("setProjectIdeas", res.data);
   } catch (error) {
-    Notify.create({
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -38,10 +40,116 @@ export async function getApplicationProcess(context, filters = {}) {
     const res = await api.get(`/api/application/process${queryParams}`);
     context.commit("setApplicationProcess", res.data || []);
   } catch (error) {
-    Notify.create({
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+  }
+}
+
+export async function getArchivedProjects(context, filters = {}) {
+  try {
+    let queryParams = '';
+
+    if (Object.keys(filters).length > 0) {
+      queryParams = '?';
+      const params = [];
+
+      if (filters.search) params.push(`search=${encodeURIComponent(filters.search)}`);
+      if (filters.municipality) params.push(`municipality=${filters.municipality}`);
+      if (filters.location) params.push(`location=${filters.location}`);
+      if (filters.status) params.push(`status=${filters.status}`);
+      if (filters.investive) params.push(`investive=${filters.investive}`);
+      if (filters.categories) params.push(`categories=${filters.categories}`);
+      if (filters.tags) params.push(`tags=${filters.tags}`);
+      if (filters.applicationStep) params.push(`applicationStep=${filters.applicationStep}`);
+
+      queryParams += params.join('&');
+    }
+
+    const res = await api.get(`/api/project/dashboard/archived${queryParams}`);
+    context.commit("setArchivedProjects", res.data || []);
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+  }
+}
+
+export async function getPrioritizedProjects(context, payload = {}) {
+  try {
+    const { municipalityId } = payload;
+    const query = municipalityId ? `?municipality=${municipalityId}` : '';
+    const res = await api.get(`/api/prioritized-projects${query}`);
+    context.commit("setPrioritizedProjects", res.data || []);
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+  }
+}
+
+export async function addToPriorityList(context, payload) {
+  const { id } = payload;
+  if (!!id) {
+    try {
+      await api.post("/api/prioritized-projects", { data: { project: id } });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Projektidee erfolgreich priorisiert") },
+        { root: true }
+      );
+      context.dispatch("getPrioritizedProjects");
+    } catch (error) {
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+      return false;
+    }
+  }
+}
+
+export async function removeFromPriorityList(context, payload) {
+  const { id } = payload;
+  if (!!id) {
+    try {
+      await api.delete(`/api/prioritized-projects/${id}`);
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Projektidee erfolgreich aus der Priorisierung entfernt") },
+        { root: true }
+      );
+      context.dispatch("getPrioritizedProjects");
+    } catch (error) {
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+      return false;
+    }
+  }
+}
+
+export async function reorderPriorityList(context, payload) {
+  const { order } = payload;
+  try {
+    await api.put("/api/prioritized-projects/reorder", { order });
+    context.dispatch("getPrioritizedProjects");
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+    context.dispatch("getPrioritizedProjects");
   }
 }
 
@@ -100,11 +208,11 @@ export async function uploadFiles(context, payload) {
       console.log("fileRes", fileRes);
     } catch (error) {
       console.log("files error.response", error.response);
-      Notify.create({
-        // position: "top-right",
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       // return false;
     }
   }
@@ -133,10 +241,11 @@ export async function uploadMedia(context, payload) {
           });
         } catch (error) {
           console.log("media error.response", error.response);
-          Notify.create({
-            type: "negative",
-            message: error.response.data.error.message
-          });
+          context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
         }
       });
       return Promise.all(promises);
@@ -155,11 +264,11 @@ export async function deleteFilesAndMedia(context, payload) {
         console.log("deleteRes", deleteRes);
       } catch (error) {
         console.log("files error.response", error.response);
-        Notify.create({
-          // position: "top-right",
-          type: "negative",
-          message: error.response.data.error.message
-        });
+        context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
         // return false;
       }
     });
@@ -249,19 +358,21 @@ export async function editProjectIdea(context, payload) {
           console.log("deleteFilesRes", deleteFilesRes);
         }
       }
-      Notify.create({
-        message: "Projektidee erfolgreich bearbeitet",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Projektidee erfolgreich bearbeitet") },
+        { root: true }
+      );
       context.commit("setCreatedProjectIdea", res.data.data);
       context.dispatch("getApplicationProcess");
       return res.data
     } catch (error) {
       console.error("error", error);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -278,12 +389,102 @@ export async function simpleUpdateProjectIdea(context, payload) {
     }
     catch (error) {
       console.error("error", error);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
+  }
+}
+
+// vorpruefung-ticket's find/findOne/create/update actions are the untouched
+// Strapi v4 core-controller defaults (only resend/findByToken/respondByToken
+// are custom-overridden on the backend), so those responses still come back
+// wrapped as { id, attributes: {...} } instead of flat like the rest of this
+// app's custom-controller content-types. Flatten here to match what the rest
+// of the codebase (and this component tree) expects.
+function flattenVorpruefungTicket(entry) {
+  if (!entry) return entry;
+  const attrs = entry.attributes || entry;
+  return { id: entry.id, ...attrs };
+}
+
+export async function fetchVorpruefungTickets(context, payload) {
+  const { projectId } = payload;
+  try {
+    const res = await api.get(`/api/vorpruefung-tickets?filters[project]=${projectId}`);
+    const raw = res.data.data || res.data || [];
+    return raw.map(flattenVorpruefungTicket);
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+    return [];
+  }
+}
+
+export async function createVorpruefungTicket(context, payload) {
+  const { projectId, type, notes } = payload;
+  try {
+    const res = await api.post("/api/vorpruefung-tickets", {
+      data: { project: projectId, type, notes: notes || "" }
+    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Vorprüfung erfolgreich angefragt") },
+        { root: true }
+      );
+    const entry = res.data.data || res.data;
+    return flattenVorpruefungTicket(entry);
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+    return false;
+  }
+}
+
+export async function updateVorpruefungTicketNotes(context, payload) {
+  const { id, notes } = payload;
+  try {
+    const res = await api.put(`/api/vorpruefung-tickets/${id}/notes`, {
+      data: { notes }
+    });
+    const entry = res.data.data || res.data;
+    return flattenVorpruefungTicket(entry);
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+    return false;
+  }
+}
+
+export async function resendVorpruefungTicket(context, payload) {
+  const { id } = payload;
+  try {
+    await api.post(`/api/vorpruefung-tickets/${id}/resend`);
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Vorprüfung erneut gesendet") },
+        { root: true }
+      );
+    return true;
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+    return false;
   }
 }
 
@@ -320,13 +521,14 @@ export async function getSpecificProject(context, payload) {
   if (id) {
     try {
       const res = await api.get(`/api/projects/${id}`);
-      context.commit("setSpecificProject", res.data);
+      context.commit("setSpecificProject", normalizeApplicationProcessSteps(res.data));
     } catch (error) {
       console.log("error", error);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
     }
   }
 }
@@ -347,16 +549,18 @@ export async function addToWatchlist(context, payload) {
         data: { project: id }
       });
       console.log("res", res);
-      Notify.create({
-        message: "Projektidee erfolgreich zur Merkliste zugefügt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Projektidee erfolgreich zur Merkliste zugefügt") },
+        { root: true }
+      );
       context.dispatch("getProjectIdeas");
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -368,16 +572,18 @@ export async function removeFromWatchlist(context, payload) {
     try {
       const res = await api.delete(`/api/watchlists/${id}`);
       console.log("res", res);
-      Notify.create({
-        message: "Projektidee erfolgreich von der Merkliste entfernt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Projektidee erfolgreich von der Merkliste entfernt") },
+        { root: true }
+      );
       context.dispatch("getProjectIdeas");
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -402,16 +608,18 @@ export async function requestAccess(context, payload) {
           guest: guest
         }
       });
-      Notify.create({
-        message: "Zugangsanfrage für Projektidee gesendet",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Zugangsanfrage für Projektidee gesendet") },
+        { root: true }
+      );
       context.dispatch("getProjectIdeas");
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -425,17 +633,43 @@ export async function archiveProjectIdea(context, payload) {
         data: { archived: true }
       });
       console.log("res", res);
-      Notify.create({
-        message: "Projektidee erfolgreich archiviert",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Projektidee erfolgreich archiviert") },
+        { root: true }
+      );
       context.commit("archiveProject");
       context.dispatch("getProjectIdeas");
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
+      return false;
+    }
+  }
+}
+
+export async function unarchiveProjectIdea(context, payload) {
+  const { id } = payload;
+  if (!!id) {
+    try {
+      await api.put(`/api/projects/${id}`, {
+        data: { archived: false }
       });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Projektidee erfolgreich wiederhergestellt") },
+        { root: true }
+      );
+      context.dispatch("getArchivedProjects");
+    } catch (error) {
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -446,17 +680,19 @@ export async function duplicateProject(context, payload) {
   if (!!id) {
     try {
       const res = await api.post(`/api/project/duplicate/${id}`);
-      Notify.create({
-        message: "Projektidee erfolgreich dupliziert",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Projektidee erfolgreich dupliziert") },
+        { root: true }
+      );
       context.dispatch("getProjectIdeas");
       return res;
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -468,16 +704,18 @@ export async function deleteProjectIdea(context, payload) {
     try {
       const res = await api.delete(`/api/projects/${id}`);
       context.commit("deleteProjectIdea", res.data.data && res.data.data.id);
-      Notify.create({
-        message: "Projektidee erfolgreich gelöscht",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Projektidee erfolgreich gelöscht") },
+        { root: true }
+      );
       context.dispatch("getProjectIdeas");
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -508,10 +746,11 @@ export async function getProjectDashboardStats(context, filters = {}) {
     const res = await api.get(`/api/project/dashboard/stat${queryParams}`);
     context.commit("setProjectDashboardStats", res.data);
   } catch (error) {
-    Notify.create({
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
     return false;
   }
 }
@@ -522,10 +761,11 @@ export async function validateApplicationAccess(context, id) {
     return res.data; // Returns { id, financialPlan, accessGranted }
   } catch (error) {
     console.error("Error validating application access:", error);
-    Notify.create({
-      type: "negative",
-      message: error.response?.data?.error?.message || "Error validating access"
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response?.data?.error?.message || "Error validating access" },
+        { root: true }
+      );
     return { accessGranted: false };
   }
 }

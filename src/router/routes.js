@@ -35,6 +35,27 @@ const routes = [
     ]
   },
   {
+    path: "/review/:token",
+    component: () => import("layouts/ReviewLayout.vue"),
+    children: [
+      {
+        path: "",
+        name: "ReviewProject",
+        component: () => import("pages/ReviewProject.vue")
+      }
+    ]
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("pages/Login.vue")
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: () => import("pages/Register.vue")
+  },
+  {
     path: "/dashboard",
     component: () => import("layouts/dashboardLayout.vue"),
     children: [
@@ -130,6 +151,19 @@ const routes = [
         component: () => import("pages/dashboard/AdminUser.vue")
       },
       {
+        path: "/Administation/Announcements",
+        name: "AdministationAnnouncements",
+        meta: {
+          title: "System Announcements",
+          titleDE: "Systemhinweise",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: true
+        },
+        icon: "/icons/Publish.svg",
+        component: () => import("pages/dashboard/Announcements.vue")
+      },
+      {
         path: "/Administation/User/:id",
         name: "AdministationUserDetails",
         meta: {
@@ -195,6 +229,19 @@ const routes = [
         },
         icon: "/icons/Government.svg",
         component: () => import("pages/dashboard/FederalStates.vue")
+      },
+      {
+        path: "/landkreise",
+        name: "Landkreise",
+        meta: {
+          title: "Landkreise",
+          titleDE: "Landkreise",
+          showInNavigation: true,
+          requireAuth: true,
+          requireAdmin: true
+        },
+        icon: "/icons/Government.svg",
+        component: () => import("pages/dashboard/Landkreise.vue")
       },
       {
         path: "/Administation/Areas",
@@ -427,6 +474,11 @@ const routes = [
         component: () => import("pages/dashboard/FundingView.vue")
       }
     ]
+  },
+  {
+    path: "/maintenance",
+    name: "Maintenance",
+    component: () => import("pages/Maintenance.vue")
   },
   {
     path: "/:catchAll(.*)*",

@@ -47,6 +47,84 @@
                 :placeholder="$t('administrativeAreas.selectFederalStates')" />
             </div>
           </div>
+          <div class="items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-14 no-margin">
+                {{ $t("administrativeAreas.selectLandkreise") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-select outlined multiple use-chips class="no-shadow input-radius-6" v-model="form.landkreise"
+                :options="landkreiseOptions" option-value="id" option-label="title" emit-value map-options
+                :placeholder="$t('administrativeAreas.selectLandkreise')" />
+            </div>
+          </div>
+          <div class="items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-14 no-margin">
+                {{ $t("administrativeAreas.financeContactEmail") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-input outlined type="email" class="no-shadow input-radius-6" v-model="form.financeContactEmail"
+                :placeholder="$t('administrativeAreas.financeContactEmail')" />
+            </div>
+          </div>
+          <div class="items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-14 no-margin">
+                {{ $t("administrativeAreas.financeContactFirstName") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-input outlined class="no-shadow input-radius-6" v-model="form.financeContactFirstName"
+                :placeholder="$t('administrativeAreas.financeContactFirstName')" />
+            </div>
+          </div>
+          <div class="items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-14 no-margin">
+                {{ $t("administrativeAreas.financeContactLastName") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-input outlined class="no-shadow input-radius-6" v-model="form.financeContactLastName"
+                :placeholder="$t('administrativeAreas.financeContactLastName')" />
+            </div>
+          </div>
+          <div class="items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-14 no-margin">
+                {{ $t("administrativeAreas.personnelContactEmail") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-input outlined type="email" class="no-shadow input-radius-6" v-model="form.personnelContactEmail"
+                :placeholder="$t('administrativeAreas.personnelContactEmail')" />
+            </div>
+          </div>
+          <div class="items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-14 no-margin">
+                {{ $t("administrativeAreas.personnelContactFirstName") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-input outlined class="no-shadow input-radius-6" v-model="form.personnelContactFirstName"
+                :placeholder="$t('administrativeAreas.personnelContactFirstName')" />
+            </div>
+          </div>
+          <div class="items-center">
+            <div class="col-12 col-md-3">
+              <p class="font-14 no-margin">
+                {{ $t("administrativeAreas.personnelContactLastName") }}
+              </p>
+            </div>
+            <div class="col-12 col-md-9">
+              <q-input outlined class="no-shadow input-radius-6" v-model="form.personnelContactLastName"
+                :placeholder="$t('administrativeAreas.personnelContactLastName')" />
+            </div>
+          </div>
           <div class="row q-col-gutter-sm q-mt-md">
             <div class="col">
               <q-btn :label="$t('category&Keyword.cancel')" outline v-close-popup size="16px" color="primary" no-caps
@@ -78,7 +156,14 @@ export default {
       form: {
         title: "",
         location: "",
-        federalStates: []
+        federalStates: [],
+        landkreise: [],
+        financeContactEmail: "",
+        financeContactFirstName: "",
+        financeContactLastName: "",
+        personnelContactEmail: "",
+        personnelContactFirstName: "",
+        personnelContactLastName: ""
       },
       municipality: {},
       isLoading: false
@@ -93,7 +178,14 @@ export default {
           {
             title: this.form.title,
             location: this.form.location,
-            federalStates: this.form.federalStates
+            federalStates: this.form.federalStates,
+            landkreise: this.form.landkreise,
+            financeContactEmail: this.form.financeContactEmail,
+            financeContactFirstName: this.form.financeContactFirstName,
+            financeContactLastName: this.form.financeContactLastName,
+            personnelContactEmail: this.form.personnelContactEmail,
+            personnelContactFirstName: this.form.personnelContactFirstName,
+            personnelContactLastName: this.form.personnelContactLastName
           }
         );
         this.isLoading = false;
@@ -102,6 +194,7 @@ export default {
           this.form.title = "";
           this.form.location = "";
           this.form.federalStates = [];
+          this.form.landkreise = [];
         }
       }
     },
@@ -110,7 +203,14 @@ export default {
         if (
           this.form.title !== this.municipality.title ||
           this.form.location !== this.municipality.location ||
-          JSON.stringify(this.form.federalStates) !== JSON.stringify(this.municipality.federalStates)
+          JSON.stringify(this.form.federalStates) !== JSON.stringify(this.municipality.federalStates) ||
+          JSON.stringify(this.form.landkreise) !== JSON.stringify(this.municipality.landkreise) ||
+          this.form.financeContactEmail !== this.municipality.financeContactEmail ||
+          this.form.financeContactFirstName !== this.municipality.financeContactFirstName ||
+          this.form.financeContactLastName !== this.municipality.financeContactLastName ||
+          this.form.personnelContactEmail !== this.municipality.personnelContactEmail ||
+          this.form.personnelContactFirstName !== this.municipality.personnelContactFirstName ||
+          this.form.personnelContactLastName !== this.municipality.personnelContactLastName
         ) {
           this.isLoading = true;
           const res = await this.$store.dispatch(
@@ -119,7 +219,14 @@ export default {
               id: this.editingId,
               title: this.form.title,
               location: this.form.location,
-              federalStates: this.form.federalStates
+              federalStates: this.form.federalStates,
+              landkreise: this.form.landkreise,
+              financeContactEmail: this.form.financeContactEmail,
+              financeContactFirstName: this.form.financeContactFirstName,
+              financeContactLastName: this.form.financeContactLastName,
+              personnelContactEmail: this.form.personnelContactEmail,
+              personnelContactFirstName: this.form.personnelContactFirstName,
+              personnelContactLastName: this.form.personnelContactLastName
             }
           );
           this.isLoading = false;
@@ -128,12 +235,10 @@ export default {
             this.form.title = "";
             this.form.location = "";
             this.form.federalStates = [];
+            this.form.landkreise = [];
           }
         } else {
-          this.$q.notify({
-            type: "negative",
-            message: "Bitte wählen Sie einen anderen Titel oder anderen Ort aus"
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Bitte wählen Sie einen anderen Titel oder anderen Ort aus") });
         }
       }
     },
@@ -148,6 +253,12 @@ export default {
           this.municipality = municipality;
           this.form.title = municipality.title;
           this.form.location = municipality.location;
+          this.form.financeContactEmail = municipality.financeContactEmail || "";
+          this.form.financeContactFirstName = municipality.financeContactFirstName || "";
+          this.form.financeContactLastName = municipality.financeContactLastName || "";
+          this.form.personnelContactEmail = municipality.personnelContactEmail || "";
+          this.form.personnelContactFirstName = municipality.personnelContactFirstName || "";
+          this.form.personnelContactLastName = municipality.personnelContactLastName || "";
           // Handle federal states - check if they exist and are in array format
           if (municipality.federalStates) {
             if (Array.isArray(municipality.federalStates)) {
@@ -158,11 +269,23 @@ export default {
           } else {
             this.form.federalStates = [];
           }
+          if (municipality.landkreise) {
+            if (Array.isArray(municipality.landkreise)) {
+              this.form.landkreise = municipality.landkreise.map(lk => lk.id || lk);
+            } else {
+              this.form.landkreise = [];
+            }
+          } else {
+            this.form.landkreise = [];
+          }
         }
       }
     },
     loadFederalStates() {
       this.$store.dispatch("federalState/getFederalStates");
+    },
+    loadLandkreise() {
+      this.$store.dispatch("landkreis/getLandkreise");
     }
   },
   computed: {
@@ -174,6 +297,13 @@ export default {
         this.form.title = "";
         this.form.location = "";
         this.form.federalStates = [];
+        this.form.landkreise = [];
+        this.form.financeContactEmail = "";
+        this.form.financeContactFirstName = "";
+        this.form.financeContactLastName = "";
+        this.form.personnelContactEmail = "";
+        this.form.personnelContactFirstName = "";
+        this.form.personnelContactLastName = "";
         this.$emit("update", val);
       }
     },
@@ -192,10 +322,24 @@ export default {
         return federalStatesResponse;
       }
       return [];
+    },
+    landkreiseOptions() {
+      const landkreise = this.$store.state.landkreis.landkreise;
+      if (!Array.isArray(landkreise)) {
+        return [];
+      }
+      const sorted = [...landkreise].sort((a, b) => a.title.localeCompare(b.title));
+      if (!this.form.federalStates.length) {
+        return sorted;
+      }
+      return sorted.filter(lk =>
+        (lk.federalStates || []).some(fsId => this.form.federalStates.includes(fsId))
+      );
     }
   },
   mounted() {
     this.loadFederalStates();
+    this.loadLandkreise();
   }
 };
 </script>

@@ -11,6 +11,8 @@ import municipality from "./municipality";
 import funding from "./funding";
 import ai from "./ai";
 import federalState from "./federalState";
+import landkreis from "./landkreis";
+import notifications from "./notifications";
 
 Vue.use(Vuex);
 /*
@@ -34,7 +36,9 @@ export default function(/* { ssrContext } */) {
       municipality,
       funding,
       ai,
-      federalState
+      federalState,
+      landkreis,
+      notifications
     },
     plugins: [
       createPersistedState({

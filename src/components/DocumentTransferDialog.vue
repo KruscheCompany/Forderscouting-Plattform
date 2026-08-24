@@ -71,10 +71,7 @@ export default {
     async transferDocument() {
       this.isLoading = true;
       if (!this.selected) {
-        this.$q.notify({
-          type: "negative",
-          message: "Bitte wählen Sie einen Benutzer aus",
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Bitte wählen Sie einen Benutzer aus") });
         this.isLoading = false;
         return;
       }
@@ -85,17 +82,11 @@ export default {
             id: this.id,
             newOwnerId: this.selected.value,
           });
-          this.$q.notify({
-            message: "Das Dokument wurde erfolgreich übertragen",
-            type: "positive",
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t("Das Dokument wurde erfolgreich übertragen") });
           this.$router.go(-1);
         } catch (error) {
           console.log("error :>> ", error.response);
-          this.$q.notify({
-            type: "negative",
-            message: error.response.data.error.message,
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response.data.error.message });
         }
         this.$emit("close");
       } catch (error) {
@@ -116,11 +107,14 @@ export default {
     },
     usersOptions() {
       const users = [];
-      const filteredUsers = this.users.filter(
-        (item) =>
-          item.user_detail.municipality.title ===
-          this.$store.state.userCenter.user.userDetails.municipality.title
-      );
+      const currentUserDetails = this.$store.state.userCenter.user.userDetails;
+      const currentScope =
+        currentUserDetails?.municipality || currentUserDetails?.landkreis;
+      const filteredUsers = this.users.filter((item) => {
+        const itemScope =
+          item.user_detail?.municipality || item.user_detail?.landkreis;
+        return !!currentScope && !!itemScope && itemScope.title === currentScope.title;
+      });
       filteredUsers.forEach((user) => {
         users.push({
           label: user.user_detail.fullName,

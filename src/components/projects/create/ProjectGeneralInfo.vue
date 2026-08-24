@@ -28,11 +28,18 @@
                   : !!userDetails && userDetails.fullName
                   " disable />
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6" v-if="needsMunicipalityPicker">
+              <q-select outlined dense class="no-shadow input-radius-6" v-model="selectedLandkreisMunicipality"
+                :options="landkreisMunicipalityOptions" option-value="id" option-label="title" emit-value map-options
+                :rules="[(val) => !!val || $t('Required')]"
+                :placeholder="$t('projectComponents.generalInfo.municipalityPlaceholder')"
+                @input="$emit('update:selected-municipality', $event)" />
+            </div>
+            <div class="col-12 col-md-6" v-else>
               <q-input outlined dense disable class="no-shadow input-radius-6 disabledClass"
                 :placeholder="$t('projectComponents.generalInfo.municipalityPlaceholder')" :value="!!project
                   ? localForm.municipality.title
-                  : !!userDetails && userDetails.municipality.title
+                  : !!userDetails && userDetails.municipality && userDetails.municipality.title
                   " :rules="[]" />
             </div>
           </div>
@@ -71,7 +78,8 @@
                 :value="!!project ? localForm.info.email : !!user && user.email" disable />
             </div>
             <div class="col-12">
-              <MunicipalityCities :currentMunicipality="localForm.info.location" @update:city="updateLocation" />
+              <MunicipalityCities :currentMunicipality="localForm.info.location" :is-required="true"
+                @update:city="updateLocation" />
             </div>
           </div>
         </div>
@@ -115,7 +123,7 @@
               </template>
             </template>
           </q-select>
-          <p class="font-16 q-mb-none q-mt-md text-grey">
+          <p class="font-16 q-mt-none q-mb-md text-grey">
             {{
               localForm.visibility === "only for me"
                 ? $t("visibility.docOnlyMe")
@@ -128,46 +136,6 @@
           </p>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12">
-          <q-separator class="bg-blue opacity-10" />
-        </div>
-      </div>
-      <div class="row items-baseline">
-        <div class="col-12 col-md-3 col-lg-2 col-xl-2">
-          <p class="font-16 no-margin">
-            {{ $t("newProjectIdeaForm.filterCategories") }}
-          </p>
-        </div>
-        <div class="col-12 col-md-9 col-lg-10 col-xl-10">
-          <Categories :requiresValidation="true" :editing="editingCategories" @update:category="updateCategories" />
-        </div>
-      </div>
-      <div class="row items-baseline">
-        <div class="col-12 col-md-3 col-lg-2 col-xl-2">
-          <p class="font-16 no-margin">{{ $t("Tags") }}</p>
-        </div>
-        <div class="col-12 col-md-9 col-lg-10 col-xl-10">
-          <Tags :requiresValidation="true" :editing="editingTags" @update:tag="updateTags" />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <q-separator class="bg-blue opacity-10" />
-        </div>
-      </div>
-      <div class="row items-center q-mb-md">
-        <div class="col-12 col-md-3 col-lg-2 col-xl-2">
-          <p class="font-16 no-margin">
-            {{ $t("newProjectIdeaForm.investive/non-investive") }}
-          </p>
-        </div>
-        <div class="col-12 col-md-9 col-lg-10 col-xl-10">
-          <q-btn-toggle v-model="localForm.details.investive" spread no-caps :rules="[(val) => !!val || $t('Required')]"
-            toggle-color="yellow" padding="12px 10px" color="transparent" toggle-text-color="black" text-color="black"
-            class="no-shadow toggleGap" :options="investiveNoninvestiveOptions" />
-        </div>
-      </div>
     </q-form>
   </q-expansion-item>
 </template>
@@ -175,18 +143,14 @@
 <script>
 import UserSelect from "components/user/UserSelect.vue";
 import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
-import Categories from "components/projects/create/Categories.vue";
-import Tags from "components/projects/create/Tags.vue";
 import { scroll } from "quasar";
 const { getScrollTarget, setScrollPosition } = scroll;
 export default {
   name: "ProjectGeneralInfo",
-  emits: ['update:form-data'],
+  emits: ['update:form-data', 'update:selected-municipality'],
   components: {
     UserSelect,
     MunicipalityCities,
-    Categories,
-    Tags,
   },
   props: {
     currentTab: {
@@ -213,32 +177,26 @@ export default {
           streetNo: "",
           postalCode: "",
         },
-        details: {
-          investive: true,
-        },
         municipality: "",
         editors: [],
-        categories: [],
-        tags: [],
       },
       isLoading: false,
       dataLoaded: true,
+      selectedLandkreisMunicipality: null,
     };
   },
   computed: {
     project() {
       return this.$store.getters["project/getProject"];
     },
+    needsMunicipalityPicker() {
+      return !this.project && !this.userDetails?.municipality && !!this.userDetails?.landkreis;
+    },
+    landkreisMunicipalityOptions() {
+      return this.userDetails?.landkreis?.municipalities || [];
+    },
 
     // Stable computed properties for child component props
-    editingCategories() {
-      return this.project?.categories || [];
-    },
-
-    editingTags() {
-      return this.project?.tags || [];
-    },
-
     editingEditors() {
       return this.project?.editors || [];
     },
@@ -258,12 +216,6 @@ export default {
         { label: this.$t("visibility.listedOnly"), value: "listed only" },
       ];
     },
-    investiveNoninvestiveOptions() {
-      return [
-        { label: this.$t("Investive"), value: true },
-        { label: this.$t("Non-Investive"), value: false },
-      ];
-    },
   },
   watch: {
     currentTab(newTab) {
@@ -280,12 +232,6 @@ export default {
     },
     updateEditors(editors) {
       this.localForm.editors = editors;
-    },
-    updateCategories(categories) {
-      this.localForm.categories = categories;
-    },
-    updateTags(tags) {
-      this.localForm.tags = tags;
     },
     async validateForm() {
       if (this.$refs.newProjectIdeaForm) {
@@ -312,13 +258,8 @@ export default {
           streetNo: formData.info?.streetNo || "",
           postalCode: formData.info?.postalCode || "",
         },
-        details: {
-          investive: typeof formData.details?.investive === 'boolean' ? formData.details.investive : true,
-        },
         municipality: formData.municipality || "",
         editors: formData.editors || [],
-        categories: formData.categories || [],
-        tags: formData.tags || [],
       };
     }
   },

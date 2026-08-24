@@ -48,8 +48,6 @@ export default {
       status: this.projectData.status !== undefined ? this.projectData.status : null,
       resetSteps: [
         { name: 'guidelineContentCheck', title: 'Guideline Check (Content)', icon: 'mdi-clipboard-check', done: true },
-        { name: 'guidelineFormCheck', title: 'Guideline Check (Formalities)', icon: 'mdi-format-list-checks', done: true },
-        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: true },
         { name: 'projectDocumentsCoordination', title: 'Project Documents Coordination', icon: 'mdi-file-document-multiple', done: true },
         { name: 'applicationDecision', title: 'Application Decision', icon: 'mdi-gavel', done: true },
         { name: 'submissionSigning', title: 'Submission & Signing', icon: 'mdi-file-sign', done: false }
@@ -122,10 +120,7 @@ export default {
 
     async submitSubmissionSigning() {
       if (this.status === null) {
-        this.$q.notify({
-          color: 'warning',
-          message: this.$t('projectComponents.submissionSigning.noSelectionError')
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "warning", title: this.$t('projectComponents.submissionSigning.noSelectionError') });
         return;
       }
 
@@ -155,16 +150,10 @@ export default {
 
         this.$emit("submissionSigning-submitted", this.status);
 
-        this.$q.notify({
-          color: 'positive',
-          message: this.$t('projectComponents.submissionSigning.successMessage')
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('projectComponents.submissionSigning.successMessage') });
       } catch (error) {
         console.error('Error submitting submission signing:', error);
-        this.$q.notify({
-          color: 'negative',
-          message: this.$t('projectComponents.submissionSigning.errorMessage')
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('projectComponents.submissionSigning.errorMessage') });
       }
     }
   }

@@ -103,6 +103,12 @@
                       <q-chip v-for="(tag, index) in tags" :key="index" square size="16px" color="yellow-10"
                         text-color="blue">
                         {{ tag.title }}
+                        <q-icon v-if="tag.status === 'pending'" name="hourglass_empty" size="14px" class="q-ml-xs">
+                          <q-tooltip>{{ $t("tagsSelector.pendingBadge") }}</q-tooltip>
+                        </q-icon>
+                        <q-icon v-else-if="tag.source === 'ai'" name="auto_awesome" size="14px" class="q-ml-xs">
+                          <q-tooltip>{{ $t("tagsSelector.aiGeneratedBadge") }}</q-tooltip>
+                        </q-icon>
                       </q-chip>
                     </div>
                   </div>
@@ -188,9 +194,12 @@ export default {
     },
     investiveText() {
       if (this.project.details) {
-        if (this.project.details.investive === true) {
+        const { investive, nonInvestive } = this.project.details;
+        if (investive === true && nonInvestive === true) {
+          return this.$t("newProjectIdeaForm.investiveBoth");
+        } else if (investive === true) {
           return this.$t("Investive");
-        } else if (this.project.details.investive === false) {
+        } else if (nonInvestive === true || investive === false) {
           return this.$t("Non-Investive");
         }
       }

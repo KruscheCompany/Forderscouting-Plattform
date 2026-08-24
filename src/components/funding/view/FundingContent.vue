@@ -300,12 +300,12 @@
                         <p class="font-16 text-blue-grey-10 q-mb-sm q-mt-xs"
                           v-html="sanitizeHtml(funding.provider || '')"></p>
                       </div>
-                      <div v-if="!!funding.info && funding.info.contactName">
+                      <div v-if="!!funding.info && (funding.info.contactFirstName || funding.info.contactLastName)">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-md">
                           {{ $t("Contact person") }}
                         </h4>
                         <p class="font-16 text-blue-grey-10 q-mb-sm q-mt-xs"
-                          v-html="sanitizeHtml(funding.info?.contactName || '')"></p>
+                          v-html="sanitizeHtml([funding.info?.contactFirstName, funding.info?.contactLastName].filter(Boolean).join(' '))"></p>
                       </div>
                       <div v-if="funding.editors && funding.editors.length > 0 && isAdmin">
                         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-md">
@@ -602,6 +602,12 @@
                           <q-chip v-for="(tag, index) in sortedTags" :key="index" square size="16px" color="yellow-10"
                             text-color="blue">
                             {{ tag.title }}
+                            <q-icon v-if="tag.status === 'pending'" name="hourglass_empty" size="14px" class="q-ml-xs">
+                              <q-tooltip>{{ $t("tagsSelector.pendingBadge") }}</q-tooltip>
+                            </q-icon>
+                            <q-icon v-else-if="tag.source === 'ai'" name="auto_awesome" size="14px" class="q-ml-xs">
+                              <q-tooltip>{{ $t("tagsSelector.aiGeneratedBadge") }}</q-tooltip>
+                            </q-icon>
                           </q-chip>
                         </div>
                       </div>
@@ -977,11 +983,7 @@ export default {
       const printContent = document.querySelector('.funding-print-template');
 
       if (!printContent) {
-        this.$q.notify({
-          type: 'negative',
-          message: 'Print content not found',
-          position: 'top'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('Print content not found') });
         return;
       }
 
@@ -1025,11 +1027,7 @@ export default {
       this.pdfIsLoading = false;
       this.$q.loading.hide();
       if (event && event.blobUrl) {
-        this.$q.notify({
-          color: 'positive',
-          message: this.$t('PDF generated successfully') || 'PDF generated successfully',
-          icon: 'check_circle'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('PDF generated successfully') || 'PDF generated successfully' });
       }
     }
   },

@@ -2,11 +2,16 @@
   <div>
     <!-- Project General Information -->
     <ProjectGeneralInfo ref="generalInfoRef" :current-tab="currentTab" :form-data="form"
-      @update:form-data="updateGeneralInfo" />
+      @update:form-data="updateGeneralInfo"
+      @update:selected-municipality="selectedLandkreisMunicipality = $event" />
 
     <!-- Project Content Details -->
     <ProjectContentDetails ref="contentDetailsRef" class="q-my-md" :current-tab="currentTab" :form-data="form"
       @update:form-data="updateContentDetails" />
+
+    <!-- Categories, Tags & Investive/Non-Investive -->
+    <ProjectCategorizationCreate ref="categorizationRef" :current-tab="currentTab" :form-data="form"
+      @update:form-data="updateCategorization" />
 
     <!-- Warning Dialog for Starting Condition Changes -->
     <StartingConditionWarningDialog :modelValue="showWarningDialog" :loading="isLoading"
@@ -17,6 +22,7 @@
 <script>
 import ProjectGeneralInfo from 'src/components/projects/create/ProjectGeneralInfo.vue';
 import ProjectContentDetails from 'src/components/projects/create/ProjectContentDetails.vue';
+import ProjectCategorizationCreate from 'src/components/projects/create/ProjectCategorizationCreate.vue';
 import StartingConditionWarningDialog from 'src/components/dialogs/StartingConditionWarningDialog.vue';
 import { scroll } from "quasar";
 
@@ -28,6 +34,7 @@ export default {
   components: {
     ProjectGeneralInfo,
     ProjectContentDetails,
+    ProjectCategorizationCreate,
     StartingConditionWarningDialog
   },
   props: {
@@ -56,6 +63,7 @@ export default {
           goals: "",
           valuesAndBenefits: "",
           investive: true,
+          nonInvestive: false,
           timeline: "",
           uploadsDescription: "",
         },
@@ -75,6 +83,7 @@ export default {
         media: null,
         files: null,
       },
+      selectedLandkreisMunicipality: null,
       resetSteps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
         { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: false },
@@ -99,12 +108,13 @@ export default {
   },
   methods: {
     updateGeneralInfo(data) {
-      this.form = { ...this.form, ...data };
+      this.form = { ...this.form, ...data, details: { ...this.form.details, ...data.details } };
     },
     updateContentDetails(data) {
-      const investive = JSON.parse(JSON.stringify(this.form.details.investive));
-      this.form = { ...this.form, ...data };
-      this.form.details.investive = investive;
+      this.form = { ...this.form, ...data, details: { ...this.form.details, ...data.details } };
+    },
+    updateCategorization(data) {
+      this.form = { ...this.form, ...data, details: { ...this.form.details, ...data.details } };
     },
     async getGeneralInfoData() {
       // Get the current localForm data from ProjectGeneralInfo component
@@ -120,19 +130,29 @@ export default {
       }
       return {};
     },
+    async getCategorizationData() {
+      // Get the current form data from ProjectCategorizationCreate component
+      if (this.$refs.categorizationRef && typeof this.$refs.categorizationRef.getCurrentFormData === 'function') {
+        return this.$refs.categorizationRef.getCurrentFormData();
+      }
+      return {};
+    },
     async validateForm() {
-      const [generalInfoValid, contentDetailsValid] = await Promise.all([
+      const [generalInfoValid, contentDetailsValid, categorizationValid] = await Promise.all([
         this.$refs.generalInfoRef.validateForm(),
-        this.$refs.contentDetailsRef.validateForm()
+        this.$refs.contentDetailsRef.validateForm(),
+        this.$refs.categorizationRef.validateForm()
       ]);
 
       if (!generalInfoValid) {
         this.scrollToInvalidElement(this.$refs.generalInfoRef);
       } else if (!contentDetailsValid) {
         this.scrollToInvalidElement(this.$refs.contentDetailsRef);
+      } else if (!categorizationValid) {
+        this.scrollToInvalidElement(this.$refs.categorizationRef);
       }
 
-      return generalInfoValid && contentDetailsValid;
+      return generalInfoValid && contentDetailsValid && categorizationValid;
     },
     scrollToInvalidElement(ref) {
       const el = ref.$el;
@@ -173,15 +193,22 @@ export default {
         // Get the latest data from child components before validation/submission
         const generalInfoData = await this.getGeneralInfoData();
         const contentDetailsData = await this.getContentDetailsData();
+        const categorizationData = await this.getCategorizationData();
 
         // Merge the latest data from child components
         this.form = {
           ...this.form,
           ...generalInfoData,
           ...contentDetailsData,
+          ...categorizationData,
+          details: {
+            ...this.form.details,
+            ...generalInfoData.details,
+            ...contentDetailsData.details,
+            ...categorizationData.details,
+          },
           fundingCheckSteps: steps
         };
-        this.form.details.investive = JSON.parse(JSON.stringify(generalInfoData.details.investive));
 
         // Check if we're editing and starting condition has changed
         if (this.editing && this.hasStartingConditionChanged(contentDetailsData)) {
@@ -217,6 +244,7 @@ export default {
           fundingCheckSteps: this.getResetSteps(),
         };
         this.form.details.investive = JSON.parse(JSON.stringify(this.form.details.investive));
+        this.form.details.nonInvestive = JSON.parse(JSON.stringify(this.form.details.nonInvestive));
 
         await this.performSubmission();
       } catch (error) {
@@ -255,6 +283,10 @@ export default {
         // All validations passed, prepare data for submission
         await this.checkOptionalParameters();
 
+        // Tags not yet created in the backend (id: null, from an AI suggestion) are only
+        // created now - at save/publish time - not the moment they're selected in the form.
+        this.form.tags = await this.$store.dispatch("tag/resolvePendingTags", this.form.tags);
+
         const projectData = {
           ...(this.editing ? this.project : {}),
           ...this.form,
@@ -272,12 +304,11 @@ export default {
             streetNo: this.userDetails.streetNo,
             postalCode: this.userDetails.postalCode,
           },
-          municipality: {
-            id: this.userDetails.municipality && this.userDetails.municipality.id,
-          },
-          owner: {
-            id: this.user && this.user.id,
-          },
+          municipality:
+            (this.userDetails.municipality && this.userDetails.municipality.id) ||
+            this.selectedLandkreisMunicipality ||
+            null,
+          owner: (this.user && this.user.id) || null,
         };
 
         // Submit to store
@@ -297,11 +328,7 @@ export default {
         // Check if the response indicates success
         if (res && res.data && projectId) {
           // Handle success (redirect, show notification, etc.)
-          this.$q.notify({
-            color: 'positive',
-            message: this.$t('Project successfully created'),
-            icon: 'check'
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('Project successfully created') });
 
           // Emit event to parent with project data
           this.$emit('project-created', {
@@ -312,11 +339,7 @@ export default {
 
         } else if (this.editing) {
           // For editing, success might not return data but still be successful
-          this.$q.notify({
-            color: 'positive',
-            message: this.$t('Project successfully updated'),
-            icon: 'check'
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('Project successfully updated') });
 
           // Emit event to parent with project data
           this.$emit('project-created', {
@@ -339,11 +362,7 @@ export default {
         }
 
         // Show notification about validation errors
-        this.$q.notify({
-          color: 'negative',
-          message: this.$t('Please fix the highlighted errors before submitting'),
-          icon: 'error'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('Please fix the highlighted errors before submitting') });
       }
 
       this.startingConditionReset = false;
@@ -379,11 +398,7 @@ export default {
         errorMessage = error.message || this.$t('Error creating project');
       }
 
-      this.$q.notify({
-        color: 'negative',
-        message: errorMessage,
-        icon: 'error'
-      });
+      this.$store.dispatch("notifications/pushToast", { kind: "negative", title: errorMessage });
 
       this.isLoading = false;
     },
@@ -404,6 +419,7 @@ export default {
         };
         this.$refs.generalInfoRef.setData(this.form);
         this.$refs.contentDetailsRef.setData(this.form);
+        this.$refs.categorizationRef.setData(this.form);
       } else {
         // New project mode
         this.editing = false;

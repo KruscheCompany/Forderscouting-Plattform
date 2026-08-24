@@ -32,16 +32,20 @@ export default function({ store } /* { ssrContext } */) {
   });
 
   Router.beforeEach((to, from, next) => {
-    // console.log("to", to);
-    // console.log("from", from);
-    // console.log("next", next);
-    // console.log("store", store);
+    if (store.state.general.maintenanceEnabled && to.name !== "Maintenance") {
+      next({ name: "Maintenance" });
+      return;
+    }
+    if (!store.state.general.maintenanceEnabled && to.name === "Maintenance") {
+      next({ path: "/" });
+      return;
+    }
     if (
       to.matched.some(record => record.meta.requireAuth) &&
       !store.getters["userCenter/isSignedIn"]
     ) {
       console.error("You need to be signed in");
-      next({ path: "/" });
+      next({ name: "Login" });
     } else {
       next();
     }

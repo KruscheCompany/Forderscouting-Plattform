@@ -25,54 +25,123 @@
         </q-banner>
       </div>
 
-      <div class="row q-col-gutter-sm q-pa-md">
-        <div class="col-12 col-sm-6 col-md-3 col-lg-3" v-for="(funding, index) in fundingMatches" :key="index">
-          <div class="funding-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
-            :class="{ 'selected': selectedCards.includes(index) }"
-            :style="!selectedCards.includes(index) ? getFundingCardStyle(funding.score) : {}" @click="toggleCard(index)"
-            @mouseenter="hoveredCard = index" @mouseleave="hoveredCard = null">
-
-            <!-- Card content with flex layout -->
-            <div class="card-content">
-              <!-- Top row with index and link button -->
-              <div class="row items-center justify-between q-mb-sm">
-                <div class="col">
-                  <div class="row items-center">
-                    <div class="funding-index text-weight-bold q-mr-sm" :style="{
-                      color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white',
-                      background: !selectedCards.includes(index)
-                        ? (getFundingCardStyle(funding.score).color === 'white' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)')
-                        : 'rgba(255,255,255,0.15)'
-                    }">
-                      {{ index + 1 }}
-                    </div>
-                    <div class="funding-score text-weight-bold">
-                      <q-icon name="star" size="16px" class="q-mr-xs" color="amber" />
-                      {{ (funding.score * 100).toFixed(2) }}%
-                    </div>
-                  </div>
-                </div>
-                <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
-                  :style="{ color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white' }"
-                  @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
-                  :disabled="!funding.external_id" />
-              </div>
-
-              <!-- Spacer to push title to bottom -->
-              <div class="flex-spacer"></div>
-
-              <!-- Title at bottom -->
-              <div class="funding-title font-16 text-weight-medium q-mb-md">
-                {{ funding.title.length > 72 ? funding.title.substring(0, 72) + '...' : funding.title }}
-                <q-tooltip v-if="funding.title && funding.title.length > 72" anchor="bottom left" self="top left"
-                  content-style="font-size: 14px; max-width: 300px; white-space: normal;">
-                  {{ funding.title }}
-                </q-tooltip>
-              </div>
+      <!-- New AI funding suggestion - reviewed one at a time (Accept/Ignore) -->
+      <div v-if="currentSuggestion" class="q-pa-md">
+        <div class="suggestion-review-card">
+          <div class="suggestion-review-icon">
+            <q-icon name="auto_awesome" size="16px" />
+          </div>
+          <div class="suggestion-review-body">
+            <div class="row items-center q-gutter-x-sm">
+              <span class="suggestion-review-title">{{ $t('projectComponents.fundingCheck.newSuggestionTitle') }}</span>
+              <span class="suggestion-score-chip">★ {{ (currentSuggestion.score * 100).toFixed(2) }}% {{ $t('projectComponents.fundingCheck.match') }}</span>
+              <span class="suggestion-rank-hint">{{ $t('projectComponents.fundingCheck.suggestionRankHint', { rank: currentSuggestionRank, total: suggestionTotalAfter }) }}</span>
+              <span class="suggestion-counter">{{ suggestionCounterText }}</span>
+            </div>
+            <div class="suggestion-funding-title">{{ currentSuggestion.title }}</div>
+            <div class="suggestion-reasoning" v-if="currentSuggestion.reasoning">{{ currentSuggestion.reasoning }}</div>
+            <div class="row items-center q-gutter-sm q-mt-sm">
+              <q-btn unelevated color="primary" no-caps
+                :label="$t('projectComponents.fundingCheck.acceptSuggestion')" icon="check"
+                class="suggestion-accept-btn" @click="acceptSuggestion" />
+              <q-btn outline no-caps :label="$t('projectComponents.fundingCheck.ignoreSuggestion')"
+                class="suggestion-ignore-btn" @click="showIgnoreDialog = true" />
+              <a v-if="currentSuggestion.external_id" href="#" class="suggestion-view-link"
+                @click.prevent="openFundingLink(currentSuggestion.external_id)">
+                {{ $t('projectComponents.fundingCheck.viewGuideline') }} ↗
+              </a>
             </div>
           </div>
         </div>
+      </div>
 
+      <!-- Inline undo bar after accepting/ignoring a suggestion -->
+      <div v-if="suggestionUndo" class="q-mx-md q-mt-md">
+        <div class="suggestion-undo-bar">
+          <span>{{ suggestionUndo.text }}</span>
+          <span v-if="suggestionUndo.undoable" class="suggestion-undo-link" @click="undoSuggestionAction">{{ $t('projectComponents.fundingCheck.undo') }}</span>
+        </div>
+      </div>
+
+      <!-- One-time hint: drag&drop reordering is not obvious without it -->
+      <div v-if="showDragHint" class="drag-hint-bar q-mx-md q-mt-md">
+        <q-icon name="drag_indicator" size="18px" />
+        <span>{{ $t('projectComponents.fundingCheck.dragHint') }}</span>
+        <q-icon name="close" size="16px" class="drag-hint-close" @click="dismissDragHint" />
+      </div>
+
+      <!-- Confirm dialog for permanently ignoring a suggestion -->
+      <StartingConditionWarningDialog :modelValue="showIgnoreDialog"
+        :title="$t('projectComponents.fundingCheck.ignoreDialogTitle')"
+        :detail="$t('projectComponents.fundingCheck.ignoreDialogDetail')" action=""
+        :confirmLabel="$t('projectComponents.fundingCheck.ignoreSuggestion')" confirmColor="negative"
+        @confirm="ignoreSuggestion" @cancel="showIgnoreDialog = false" />
+
+      <draggable v-model="visibleOrderedMatches" handle=".funding-drag-handle" :disabled="isRefreshing"
+        @change="onDragChange">
+        <!-- vuedraggable requires a transition-group (not tag/footer-slot) to animate enter/reorder -->
+        <transition-group name="funding-card-anim" tag="div" appear class="row q-col-gutter-sm q-px-md q-pt-md">
+          <div class="col-12 col-sm-6 col-md-3 col-lg-3" v-for="(funding, index) in visibleOrderedMatches"
+            :key="funding.external_id || funding.title"
+            :style="{ '--funding-enter-delay': (150 + Math.max(0, index - enterDelayBase) * 90) + 'ms' }">
+            <div class="funding-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
+              :class="{ 'selected': selectedCards.includes(index), 'suggestion-added': funding.isSuggestion }"
+              :style="!selectedCards.includes(index) ? getFundingCardStyle(funding.score) : {}"
+              @click="toggleCard(index)" @mouseenter="hoveredCard = index" @mouseleave="hoveredCard = null">
+
+              <!-- Card content with flex layout -->
+              <div class="card-content">
+                <!-- Top row with index and link button -->
+                <div class="row items-center justify-between q-mb-sm">
+                  <div class="col">
+                    <div class="row items-center">
+                      <div class="funding-index text-weight-bold q-mr-sm" :style="{
+                        color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white',
+                        background: !selectedCards.includes(index)
+                          ? (getFundingCardStyle(funding.score).color === 'white' ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.7)')
+                          : 'rgba(255,255,255,0.15)'
+                      }">
+                        {{ index + 1 }}
+                      </div>
+                      <div class="funding-score text-weight-bold">
+                        <q-icon name="star" size="16px" class="q-mr-xs" />
+                        {{ (funding.score * 100).toFixed(2) }}%
+                      </div>
+                      <span v-if="funding.isSuggestion" class="suggestion-added-badge q-ml-xs" :style="{
+                        color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white',
+                        background: !selectedCards.includes(index)
+                          ? (getFundingCardStyle(funding.score).color === 'white' ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.7)')
+                          : 'rgba(255,255,255,0.15)'
+                      }">{{ $t('projectComponents.fundingCheck.addedBadge') }}</span>
+                    </div>
+                  </div>
+                  <q-icon name="mdi-drag-vertical" size="20px" class="funding-drag-handle q-mr-xs"
+                    :style="{ color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white' }"
+                    :title="$t('projectComponents.fundingCheck.dragToReorder')" @click.stop />
+                  <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
+                    :style="{ color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white' }"
+                    @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
+                    :disabled="!funding.external_id" />
+                </div>
+
+                <!-- Spacer to push title to bottom -->
+                <div class="flex-spacer"></div>
+
+                <!-- Title at bottom -->
+                <div class="funding-title font-16 text-weight-medium q-mb-md">
+                  {{ funding.title.length > 72 ? funding.title.substring(0, 72) + '...' : funding.title }}
+                  <q-tooltip v-if="funding.title && funding.title.length > 72" anchor="bottom left" self="top left"
+                    content-style="font-size: 14px; max-width: 300px; white-space: normal;">
+                    {{ funding.title }}
+                  </q-tooltip>
+                </div>
+              </div>
+            </div>
+          </div>
+        </transition-group>
+      </draggable>
+
+      <div class="row q-col-gutter-sm q-px-md q-pb-md q-mt-md">
         <!-- Refresh Card -->
         <div class="col-12 col-sm-6 col-md-3 col-lg-3">
           <div class="refresh-card shadow-0 radius-20 q-pl-md q-pt-sm q-pb-md q-pr-sm cursor-pointer transition-all"
@@ -124,6 +193,12 @@
         </div>
       </div>
 
+      <!-- Show More -->
+      <div v-if="canShowMore" class="row justify-center q-pb-md">
+        <q-btn flat color="primary" icon="expand_more" :label="$t('projectComponents.fundingCheck.showMore')"
+          @click="showMoreMatches" />
+      </div>
+
       <!-- Funding Comparison Section Component -->
       <FundingComparisonSection :selectedCards="selectedCards" :projectData="projectData" />
 
@@ -137,6 +212,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import draggable from 'vuedraggable';
 import StartingConditionWarningDialog from 'src/components/dialogs/StartingConditionWarningDialog.vue';
 import FundingComparisonSection from 'src/components/projects/create/FundingComparisonSection.vue';
 
@@ -144,7 +220,8 @@ export default {
   name: "ProjectFundingCheckCreate",
   components: {
     StartingConditionWarningDialog,
-    FundingComparisonSection
+    FundingComparisonSection,
+    draggable
   },
   props: {
     currentTab: {
@@ -167,11 +244,22 @@ export default {
       selectedCards: [], // Array to store multiple selected cards
       selectedFunding: null,
       hoveredCard: null,
+      orderedMatches: [], // fundingMatches, reorderable via drag&drop
+      visibleCount: 12,
+      topSetSize: 12,
+      enterDelayBase: 0, // count of tiles already visible before the most recent reveal, so stagger delay resets per batch instead of growing forever
       isRefreshing: false,
       isSubmitting: false,
       showWarningDialog: false,
       isLoading: false,
       pendingFundingData: null, // Store data to submit after warning confirmation
+      pendingSuggestions: [], // Unread AI funding-suggestions for this project (webhook-driven, separate from live AI-proxy matches), reviewed one at a time
+      suggestionIndex: 0, // Position of the suggestion currently shown for review in pendingSuggestions
+      suggestionUndo: null, // { type: 'accepted'|'ignored', text, undoable, insertedAt } - drives the inline undo bar
+      showIgnoreDialog: false,
+      // localStorage write is a no-op without preference-cookie consent (see boot/localStorage-guard.js),
+      // so the hint simply reappears each visit for those users instead of tracking dismissal any other way
+      dragHintDismissed: localStorage.getItem('fundingCardDragHintSeen') === 'true',
       resetSteps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
         { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: true },
@@ -194,9 +282,14 @@ export default {
       return this.userDetails?.municipality || null;
     },
 
-    // Get user's federal states from municipality
+    // Get user's landkreis (mutually exclusive with municipality)
+    userLandkreis() {
+      return this.userDetails?.landkreis || null;
+    },
+
+    // Get user's federal states from municipality or landkreis
     userFederalStates() {
-      return this.userMunicipality?.federalStates || [];
+      return this.userMunicipality?.federalStates || this.userLandkreis?.federalStates || [];
     },
 
     // Get all fundings from store
@@ -210,7 +303,7 @@ export default {
 
     // Check if user has required data
     userDataValidation() {
-      const hasMunicipality = !!this.userMunicipality;
+      const hasMunicipality = !!this.userMunicipality || !!this.userLandkreis;
       const hasFederalStates = this.userFederalStates && this.userFederalStates.length > 0;
 
       return {
@@ -248,6 +341,43 @@ export default {
     isLoadingMatches() {
       return this.getLoadingFundingMatches || false;
     },
+
+    // Suggestion currently shown for review (Accept/Ignore), one at a time
+    currentSuggestion() {
+      return this.pendingSuggestions[this.suggestionIndex] || null;
+    },
+    // Where this suggestion would land in the grid if accepted, for the "would rank #N of M" preview
+    currentSuggestionRank() {
+      if (!this.currentSuggestion) return 0;
+      const higherScored = this.orderedMatches.filter(m => m.score > this.currentSuggestion.score).length;
+      return higherScored + 1;
+    },
+    suggestionTotalAfter() {
+      return this.orderedMatches.length + 1;
+    },
+    suggestionCounterText() {
+      return this.$t('projectComponents.fundingCheck.suggestionCounter', {
+        position: this.suggestionIndex + 1,
+        total: this.pendingSuggestions.length
+      });
+    },
+
+    // Visible slice of orderedMatches, writable so vuedraggable can reorder it in place
+    visibleOrderedMatches: {
+      get() {
+        return this.orderedMatches.slice(0, this.visibleCount);
+      },
+      set(newVal) {
+        this.orderedMatches.splice(0, this.visibleCount, ...newVal);
+      }
+    },
+
+    canShowMore() {
+      return this.visibleCount < this.orderedMatches.length;
+    },
+    showDragHint() {
+      return !this.dragHintDismissed && this.visibleOrderedMatches.length > 1;
+    },
     // Computed property to get the originally selected funding indices
     originalSelectedFundingIndices() {
       if (!this.projectData.fundingMatches || this.projectData.fundingMatches.length === 0) {
@@ -271,29 +401,49 @@ export default {
 
       return selectedIndices;
     },
+    // Stable (external_id-based) identity of the originally saved selection, so that a card
+    // moving position (drag reorder, or a new suggestion inserted ahead of it) never reads as
+    // a selection change - only actually selecting/deselecting a funding should.
+    originalSelectedFundingKeys() {
+      const keys = new Set();
+      (this.projectData.fundingMatches || []).forEach(funding => {
+        if (funding.selected) {
+          keys.add(funding.isFehlanzeige ? 'fehlanzeige' : String(funding.external_id));
+        }
+      });
+      return keys;
+    },
+    currentSelectedFundingKeys() {
+      const keys = new Set();
+      this.selectedCards.forEach(index => {
+        if (index === 'fehlanzeige') {
+          keys.add('fehlanzeige');
+          return;
+        }
+        const funding = this.orderedMatches[index];
+        if (funding) {
+          keys.add(String(funding.external_id));
+        }
+      });
+      return keys;
+    },
     // Check if user has changed their funding selection
     hasFundingSelectionChanged() {
-      const originalIndices = this.originalSelectedFundingIndices;
+      const originalKeys = this.originalSelectedFundingKeys;
 
       // If no original selection exists, this is a first-time selection (not a change)
-      if (originalIndices.length === 0) {
+      if (originalKeys.size === 0) {
         return false;
       }
 
-      // If lengths differ, there's definitely a change
-      if (originalIndices.length !== this.selectedCards.length) {
+      const currentKeys = this.currentSelectedFundingKeys;
+
+      if (originalKeys.size !== currentKeys.size) {
         return true;
       }
 
-      // Check if all original selections are still selected and no new ones added
-      for (const index of originalIndices) {
-        if (!this.selectedCards.includes(index)) {
-          return true;
-        }
-      }
-
-      for (const index of this.selectedCards) {
-        if (!originalIndices.includes(index)) {
+      for (const key of originalKeys) {
+        if (!currentKeys.has(key)) {
           return true;
         }
       }
@@ -305,6 +455,19 @@ export default {
     isFirstTimeFundingSelection() {
       const originalIndices = this.originalSelectedFundingIndices;
       return originalIndices.length === 0 && this.selectedCards.length > 0;
+    },
+    // True when the candidate pool itself differs from what's saved (e.g. an accepted
+    // suggestion sitting unselected) - independent of whether the *selection* changed, so
+    // accepting a suggestion still gets persisted at submit even without triggering the
+    // reset warning (that warning is about changed selections, not a changed candidate pool)
+    hasUnpersistedGridChanges() {
+      const savedIds = new Set((this.projectData.fundingMatches || []).map(f => String(f.external_id || f.title)));
+      const currentIds = new Set(this.orderedMatches.map(f => String(f.external_id || f.title)));
+      if (savedIds.size !== currentIds.size) return true;
+      for (const id of currentIds) {
+        if (!savedIds.has(id)) return true;
+      }
+      return false;
     },
     funding() {
       return this.$store.state.funding.funding;
@@ -323,21 +486,18 @@ export default {
       }
     },
 
-    // Watch for changes in funding matches to show error if no matches
+    // Watch for changes in funding matches to show error if no matches, and re-seed
+    // orderedMatches for drag&drop (see syncOrderedMatches)
     fundingMatches(newMatches) {
+      const matches = newMatches || [];
+
       if (this.expandedFundingCheck && this.userDataValidation.isValid &&
         this.getFundingMatches && this.getFundingMatches.length > 0 &&
-        newMatches.length === 0) {
-        this.$q.notify({
-          color: 'warning',
-          textColor: 'black',
-          iconColor: 'black',
-          message: this.$t('projectComponents.fundingCheck.noMatchingFundings'),
-          icon: 'info',
-          position: 'top',
-          timeout: 5000
-        });
+        matches.length === 0) {
+        this.$store.dispatch("notifications/pushToast", { kind: "warning", title: this.$t('projectComponents.fundingCheck.noMatchingFundings') });
       }
+
+      this.syncOrderedMatches(matches);
     },
 
     // Watch for changes in originalSelectedFundingIndices to set initial selections
@@ -366,7 +526,7 @@ export default {
     // Filter fundings by user's municipality and federal states
     filterFundingsByUserData(aiMatches) {
       if (this.isAdmin) {
-        return aiMatches.slice(0, 12);
+        return aiMatches;
       }
       const userFederalStateIds = this.userFederalStates.map(fs => fs.id);
 
@@ -396,19 +556,13 @@ export default {
           fundingFederalStates.some(fundingFs => fundingFs.id === userFsId)
         );
         return hasAllFederalStatesMatch;
-      }).slice(0, 12);
+      });
     },
 
     // Show error notification if user data is invalid
     showUserDataError() {
       if (!this.userDataValidation.isValid) {
-        this.$q.notify({
-          color: 'negative',
-          message: this.userDataValidation.errorMessage,
-          icon: 'warning',
-          position: 'top',
-          timeout: 5000
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.userDataValidation.errorMessage });
       }
     },
 
@@ -459,12 +613,15 @@ export default {
 
       try {
         // Check if projectData has the required data
-        if (!startingCondition || !goals || !content || !valuesAndBenefits || !financialPlan || !financialPlan.costAndFinance) {
-          this.$q.notify({
-            color: 'negative',
-            message: this.$t('projectComponents.fundingCheck.noProjectData'),
-            icon: 'warning'
-          });
+        const missingFields = [];
+        if (!startingCondition) missingFields.push(this.$t('newProjectIdeaForm.projectStartingCondition'));
+        if (!goals) missingFields.push(this.$t('newProjectIdeaForm.projectGoals'));
+        if (!content) missingFields.push(this.$t('newProjectIdeaForm.projectContent'));
+        if (!valuesAndBenefits) missingFields.push(this.$t('newProjectIdeaForm.projectValue&Benefits'));
+        if (!financialPlan || !financialPlan.costAndFinance) missingFields.push(this.$t('newProjectIdeaForm.financialPlan'));
+
+        if (missingFields.length > 0) {
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('projectComponents.fundingCheck.noProjectDataFields', { fields: missingFields.join(', ') }) });
           return;
         }
 
@@ -478,19 +635,11 @@ export default {
           finances
         });
 
-        this.$q.notify({
-          color: 'positive',
-          message: this.$t('projectComponents.fundingCheck.successRefresh'),
-          icon: 'check'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('projectComponents.fundingCheck.successRefresh') });
 
       } catch (error) {
         console.error('Error refreshing funding matches:', error);
-        this.$q.notify({
-          color: 'negative',
-          message: this.$t('projectComponents.fundingCheck.errorRefresh'),
-          icon: 'error'
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('projectComponents.fundingCheck.errorRefresh') });
       } finally {
         this.isRefreshing = false;
         this.isLoading = false;
@@ -512,6 +661,100 @@ export default {
       this.showWarningDialog = false;
       this.isLoading = false;
       this.pendingFundingData = null;
+    },
+
+    // Fetch unread webhook-driven funding-suggestions for this project (separate
+    // from the live AI-proxy matches in getFundingMatches), reviewed one at a time
+    async fetchPendingSuggestions() {
+      if (!this.createdProjectId) return;
+      try {
+        const response = await this.$api.get(`/api/projects/${this.createdProjectId}/funding-suggestions`);
+        this.pendingSuggestions = response.data || [];
+        this.suggestionIndex = 0;
+        this.suggestionUndo = null;
+      } catch (error) {
+        console.error('Error fetching funding suggestions:', error);
+      }
+    },
+
+    // Inserts the suggestion into the grid sorted by score, unselected - it only becomes
+    // part of the submitted selection if the user explicitly picks it, same as any other card
+    acceptSuggestion() {
+      const suggestion = this.currentSuggestion;
+      if (!suggestion) return;
+
+      const alreadyInGrid = this.orderedMatches.some(match => String(match.external_id) === String(suggestion.external_id));
+      if (alreadyInGrid) {
+        this.advanceSuggestionQueue();
+        return;
+      }
+
+      const newMatch = {
+        title: suggestion.title,
+        score: suggestion.score,
+        external_id: suggestion.external_id,
+        reasoning: suggestion.reasoning,
+        isSuggestion: true
+      };
+
+      let insertAt = this.orderedMatches.findIndex(match => match.score < newMatch.score);
+      if (insertAt === -1) insertAt = this.orderedMatches.length;
+
+      this.orderedMatches.splice(insertAt, 0, newMatch);
+      // Shift any already-selected cards that now sit one position later
+      this.selectedCards = this.selectedCards.map(index => (index !== 'fehlanzeige' && index >= insertAt) ? index + 1 : index);
+
+      this.suggestionUndo = {
+        type: 'accepted',
+        text: this.$t('projectComponents.fundingCheck.suggestionAcceptedUndo'),
+        undoable: true,
+        insertedAt: insertAt
+      };
+      this.advanceSuggestionQueue();
+    },
+
+    // Persists the ignore immediately (see funding-suggestion.status on the BE) so it's
+    // counted correctly in stats and never resurfaces, independent of this step's final submit
+    async ignoreSuggestion() {
+      this.showIgnoreDialog = false;
+      const suggestion = this.currentSuggestion;
+      if (!suggestion) return;
+
+      try {
+        await this.$api.patch(`/api/projects/${this.createdProjectId}/funding-suggestions/${suggestion.id}/ignore`);
+      } catch (error) {
+        console.error('Error ignoring funding suggestion:', error);
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('projectComponents.fundingCheck.errorIgnoreSuggestion') });
+        return;
+      }
+
+      this.suggestionUndo = {
+        type: 'ignored',
+        text: this.$t('projectComponents.fundingCheck.suggestionIgnoredUndo'),
+        undoable: false // already persisted server-side, nothing local left to undo
+      };
+      this.advanceSuggestionQueue();
+    },
+
+    advanceSuggestionQueue() {
+      this.suggestionIndex += 1;
+    },
+
+    // Local-only: pulls an accepted card back out of the grid, or just re-shows an ignored
+    // suggestion (its BE status was already flipped and stays as-is)
+    undoSuggestionAction() {
+      if (!this.suggestionUndo || !this.suggestionUndo.undoable) return;
+
+      if (this.suggestionUndo.type === 'accepted') {
+        const at = this.suggestionUndo.insertedAt;
+        this.orderedMatches.splice(at, 1);
+        this.selectedCards = this.selectedCards
+          .filter(index => index !== at)
+          .map(index => (index !== 'fehlanzeige' && index > at) ? index - 1 : index);
+      }
+
+      this.suggestionIndex -= 1;
+      this.suggestionUndo = null;
     },
 
     async performFundingUpdate(fundingMatchesWithSelection, nullifyQuestions = false) {
@@ -599,13 +842,56 @@ export default {
     },
     // Get funding matches with selection status property
     getFundingMatchesWithSelection() {
-      const matches = this.fundingMatches || [];
+      const matches = this.orderedMatches || [];
 
       // Add selected property to all funding matches
       return matches.map((funding, index) => ({
         ...funding,
         selected: this.selectedCards.includes(index)
       }));
+    },
+
+    // Re-seed orderedMatches/visibleCount only when the underlying set of matches actually
+    // changes (e.g. after a refresh) - not on every reactive recompute, so a drag isn't lost
+    syncOrderedMatches(matches) {
+      const list = matches || [];
+      const newIds = new Set(list.map(f => f.external_id || f.title));
+      // Exclude accepted-but-unsaved suggestions from the comparison - they aren't part of
+      // the AI-proxy match list, so their presence shouldn't be read as "the set changed"
+      // and cause an in-flight accepted suggestion to be silently wiped out.
+      const currentIds = new Set(this.orderedMatches.filter(f => !f.isSuggestion).map(f => f.external_id || f.title));
+      const sameSet = newIds.size === currentIds.size && [...newIds].every(id => currentIds.has(id));
+      if (!sameSet) {
+        this.orderedMatches = [...list];
+        this.visibleCount = Math.min(this.topSetSize, list.length);
+        this.enterDelayBase = 0;
+      }
+    },
+
+    dismissDragHint() {
+      this.dragHintDismissed = true;
+      localStorage.setItem('fundingCardDragHintSeen', 'true');
+    },
+
+    showMoreMatches() {
+      this.enterDelayBase = this.visibleCount;
+      this.visibleCount = Math.min(this.visibleCount + 4, this.orderedMatches.length);
+    },
+
+    // Keep selectedCards pointing at the same tiles after a drag reorder
+    onDragChange(evt) {
+      const moved = evt && evt.moved;
+      if (!moved || moved.oldIndex === moved.newIndex) {
+        return;
+      }
+      const { oldIndex, newIndex } = moved;
+      this.selectedCards = this.selectedCards.map(index => {
+        if (index === 'fehlanzeige') return index;
+        if (index === oldIndex) return newIndex;
+        if (oldIndex < newIndex && index > oldIndex && index <= newIndex) return index - 1;
+        if (oldIndex > newIndex && index >= newIndex && index < oldIndex) return index + 1;
+        return index;
+      });
     },
     async submitFundingCheck() {
       this.isSubmitting = true;
@@ -617,11 +903,7 @@ export default {
         const hasSelection = fundingMatchesWithSelection.some(funding => funding.selected) || this.selectedCards.includes('fehlanzeige');
 
         if (!hasSelection) {
-          this.$q.notify({
-            color: 'negative',
-            message: this.$t('projectComponents.fundingCheck.pleaseSelect'),
-            icon: 'warning'
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t('projectComponents.fundingCheck.pleaseSelect') });
           return;
         }
 
@@ -650,6 +932,13 @@ export default {
           return;
         }
 
+        // Selection itself is unchanged, but the candidate pool is (e.g. an accepted
+        // suggestion sitting unselected) - persist silently, no reset warning needed
+        if (this.hasUnpersistedGridChanges) {
+          await this.performFundingUpdate(fundingMatchesWithSelection);
+          return;
+        }
+
         // If no changes and not first-time, just emit without API call
         this.$emit('funding-submitted', {
           fundingMatches: fundingMatchesWithSelection,
@@ -669,6 +958,11 @@ export default {
     },
   },
 
+  created() {
+    // Seed orderedMatches/visibleCount for drag&drop and the "show more" reveal
+    this.syncOrderedMatches(this.fundingMatches);
+  },
+
   mounted() {
     // Load all fundings when component mounts
     this.$store.dispatch('funding/getFundings');
@@ -677,11 +971,183 @@ export default {
     if (this.expandedFundingCheck && !this.userDataValidation.isValid) {
       this.showUserDataError();
     }
+
+    this.fetchPendingSuggestions();
   }
 };
 </script>
 
 <style lang="scss" scoped>
+// New AI funding suggestion - reviewed one at a time (Accept/Ignore)
+.suggestion-review-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #f2f5fb;
+  border: 1px solid #dbe3f5;
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+
+.suggestion-review-icon {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  border-radius: 8px;
+  background: #1b2a78;
+  color: #f2ec4a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.suggestion-review-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.suggestion-review-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1b2a78;
+}
+
+.suggestion-score-chip {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #4759c4;
+  background: #e6ebfa;
+  border-radius: 5px;
+  padding: 3px 8px;
+}
+
+.suggestion-rank-hint {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.suggestion-counter {
+  margin-left: auto;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.suggestion-funding-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-top: 8px;
+  color: #1f2937;
+}
+
+.suggestion-reasoning {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #6b7280;
+  margin-top: 6px;
+  max-width: 900px;
+}
+
+.suggestion-accept-btn {
+  height: 34px;
+  min-height: 34px;
+  padding: 0 16px !important;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+
+  ::v-deep .q-icon {
+    font-size: 15px;
+  }
+
+  &:hover {
+    background: #152163 !important;
+  }
+}
+
+.suggestion-ignore-btn {
+  height: 34px;
+  min-height: 34px;
+  padding: 0 14px !important;
+  margin-right: 8px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  border-color: #d7dced;
+  color: #4b5563;
+
+  &:hover {
+    border-color: #b9c2e0;
+    color: #1b2a78;
+  }
+}
+
+.suggestion-view-link {
+  margin-left: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #3b5bdb;
+  text-decoration: none;
+
+  &:hover {
+    color: #1b2a78;
+  }
+}
+
+.suggestion-undo-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f7f8fa;
+  border: 1px solid #eef0f4;
+  border-radius: 8px;
+  padding: 11px 16px;
+  font-size: 12.5px;
+  color: #6b7280;
+}
+
+.suggestion-undo-link {
+  margin-left: auto;
+  font-weight: 700;
+  color: #3b5bdb;
+  cursor: pointer;
+}
+
+.suggestion-added-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 2px 5px;
+  white-space: nowrap;
+}
+
+.drag-hint-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f7f8fa;
+  border-radius: 8px;
+  padding: 11px 16px;
+  font-size: 12.5px;
+  color: #6b7280;
+
+  .q-icon:first-child {
+    color: #9ca3af;
+  }
+
+  .drag-hint-close {
+    margin-left: auto;
+    color: #9ca3af;
+    cursor: pointer;
+  }
+}
+
+.funding-card.suggestion-added {
+  box-shadow: 0 0 0 2px #4759c4;
+}
+
 .funding-card {
   background: transparent;
   min-height: 160px;
@@ -759,6 +1225,20 @@ export default {
   }
 }
 
+.funding-drag-handle {
+  cursor: grab;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
 .funding-title {
   font-size: 14px;
   line-height: 1.3;
@@ -783,6 +1263,22 @@ export default {
 
 .transition-all {
   transition: all 0.2s ease;
+}
+
+// Staggered fade+slide-in for funding cards (initial reveal & "show more"),
+// delay per card comes from --funding-enter-delay set on each v-for item
+.funding-card-anim-enter {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.funding-card-anim-enter-active {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition-delay: var(--funding-enter-delay, 0ms);
+}
+
+.funding-card-anim-move {
+  transition: transform 0.3s ease;
 }
 
 // Refresh Card Styles

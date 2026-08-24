@@ -8,7 +8,7 @@
           {{ $t('projectComponents.guidelineContentCheck.description') }}
         </h4>
         <q-banner rounded class="bg-grey-3 font-16">
-          <p class="q-my-sm text-block" v-html="guidelineContentCheckText"></p>
+          <p class="q-my-sm text-block" v-html="sanitizeHtml(guidelineCheckText)"></p>
         </q-banner>
       </q-card-section>
     </q-expansion-item>
@@ -16,8 +16,11 @@
 </template>
 
 <script>
+import htmlSanitizer from 'src/mixins/htmlSanitizer.js';
+
 export default {
   name: "ProjectGuidelineContentCheck",
+  mixins: [htmlSanitizer],
   props: {
     project: {
       type: Object,
@@ -35,15 +38,19 @@ export default {
     };
   },
   computed: {
-    guidelineContentCheckText() {
-      return this.project && this.project.details && this.project.details.guidelineContentCheck
-        ? this.project.details.guidelineContentCheck
+    guidelineCheckText() {
+      const raw = this.project && this.project.details && this.project.details.guidelineCheck
+        ? this.project.details.guidelineCheck
         : this.$t('projectComponents.guidelineContentCheck.noContent');
+      // Convert newlines to <br> before sanitizeHtml() runs, since sanitizeHtml()
+      // strips raw \n characters (see src/mixins/htmlSanitizer.js) which would
+      // otherwise destroy the "\n\n---\n\n" merge separator between the old
+      // guideline check fields.
+      return raw.replace(/\n/g, '<br>');
     }
   },
   watch: {
     currentTab(newTab) {
-      // Expand the section if the current tab is 'guidelineContentCheck'
       this.expandedGuidelineContentCheck = newTab === "guidelineContentCheck";
     }
   }

@@ -58,6 +58,42 @@
         </div>
       </div>
       <q-separator inset class="bg-blue opacity-10 q-mt-xs" />
+      <div class="row items-center q-mt-xs q-pl-md">
+        <div class="col-10">
+          <p class="font-16 no-margin">
+            {{ $t("notifications.tagPendingApproval") }}
+          </p>
+        </div>
+        <div class="col-2 text-right">
+          <q-toggle size="lg" color="primary" class="customToggle" v-model="form.notifications.app.tagPendingApproval"
+            aria-label="toggle" />
+        </div>
+      </div>
+      <q-separator inset class="bg-blue opacity-10 q-mt-xs" />
+      <div class="row items-center q-mt-xs q-pl-md">
+        <div class="col-10">
+          <p class="font-16 no-margin">
+            {{ $t("notifications.tagReviewDecision") }}
+          </p>
+        </div>
+        <div class="col-2 text-right">
+          <q-toggle size="lg" color="primary" class="customToggle" v-model="form.notifications.app.tagReviewDecision"
+            aria-label="toggle" />
+        </div>
+      </div>
+      <q-separator inset class="bg-blue opacity-10 q-mt-xs" />
+      <div class="row items-center q-mt-xs q-pl-md">
+        <div class="col-10">
+          <p class="font-16 no-margin">
+            {{ $t("notifications.fundingSuggestion") }}
+          </p>
+        </div>
+        <div class="col-2 text-right">
+          <q-toggle size="lg" color="primary" class="customToggle" v-model="form.notifications.app.fundingSuggestion"
+            aria-label="toggle" />
+        </div>
+      </div>
+      <q-separator inset class="bg-blue opacity-10 q-mt-xs" />
 
       <h2 class="text-left font-16 text-weight-bold q-mb-none q-mt-md text-grey">
         {{ $t("notifications.viaEmail") }}
@@ -109,6 +145,42 @@
         </div>
         <div class="col-2 text-right">
           <q-toggle size="lg" color="primary" class="customToggle" v-model="form.notifications.email.dataRequests"
+            aria-label="toggle" />
+        </div>
+      </div>
+      <q-separator inset class="bg-blue opacity-10 q-mt-xs" />
+      <div class="row items-center q-mt-xs q-pl-md">
+        <div class="col-10">
+          <p class="font-16 no-margin">
+            {{ $t("notifications.tagPendingApproval") }}
+          </p>
+        </div>
+        <div class="col-2 text-right">
+          <q-toggle size="lg" color="primary" class="customToggle" v-model="form.notifications.email.tagPendingApproval"
+            aria-label="toggle" />
+        </div>
+      </div>
+      <q-separator inset class="bg-blue opacity-10 q-mt-xs" />
+      <div class="row items-center q-mt-xs q-pl-md">
+        <div class="col-10">
+          <p class="font-16 no-margin">
+            {{ $t("notifications.tagReviewDecision") }}
+          </p>
+        </div>
+        <div class="col-2 text-right">
+          <q-toggle size="lg" color="primary" class="customToggle" v-model="form.notifications.email.tagReviewDecision"
+            aria-label="toggle" />
+        </div>
+      </div>
+      <q-separator inset class="bg-blue opacity-10 q-mt-xs" />
+      <div class="row items-center q-mt-xs q-pl-md">
+        <div class="col-10">
+          <p class="font-16 no-margin">
+            {{ $t("notifications.fundingSuggestion") }}
+          </p>
+        </div>
+        <div class="col-2 text-right">
+          <q-toggle size="lg" color="primary" class="customToggle" v-model="form.notifications.email.fundingSuggestion"
             aria-label="toggle" />
         </div>
       </div>

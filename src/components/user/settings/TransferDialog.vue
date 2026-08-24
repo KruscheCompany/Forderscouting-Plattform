@@ -146,20 +146,20 @@ export default {
       const againstUserID = referenceUser?.id ||
         (referenceUser?.user?.id ? Number(referenceUser.user.id) : null);
 
-      // Extract municipality ID
-      const municipalityPath = referenceUser?.id ?
-        'user_detail.municipality.id' :
-        'userDetails.municipality.id';
+      // Extract municipality/landkreis scope (either can be unset)
+      const scopeBase = referenceUser?.id ? 'user_detail' : 'userDetails';
+      const againstUserMunicipalityID = this.getNestedProperty(referenceUser, `${scopeBase}.municipality.id`);
+      const againstUserLandkreisID = this.getNestedProperty(referenceUser, `${scopeBase}.landkreis.id`);
 
-      const againstUserMunicipalityID = this.getNestedProperty(referenceUser, municipalityPath);
+      // If no valid municipality or landkreis is found, return empty array
+      if (!againstUserMunicipalityID && !againstUserLandkreisID) return [];
 
-      // If no valid municipality ID is found, return empty array
-      if (!againstUserMunicipalityID) return [];
-
-      // Filter users
+      // Filter users - same municipality, or same landkreis
       return this.$store.state.userCenter.users.filter(user =>
-        user.id !== againstUserID &&
-        user.user_detail?.municipality?.id === againstUserMunicipalityID
+        user.id !== againstUserID && (
+          (!!againstUserMunicipalityID && user.user_detail?.municipality?.id === againstUserMunicipalityID) ||
+          (!!againstUserLandkreisID && user.user_detail?.landkreis?.id === againstUserLandkreisID)
+        )
       );
     },
 

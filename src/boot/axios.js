@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { boot } from "quasar/wrappers";
 import axios from "axios";
+import { i18n } from "boot/i18n";
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_MAIN_URL
@@ -31,12 +32,16 @@ export default ({ app, store, router }) => {
       !!store.state.userCenter.user && store.state.userCenter.user.jwt;
     if (token) {
       // Checking if the url is not login because we should have Auth header there. Login witll not work
-      if (config.url !== "/api/auth/local") {
+      if (
+        config.url !== "/api/auth/local" &&
+        config.url !== "/api/maintenance-mode"
+      ) {
         config.headers.Authorization = `Bearer ${token}`;
       } else {
         config.headers.Authorization = null;
       }
     }
+    config.headers["Accept-Language"] = i18n.locale === "en-us" ? "en" : "de";
     return config;
   });
 

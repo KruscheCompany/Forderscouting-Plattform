@@ -50,7 +50,6 @@
 
 <script>
 import { api } from "boot/axios";
-import { Notify } from "quasar";
 
 export default {
   name: "ProjectApplicationDecision",
@@ -77,8 +76,6 @@ export default {
         JSON.parse(JSON.stringify(this.projectData.applicationDecisionFiles)) : null,
       resetSteps: [
         { name: 'guidelineContentCheck', title: 'Guideline Check (Content)', icon: 'mdi-clipboard-check', done: true },
-        { name: 'guidelineFormCheck', title: 'Guideline Check (Formalities)', icon: 'mdi-format-list-checks', done: true },
-        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: true },
         { name: 'projectDocumentsCoordination', title: 'Project Documents Coordination', icon: 'mdi-file-document-multiple', done: true },
         { name: 'applicationDecision', title: 'Application Decision', icon: 'mdi-gavel', done: false },
         { name: 'submissionSigning', title: 'Submission & Signing', icon: 'mdi-file-sign', done: false }
@@ -154,10 +151,7 @@ export default {
         await api.delete(`api/upload/files/${file.id}`);
       } catch (error) {
         console.error("Error deleting file:", error);
-        Notify.create({
-          type: "negative",
-          message: error.response?.data?.error?.message || "Error deleting file"
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response?.data?.error?.message || "Error deleting file" });
       }
     },
 
@@ -249,10 +243,7 @@ export default {
         this.$emit("applicationDecision-submitted");
       } catch (error) {
         console.error("Error submitting application decision:", error);
-        Notify.create({
-          type: "negative",
-          message: error.response?.data?.error?.message || "Error uploading files"
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response?.data?.error?.message || "Error uploading files" });
       }
     }
   },

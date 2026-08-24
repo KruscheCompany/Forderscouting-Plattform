@@ -4,10 +4,19 @@
       header-class="bg-white text-black" v-model="expandedGuidelineContentCheck">
       <q-card-section class="q-pt-none">
         <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
+          {{ $t('projectComponents.guidelineContentCheck.bulletPointTitle') }}
+        </h4>
+        <ul>
+          <li>{{ $t('projectComponents.guidelineContentCheck.documents') }}</li>
+          <li>{{ $t('projectComponents.guidelineContentCheck.procedure') }}</li>
+          <li>{{ $t('projectComponents.guidelineContentCheck.applicationDeadline') }}</li>
+          <li>{{ $t('projectComponents.guidelineContentCheck.applicationCost') }}</li>
+        </ul>
+        <h4 class="font-16 text-blue-grey-10 q-mb-none q-mt-none">
           {{ $t('projectComponents.guidelineContentCheck.description') }}
         </h4>
         <div>
-          <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" v-model="guidelineContentCheck" />
+          <q-input outlined type="textarea" rows="10" class="no-shadow input-radius-6" v-model="guidelineCheck" />
         </div>
       </q-card-section>
     </q-expansion-item>
@@ -35,11 +44,9 @@ export default {
   data() {
     return {
       expandedGuidelineContentCheck: this.currentTab === "guidelineContentCheck",
-      guidelineContentCheck: this.projectData.details.guidelineContentCheck || "",
+      guidelineCheck: this.projectData.details.guidelineCheck || "",
       resetSteps: [
         { name: 'guidelineContentCheck', title: 'Guideline Check (Content)', icon: 'mdi-clipboard-check', done: false },
-        { name: 'guidelineFormCheck', title: 'Guideline Check (Formalities)', icon: 'mdi-format-list-checks', done: false },
-        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false },
         { name: 'projectDocumentsCoordination', title: 'Project Documents Coordination', icon: 'mdi-file-document-multiple', done: false },
         { name: 'applicationDecision', title: 'Application Decision', icon: 'mdi-gavel', done: false },
         { name: 'submissionSigning', title: 'Submission & Signing', icon: 'mdi-file-sign', done: false }
@@ -48,22 +55,17 @@ export default {
   },
   watch: {
     currentTab(newTab) {
-      // Expand the section if the current tab is 'guidelineContentCheck'
       this.expandedGuidelineContentCheck = newTab === "guidelineContentCheck";
     }
   },
   methods: {
-    // Get updated steps with guidelineContentCheck marked as done
     getUpdatedSteps() {
-      // Use existing steps from projectData if available, otherwise use default steps
       const currentSteps = this.projectData.projectApplicationSteps || this.resetSteps;
 
       return currentSteps.map(step => {
         if (step.name === 'guidelineContentCheck') {
-          // Mark guidelineContentCheck as done when submitting
           return { ...step, done: true };
         }
-        // Keep all other steps as they are
         return { ...step };
       });
     },
@@ -74,7 +76,7 @@ export default {
           id: this.createdProjectId,
           details: {
             id: this.projectData.details.id,
-            guidelineContentCheck: this.guidelineContentCheck
+            guidelineCheck: this.guidelineCheck
           },
           projectApplicationSteps: this.getUpdatedSteps()
         }

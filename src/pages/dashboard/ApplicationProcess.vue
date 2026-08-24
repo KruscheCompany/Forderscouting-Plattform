@@ -44,7 +44,8 @@
         :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectAptitudeCreate ref="aptitudeRef" v-if="step === 'aptitude'" :created-project-id="createdProjectId"
-        :project-data="form" :current-tab="step" class="q-my-md" @aptitude-submitted="handleAptitudeSubmitted" />
+        :project-data="form" :current-tab="step" class="q-my-md" @aptitude-submitted="handleAptitudeSubmitted"
+        @tickets-updated="val => (aptitudeGateOpen = val)" />
 
       <ProjectViewAptitude
         v-if="step !== 'project' && step !== 'fundingCheck' && step !== 'qAndA' && step !== 'aptitude'" :project="form"
@@ -64,7 +65,8 @@
       <ProjectViewTaskPlan v-if="step !== 'taskPlan'" :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewSiteVisit v-if="step !== 'taskPlan' && step !== 'siteVisit'" :project="form" :current-tab="step"
         class="q-my-md" />
-      <ProjectViewGoals v-if="step === 'requirements'" :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewGoalsAndRequirements v-if="step !== 'taskPlan' && step !== 'siteVisit' && step !== 'goalsAndRequirements'"
+        :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectTaskPlanCreate ref="taskPlanRef" v-if="step === 'taskPlan'" :created-project-id="createdProjectId"
         :project-data="form" :current-tab="step" class="q-my-md" @taskPlan-submitted="goToNextStep(false)" />
@@ -72,11 +74,12 @@
       <ProjectSiteVisit ref="siteVisitRef" v-if="step === 'siteVisit'" :created-project-id="createdProjectId"
         :project-data="form" :current-tab="step" class="q-my-md" @siteVisit-submitted="goToNextStep(false)" />
 
-      <ProjectGoals ref="goalsRef" v-if="step === 'goals'" :created-project-id="createdProjectId" :project-data="form"
-        :current-tab="step" class="q-my-md" @goals-submitted="goToNextStep(false)" />
+      <ProjectGoalsAndRequirements ref="goalsAndRequirementsRef" v-if="step === 'goalsAndRequirements'"
+        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
+        @goalsAndRequirements-submitted="goToNextStep(false)" />
 
-      <ProjectRequirements ref="requirementsRef" v-if="step === 'requirements'" :created-project-id="createdProjectId"
-        :project-data="form" :current-tab="step" class="q-my-md" @requirements-submitted="goToNextTab" />
+      <ProjectFinancingCheck ref="financingCheckRef" v-if="step === 'financingCheck'" :created-project-id="createdProjectId"
+        :project-data="form" :current-tab="step" class="q-my-md" @financingCheck-submitted="goToNextTab" />
     </div>
 
     <div v-if="tab === 'application'">
@@ -88,31 +91,17 @@
       <ProjectViewDecision :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewTaskPlan :project="form" :current-tab="step" class="q-my-md" />
       <ProjectViewSiteVisit :project="form" :current-tab="step" class="q-my-md" />
-      <ProjectViewGoals :project="form" :current-tab="step" class="q-my-md" />
-      <ProjectViewRequirements :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewGoalsAndRequirements :project="form" :current-tab="step" class="q-my-md" />
+      <ProjectViewFinancingCheck :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectViewGuidelineContentCheck v-if="step !== 'guidelineContentCheck'" :project="form" :current-tab="step"
         class="q-my-md" />
-      <ProjectViewGuidelineFormCheck v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck'"
-        :project="form" :current-tab="step" class="q-my-md" />
-      <ProjectViewFinancingCheck
-        v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck' && step !== 'financingCheck'"
-        :project="form" :current-tab="step" class="q-my-md" />
-      <ProjectViewDocumentsCoordination
-        v-if="step !== 'guidelineContentCheck' && step !== 'guidelineFormCheck' && step !== 'financingCheck' && step !== 'projectDocumentsCoordination'"
+      <ProjectViewDocumentsCoordination v-if="step !== 'guidelineContentCheck' && step !== 'projectDocumentsCoordination'"
         :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectGuidelineContentCheck ref="guidelineContentCheckRef" v-if="step === 'guidelineContentCheck'"
         :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
         @guidelineContentCheck-submitted="goToNextStep(false)" />
-
-      <ProjectGuidelineFormCheck ref="guidelineFormCheckRef" v-if="step === 'guidelineFormCheck'"
-        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
-        @guidelineFormCheck-submitted="goToNextStep(false)" />
-
-      <ProjectFinancingCheck ref="financingCheckRef" v-if="step === 'financingCheck'"
-        :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
-        @financingCheck-submitted="goToNextStep(false)" />
 
       <ProjectDocumentsCoordination ref="documentsCoordinationRef" v-if="step === 'projectDocumentsCoordination'"
         :created-project-id="createdProjectId" :project-data="form" :current-tab="step" class="q-my-md"
@@ -137,8 +126,9 @@
     <div class="q-mt-lg q-mb-xl">
       <q-card class="shadow-1 radius-20 bg-white q-pa-lg">
         <div class="row justify-center">
-          <q-btn :loading="isLoading" @click="manageSubmit" size="16px" color="primary"
-            class="text-white q-px-xl q-py-sm full-width" no-caps :label="$t('Publish')" />
+          <q-btn :loading="isLoading" :disable="step === 'aptitude' && !aptitudeGateOpen" @click="manageSubmit"
+            size="16px" color="primary" class="text-white q-px-xl q-py-sm full-width" no-caps
+            :label="$t('Publish')" />
         </div>
       </q-card>
     </div>
@@ -153,10 +143,8 @@ import ProjectAptitudeCreate from 'src/components/projects/create/ProjectAptitud
 import ProjectDecisionCreate from 'src/components/projects/create/ProjectDecisionCreate.vue';
 import ProjectTaskPlanCreate from 'src/components/projects/create/ProjectTaskPlanCreate.vue';
 import ProjectSiteVisit from 'src/components/projects/create/ProjectSiteVisit.vue';
-import ProjectGoals from 'src/components/projects/create/ProjectGoals.vue';
-import ProjectRequirements from 'src/components/projects/create/ProjectRequirements.vue';
+import ProjectGoalsAndRequirements from 'src/components/projects/create/ProjectGoalsAndRequirements.vue';
 import ProjectGuidelineContentCheck from 'src/components/projects/create/ProjectGuidelineContentCheck.vue';
-import ProjectGuidelineFormCheck from 'src/components/projects/create/ProjectGuidelineFormCheck.vue';
 import ProjectFinancingCheck from 'src/components/projects/create/ProjectFinancingCheck.vue';
 import ProjectDocumentsCoordination from 'src/components/projects/create/ProjectDocumentsCoordination.vue';
 import ProjectApplicationDecision from 'src/components/projects/create/ProjectApplicationDecision.vue';
@@ -167,10 +155,8 @@ import ProjectViewContentDetails from 'src/components/projects/view/ProjectConte
 import ProjectViewApplicationDecision from 'src/components/projects/view/ProjectApplicationDecision.vue';
 import ProjectViewFundingCheck from 'src/components/projects/view/ProjectFundingCheck.vue';
 import ProjectViewQAndA from 'src/components/projects/view/ProjectQAndA.vue';
-import ProjectViewGoals from 'src/components/projects/view/ProjectGoals.vue';
-import ProjectViewRequirements from 'src/components/projects/view/ProjectRequirements.vue';
+import ProjectViewGoalsAndRequirements from 'src/components/projects/view/ProjectGoalsAndRequirements.vue';
 import ProjectViewGuidelineContentCheck from 'src/components/projects/view/ProjectGuidelineContentCheck.vue';
-import ProjectViewGuidelineFormCheck from 'src/components/projects/view/ProjectGuidelineFormCheck.vue';
 import ProjectViewFinancingCheck from 'src/components/projects/view/ProjectFinancingCheck.vue';
 import ProjectViewDocumentsCoordination from 'src/components/projects/view/ProjectDocumentsCoordination.vue';
 import ProjectViewAptitude from 'src/components/projects/view/ProjectAptitude.vue';
@@ -189,10 +175,8 @@ export default {
     ProjectDecisionCreate,
     ProjectTaskPlanCreate,
     ProjectSiteVisit,
-    ProjectGoals,
-    ProjectRequirements,
+    ProjectGoalsAndRequirements,
     ProjectGuidelineContentCheck,
-    ProjectGuidelineFormCheck,
     ProjectFinancingCheck,
     ProjectDocumentsCoordination,
     ProjectApplicationDecision,
@@ -202,10 +186,8 @@ export default {
     ProjectViewApplicationDecision,
     ProjectViewFundingCheck,
     ProjectViewQAndA,
-    ProjectViewGoals,
-    ProjectViewRequirements,
+    ProjectViewGoalsAndRequirements,
     ProjectViewGuidelineContentCheck,
-    ProjectViewGuidelineFormCheck,
     ProjectViewFinancingCheck,
     ProjectViewDocumentsCoordination,
     ProjectViewAptitude,
@@ -219,6 +201,7 @@ export default {
       tab: 'aiFundingCheck',
       secondaryTab: 'project',
       isLoading: false,
+      aptitudeGateOpen: false,
       createdProjectId: null, // Store the project ID after creation
       form: {}, // Store project data for passing to child components
       fundingCheckSteps: [
@@ -231,13 +214,11 @@ export default {
       projectDevelopmentSteps: [
         { name: 'taskPlan', title: 'task plan', icon: 'mdi-checkbox-multiple-marked', done: false },
         { name: 'siteVisit', title: 'site visit', icon: 'mdi-map-marker', done: false },
-        { name: 'goals', title: 'goals', icon: 'mdi-target', done: false },
-        { name: 'requirements', title: 'requirements', icon: 'mdi-file-document', done: false }
+        { name: 'goalsAndRequirements', title: 'Goals and requirements', icon: 'mdi-target', done: false },
+        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false }
       ],
       projectApplicationSteps: [
         { name: 'guidelineContentCheck', title: 'Guideline Check (Content)', icon: 'mdi-clipboard-check', done: false },
-        { name: 'guidelineFormCheck', title: 'Guideline Check (Formalities)', icon: 'mdi-format-list-checks', done: false },
-        { name: 'financingCheck', title: 'Financing Check', icon: 'mdi-cash-check', done: false },
         { name: 'projectDocumentsCoordination', title: 'Project Documents Coordination', icon: 'mdi-file-document-multiple', done: false },
         { name: 'applicationDecision', title: 'Application Decision', icon: 'mdi-gavel', done: false },
         { name: 'submissionSigning', title: 'Submission & Signing', icon: 'mdi-file-sign', done: false }
@@ -295,19 +276,6 @@ export default {
   watch: {
     step(newStep) {
       this.refreshData();
-    },
-    // Watch for route changes to handle query parameters
-    '$route': {
-      handler(newRoute) {
-        // Check if we have a triggerFundingMatch query param (coming from a redirect)
-        if (newRoute.query.triggerFundingMatch === '1' && this.form && this.form.details) {
-          // Wait for the next tick to ensure form data is fully populated
-          this.$nextTick(() => {
-            this.handleFundingMatch(this.form);
-          });
-        }
-      },
-      immediate: true // Run immediately when component is created
     }
   },
 
@@ -416,16 +384,15 @@ export default {
 
       // Check if we're creating a new project from scratch (no projectId in URL)
       if (!this.$route.params.projectId) {
-        // Redirect to edit route with the new project ID and a query param to trigger funding match
-        this.$router.push({
+        // Update the URL to the edit route for the new project, without waiting for a
+        // remount (ApplicationProcess/EditApplicationProcess share the same component
+        // instance, so mounted()/setData() won't re-run to pick up a query param here)
+        this.$router.replace({
           name: 'EditApplicationProcess',
-          params: { projectId: data.id },
-          query: { triggerFundingMatch: hasStartingConditionChanged || !this.form.fundingMatches ? '1' : '0' }
+          params: { projectId: data.id }
         });
-        return; // Stop execution here as we're redirecting
       }
 
-      // Original logic for existing projects
       if (hasStartingConditionChanged || !this.form.fundingMatches) {
         this.handleFundingMatch(data.projectData);
       } else {
@@ -436,6 +403,7 @@ export default {
       const { startingCondition, goals, content, valuesAndBenefits } = projectData.details || {};
       const { financialPlan } = projectData;
       const finances = `${financialPlan?.description || ''} ${(financialPlan?.costAndFinance || []).map(item => `${item.title}: ${item.value} Euro`).join(', ')}`;
+      this.$q.loading.show({ message: this.$t('projectComponents.fundingCheck.matchingLoading') });
       try {
         await this.$store.dispatch('ai/matchFunding', {
           startingCondition,
@@ -450,6 +418,11 @@ export default {
       } catch (fundingError) {
         console.error('Funding matching failed:', fundingError);
         this.step = 'fundingCheck';
+      } finally {
+        // Let the (large, one-off) layout reflow from the funding cards mounting happen
+        // while still covered by the loading overlay, so hiding it doesn't reveal a jump
+        await this.$nextTick();
+        this.$q.loading.hide();
       }
     },
     async handleFundingSubmitted(data) {
@@ -515,10 +488,7 @@ export default {
     },
     async handleSubmissionSigningSubmitted(status) {
       if (status !== null) {
-        this.$q.notify({
-          color: 'positive',
-          message: `${this.$t('Application process completed successfully')}`
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "positive", title: `${this.$t('Application process completed successfully')}` });
 
         // Redirect to view page after successful completion
         if (this.createdProjectId) {
@@ -529,10 +499,7 @@ export default {
         }
       } else {
         // No decision made
-        this.$q.notify({
-          color: 'warning',
-          message: this.$t('No decision was made on the application')
-        });
+        this.$store.dispatch("notifications/pushToast", { kind: "warning", title: this.$t('No decision was made on the application') });
         this.form = { ...this.form, ...JSON.parse(JSON.stringify(this.project)) };
       }
     },
@@ -555,14 +522,10 @@ export default {
         await this.$refs.taskPlanRef.submitTaskPlan();
       } else if (this.step === 'siteVisit') {
         await this.$refs.siteVisitRef.submitSiteVisit();
-      } else if (this.step === 'goals') {
-        await this.$refs.goalsRef.submitGoals();
-      } else if (this.step === 'requirements') {
-        await this.$refs.requirementsRef.submitRequirements();
+      } else if (this.step === 'goalsAndRequirements') {
+        await this.$refs.goalsAndRequirementsRef.submitGoalsAndRequirements();
       } else if (this.step === 'guidelineContentCheck') {
         await this.$refs.guidelineContentCheckRef.submitGuidelineContentCheck();
-      } else if (this.step === 'guidelineFormCheck') {
-        await this.$refs.guidelineFormCheckRef.submitGuidelineFormCheck();
       } else if (this.step === 'financingCheck') {
         await this.$refs.financingCheckRef.submitFinancingCheck();
       } else if (this.step === 'projectDocumentsCoordination') {
@@ -594,18 +557,14 @@ export default {
           this.$refs.projectDescriptionRef.setData();
         }
 
-        // If coming from a redirect (has triggerFundingMatch query), let the watcher handle it
-        // Otherwise use the normal behavior
-        if (!this.$route.query.triggerFundingMatch) {
-          if (this.$route.query.tab) {
-            // Restore tab and step from view mode navigation
-            this.tab = this.$route.query.tab;
-            if (this.$route.query.step) {
-              this.step = this.$route.query.step;
-            }
-          } else {
-            this.setActiveTabBasedOnCompletion();
+        if (this.$route.query.tab) {
+          // Restore tab and step from view mode navigation
+          this.tab = this.$route.query.tab;
+          if (this.$route.query.step) {
+            this.step = this.$route.query.step;
           }
+        } else {
+          this.setActiveTabBasedOnCompletion();
         }
       }
       this.$store.dispatch("userCenter/getUsers");
@@ -688,6 +647,7 @@ export default {
 
   },
   mounted() {
+    this.$store.dispatch("ai/resetTaxonomySuggestions");
     this.setData();
   },
   beforeDestroy() {

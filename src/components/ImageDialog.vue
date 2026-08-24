@@ -87,15 +87,9 @@ export default {
           });
           this.$emit("add-caption", this.captionInput, this.imageIndex);
           this.$_options = false;
-          this.$q.notify({
-            type: "positive",
-            message: this.$t("Caption updated")
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t("Caption updated") });
         } catch (error) {
-          this.$q.notify({
-            type: "negative",
-            message: error.response.data.error.message
-          });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response.data.error.message });
         }
       } else {
         this.$emit("add-caption", this.captionInput, this.imageIndex);

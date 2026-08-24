@@ -61,8 +61,23 @@
               </p>
             </div>
             <div class="col-12 col-md-9">
-              <Municipality :currentMunicipality="form.municipality"
+              <q-btn-toggle
+                v-model="scope"
+                spread
+                no-caps
+                class="q-mb-sm no-shadow input-radius-6"
+                toggle-color="primary"
+                :options="[
+                  { label: $t('userAdministration.administration'), value: 'municipality' },
+                  { label: $t('landkreise.landkreisName'), value: 'landkreis' }
+                ]"
+                @input="onScopeChange"
+              />
+              <Municipality v-if="scope === 'municipality'" :currentMunicipality="form.municipality"
                 @update:municipality="form.municipality = $event" />
+              <LandkreisSelect v-else :currentLandkreis="form.landkreis"
+                :rules="[val => !!val || $t('Required')]"
+                @update:landkreis="form.landkreis = $event" />
             </div>
           </div>
           <div class="row items-baseline ">
@@ -115,6 +130,7 @@
 
 <script>
 import Municipality from "components/projects/create/Municipality.vue";
+import LandkreisSelect from "components/Landkreise/LandkreisSelect.vue";
 import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
 import Categories from "components/projects/create/Categories.vue";
 export default {
@@ -130,12 +146,14 @@ export default {
   },
   components: {
     Municipality,
+    LandkreisSelect,
     MunicipalityCities,
     Categories
   },
   data() {
     return {
       isLeader: false,
+      scope: "municipality",
       roleOptions: [
         {
           label: "Admin",
@@ -166,6 +184,7 @@ export default {
         municipality: {
           id: null,
         },
+        landkreis: null,
         categories: [],
         message: "",
         email: "",
@@ -175,15 +194,25 @@ export default {
     };
   },
   methods: {
+    onScopeChange() {
+      this.form.municipality = { id: null };
+      this.form.landkreis = null;
+    },
     inviteUser() {
       this.$refs.userInviteForm.validate().then(async success => {
         if (success) {
           this.isLoading = true;
+          const { municipality, landkreis, ...rest } = this.form;
+          const data =
+            this.scope === "municipality"
+              ? { ...rest, municipality }
+              : { ...rest, landkreis: { id: landkreis?.id } };
           const res = await this.$store.dispatch("userCenter/inviteUser", {
-            data: this.form
+            data
           });
           this.isLoading = false;
           if (res !== false) {
+            this.$emit("invited");
             if (this.guestEmail.length > 0) {
               this.$store.dispatch("userCenter/deleteGuestRequest", {
                 id: this.notification.id
@@ -197,6 +226,8 @@ export default {
               this.form.municipality = {
                 id: null
               };
+              this.form.landkreis = null;
+              this.scope = "municipality";
               this.form.message = "";
               this.form.email = "";
             }, 500);
@@ -227,7 +258,9 @@ export default {
       if (val) {
         this.form.email = this.guestEmail;
         this.form.location = this.guestLocation;
+        this.scope = "municipality";
         this.form.municipality = this.guestMunicipality;
+        this.form.landkreis = null;
         this.form.categories = this.guestCategories;
         this.form.username = this.guestName;
       }

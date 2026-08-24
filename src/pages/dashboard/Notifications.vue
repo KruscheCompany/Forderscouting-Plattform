@@ -1,5 +1,9 @@
 <template>
   <q-page class="q-mt-lg q-pb-md" :class="$q.screen.lt.md ? 'q-mx-md' : 'q-mx-xl'">
+    <div v-if="loading" class="flex flex-center" style="min-height: 300px">
+      <q-spinner color="primary" size="3em" :thickness="3" />
+    </div>
+    <div v-else :class="{ 'notif-reveal': !hasAnimated }" @animationend="hasAnimated = true">
     <q-card v-if="Object.keys(data).length === 0" class="full-height full-width bg-white radius-20 shadow-1">
       <q-card-section>
         <div class="row">
@@ -34,7 +38,15 @@
                       ? $t("Comment to a funding made by | ")
                       : noti.typeOfNoti == "requests"
                         ? $t(`Request to ${noti.type} a document made by | `)
-                        : ""
+                        : noti.typeOfNoti == "tagPendingApproval"
+                          ? $t("A new tag suggestion needs review")
+                          : noti.typeOfNoti == "tagReviewDecision"
+                            ? noti.decision == "approved"
+                              ? $t("Your suggested tag was approved")
+                              : $t("Your suggested tag was rejected")
+                            : noti.typeOfNoti == "fundingSuggestions"
+                              ? $t("New funding suggestions for | ")
+                              : ""
               }}
 
               <span class="text-blue">{{
@@ -44,7 +56,9 @@
                     ? noti.owner.username
                     : noti.typeOfNoti == "requests" && noti.user != null
                       ? noti.user.username
-                      : ""
+                      : noti.typeOfNoti == "fundingSuggestions" && noti.project != null
+                        ? noti.project.title
+                        : ""
               }}</span>
             </p>
             <p class="font-14 q-mb-none">
@@ -59,7 +73,11 @@
                         ? noti.project != null
                           ? noti.project.title
                           : noti.funding.title
-                        : ""
+                        : noti.typeOfNoti == "tagPendingApproval" || noti.typeOfNoti == "tagReviewDecision"
+                          ? noti.title
+                          : noti.typeOfNoti == "fundingSuggestions"
+                            ? `${(noti.suggestions || []).length} ${$t('notificationsUser.newSuggestions')}`
+                            : ""
               }}
             </p>
           </div>
@@ -70,7 +88,8 @@
             <q-btn @click="view(noti)" v-if="
               noti.typeOfNoti == 'fundingComments' ||
               noti.typeOfNoti == 'fundingExpirey' ||
-              noti.typeOfNoti == 'requests'
+              noti.typeOfNoti == 'requests' ||
+              noti.typeOfNoti == 'fundingSuggestions'
             " color="
               blue" unelevated outline class="radius-6 text-weight-600"
               :class="$q.screen.lt.md ? 'full-width q-mb-md' : ''" no-caps dense>
@@ -99,6 +118,20 @@
                 {{ $t("notificationsUser.declineBtn") }}
               </p>
             </q-btn>
+            <q-btn @click="approveTagFromNotification(noti, index)" v-if="noti.typeOfNoti == 'tagPendingApproval'"
+              color="blue" unelevated class="radius-6 q-ml-md text-weight-600"
+              :class="$q.screen.lt.md ? 'full-width q-mb-md' : ''" dense no-caps>
+              <p class="q-mb-none q-mx-md q-my-sm">
+                {{ $t("notificationsUser.acceptBtn") }}
+              </p>
+            </q-btn>
+            <q-btn @click="rejectTagFromNotification(noti, index)" v-if="noti.typeOfNoti == 'tagPendingApproval'"
+              color="red" unelevated class="radius-6 q-ml-md text-weight-600"
+              :class="$q.screen.lt.md ? 'full-width q-mb-md' : ''" dense no-caps>
+              <p class="q-mb-none q-mx-md q-my-sm">
+                {{ $t("notificationsUser.declineBtn") }}
+              </p>
+            </q-btn>
             <q-btn @click="markAsRead(noti, index)" color="" unelevated
               class="radius-6 q-ml-md text-weight-600 text-blue" :class="$q.screen.lt.md ? 'full-width q-mb-md' : ''"
               dense no-caps>
@@ -110,6 +143,7 @@
           </div>
         </q-card-section>
       </q-card>
+    </div>
     </div>
     <q-dialog v-if="dialog" v-model="dialog">
       <q-card>
@@ -150,6 +184,8 @@ export default {
   data() {
     return {
       data: [],
+      loading: true,
+      hasAnimated: false,
       dialog: false,
       currentFundingComment: null,
       inviteUserDialog: false,
@@ -200,6 +236,18 @@ export default {
             funding.createdAt = plannedEnd.toISOString().split("T")[0];
             data.push({ ...funding, typeOfNoti: "fundingExpirey" });
           });
+        } else if (item === "pendingTags") {
+          this.data[item].forEach((tag) => {
+            data.push({ ...tag, typeOfNoti: "tagPendingApproval" });
+          });
+        } else if (item === "tagDecisions") {
+          this.data[item].forEach((decision) => {
+            data.push({ ...decision, typeOfNoti: "tagReviewDecision" });
+          });
+        } else if (item === "fundingSuggestions") {
+          this.data[item].forEach((group) => {
+            data.push({ ...group, typeOfNoti: "fundingSuggestions" });
+          });
         }
       }
       data.sort((a, b) => {
@@ -219,6 +267,7 @@ export default {
       this.$api.get("/api/user/notification").then((response) => {
         this.data = response.data;
         this.prepData();
+        this.loading = false;
       });
     },
     getIcon(type) {
@@ -226,9 +275,10 @@ export default {
       else if (type == "fundingComments") return "description";
       else if (type == "guest") return "person";
       else if (type == "requests") return "person_add";
+      else if (type == "tagPendingApproval" || type == "tagReviewDecision") return "sell";
+      else if (type == "fundingSuggestions") return "lightbulb";
     },
     async view(noti, isFunding = false) {
-      console.log(this.loggedInUser);
       if (noti.typeOfNoti == "fundingComments" && isFunding) {
         this.$router.push({ path: `/user/newFunding/${noti.funding.id}` });
       } else if (noti.typeOfNoti == "fundingComments") {
@@ -258,6 +308,11 @@ export default {
             this.$router.push({ path: `/user/newFunding/${noti.funding.id}` });
           }
         }
+      } else if (noti.typeOfNoti == "fundingSuggestions" && noti.project != null) {
+        this.$router.push({
+          path: `/application/process/edit/${noti.project.id}`,
+          query: { step: "fundingCheck" },
+        });
       }
     },
     acceptReq(noti, index) {
@@ -291,6 +346,14 @@ export default {
       }
       this.updateNotifications(noti, index);
     },
+    async approveTagFromNotification(noti, index) {
+      await this.$store.dispatch("tag/editTag", { id: noti.id, title: noti.title, status: "approved" });
+      this.updateNotifications(noti, index);
+    },
+    async rejectTagFromNotification(noti, index) {
+      await this.$store.dispatch("tag/deleteTag", { id: noti.id });
+      this.updateNotifications(noti, index);
+    },
     async markAsRead(noti) {
       const notificationType = noti.typeOfNoti;
       switch (notificationType) {
@@ -301,6 +364,7 @@ export default {
               funding_expirey: noti.id,
             },
           });
+          this.getData();
           break;
         case "fundingComments":
           await this.$api.post("/api/read-notifications", {
@@ -329,18 +393,83 @@ export default {
           });
           this.getData();
           break;
+        case "tagPendingApproval":
+          await this.$api.post("/api/read-notifications", {
+            data: {
+              user: this.loggedInUser.id,
+              tag_pending: noti.id,
+            },
+          });
+          this.getData();
+          break;
+        case "tagReviewDecision":
+          await this.$api.post("/api/read-notifications", {
+            data: {
+              user: this.loggedInUser.id,
+              tag_decision: noti.id,
+            },
+          });
+          this.getData();
+          break;
+        case "fundingSuggestions":
+          try {
+            await Promise.all(
+              (noti.suggestions || []).map((suggestion) =>
+                this.$api.post("/api/read-notifications", {
+                  data: {
+                    user: this.loggedInUser.id,
+                    funding_suggestion: suggestion.id,
+                  },
+                })
+              )
+            );
+          } catch (error) {
+            console.error("Error marking funding suggestions as read:", error);
+            this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("notificationsUser.markAsReadError") });
+          }
+          this.getData();
+          break;
         default:
           break;
       }
+      this.$store.dispatch("notifications/fetchNotificationsCount");
     },
     updateNotifications(noti, index) {
       this.data[noti.createdAt.split("T")[0]].splice(index, 1);
+      this.$store.dispatch("notifications/fetchNotificationsCount");
+    },
+    onLiveNotification() {
+      this.getData();
     },
   },
   mounted() {
     this.getData();
+    if (this.$socket) {
+      this.$socket.on("notification", this.onLiveNotification);
+    }
+  },
+  beforeDestroy() {
+    if (this.$socket) {
+      this.$socket.off("notification", this.onLiveNotification);
+    }
   },
 };
 </script>
 
-<style></style>
+<style>
+.notif-reveal {
+  animation: notif-reveal-anim 0.4s ease-out;
+}
+
+@keyframes notif-reveal-anim {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

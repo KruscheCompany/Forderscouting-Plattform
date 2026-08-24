@@ -4,6 +4,8 @@ export default function () {
     isLoadingFundingMatches: false,
     fundingQuestions: [], // Keep for backward compatibility
     fundingQuestionsMap: {}, // Map of funding ID to questions array
-    isLoadingFundingQuestions: false
+    isLoadingFundingQuestions: false,
+    taxonomySuggestions: null,
+    isLoadingTaxonomy: false
   }
 }

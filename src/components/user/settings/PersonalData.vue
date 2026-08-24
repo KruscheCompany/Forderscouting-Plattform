@@ -89,6 +89,22 @@
       <div class="row items-center">
         <div class="col-12 col-md-3">
           <p class="font-16 no-margin">
+            {{ $t("landkreise.landkreisName") }}
+          </p>
+        </div>
+        <div class="col-12 col-md-9">
+          <q-input
+            disable
+            outlined
+            class="no-shadow input-radius-6"
+            v-model="form.landkreis"
+            :rules="[]"
+          />
+        </div>
+      </div>
+      <div class="row items-center">
+        <div class="col-12 col-md-3">
+          <p class="font-16 no-margin">
             Email
           </p>
         </div>
@@ -208,6 +224,7 @@ export default {
       form: {
         fullName: "",
         administration: "",
+        landkreis: "",
         email: "",
         telephone: "",
         location: "",
@@ -221,11 +238,7 @@ export default {
   },
   methods: {
     rejected() {
-      this.$q.notify({
-        color: "negative",
-        textColor: "white",
-        message: "Bitte stellen Sie sicher, dass Sie ein Bild hochladen"
-      });
+      this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Bitte stellen Sie sicher, dass Sie ein Bild hochladen") });
     },
     async uploadImage() {
       if (this.newImg != null) {
@@ -251,6 +264,11 @@ export default {
         (!!this.userDetails &&
           !!this.userDetails.municipality &&
           this.userDetails.municipality.title) ||
+        "";
+      this.form.landkreis =
+        (!!this.userDetails &&
+          !!this.userDetails.landkreis &&
+          this.userDetails.landkreis.title) ||
         "";
       this.form.streetNo =
         (!!this.userDetails && this.userDetails.streetNo) || "";

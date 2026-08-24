@@ -1,5 +1,5 @@
 import { api } from "boot/axios";
-import { Notify } from "quasar";
+import { i18n } from "boot/i18n";
 import Cookies from "js-cookie";
 
 const COOKIE_OPTS = {
@@ -44,10 +44,11 @@ export async function login(context, payload) {
       console.log("error :>> ", error.response);
       // TODO add error for too many login requests
       // console.log("error :>> ", error.response);
-      // Notify.create({
-      //   type: "negative",
-      //   message: error.response.data.error.message
-      // });
+      // context.dispatch(
+      //   "notifications/pushToast",
+      //   { kind: "negative", title: error.response.data.error.message },
+      //   { root: true }
+      // );
       return (
         error.response.data.error.message ||
         "Login failed, please try again in a while"
@@ -88,10 +89,11 @@ export async function getUserDetails(context) {
     }
   } catch (error) {
     console.log("error :>> ", error.response);
-    Notify.create({
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -101,10 +103,11 @@ export async function getUserInfo(context) {
     context.commit("setUserInfo", res.data);
   } catch (error) {
     console.log("error :>> ", error.response);
-    Notify.create({
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -114,10 +117,11 @@ export async function getUsers(context) {
     context.commit("setUsers", res.data);
   } catch (error) {
     console.log("error :>> ", error.response);
-    Notify.create({
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -127,18 +131,20 @@ export async function inviteUser(context, payload) {
     try {
       const res = await api.post("/api/users", data);
       console.log("res :>> ", res);
-      Notify.create({
-        message: "Eine Einladung wurde an den User geschickt",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Eine Einladung wurde an den User geschickt") },
+        { root: true }
+      );
       context.dispatch("getUsers");
       // TODO perform add user mutation? Ask Ameen if I should update the table right away
     } catch (error) {
       console.log("error :>> ", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -149,19 +155,21 @@ export async function resetPassword(context, payload) {
   if (!!data) {
     try {
       await api.post("/api/auth/reset-password", data);
-      Notify.create({
-        message: "Passwort erfolgreich zurück gesetzt. Weiterleitung zum Login",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Passwort erfolgreich zurück gesetzt. Weiterleitung zum Login") },
+        { root: true }
+      );
       setTimeout(() => {
         this.$router.push({ path: "/" });
       }, 2000);
     } catch (error) {
       console.log("error :>> ", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -174,19 +182,21 @@ export async function updatePersonalData(context, payload) {
   if (!!data && !!userDetailsId) {
     try {
       const res = await api.put(`/api/user-details/${userDetailsId}`, { data });
-      Notify.create({
-        message: "Userdaten wurden erfolgreich geändert",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Userdaten wurden erfolgreich geändert") },
+        { root: true }
+      );
       context.commit("updatePersonalData", res.data.data);
       context.dispatch("getUserDetails");
       context.dispatch("getUsers");
     } catch (error) {
       console.log("error :>> ", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -197,20 +207,22 @@ export async function updateUser(context, payload) {
   if (!!data.id && !!data.data) {
     try {
       const res = await api.put(`/api/users/${data.id}`, { data: data.data });
-      Notify.create({
-        message: "Userdaten wurden erfolgreich geändert",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Userdaten wurden erfolgreich geändert") },
+        { root: true }
+      );
       context.dispatch("getUserDetails");
       context.dispatch("getUserInfo");
       context.dispatch("getUsers");
       this.$router.push({ path: "/Administation/User/" });
     } catch (error) {
       console.log("error :>> ", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -232,19 +244,21 @@ export async function transferData(context, payload) {
           payload.hasOwnProperty("fromId") ? `&fromId=${payload.fromId}` : ""
         }`
       );
-      Notify.create({
-        message: "Userdaten wurden transferiert",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Userdaten wurden transferiert") },
+        { root: true }
+      );
       console.log("res", res);
       // context.dispatch("getUserDetails");
       // this.$router.push({ path: "/Administation/User/" });
     } catch (error) {
       console.log("error :>> ", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -263,10 +277,11 @@ export async function manageRequest(context, payload) {
       // context.commit("setDataOverview", res.data);
     } catch (error) {
       console.log("error :>> ", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
     }
   }
 }
@@ -277,10 +292,11 @@ export async function deleteGuestRequest(context, payload) {
       const res = await api.delete(`/api/guest-requests/${id}`);
     } catch (error) {
       console.log("error :>> ", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
     }
   }
 }
@@ -295,10 +311,11 @@ export async function markNotificationAsRead(context, payload) {
     }
     catch (error) {
       console.log("error :>> ", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
     }
   }
 }
@@ -309,10 +326,11 @@ export async function getDataOverview(context) {
     context.commit("setDataOverview", res.data);
   } catch (error) {
     console.log("error :>> ", error.response);
-    Notify.create({
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -322,10 +340,11 @@ export async function getWatchlists(context) {
     context.commit("setWatchlists", res.data);
   } catch (error) {
     console.log("error :>> ", error.response);
-    Notify.create({
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
   }
 }
 
@@ -351,17 +370,18 @@ export async function forgotPassword(context) {
     await api.post("/api/auth/forgot-password", {
       email: context.state.user.user.email
     });
-    Notify.create({
-      message:
-        "Ein Link für die Zurücksetzung Ihres Passwortes wurde an Ihre Email geschickt",
-      type: "positive"
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Ein Link für die Zurücksetzung Ihres Passwortes wurde an Ihre Email geschickt") },
+        { root: true }
+      );
   } catch (error) {
     console.log("error :>> ", error.response);
-    Notify.create({
-      type: "negative",
-      message: error.response.data.error.message
-    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
     return false;
   }
 }
@@ -381,10 +401,11 @@ export async function uploadProfile(context, payload) {
       context.dispatch("getUserDetails");
       console.log("fileRes", fileRes);
     } catch (error) {
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }
@@ -398,10 +419,11 @@ export async function deleteProfile(context, payload) {
       console.log("res", res);
     } catch (error) {
       console.log("error.response", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
     }
   }
 }
@@ -410,16 +432,18 @@ export async function deleteUser(context, payload) {
     try {
       const res = await api.delete(`/api/users/${payload.id}`);
       if (!payload.admin) context.dispatch("logout");
-      Notify.create({
-        message: "Benutzer wurde gelöscht.",
-        type: "positive"
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("Benutzer wurde gelöscht.") },
+        { root: true }
+      );
     } catch (error) {
       console.log("error.response", error.response);
-      Notify.create({
-        type: "negative",
-        message: error.response.data.error.message
-      });
+      context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: error.response.data.error.message },
+        { root: true }
+      );
       return false;
     }
   }

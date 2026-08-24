@@ -7,6 +7,8 @@ export default function() {
     createdProjectIdea: null,
     projectDashboardStats: null,
     applicationProcess: [],
-    financialPlan: null
+    financialPlan: null,
+    archivedProjects: [],
+    prioritizedProjects: []
   };
 }
