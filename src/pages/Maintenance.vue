@@ -1,7 +1,7 @@
 <template>
   <div class="maintenance-page">
     <div class="maintenance-card">
-      <q-icon name="mdi-wrench-clock" size="64px" color="primary" />
+      <q-icon name="mdi-hammer-wrench" size="64px" color="primary" />
       <h1>Wartungsarbeiten</h1>
       <p>Die Plattform ist vorübergehend nicht erreichbar.</p>
       <p v-if="message" class="maintenance-message">{{ message }}</p>
