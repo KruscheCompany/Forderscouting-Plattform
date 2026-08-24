@@ -1,5 +1,7 @@
 export default function() {
   return {
-    loading: false
+    loading: false,
+    maintenanceEnabled: false,
+    maintenanceMessage: ""
   };
 }
