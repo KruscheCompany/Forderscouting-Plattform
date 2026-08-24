@@ -1,12 +1,12 @@
 <template>
-  <q-expansion-item v-model="expanded" @show="fetchArchivedProjects" header-class="bg-blue-grey-2 q-px-md"
+  <q-expansion-item v-model="expanded" @show="fetchArchivedProjects" header-class="bg-red-1 q-px-md"
     expand-icon-class="text-blue" class="q-mt-md q-mb-lg radius-20 shadow-1 overflow-hidden bg-white">
     <template v-slot:header>
       <q-item-section avatar>
-        <q-icon name="inventory" color="blue-grey-9" />
+        <q-icon name="inventory" color="red-9" />
       </q-item-section>
       <q-item-section>
-        <span class="font-16 text-weight-600 text-blue-grey-9">{{ $t("ProjectDashboard.archivedApplications") }}</span>
+        <span class="font-16 text-weight-600 text-red-9">{{ $t("ProjectDashboard.archivedApplications") }}</span>
       </q-item-section>
     </template>
 
