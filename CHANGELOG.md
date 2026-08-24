@@ -1,5 +1,13 @@
 # Änderungsprotokoll / Changelog
 
+## 6.19.0 — 2026-08-24
+
+### de
+- Die Plattform kann jetzt bei Bedarf mit einer Wartungsmeldung vorübergehend für alle Nutzer*innen gesperrt werden, sofort oder zu einem geplanten Zeitpunkt.
+
+### en
+- The platform can now be temporarily locked for all users with a maintenance notice, either immediately or at a scheduled time.
+
 ## 6.18.1 — 2026-08-21
 
 ### de
