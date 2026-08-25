@@ -385,11 +385,11 @@
           <div class="row items-baseline">
             <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
-                {{ $t("Funding goal") }}
+                {{ $t("What is funded?") }}
               </p>
             </div>
             <div class="col-12 col-md-9">
-              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.goal"
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.funded"
                 :toolbar="editorToolbar" />
             </div>
           </div>
@@ -412,11 +412,11 @@
           <div class="row items-baseline">
             <div class="col-12 col-md-3">
               <p class="font-16 no-margin">
-                {{ $t("What is funded?") }}
+                {{ $t("Funding goal") }}
               </p>
             </div>
             <div class="col-12 col-md-9">
-              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.funded"
+              <q-editor outlined class="no-shadow input-radius-6" v-model="form.details.goal"
                 :toolbar="editorToolbar" />
             </div>
           </div>
@@ -971,7 +971,7 @@ export default {
     }
   },
   watch: {
-    "form.details.goal": {
+    "form.details.funded": {
       handler(val) {
         clearTimeout(this.taxonomySuggestTimeout);
         const content = this.stripHtml(val || "").trim();

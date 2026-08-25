@@ -1,5 +1,13 @@
 # Änderungsprotokoll / Changelog
 
+## 6.20.2 — 2026-08-25
+
+### de
+- Beim Anlegen/Bearbeiten einer Förderung wurde die Reihenfolge der Felder „Was wird gefördert“ und „Förderziel“ vertauscht.
+
+### en
+- When creating/editing a funding entry, the order of the "What is funded?" and "Funding goal" fields was swapped.
+
 ## 6.20.1 — 2026-08-25
 
 ### de
