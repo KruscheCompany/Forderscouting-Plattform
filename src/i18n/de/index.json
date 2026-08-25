@@ -614,7 +614,11 @@
     "message": "Nachricht",
     "sendInvitation": "Einladung senden",
     "cancel": "Abbrechen",
-    "transferData": "Daten übertragen"
+    "transferData": "Daten übertragen",
+    "roleAdmin": "Admin",
+    "roleUser": "Projektmanager*in",
+    "roleGuest": "Ehrenamt",
+    "roleLeader": "Verwaltungskoordinator*in"
   },
   "Sent": "Gesendet",
   "NotSent": "Nicht gesendet",

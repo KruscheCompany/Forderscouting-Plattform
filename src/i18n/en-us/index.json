@@ -614,7 +614,11 @@
     "message": "Message",
     "transferData": "Transfer Data",
     "sendInvitation": "Send Invitation",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "roleAdmin": "Admin",
+    "roleUser": "User",
+    "roleGuest": "Guest",
+    "roleLeader": "Coordinator"
   },
   "Sent": "Sent",
   "NotSent": "Not Sent",
