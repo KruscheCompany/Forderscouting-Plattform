@@ -1,5 +1,17 @@
 # Änderungsprotokoll / Changelog
 
+## 6.20.1 — 2026-08-25
+
+### de
+- Beim Bearbeiten oder Einladen einer Person wird beim Wechsel zwischen Verwaltung und Landkreis der jeweils andere Bereich jetzt korrekt geleert, statt beide Auswahlen zu löschen.
+- Die bereits ausgewählte Verwaltung bzw. der Landkreis wird beim Bearbeiten einer Person jetzt korrekt angezeigt.
+- Die Rollenbezeichnungen in der Benutzerverwaltung werden jetzt in der jeweiligen Sprache angezeigt.
+
+### en
+- When editing or inviting a person, switching between Administration and Landkreis now correctly clears only the other field instead of wiping both selections.
+- The already-selected Administration or Landkreis is now displayed correctly when editing a person.
+- Role labels in user management are now translated into the selected language.
+
 ## 6.20.0 — 2026-08-24
 
 ### de

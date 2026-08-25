@@ -72,13 +72,11 @@ export default {
         .sort((a, b) => a.title.localeCompare(b.title));
     },
   },
-  // mounted() {
-  //   console.log("this.currentMunicipality", this.currentMunicipality.title);
-  //   this.model = this.currentMunicipality.title
-  //     ? this.currentMunicipality
-  //     : null;
-  //   console.log("modell", this.model);
-  // }
+  watch: {
+    currentMunicipality(val) {
+      this.model = val;
+    },
+  },
 };
 </script>
 
