@@ -71,7 +71,6 @@
                   { label: $t('userAdministration.administration'), value: 'municipality' },
                   { label: $t('landkreise.landkreisName'), value: 'landkreis' }
                 ]"
-                @input="onScopeChange"
               />
               <Municipality v-if="scope === 'municipality'" :currentMunicipality="form.municipality"
                 @update:municipality="form.municipality = $event" />
@@ -194,10 +193,6 @@ export default {
     };
   },
   methods: {
-    onScopeChange() {
-      this.form.municipality = { id: null };
-      this.form.landkreis = null;
-    },
     inviteUser() {
       this.$refs.userInviteForm.validate().then(async success => {
         if (success) {

@@ -68,6 +68,11 @@ export default {
         : [];
     },
   },
+  watch: {
+    currentLandkreis(val) {
+      this.model = val;
+    },
+  },
   mounted() {
     this.$store.dispatch("landkreis/getLandkreise");
   },

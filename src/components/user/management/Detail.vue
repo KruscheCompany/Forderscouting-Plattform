@@ -41,7 +41,6 @@
                 { label: $t('userAdministration.administration'), value: 'municipality' },
                 { label: $t('landkreise.landkreisName'), value: 'landkreis' }
               ]"
-              @input="onScopeChange"
             />
             <MunicipalitySelect
               v-if="form.scope === 'municipality'"
@@ -204,10 +203,6 @@ export default {
     };
   },
   methods: {
-    onScopeChange() {
-      this.form.municipality = { id: null, title: "" };
-      this.form.landkreis = { id: null, title: "" };
-    },
     getUserData() {
       const id = !!this.$route.params && this.$route.params.id;
       if (id) {
