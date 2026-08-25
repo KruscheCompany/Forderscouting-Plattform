@@ -241,9 +241,13 @@ export default {
           label: this.$t("userAdministration.role"),
           align: "left",
           field: row =>
-            (!!row.role && row.role.type === "authenticated"
-              ? "User"
-              : !!row.role && row.role.type === "guest" ? "Guest" : !!row.role && row.role.type === "leader" ? "Municipality Leader" : "Admin") || "Role Unavailable",
+            !!row.role && row.role.type === "authenticated"
+              ? this.$t("userAdministration.roleUser")
+              : !!row.role && row.role.type === "guest"
+              ? this.$t("userAdministration.roleGuest")
+              : !!row.role && row.role.type === "leader"
+              ? this.$t("userAdministration.roleLeader")
+              : this.$t("userAdministration.roleAdmin"),
           format: val => `${val}`,
           sortable: true
         }
