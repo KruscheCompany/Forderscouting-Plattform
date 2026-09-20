@@ -282,18 +282,20 @@ export default {
       return this.userDetails?.municipality || null;
     },
 
-    // Get user's landkreis (mutually exclusive with municipality)
     userLandkreis() {
       return this.userDetails?.landkreis || null;
     },
 
-    // Get user's federal states from municipality or landkreis
+    // The federal state the admin assigned wins over the ones derived from the
+    // municipality or landkreis, which may span several.
     userFederalStates() {
+      if (this.userDetails?.federalState) return [this.userDetails.federalState];
       return this.userMunicipality?.federalStates || this.userLandkreis?.federalStates || [];
     },
 
-    // Get all fundings from store
-    allFundings() {
+    // The fundings the API scoped to this user (not the unscoped
+    // funding.allFundings list used by the dashboard and overview)
+    scopedFundings() {
       const fundings = this.$store.state.funding.fundings;
       if (fundings) {
         return fundings;
@@ -523,39 +525,17 @@ export default {
       return null;
     },
 
-    // Filter fundings by user's municipality and federal states
+    // The API already scopes /api/fundings to what this user may see, so a match is
+    // kept only if its funding is in that list - no client-side hierarchy check.
     filterFundingsByUserData(aiMatches) {
       if (this.isAdmin) {
         return aiMatches;
       }
-      const userFederalStateIds = this.userFederalStates.map(fs => fs.id);
-
       return aiMatches.filter(match => {
-        // 1. Check if match has external_id
         if (!match.external_id) {
           return false;
         }
-
-        // 2. Find the funding in store by external_id
-        const funding = this.allFundings.find(f => f.id === parseInt(match.external_id));
-
-        // If funding not found in store, exclude it
-        if (!funding) {
-          return false;
-        }
-
-        // 3a. Check if funding has federalStates
-        const fundingFederalStates = funding.federalStates || [];
-
-        if (fundingFederalStates.length === 0) {
-          return false;
-        }
-
-        // 3c. Check if ALL user's federal states are in funding's federal states
-        const hasAllFederalStatesMatch = userFederalStateIds.every(userFsId =>
-          fundingFederalStates.some(fundingFs => fundingFs.id === userFsId)
-        );
-        return hasAllFederalStatesMatch;
+        return this.scopedFundings.some(f => f.id === parseInt(match.external_id));
       });
     },
 

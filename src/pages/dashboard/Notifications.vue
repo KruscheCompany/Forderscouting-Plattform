@@ -440,10 +440,12 @@ export default {
     },
     onLiveNotification() {
       this.getData();
+      this.$store.dispatch("notifications/markNotificationsSeen");
     },
   },
   mounted() {
     this.getData();
+    this.$store.dispatch("notifications/markNotificationsSeen");
     if (this.$socket) {
       this.$socket.on("notification", this.onLiveNotification);
     }

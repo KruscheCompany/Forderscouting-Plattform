@@ -80,8 +80,10 @@
                     :value="!!project ? form.info.email : !!user && user.email" disable />
                 </div>
                 <div class="col-12">
-                  <MunicipalityCities :currentMunicipality="form.info.location"
-                    @update:city="form.info.location = $event" />
+                  <LocationSelect :currentLocation="form.location"
+                    :parentMunicipalityId="ownMunicipalityId"
+                    :rules="[(val) => !!val || $t('Required')]"
+                    @update:location="updateLocation" />
                 </div>
               </div>
             </div>
@@ -436,7 +438,7 @@ import Links from "components/projects/create/Links.vue";
 import Fundings from "components/funding/Fundings.vue";
 import ImageDialog from "components/ImageDialog.vue";
 import { dateFormatter } from "src/boot/dateFormatter";
-import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
+import LocationSelect from "components/hierarchy/LocationSelect.vue";
 
 export default {
   name: "newProjectIdea",
@@ -444,7 +446,7 @@ export default {
     UserSelect,
     CategorizationCard,
     EstimatedCost,
-    MunicipalityCities,
+    LocationSelect,
     Links,
     Fundings,
     ImageDialog,
@@ -467,6 +469,7 @@ export default {
           streetNo: "",
           postalCode: "",
         },
+        location: null,
         details: {
           startingCondition: "",
           content: "",
@@ -532,6 +535,10 @@ export default {
     removeFile(index) {
       this.form.files.splice(index, 1);
     },
+    updateLocation(location) {
+      this.form.location = location;
+      this.form.info.location = location?.title || "";
+    },
     scrollToInvalidElement(ref) {
       const el = ref.$el;
       const target = getScrollTarget(el);
@@ -567,6 +574,7 @@ export default {
                 (this.userDetails.municipality && this.userDetails.municipality.id) ||
                 this.selectedLandkreisMunicipality ||
                 null,
+              location: this.form.location?.id ? { id: this.form.location.id } : null,
               owner: (this.user && this.user.id) || null,
             },
           });
@@ -607,6 +615,7 @@ export default {
               ...this.form,
               tags,
               published: published,
+              location: this.form.location?.id ? { id: this.form.location.id } : null,
             },
           });
           this.isLoading = false;
@@ -708,6 +717,13 @@ export default {
     landkreisMunicipalityOptions() {
       return this.userDetails?.landkreis?.municipalities || [];
     },
+    ownMunicipalityId() {
+      return (
+        (this.project
+          ? this.project.municipality?.id
+          : this.userDetails?.municipality?.id || this.selectedLandkreisMunicipality) || null
+      );
+    },
     user() {
       return this.$store.state.userCenter.user.user;
     },
@@ -758,6 +774,9 @@ export default {
     },
   },
   watch: {
+    selectedLandkreisMunicipality() {
+      this.updateLocation(null);
+    },
     "form.details.content": {
       handler(val) {
         clearTimeout(this.taxonomySuggestTimeout);

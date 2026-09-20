@@ -41,6 +41,12 @@ export default {
       type: Object,
       default: null,
     },
+    // Optional: narrows options to municipalities under this landkreis. When
+    // omitted, shows every municipality (matching today's no-context fallback).
+    parentLandkreisId: {
+      type: Number,
+      default: null,
+    },
     rules: {
       type: Array,
       default: () => [],
@@ -62,7 +68,10 @@ export default {
   },
   computed: {
     municipalities() {
-      return this.$store.state.municipality.municipalities
+      const municipalities = this.parentLandkreisId
+        ? this.$store.getters["landkreis/municipalitiesUnder"](this.parentLandkreisId)
+        : this.$store.state.municipality.municipalities || [];
+      return municipalities
         .map((municipality) => {
           return {
             id: municipality.id,

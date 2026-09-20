@@ -8,7 +8,7 @@ export async function getTags(context) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     return false;
@@ -22,7 +22,7 @@ export async function getSimplifiedTags(context, payload) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     return false;
@@ -44,7 +44,7 @@ export async function addTag(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -68,7 +68,7 @@ export async function deleteTag(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -94,7 +94,7 @@ export async function editTag(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -109,7 +109,7 @@ export async function getPendingTags(context) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     return false;
@@ -125,7 +125,7 @@ export async function addPendingTag(context, payload) {
   } catch (error) {
     context.dispatch(
       "notifications/pushToast",
-      { kind: "negative", title: error.response.data.error.message },
+      { kind: "negative", title: i18n.t(error.response.data.error.message) },
       { root: true }
     );
     return false;

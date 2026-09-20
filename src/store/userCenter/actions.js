@@ -50,7 +50,7 @@ export async function login(context, payload) {
       //   { root: true }
       // );
       return (
-        error.response.data.error.message ||
+        i18n.t(error.response.data.error.message) ||
         "Login failed, please try again in a while"
       );
     }
@@ -91,7 +91,7 @@ export async function getUserDetails(context) {
     console.log("error :>> ", error.response);
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -105,7 +105,7 @@ export async function getUserInfo(context) {
     console.log("error :>> ", error.response);
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -119,7 +119,7 @@ export async function getUsers(context) {
     console.log("error :>> ", error.response);
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -142,7 +142,7 @@ export async function inviteUser(context, payload) {
       console.log("error :>> ", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -167,7 +167,7 @@ export async function resetPassword(context, payload) {
       console.log("error :>> ", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -194,7 +194,7 @@ export async function updatePersonalData(context, payload) {
       console.log("error :>> ", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -215,12 +215,11 @@ export async function updateUser(context, payload) {
       context.dispatch("getUserDetails");
       context.dispatch("getUserInfo");
       context.dispatch("getUsers");
-      this.$router.push({ path: "/Administation/User/" });
     } catch (error) {
       console.log("error :>> ", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -256,7 +255,7 @@ export async function transferData(context, payload) {
       console.log("error :>> ", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -279,7 +278,7 @@ export async function manageRequest(context, payload) {
       console.log("error :>> ", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     }
@@ -294,7 +293,7 @@ export async function deleteGuestRequest(context, payload) {
       console.log("error :>> ", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     }
@@ -313,7 +312,7 @@ export async function markNotificationAsRead(context, payload) {
       console.log("error :>> ", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     }
@@ -328,7 +327,7 @@ export async function getDataOverview(context) {
     console.log("error :>> ", error.response);
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -342,7 +341,7 @@ export async function getWatchlists(context) {
     console.log("error :>> ", error.response);
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -360,6 +359,7 @@ export async function logout(context) {
   context.commit("municipality/setMunicipalities", [], { root: true });
   context.commit("category/setCategories", [], { root: true });
   context.commit("funding/setFundings", [], { root: true });
+  context.commit("funding/setAllFundings", [], { root: true });
   context.commit("funding/setSpecificFunding", null, { root: true });
   context.commit("funding/setFundingsWithArchived", [], { root: true });
   sessionStorage.clear();
@@ -379,7 +379,7 @@ export async function forgotPassword(context) {
     console.log("error :>> ", error.response);
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     return false;
@@ -403,7 +403,7 @@ export async function uploadProfile(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -421,7 +421,7 @@ export async function deleteProfile(context, payload) {
       console.log("error.response", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     }
@@ -441,7 +441,7 @@ export async function deleteUser(context, payload) {
       console.log("error.response", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;

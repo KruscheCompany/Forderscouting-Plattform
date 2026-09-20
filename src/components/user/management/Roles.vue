@@ -86,7 +86,7 @@
                   <q-item
                     clickable
                     v-close-popup
-                    @click="$router.push('/Administation/User/' + props.row.id)"
+                    @click="editUserId = props.row.id; editUserDialog = true"
                   >
                     <q-item-section
                       ><span class="text-right font-14">
@@ -139,6 +139,12 @@
       @update="inviteUserDialog = $event"
       @invited="getData"
     />
+    <Detail
+      :dialogState="editUserDialog"
+      :userId="editUserId"
+      @update="editUserDialog = $event"
+      @updated="getData"
+    />
     <TransferDialog
       :fromId="currentUser"
       :dialogState="transferDialog"
@@ -160,17 +166,21 @@
 import TransferDialog from "components/user/settings/TransferDialog.vue";
 import deleteDataDialog from "components/user/settings/deleteDataDialog.vue";
 import InviteUser from "components/user/management/InviteUser.vue";
+import Detail from "components/user/management/Detail.vue";
 import { dateFormatter } from "src/boot/dateFormatter";
 export default {
   name: "Roles",
   components: {
     InviteUser,
+    Detail,
     TransferDialog,
     deleteDataDialog
   },
   data() {
     return {
       inviteUserDialog: false,
+      editUserDialog: false,
+      editUserId: null,
       transferDialog: false,
       deleteData: false,
       filter: "",

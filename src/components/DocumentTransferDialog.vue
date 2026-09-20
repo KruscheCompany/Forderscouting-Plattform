@@ -86,7 +86,7 @@ export default {
           this.$router.go(-1);
         } catch (error) {
           console.log("error :>> ", error.response);
-          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response.data.error.message });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t(error.response.data.error.message) });
         }
         this.$emit("close");
       } catch (error) {

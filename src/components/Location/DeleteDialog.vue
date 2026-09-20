@@ -3,10 +3,10 @@
     <q-card class="q-pa-lg radius-10">
       <q-card-section>
         <h6 class="text-center font-24 q-mt-none">
-          {{ $t("deleteState") }}
+          {{ $t("deleteLocationEntry") }}
         </h6>
         <p class="text-center text-weight-light">
-          {{ $t("deleteStateMessage") }}
+          {{ $t("deleteLocationEntryMessage") }}
         </p>
       </q-card-section>
       <q-card-section>
@@ -29,7 +29,7 @@
             no-caps
             class="no-shadow radius-6 q-px-xl"
             :loading="isLoading"
-            @click="deleteState"
+            @click="deleteLocationEntry"
           />
         </div>
       </q-card-section>
@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  name: "deleteStateDialog",
+  name: "deleteLocationEntryDialog",
   props: {
     dialogState: { type: Boolean, default: false },
     id: { type: Number, default: null }
@@ -50,11 +50,11 @@ export default {
     };
   },
   methods: {
-    async deleteState() {
+    async deleteLocationEntry() {
       if (!!this.id) {
         this.isLoading = true;
         const res = await this.$store.dispatch(
-          "municipality/deleteState",
+          "municipality/deleteLocationEntry",
           { id: this.id }
         );
         this.isLoading = false;

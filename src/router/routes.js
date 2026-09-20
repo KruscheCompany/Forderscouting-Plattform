@@ -164,20 +164,6 @@ const routes = [
         component: () => import("pages/dashboard/Announcements.vue")
       },
       {
-        path: "/Administation/User/:id",
-        name: "AdministationUserDetails",
-        meta: {
-          title: "User Administation",
-          titleDE: "Benutzer*innen-Verwaltung",
-          showInNavigation: false,
-          backLink: "/Administation/User",
-          requireAuth: true,
-          requireAdmin: true
-        },
-        icon: "/icons/Users.svg",
-        component: () => import("pages/dashboard/DetailUser.vue")
-      },
-      {
         path: "/network",
         name: "Network",
         meta: {
@@ -258,17 +244,18 @@ const routes = [
         component: () => import("pages/dashboard/Municipality.vue")
       },
       {
-        path: "/states",
-        name: "States",
+        path: "/locations",
+        alias: "/states",
+        name: "Locations",
         meta: {
-          title: "States",
-          titleDE: "Gemeinden",
+          title: "Locations",
+          titleDE: "Orte",
           showInNavigation: true,
           requireAuth: true,
           requireAdmin: true
         },
         icon: "/icons/Government.svg",
-        component: () => import("pages/dashboard/States.vue")
+        component: () => import("pages/dashboard/Locations.vue")
       },
       {
         path: "/Administation/Areas/:id",

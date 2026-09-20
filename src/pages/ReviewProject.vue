@@ -332,8 +332,8 @@ export default {
         this.ticket = { ...this.ticket, responseText: this.responseText };
       } catch (error) {
         this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response && error.response.data && error.response.data.error
-            ? error.response.data.error.message
-            : "Fehler beim Absenden." });
+            ? this.$t(error.response.data.error.message)
+            : this.$t("Fehler beim Absenden.") });
       } finally {
         this.submitting = false;
       }

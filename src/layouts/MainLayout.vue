@@ -32,7 +32,7 @@
           :to="{ name: 'Login' }"
           color="yellow"
           unelevated
-          class="q-mr-sm radius-6"
+          class="q-mr-sm radius-6 auth-btn"
           no-caps
         >
           <p class="q-mb-none text-blue q-mx-sm q-my-xs"
@@ -45,7 +45,7 @@
             :to="{ name: 'Register' }"
             color="yellow"
             unelevated
-            class="mr-0 radius-6"
+            class="mr-0 radius-6 auth-btn"
             no-caps
           >
             <p class="q-mb-none text-blue q-my-xs" :style="$q.screen.lt.sm ? 'font-size: 11px;' : ''">{{ $t("guestRegistration") }}</p>
@@ -128,6 +128,14 @@ export default {
 @media only screen and (min-width: 600px) {
   .navContainer {
     padding: 0 135px !important;
+  }
+}
+.auth-btn {
+  min-width: 110px;
+}
+@media only screen and (max-width: 599px) {
+  .auth-btn {
+    min-width: 80px;
   }
 }
 </style>

@@ -12,6 +12,7 @@ import funding from "./funding";
 import ai from "./ai";
 import federalState from "./federalState";
 import landkreis from "./landkreis";
+import location from "./location";
 import notifications from "./notifications";
 
 Vue.use(Vuex);
@@ -38,6 +39,7 @@ export default function(/* { ssrContext } */) {
       ai,
       federalState,
       landkreis,
+      location,
       notifications
     },
     plugins: [

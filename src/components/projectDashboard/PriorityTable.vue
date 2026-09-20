@@ -39,20 +39,23 @@
         :no-data-label="$t('No data')" :no-results-label="$t('No results')" hide-bottom>
         <template v-slot:header="props">
           <q-tr class="tableHeader" :props="props">
-            <q-th v-if="isLeader" auto-width />
+            <q-th v-if="isLeader" :style="{ width: actionColumnWidth }" />
             <q-th v-for="col in props.cols" :key="col.name" :props="props" :style="col.headerStyle" class="font-14 text-black">
               {{ col.label }}
             </q-th>
             <q-th :style="{ width: expandColumnWidth }" />
-            <q-th v-if="isLeader" auto-width />
           </q-tr>
         </template>
 
         <template v-slot:body="props">
           <q-tr :props="props" class="priority-row" :draggable="isLeader && !isSorted"
             @dragstart="onRowDragStart(props.row)" @dragover.prevent @drop="onRowDrop(props.row)">
-            <q-td v-if="isLeader" auto-width class="priority-col-handle">
-              <q-icon name="mdi-drag" size="sm" :class="isSorted ? 'text-grey-5' : 'drag-handle cursor-pointer'" />
+            <q-td v-if="isLeader" :style="{ width: actionColumnWidth }" class="text-center">
+              <div class="row items-center justify-center no-wrap">
+                <q-icon name="mdi-drag" size="sm" :class="isSorted ? 'text-grey-5' : 'drag-handle cursor-pointer'" />
+                <q-btn flat dense round size="sm" icon="close" color="grey-8"
+                  :title="$t('ProjectDashboard.removeFromPriorityList')" @click.stop="remove(props.row)" />
+              </div>
             </q-td>
             <q-td v-for="col in props.cols" :key="col.name" :props="props" :style="col.style" class="font-14 cursor-pointer"
               @click="view(props.row.project)">
@@ -73,13 +76,13 @@
                 </q-badge>
               </template>
               <template v-else>
-                <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
+                <q-tooltip v-if="col.value && col.value.length > (col.name === 'location' ? 15 : 48)" anchor="bottom left" self="top left"
                   content-style="font-size: 14px">
                   {{ col.value }}
                 </q-tooltip>
                 {{
-                  col.value && col.value.length > 125
-                    ? col.value.substring(0, 125) + "..."
+                  col.value && col.value.length > (col.name === 'location' ? 15 : 125)
+                    ? col.value.substring(0, col.name === 'location' ? 15 : 125) + "..."
                     : col.value
                 }}
               </template>
@@ -87,10 +90,6 @@
             <q-td :style="{ width: expandColumnWidth }" class="text-center">
               <q-btn size="md" color="blue" round dense @click.stop="toggleExpand(props.row)"
                 :icon="isExpanded(props.row) ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
-            </q-td>
-            <q-td v-if="isLeader" auto-width class="text-right">
-              <q-btn flat dense round size="sm" icon="close" color="grey-8"
-                :title="$t('ProjectDashboard.removeFromPriorityList')" @click.stop="remove(props.row)" />
             </q-td>
           </q-tr>
           <FinancialPlanRow :visible="isExpanded(props.row)" :financial-plan="getFinancialPlan(props.row)"
@@ -158,6 +157,9 @@ export default {
     },
     expandColumnWidth() {
       return COLUMN_WIDTHS.expand;
+    },
+    actionColumnWidth() {
+      return COLUMN_WIDTHS.action;
     },
     filteredList() {
       const searchTerm = (this.search || "").trim().toLowerCase();
@@ -377,7 +379,4 @@ export default {
   background: $grey-1;
 }
 
-.priority-col-handle {
-  width: 32px;
-}
 </style>

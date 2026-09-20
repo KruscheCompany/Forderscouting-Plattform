@@ -202,7 +202,7 @@ export default {
       if (!!this.form.title && this.form.location && !!this.editingId) {
         if (
           this.form.title !== this.municipality.title ||
-          this.form.location !== this.municipality.location ||
+          this.form.location !== this.municipality.verwaltungssitz ||
           JSON.stringify(this.form.federalStates) !== JSON.stringify(this.municipality.federalStates) ||
           JSON.stringify(this.form.landkreise) !== JSON.stringify(this.municipality.landkreise) ||
           this.form.financeContactEmail !== this.municipality.financeContactEmail ||
@@ -252,7 +252,7 @@ export default {
         if (!!municipality) {
           this.municipality = municipality;
           this.form.title = municipality.title;
-          this.form.location = municipality.location;
+          this.form.location = municipality.verwaltungssitz;
           this.form.financeContactEmail = municipality.financeContactEmail || "";
           this.form.financeContactFirstName = municipality.financeContactFirstName || "";
           this.form.financeContactLastName = municipality.financeContactLastName || "";
