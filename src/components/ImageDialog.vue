@@ -89,7 +89,7 @@ export default {
           this.$_options = false;
           this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t("Caption updated") });
         } catch (error) {
-          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response.data.error.message });
+          this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t(error.response.data.error.message) });
         }
       } else {
         this.$emit("add-caption", this.captionInput, this.imageIndex);

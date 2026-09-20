@@ -226,8 +226,8 @@ export default {
         },
         {
           name: "federal state",
-          label: this.$t("administrativeAreas.federalState"),
-          field: row => row.location,
+          label: this.$t("administrativeAreas.administrationSeat"),
+          field: row => row.verwaltungssitz,
           sortable: true,
           align: "left"
         },

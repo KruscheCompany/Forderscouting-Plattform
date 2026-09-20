@@ -28,7 +28,7 @@ export async function getLandkreise(context) {
     console.error("error :>> ", error);
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -50,7 +50,7 @@ export async function createLandkreis(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -74,7 +74,7 @@ export async function editLandkreis(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -96,7 +96,7 @@ export async function deleteLandkreis(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;

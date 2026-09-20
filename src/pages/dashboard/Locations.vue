@@ -1,8 +1,11 @@
 <template>
   <q-page class="q-my-lg" :class="$q.screen.gt.sm ? 'q-mx-xl' : 'q-mx-sm'">
+    <div class="text-caption text-grey-7 q-mb-sm">
+      {{ $t("administrativeAreas.locationEntryNote") }}
+    </div>
     <q-table
       class="radius-20 shadow-1 pagination-no-shadow"
-      :title="$t('administrativeAreas.statesOverview')"
+      :title="$t('administrativeAreas.locationEntriesOverview')"
       :data="data"
       row-key="name"
       :columns="columns"
@@ -47,7 +50,7 @@
               @click="createDialog = true"
             >
               <p v-if="$q.screen.gt.sm" class="q-mb-none q-mx-md q-my-sm">
-                {{ $t("administrativeAreas.createState") }}
+                {{ $t("administrativeAreas.createLocationEntry") }}
               </p>
             </q-btn>
           </div>
@@ -120,22 +123,22 @@
     </q-table>
     <CreateDialog
       :dialogState="createDialog"
-      :editingId="municipalityId"
-      @update="(createDialog = $event), (municipalityId = null)"
+      :editingId="locationEntryId"
+      @update="(createDialog = $event), (locationEntryId = null)"
     />
     <DeleteDialog
-      :id="municipalityId"
+      :id="locationEntryId"
       :dialogState="deleteDialog"
-      @update="(deleteDialog = $event), (municipalityId = null)"
+      @update="(deleteDialog = $event), (locationEntryId = null)"
     />
   </q-page>
 </template>
 
 <script>
-import CreateDialog from "components/States/CreateDialog.vue";
-import DeleteDialog from "components/States/DeleteDialog.vue";
+import CreateDialog from "components/Location/CreateDialog.vue";
+import DeleteDialog from "components/Location/DeleteDialog.vue";
 export default {
-  name: "States",
+  name: "Locations",
   components: {
     CreateDialog,
     DeleteDialog,
@@ -144,31 +147,31 @@ export default {
     return {
       createDialog: false,
       deleteDialog: false,
-      municipalityId: null,
+      locationEntryId: null,
       filter: "",
       visibleColumns: ["title", "municipality"],
     };
   },
   methods: {
     prepDeleteDialog(row) {
-      this.municipalityId = !!row.id ? row.id : "";
+      this.locationEntryId = !!row.id ? row.id : "";
       this.deleteDialog = true;
     },
     prepEditDialog(row) {
-      this.municipalityId = !!row.id ? row.id : "";
+      this.locationEntryId = !!row.id ? row.id : "";
       this.createDialog = true;
     },
     getData() {
-      this.$store.dispatch("municipality/getStates");
+      this.$store.dispatch("municipality/getLocationEntries");
     },
   },
   computed: {
     data() {
-      return this.$store.state.municipality.states.map((state) => {
+      return this.$store.state.municipality.locations.map((location) => {
         return {
-          id: state.id,
-          title: state.title,
-          municipality: state.municipality.title,
+          id: location.id,
+          title: location.title,
+          municipality: location.municipality.title,
         };
       });
     },
@@ -186,7 +189,7 @@ export default {
         },
         {
           name: "title",
-          label: this.$t("administrativeAreas.federalState"),
+          label: this.$t("administrativeAreas.locationEntryTitle"),
           field: (row) => row.title,
           sortable: true,
           align: "left",
@@ -207,16 +210,16 @@ export default {
       const savedPagination = JSON.parse(localStorage.getItem("pagination"));
 
       this.$refs.table.setPagination({
-        page: savedPagination.statesPage || 1,
-        rowsPerPage: savedPagination.statesRowsPerPage || 10,
+        page: savedPagination.locationEntriesPage || 1,
+        rowsPerPage: savedPagination.locationEntriesRowsPerPage || 10,
       });
     }
   },
   beforeDestroy() {
     const pagination = JSON.parse(localStorage.getItem("pagination"));
     const localPagination = {
-      statesPage: this.$refs.table.computedPagination.page,
-      statesRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
+      locationEntriesPage: this.$refs.table.computedPagination.page,
+      locationEntriesRowsPerPage: this.$refs.table.computedPagination.rowsPerPage,
     };
     const filters = { ...pagination, ...localPagination };
     localStorage.setItem("pagination", JSON.stringify(filters));

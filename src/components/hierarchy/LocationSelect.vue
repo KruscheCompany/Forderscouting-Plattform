@@ -4,7 +4,7 @@
       outlined
       dense
       v-model="model"
-      :options="landkreise"
+      :options="options"
       options-selected-class="text-primary text-weight-600"
       class="no-shadow input-radius-6"
       hide-bottom-space
@@ -19,7 +19,7 @@
         </template>
         <template v-else>
           <span class="text-grey">
-            {{ $t("landkreise.selectLandkreis") }}
+            {{ $t("personalData.location") }}
           </span>
         </template>
       </template>
@@ -36,15 +36,15 @@
 
 <script>
 export default {
-  name: "landkreisSelect",
+  name: "locationSelect",
   props: {
-    currentLandkreis: {
+    currentLocation: {
       type: Object,
       default: null,
     },
-    // Optional: narrows options to landkreise spanning this federal state.
-    // When omitted, shows every landkreis (matching today's no-context fallback).
-    parentFederalStateId: {
+    // Optional: narrows options to this municipality's locations. When
+    // omitted, shows every location (matching today's no-context fallback).
+    parentMunicipalityId: {
       type: Number,
       default: null,
     },
@@ -55,35 +55,34 @@ export default {
   },
   data() {
     return {
-      model: this.currentLandkreis,
+      model: this.currentLocation,
     };
   },
   methods: {
     onSelect(value) {
-      const landkreis = {
+      const location = {
         id: value.id,
         title: value.title,
       };
-      this.$emit("update:landkreis", landkreis);
+      this.$emit("update:location", location);
     },
   },
   computed: {
-    landkreise() {
-      const landkreise = this.parentFederalStateId
-        ? this.$store.getters["federalState/landkreiseUnder"](this.parentFederalStateId)
-        : this.$store.state.landkreis.landkreise;
-      return Array.isArray(landkreise)
-        ? [...landkreise].sort((a, b) => a.title.localeCompare(b.title))
-        : [];
+    options() {
+      const locations = this.$store.state.location.locations || [];
+      const filtered = this.parentMunicipalityId
+        ? locations.filter((loc) => ((loc.municipality && loc.municipality.id) || loc.municipality) === this.parentMunicipalityId)
+        : locations;
+      return [...filtered].sort((a, b) => a.title.localeCompare(b.title));
     },
   },
   watch: {
-    currentLandkreis(val) {
+    currentLocation(val) {
       this.model = val;
     },
   },
   mounted() {
-    this.$store.dispatch("landkreis/getLandkreise");
+    this.$store.dispatch("location/getLocations");
   },
 };
 </script>

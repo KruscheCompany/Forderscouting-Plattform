@@ -78,8 +78,10 @@
                 :value="!!project ? localForm.info.email : !!user && user.email" disable />
             </div>
             <div class="col-12">
-              <MunicipalityCities :currentMunicipality="localForm.info.location" :is-required="true"
-                @update:city="updateLocation" />
+              <LocationSelect :currentLocation="localForm.location"
+                :parentMunicipalityId="ownMunicipalityId"
+                :rules="[(val) => !!val || $t('Required')]"
+                @update:location="updateLocation" />
             </div>
           </div>
         </div>
@@ -142,7 +144,7 @@
 
 <script>
 import UserSelect from "components/user/UserSelect.vue";
-import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
+import LocationSelect from "components/hierarchy/LocationSelect.vue";
 import { scroll } from "quasar";
 const { getScrollTarget, setScrollPosition } = scroll;
 export default {
@@ -150,7 +152,7 @@ export default {
   emits: ['update:form-data', 'update:selected-municipality'],
   components: {
     UserSelect,
-    MunicipalityCities,
+    LocationSelect,
   },
   props: {
     currentTab: {
@@ -177,6 +179,7 @@ export default {
           streetNo: "",
           postalCode: "",
         },
+        location: null,
         municipality: "",
         editors: [],
       },
@@ -194,6 +197,12 @@ export default {
     },
     landkreisMunicipalityOptions() {
       return this.userDetails?.landkreis?.municipalities || [];
+    },
+    ownMunicipalityId() {
+      return (
+        (this.project ? this.project.municipality?.id : this.userDetails?.municipality?.id) ||
+        null
+      );
     },
 
     // Stable computed properties for child component props
@@ -228,7 +237,8 @@ export default {
       return this.localForm;
     },
     updateLocation(location) {
-      this.localForm.info.location = location;
+      this.localForm.location = location;
+      this.localForm.info.location = location?.title || "";
     },
     updateEditors(editors) {
       this.localForm.editors = editors;
@@ -258,6 +268,9 @@ export default {
           streetNo: formData.info?.streetNo || "",
           postalCode: formData.info?.postalCode || "",
         },
+        location:
+          formData.location ||
+          (formData.info?.location ? { id: null, title: formData.info.location } : null),
         municipality: formData.municipality || "",
         editors: formData.editors || [],
       };

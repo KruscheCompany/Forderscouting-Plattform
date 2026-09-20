@@ -9,7 +9,7 @@ export async function getProjectIdeas(context) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -42,7 +42,7 @@ export async function getApplicationProcess(context, filters = {}) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -73,7 +73,7 @@ export async function getArchivedProjects(context, filters = {}) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -88,7 +88,7 @@ export async function getPrioritizedProjects(context, payload = {}) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -108,7 +108,7 @@ export async function addToPriorityList(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -130,7 +130,7 @@ export async function removeFromPriorityList(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -146,7 +146,7 @@ export async function reorderPriorityList(context, payload) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     context.dispatch("getPrioritizedProjects");
@@ -210,7 +210,7 @@ export async function uploadFiles(context, payload) {
       console.log("files error.response", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       // return false;
@@ -243,7 +243,7 @@ export async function uploadMedia(context, payload) {
           console.log("media error.response", error.response);
           context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
         }
@@ -266,7 +266,7 @@ export async function deleteFilesAndMedia(context, payload) {
         console.log("files error.response", error.response);
         context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
         // return false;
@@ -370,7 +370,7 @@ export async function editProjectIdea(context, payload) {
       console.error("error", error);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -391,7 +391,7 @@ export async function simpleUpdateProjectIdea(context, payload) {
       console.error("error", error);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -420,7 +420,7 @@ export async function fetchVorpruefungTickets(context, payload) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     return [];
@@ -443,7 +443,7 @@ export async function createVorpruefungTicket(context, payload) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     return false;
@@ -461,7 +461,7 @@ export async function updateVorpruefungTicketNotes(context, payload) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     return false;
@@ -481,7 +481,7 @@ export async function resendVorpruefungTicket(context, payload) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     return false;
@@ -526,7 +526,7 @@ export async function getSpecificProject(context, payload) {
       console.log("error", error);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     }
@@ -558,7 +558,7 @@ export async function addToWatchlist(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -581,7 +581,7 @@ export async function removeFromWatchlist(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -617,7 +617,7 @@ export async function requestAccess(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -643,7 +643,7 @@ export async function archiveProjectIdea(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -667,7 +667,7 @@ export async function unarchiveProjectIdea(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -690,7 +690,7 @@ export async function duplicateProject(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -713,7 +713,7 @@ export async function deleteProjectIdea(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -748,7 +748,7 @@ export async function getProjectDashboardStats(context, filters = {}) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     return false;

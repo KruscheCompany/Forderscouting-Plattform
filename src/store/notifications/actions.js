@@ -8,16 +8,18 @@ export async function fetchNotificationsCount(context) {
   try {
     const response = await api.get("/api/user/notification");
     const data = (response && response.data) || {};
-    const count = ["fundingComments", "fundingExpirey", "guest", "requests", "pendingTags", "tagDecisions"].reduce(
-      (total, key) => total + (Array.isArray(data[key]) ? data[key].length : 0),
-      0
-    );
-    const fundingSuggestionsCount = Array.isArray(data.fundingSuggestions)
-      ? data.fundingSuggestions.reduce((total, group) => total + (group.suggestions ? group.suggestions.length : 0), 0)
-      : 0;
-    context.commit("setNotificationsCount", count + fundingSuggestionsCount);
+    context.commit("setNotificationsCount", data.newNotificationsCount || 0);
   } catch (error) {
     context.commit("setNotificationsCount", 0);
+  }
+}
+
+export async function markNotificationsSeen(context) {
+  try {
+    await api.post("/api/user/notification/seen");
+    context.dispatch("fetchNotificationsCount");
+  } catch (error) {
+    // badge just won't reset this time; next successful call will catch up
   }
 }
 
@@ -95,7 +97,7 @@ export async function publishRibbon(context, { message, linkLabel, linkUrl }) {
     await api.post("/api/system-ribbons", { data: { message, linkLabel, linkUrl } });
     context.dispatch("pushToast", { kind: "positive", title: i18n.t("systemRibbon.publishedSuccess") });
   } catch (error) {
-    context.dispatch("pushToast", { kind: "negative", title: error.response.data.error.message });
+    context.dispatch("pushToast", { kind: "negative", title: i18n.t(error.response.data.error.message) });
   }
 }
 
@@ -105,6 +107,6 @@ export async function unpublishRibbon(context, id) {
     context.commit("setActiveRibbon", null);
     context.dispatch("pushToast", { kind: "positive", title: i18n.t("systemRibbon.unpublishedSuccess") });
   } catch (error) {
-    context.dispatch("pushToast", { kind: "negative", title: error.response.data.error.message });
+    context.dispatch("pushToast", { kind: "negative", title: i18n.t(error.response.data.error.message) });
   }
 }

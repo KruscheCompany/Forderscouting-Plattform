@@ -1,5 +1,57 @@
 # Änderungsprotokoll / Changelog
 
+## 6.25.0 — 2026-09-13
+
+### de
+- Die Verwaltungsseite für Orte heißt jetzt "Orte" (vorher "Gemeinden/States" mit uneinheitlicher Bezeichnung je nach Sprache) und ist unter einer neuen, klareren Adresse erreichbar. Der alte Link funktioniert weiterhin.
+
+### en
+- The admin page for managing villages/towns is now consistently labeled "Locations" in both languages (it previously showed the English label "States", which was incorrect) and lives at a new, clearer address. The old link still works.
+
+## 6.24.0 — 2026-09-13
+
+### de
+- Die Ortsauswahl in den persönlichen Daten sowie beim Anlegen und Bearbeiten einer Projektidee wurde vereinheitlicht: Sie wählen den Ort jetzt aus einer echten Liste aus, statt ihn frei einzutippen.
+
+### en
+- The location field in personal data, and when creating or editing a project idea, now uses the same unified picker: you select the village/town from a real list instead of typing it freely.
+
+## 6.23.0 — 2026-09-12
+
+### de
+- Förderungen, die nur für einen Landkreis oder ein Bundesland freigegeben sind, werden jetzt korrekt allen Verwaltungen darunter angezeigt – vorher waren sie nur für die eigene Verwaltung sichtbar.
+
+### en
+- Funding programs released only for a district or federal state are now correctly shown to every administration within it — previously they were only visible to their own administration.
+
+## 6.22.0 — 2026-09-12
+
+### de
+- Beim Einladen oder Bearbeiten einer Person muss jetzt nur noch **ein** Bereich ausgewählt werden (Landkreis, Verwaltung oder Ort) – die übergeordneten und untergeordneten Bereiche werden automatisch angezeigt.
+- Für Ehrenamtliche (Gäste) wird beim Einladen/Bearbeiten nur noch der Ort abgefragt, keine Verwaltung oder Landkreis mehr.
+- Bei der Registrierung als Gast wird jetzt nur noch der Ort ausgewählt, nicht mehr zusätzlich die Verwaltung.
+
+### en
+- When inviting or editing a person, only **one** region needs to be selected now (Landkreis, Administration, or Location) – the related broader and narrower regions are shown automatically.
+- For volunteers (guests), invite/edit now only asks for their city, not an administration or district.
+- Guest self-registration now only asks for a city/location, not an administration.
+
+## 6.21.1 — 2026-09-12
+
+### de
+- Beim Anlegen oder Bearbeiten einer Verwaltung muss der Verwaltungssitz jetzt nicht mehr eindeutig sein – zwei Verwaltungen können denselben Amtssitz haben.
+
+### en
+- When creating or editing an administration, the office location no longer needs to be unique — two administrations can now share the same office town.
+
+## 6.21.0 — 2026-09-12
+
+### de
+- Die rote Markierung an der Benachrichtigungs-Glocke zeigt jetzt nur noch neue, ungesehene Benachrichtigungen an. Sobald Sie die Benachrichtigungsseite geöffnet haben, verschwindet die Zahl, bis wieder etwas Neues eintrifft — auch auf anderen Geräten und nach erneutem Anmelden.
+
+### en
+- The red marker on the notification bell now only counts new, unseen notifications. Once you've opened the notifications page, the number clears until something new arrives — even on other devices and after logging back in.
+
 ## 6.20.2 — 2026-08-25
 
 ### de

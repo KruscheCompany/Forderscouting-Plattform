@@ -51,14 +51,10 @@
                     />
                   </div>
                   <div class="col-12 login-field-gap login-select-field">
-                    <p class="q-mb-sm login-label">{{ $t("personalData.administration") }}</p>
-                    <Municipality :isRequired="true" @update:municipality="form.municipality = $event" />
-                  </div>
-                  <div class="col-12 login-field-gap login-select-field">
                     <p class="q-mb-sm login-label">{{ $t("personalData.location") }}</p>
-                    <MunicipalityCities
-                      :isRequired="true"
-                      @update:city="form.location = $event"
+                    <LocationSelect
+                      :rules="[val => !!val || 'Erforderlich']"
+                      @update:location="form.assignedLocation = $event"
                     />
                   </div>
                   <div class="col-12 login-field-gap login-select-field">
@@ -131,16 +127,14 @@
 
 <script>
 import AnimatedJourneyMapBackground from "components/AnimatedJourneyMapBackground.vue";
-import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
-import Municipality from "components/projects/create/Municipality.vue";
+import LocationSelect from "components/hierarchy/LocationSelect.vue";
 import Categories from "components/projects/create/Categories.vue";
 
 export default {
   name: "Register",
   components: {
     AnimatedJourneyMapBackground,
-    MunicipalityCities,
-    Municipality,
+    LocationSelect,
     Categories
   },
   data() {
@@ -148,8 +142,7 @@ export default {
       form: {
         name: "",
         email: "",
-        location: "",
-        municipality: null,
+        assignedLocation: null,
         categories: []
       },
       isLoading: false,
@@ -180,9 +173,8 @@ export default {
           data: {
             name: form.name,
             email: form.email,
-            location: form.location,
-            municipality: {
-              id: form.municipality
+            assignedLocation: {
+              id: form.assignedLocation?.id
             },
             categories: form.categories
           }
@@ -194,12 +186,9 @@ export default {
         return res.data;
       } catch (error) {
         this.isLoading = false;
-        this.errorMsg = error.response.data.error.message;
+        this.errorMsg = this.$t(error.response.data.error.message);
       }
     }
-  },
-  mounted() {
-    this.$store.dispatch("municipality/getMunicipalitiesPublic");
   }
 };
 </script>

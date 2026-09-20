@@ -21,16 +21,22 @@
       :no-results-label="$t('No results')" ref="table">
       <template v-slot:header="props">
         <q-tr class="tableHeader" :props="props">
+          <q-th :style="{ width: actionColumnWidth }" />
           <q-th v-for="col in props.cols" :key="col.name" :props="props" :style="col.headerStyle" class="font-14 text-black">
             {{ col.label }}
           </q-th>
-          <q-th :style="{ width: expandColumnWidth }" />
           <q-th :style="{ width: expandColumnWidth }" />
         </q-tr>
       </template>
 
       <template v-slot:body="props">
         <q-tr :props="props">
+          <q-td :style="{ width: actionColumnWidth }" class="text-center">
+            <q-btn size="md" color="blue" round dense flat icon="unarchive" :loading="unarchivingId === props.row.id"
+              @click.stop="unarchiveRow(props.row)">
+              <q-tooltip>{{ $t('ProjectDashboard.unarchive') }}</q-tooltip>
+            </q-btn>
+          </q-td>
           <q-td v-for="col in props.cols" :key="col.name" :props="props" :style="col.style" class="font-14">
             <template v-if="col.name === 'applicationProcess'">
               <q-badge color="primary" class="text-white q-py-sm q-px-md" :style="stepBadgeStyle" v-if="!props.row.applicationProcessSteps">
@@ -49,13 +55,13 @@
               </q-badge>
             </template>
             <template v-else>
-              <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
+              <q-tooltip v-if="col.value" anchor="bottom left" self="top left"
                 content-style="font-size: 14px">
                 {{ col.value }}
               </q-tooltip>
               {{
-                col.value && col.value.length > 125
-                  ? col.value.substring(0, 125) + "..."
+                col.value && col.value.length > (col.name === 'location' ? 15 : 125)
+                  ? col.value.substring(0, col.name === 'location' ? 15 : 125) + "..."
                   : col.value
               }}
             </template>
@@ -63,12 +69,6 @@
           <q-td :style="{ width: expandColumnWidth }" class="text-center">
             <q-btn size="md" color="blue" round dense @click="toggleExpand(props.row)"
               :icon="isExpanded(props.row) ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
-          </q-td>
-          <q-td :style="{ width: expandColumnWidth }" class="text-center">
-            <q-btn size="md" color="blue" round dense flat icon="unarchive" :loading="unarchivingId === props.row.id"
-              @click.stop="unarchiveRow(props.row)">
-              <q-tooltip>{{ $t('ProjectDashboard.unarchive') }}</q-tooltip>
-            </q-btn>
           </q-td>
         </q-tr>
         <FinancialPlanRow :visible="isExpanded(props.row)" :financial-plan="getFinancialPlan(props.row)"
@@ -121,6 +121,9 @@ export default {
     },
     expandColumnWidth() {
       return COLUMN_WIDTHS.expand;
+    },
+    actionColumnWidth() {
+      return COLUMN_WIDTHS.action;
     },
     columns() {
       return [

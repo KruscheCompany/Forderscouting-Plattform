@@ -283,7 +283,7 @@ export default {
             res = true;
           } catch (error) {
             console.log("error :>> ", error.response);
-            this.$store.dispatch("notifications/pushToast", { kind: "negative", title: error.response.data.error.message });
+            this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t(error.response.data.error.message) });
             res = false;
           }
           this.isLoading = false;
