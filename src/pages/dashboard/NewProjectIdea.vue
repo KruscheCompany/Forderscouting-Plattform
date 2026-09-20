@@ -719,8 +719,9 @@ export default {
     },
     ownMunicipalityId() {
       return (
-        (this.project ? this.project.municipality?.id : this.userDetails?.municipality?.id) ||
-        null
+        (this.project
+          ? this.project.municipality?.id
+          : this.userDetails?.municipality?.id || this.selectedLandkreisMunicipality) || null
       );
     },
     user() {
@@ -773,6 +774,9 @@ export default {
     },
   },
   watch: {
+    selectedLandkreisMunicipality() {
+      this.updateLocation(null);
+    },
     "form.details.content": {
       handler(val) {
         clearTimeout(this.taxonomySuggestTimeout);

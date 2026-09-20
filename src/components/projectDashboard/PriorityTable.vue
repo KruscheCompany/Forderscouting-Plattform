@@ -76,7 +76,7 @@
                 </q-badge>
               </template>
               <template v-else>
-                <q-tooltip v-if="col.value" anchor="bottom left" self="top left"
+                <q-tooltip v-if="col.value && col.value.length > (col.name === 'location' ? 15 : 48)" anchor="bottom left" self="top left"
                   content-style="font-size: 14px">
                   {{ col.value }}
                 </q-tooltip>

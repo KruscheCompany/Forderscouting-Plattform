@@ -65,7 +65,7 @@
               <span class="iu-clear-btn" @click="clearScope">{{ $t('userAdministration.clearScope') }}</span>
             </div>
             <div class="iu-panel q-mt-sm">
-              <template v-if="form.role === 'Guest'">
+              <template v-if="form.role === 'guest'">
                 <label class="iu-field">
                   <span class="iu-field-label">{{ $t('personalData.location') }}</span>
                   <LocationSelect :currentLocation="form.assignedLocation"
@@ -74,7 +74,7 @@
                 </label>
               </template>
               <template v-else>
-                <HierarchyScopePicker v-model="form.scope" />
+                <HierarchyScopePicker v-model="form.scope" :municipality-only="form.role === 'leader'" />
               </template>
             </div>
           </div>
@@ -122,6 +122,7 @@
 
 <script>
 import HierarchyScopePicker from "components/hierarchy/HierarchyScopePicker.vue";
+import { emptyScope, scopeToUserPayload } from "components/hierarchy/scopePayload";
 import LocationSelect from "components/hierarchy/LocationSelect.vue";
 import Categories from "components/projects/create/Categories.vue";
 export default {
@@ -150,7 +151,7 @@ export default {
         role: "",
         // "assign one, infer the rest" - scope is used for every role except
         // Guest, which is location-only (see form.assignedLocation).
-        scope: { anchorLevel: "municipality", anchorId: null },
+        scope: emptyScope(),
         assignedLocation: null,
         categories: [],
         message: "",
@@ -165,8 +166,8 @@ export default {
       this.roleError = false;
     },
     clearScope() {
-      if (this.form.role === "Guest") this.form.assignedLocation = null;
-      else this.form.scope = { anchorLevel: "municipality", anchorId: null };
+      if (this.form.role === "guest") this.form.assignedLocation = null;
+      else this.form.scope = emptyScope();
     },
     inviteUser() {
       this.roleError = !this.form.role;
@@ -175,12 +176,10 @@ export default {
           this.isLoading = true;
           const { scope, assignedLocation, ...rest } = this.form;
           const data = { ...rest };
-          if (this.form.role === "Guest") {
+          if (this.form.role === "guest") {
             if (assignedLocation?.id) data.assignedLocation = { id: assignedLocation.id };
-          } else if (scope.anchorId) {
-            if (scope.anchorLevel === "municipality") data.municipality = { id: scope.anchorId };
-            else if (scope.anchorLevel === "landkreis") data.landkreis = { id: scope.anchorId };
-            else if (scope.anchorLevel === "location") data.assignedLocation = { id: scope.anchorId };
+          } else {
+            Object.assign(data, scopeToUserPayload(scope));
           }
           const res = await this.$store.dispatch("userCenter/inviteUser", {
             data
@@ -198,7 +197,7 @@ export default {
               this.$_options = false;
               this.form.username = "";
               this.form.role = "";
-              this.form.scope = { anchorLevel: "municipality", anchorId: null };
+              this.form.scope = emptyScope();
               this.form.assignedLocation = null;
               this.form.message = "";
               this.form.email = "";
@@ -220,14 +219,14 @@ export default {
     roleOptions() {
       return [
         { label: this.$t("userAdministration.roleAdmin"), value: "admin", desc: this.$t("userAdministration.roleAdminDesc") },
-        { label: this.$t("userAdministration.roleLeader"), value: "Leader", desc: this.$t("userAdministration.roleLeaderDesc") },
+        { label: this.$t("userAdministration.roleLeader"), value: "leader", desc: this.$t("userAdministration.roleLeaderDesc") },
         { label: this.$t("userAdministration.roleUser"), value: "user", desc: this.$t("userAdministration.roleUserDesc") },
-        { label: this.$t("userAdministration.roleGuest"), value: "Guest", desc: this.$t("userAdministration.roleGuestDesc") }
+        { label: this.$t("userAdministration.roleGuest"), value: "guest", desc: this.$t("userAdministration.roleGuestDesc") }
       ];
     },
     roleOptionsLeader() {
       return [
-        { label: this.$t("userAdministration.roleGuest"), value: "Guest", desc: this.$t("userAdministration.roleGuestDesc") }
+        { label: this.$t("userAdministration.roleGuest"), value: "guest", desc: this.$t("userAdministration.roleGuestDesc") }
       ];
     },
     currentRoleOptions() {
@@ -257,9 +256,12 @@ export default {
         this.form.email = this.guestEmail;
         this.form.categories = this.guestCategories;
         this.form.username = this.guestName;
-        if (this.guestMunicipality?.id) {
-          this.form.scope = { anchorLevel: "municipality", anchorId: this.guestMunicipality.id };
-        }
+        // Start from a clean scope every time the dialog opens, so a previous
+        // guest conversion's municipality/location cannot leak into a plain invite.
+        this.form.scope = this.guestMunicipality?.id
+          ? { anchorLevel: "municipality", anchorId: this.guestMunicipality.id, levels: null }
+          : emptyScope();
+        this.form.assignedLocation = null;
         // guestLocation is the legacy free-text city from a guest-request - best-effort
         // match it against the real location list so LocationSelect can preselect it;
         // if nothing matches, the admin picks manually (same "unlinked legacy data"
@@ -276,7 +278,7 @@ export default {
   },
   mounted() {
     this.isLeader = this.$store.getters["userCenter/isLeader"];
-    this.isLeader ? this.form.role = "Guest" : "";
+    this.isLeader ? this.form.role = "guest" : "";
   }
 };
 </script>

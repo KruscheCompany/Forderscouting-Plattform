@@ -42,16 +42,6 @@ export function setTempMunicipality(state, payload) {
   state.tempMunicipality = payload;
 }
 
-export function setLocationEntries(state, payload) {
-  state.locations = payload;
-}
-
-export function deleteLocationEntry(state, payload) {
-  if (!!payload) {
-    state.locations = state.locations.filter(location => location.id !== payload);
-  }
-}
-
 export function setLocationsSimplified(state, payload) {
   state.locationsSimplified = payload;
 }

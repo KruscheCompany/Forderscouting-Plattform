@@ -29,20 +29,6 @@ export async function getSimplifiedMunicipalities(context) {
   }
 }
 
-export async function getLocationEntries(context) {
-  try {
-    const res = await api.get("/api/locations");
-    context.commit("setLocationEntries", res.data);
-  } catch (error) {
-    console.error("error :>> ", error);
-    context.dispatch(
-        "notifications/pushToast",
-        { kind: "negative", title: i18n.t(error.response.data.error.message) },
-        { root: true }
-      );
-  }
-}
-
 export async function getLocationsByMunicipality(context, { municipalityId }) {
   try {
     const res = await api.get("/api/locations/by-municipality", {
@@ -139,7 +125,7 @@ export async function createLocationEntry(context, payload) {
         { kind: "positive", title: i18n.t("Ort erfolgreich hinzugefügt") },
         { root: true }
       );
-      context.dispatch("getLocationEntries");
+      context.dispatch("location/getLocations", null, { root: true });
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
@@ -211,7 +197,7 @@ export async function editLocationEntry(context, payload) {
         { kind: "positive", title: i18n.t("Ort erfolgreich aktualisiert") },
         { root: true }
       );
-      context.dispatch("getLocationEntries");
+      context.dispatch("location/getLocations", null, { root: true });
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
@@ -251,13 +237,13 @@ export async function deleteLocationEntry(context, payload) {
   if (!!id) {
     try {
       const res = await api.delete(`/api/locations/${id}`);
-      context.commit("deleteLocationEntry", res.data.data && res.data.data.id);
+      context.commit("location/deleteLocation", res.data.data && res.data.data.id, { root: true });
       context.dispatch(
         "notifications/pushToast",
         { kind: "positive", title: i18n.t("Ort erfolgreich gelöscht") },
         { root: true }
       );
-      context.dispatch("getLocationEntries");
+      context.dispatch("location/getLocations", null, { root: true });
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",

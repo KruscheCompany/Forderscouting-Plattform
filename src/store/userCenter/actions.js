@@ -359,6 +359,7 @@ export async function logout(context) {
   context.commit("municipality/setMunicipalities", [], { root: true });
   context.commit("category/setCategories", [], { root: true });
   context.commit("funding/setFundings", [], { root: true });
+  context.commit("funding/setAllFundings", [], { root: true });
   context.commit("funding/setSpecificFunding", null, { root: true });
   context.commit("funding/setFundingsWithArchived", [], { root: true });
   sessionStorage.clear();

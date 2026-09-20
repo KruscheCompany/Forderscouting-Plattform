@@ -1,5 +1,35 @@
 # Änderungsprotokoll / Changelog
 
+## 6.26.0 — 2026-09-20
+
+### de
+- Bei Nutzer*innen bleiben jetzt alle zugewiesenen Ebenen (Bundesland, Landkreis, Verwaltung und Ort) gespeichert – nicht mehr nur eine. So ist eindeutig, welches Bundesland oder welcher Landkreis gemeint ist, wenn eine Verwaltung zu mehreren gehört. Beim Speichern wird geprüft, dass die gewählten Ebenen zusammenpassen.
+- In der Förderprüfung und bei der Auswahl von Förderungen im Projekt werden nur noch Förderungen angezeigt, die zu Ihren zugewiesenen Ebenen passen. Die Förder-Kurzinfos auf dem Dashboard und in der Datenübersicht bleiben für alle sichtbar.
+- Wenn Sie einem Landkreis zugeordnet sind und eine Projektidee anlegen, zeigt die Ortsauswahl jetzt nur die Orte der gewählten Verwaltung – vorher wurden alle Orte angeboten.
+- Die Förderprüfung mit KI-Vorschlägen blendet passende Förderungen nicht mehr fälschlich aus.
+- Koordinator*innen werden beim Einladen und Bearbeiten immer genau einer Verwaltung zugeordnet. Die Prüfung „nur eine Koordination pro Verwaltung" gilt jetzt auch beim Einladen.
+- In den Projekttabellen erscheint der Hinweistext beim Darüberfahren nur noch bei längeren Texten.
+- Beim erneuten Öffnen des Einladungsdialogs werden Verwaltung und Ort der vorherigen Einladung nicht mehr übernommen.
+- Neu angelegte, geänderte oder gelöschte Orte erscheinen sofort in allen Ortsauswahlen, ohne die Seite neu zu laden.
+
+### en
+- Users now keep all of their assigned levels (federal state, district, administration and town) instead of just one. This makes it clear which federal state or district is meant when an administration belongs to several. When saving, the chosen levels are checked to make sure they fit together.
+- In the funding check and when selecting funding programs in a project, you now only see programs that match your assigned levels. The funding short-infos on the dashboard and in the data overview stay visible to everyone.
+- If you are assigned to a district and create a project idea, the location field now only offers the locations of the selected administration – previously every location was offered.
+- The funding check with AI suggestions no longer wrongly hides matching funding programs.
+- Coordinators are now always assigned to exactly one administration when invited or edited. The "only one coordinator per administration" check now also applies when inviting.
+- In the project tables, the hover text now only appears for longer texts.
+- When you reopen the invitation dialog, the administration and town from the previous invitation are no longer carried over.
+- Newly created, changed or deleted towns now appear in every town picker right away, without reloading the page.
+
+## 6.25.1 — 2026-09-20
+
+### de
+- Förder-Kurzinfos werden jetzt allen Nutzer:innen angezeigt, unabhängig davon, wer sie angelegt hat, und die zuletzt gespeicherten stehen oben in der Liste.
+
+### en
+- Funding short-info entries are now shown to all users, no matter who created them, with the most recently saved ones listed first.
+
 ## 6.25.0 — 2026-09-13
 
 ### de

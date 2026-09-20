@@ -1,11 +1,9 @@
 import { api } from "boot/axios";
 import { i18n } from "boot/i18n";
 
-// Ort/location, split out of the municipality module the same way landkreis
-// historically was - the municipality module's `states` (used by the
-// States.vue admin page/CreateDialog, misleadingly named after Bundesland
-// even though it manages Location/Ort rows) predates this and is left
-// untouched for now; new code should read from here instead.
+// The single cache of Ort/location rows - the admin Locations page, its
+// create/edit dialog and every location picker all read it. The municipality
+// module's location create/update/delete actions refresh it after saving.
 export async function getLocations(context) {
   try {
     const res = await api.get("/api/locations");

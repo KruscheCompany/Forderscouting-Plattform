@@ -66,7 +66,7 @@
                 </label>
               </template>
               <template v-else>
-                <HierarchyScopePicker v-model="form.scope" />
+                <HierarchyScopePicker v-model="form.scope" :municipality-only="form.role === 'leader'" />
               </template>
             </div>
           </div>
@@ -155,6 +155,7 @@
 import TransferDialog from "components/user/settings/TransferDialog.vue";
 import deleteDataDialog from "components/user/settings/deleteDataDialog.vue";
 import HierarchyScopePicker from "components/hierarchy/HierarchyScopePicker.vue";
+import { emptyScope, scopeToUserPayload, userDetailToScope } from "components/hierarchy/scopePayload";
 import LocationSelect from "components/hierarchy/LocationSelect.vue";
 import Categories from "components/projects/create/Categories.vue";
 export default {
@@ -182,7 +183,7 @@ export default {
         role: "",
         // "assign one, infer the rest" - scope is used for every role except
         // guest, which is location-only (see form.assignedLocation).
-        scope: { anchorLevel: "municipality", anchorId: null },
+        scope: emptyScope(),
         assignedLocation: null,
         categories: []
       },
@@ -196,7 +197,7 @@ export default {
     },
     clearScope() {
       if (this.form.role === "guest") this.form.assignedLocation = null;
-      else this.form.scope = { anchorLevel: "municipality", anchorId: null };
+      else this.form.scope = emptyScope();
     },
     getUserData() {
       if (this.userId) {
@@ -206,13 +207,7 @@ export default {
         this.currentUser = currentUser;
         this.form.username = currentUser.username;
         this.form.email = currentUser.email;
-        if (currentUser.user_detail.municipality) {
-          this.form.scope = { anchorLevel: "municipality", anchorId: currentUser.user_detail.municipality.id };
-        } else if (currentUser.user_detail.landkreis) {
-          this.form.scope = { anchorLevel: "landkreis", anchorId: currentUser.user_detail.landkreis.id };
-        } else if (currentUser.user_detail.assignedLocation) {
-          this.form.scope = { anchorLevel: "location", anchorId: currentUser.user_detail.assignedLocation.id };
-        }
+        this.form.scope = userDetailToScope(currentUser.user_detail);
         if (currentUser.user_detail.assignedLocation) {
           this.form.assignedLocation = {
             id: currentUser.user_detail.assignedLocation.id,
@@ -232,10 +227,8 @@ export default {
           const data = { ...rest };
           if (this.form.role === "guest") {
             if (assignedLocation?.id) data.assignedLocation = { id: assignedLocation.id };
-          } else if (scope.anchorId) {
-            if (scope.anchorLevel === "municipality") data.municipality = { id: scope.anchorId };
-            else if (scope.anchorLevel === "landkreis") data.landkreis = { id: scope.anchorId };
-            else if (scope.anchorLevel === "location") data.assignedLocation = { id: scope.anchorId };
+          } else {
+            Object.assign(data, scopeToUserPayload(scope));
           }
           const res = await this.$store.dispatch("userCenter/updateUser", {
             id: this.userId,

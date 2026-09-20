@@ -177,7 +177,7 @@ export default {
   },
   computed: {
     data() {
-      const fundings = this.$store.state.funding.fundings;
+      const fundings = this.$store.state.funding.allFundings;
       if (!fundings) return fundings;
       if (this.eligibilityFilter === "eligible") {
         return fundings.filter(item => item.applicationEligible === true);
@@ -270,7 +270,7 @@ export default {
   methods: {
     dateFormatter,
     getData() {
-      this.$store.dispatch("funding/getFundings");
+      this.$store.dispatch("funding/getAllFundings");
     },
     async view(row) {
       const id = row && row.id;

@@ -162,12 +162,12 @@ export default {
       this.createDialog = true;
     },
     getData() {
-      this.$store.dispatch("municipality/getLocationEntries");
+      this.$store.dispatch("location/getLocations");
     },
   },
   computed: {
     data() {
-      return this.$store.state.municipality.locations.map((location) => {
+      return this.$store.state.location.locations.map((location) => {
         return {
           id: location.id,
           title: location.title,

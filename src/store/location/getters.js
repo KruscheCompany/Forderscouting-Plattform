@@ -8,17 +8,3 @@ export function parentMunicipality(state) {
     return [location.municipality];
   };
 }
-
-export function parentLandkreise(state) {
-  return (locationId) => {
-    const location = (state.locations || []).find((l) => l.id === locationId);
-    return location ? (location.landkreise || []) : [];
-  };
-}
-
-export function parentFederalStates(state) {
-  return (locationId) => {
-    const location = (state.locations || []).find((l) => l.id === locationId);
-    return location ? (location.federalStates || []) : [];
-  };
-}

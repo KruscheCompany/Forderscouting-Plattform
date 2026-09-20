@@ -1362,7 +1362,7 @@
     "investive": "investiv/ nicht investiv",
     "categories": "Kategorien",
     "applicationProcess": "Arbeitsphase",
-    "locations": "Ort",
+    "locations": "Municipalities",
     "unarchive": "Restore from archive"
   },
   "projectIdea": "Antragswege",
@@ -1625,6 +1625,9 @@
   "Dieser Link ist ungültig": {
     "": "This link is invalid."
   },
+  "Die gewählten Ebenen passen nicht zusammen": "The selected levels do not belong together.",
+  "Bitte weisen Sie dem Benutzer eine Verwaltungsebene zu": "Please assign an administrative level to the user.",
+  "Ein*e Koordinator*in muss einer Verwaltung zugeordnet sein": "A coordinator must be assigned to an administration.",
   "Es kann nur eine*n Koordinator*in pro Verwaltung geben": {
     "": "There can only be one coordinator per administration."
   },

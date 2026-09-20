@@ -162,7 +162,7 @@ export default {
     },
     async getLocationEntryInfo() {
       if (!!this.editingId) {
-        const locationEntry = this.$store.state.municipality.locations.find(
+        const locationEntry = this.$store.state.location.locations.find(
           loc => {
             return loc.id === this.editingId;
           }

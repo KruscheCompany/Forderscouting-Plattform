@@ -14,6 +14,19 @@ export async function getFundings(context) {
   }
 }
 
+export async function getAllFundings(context) {
+  try {
+    const res = await api.get("/api/fundings?allLocations=true");
+    context.commit("setAllFundings", res.data);
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
+        { root: true }
+      );
+  }
+}
+
 export async function getFundingsWithArchived(context) {
   try {
     const res = await api.get("/api/fundings?withArchived=true");
@@ -342,6 +355,7 @@ export async function archiveFunding(context, payload) {
       );
       context.commit("archiveFunding");
       context.dispatch("getFundings");
+      context.dispatch("getAllFundings");
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
@@ -439,6 +453,7 @@ export async function deleteFunding(context, payload) {
         { root: true }
       );
       context.dispatch("getFundings");
+      context.dispatch("getAllFundings");
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",

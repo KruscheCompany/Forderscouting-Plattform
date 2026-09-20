@@ -200,8 +200,9 @@ export default {
     },
     ownMunicipalityId() {
       return (
-        (this.project ? this.project.municipality?.id : this.userDetails?.municipality?.id) ||
-        null
+        (this.project
+          ? this.project.municipality?.id
+          : this.userDetails?.municipality?.id || this.selectedLandkreisMunicipality) || null
       );
     },
 
@@ -227,6 +228,9 @@ export default {
     },
   },
   watch: {
+    selectedLandkreisMunicipality() {
+      this.updateLocation(null);
+    },
     currentTab(newTab) {
       this.expanded = newTab === "project";
     },

@@ -36,7 +36,7 @@
         <LandkreisSelect
           :currentLandkreis="landkreisModel"
           :parentFederalStateId="federalStateModel && federalStateModel.id"
-          :rules="required ? [val => !!val || $t('Required')] : []"
+          :rules="required && !municipalityOnly ? [val => !!val || $t('Required')] : []"
           @update:landkreis="onLandkreisSelect"
         />
       </label>
@@ -46,6 +46,7 @@
         <MunicipalitySelect
           :currentMunicipality="municipalityModel"
           :parentLandkreisId="landkreisModel && landkreisModel.id"
+          :rules="municipalityOnly ? [val => !!val || $t('Required')] : []"
           @update:municipality="onMunicipalitySelect"
         />
       </label>
@@ -71,21 +72,32 @@
 import LandkreisSelect from "components/Landkreise/LandkreisSelect.vue";
 import MunicipalitySelect from "components/Municipality/MunicipalitySelect.vue";
 import LocationSelect from "components/hierarchy/LocationSelect.vue";
+import { emptyScope } from "components/hierarchy/scopePayload";
 
 export default {
   name: "hierarchyScopePicker",
   components: { LandkreisSelect, MunicipalitySelect, LocationSelect },
   props: {
-    // v-model: { anchorLevel: 'landkreis'|'municipality'|'location', anchorId: Number|null }
-    // State is display/filtering only - it never becomes the anchor, since the
-    // backend has no concept of scoping a user to a whole federal state.
+    // v-model: { anchorLevel: 'landkreis'|'municipality'|'location', anchorId: Number|null,
+    //            levels: { federalStateId, landkreisId, municipalityId, locationId } }
+    // The anchor is the most specific chosen level. `levels` holds every chosen
+    // level, because a landkreis or municipality can belong to several parents
+    // and only the stored choice says which one applies. Federal state is kept
+    // as a level but is never the anchor.
     value: {
       type: Object,
-      default: () => ({ anchorLevel: "landkreis", anchorId: null }),
+      default: () => emptyScope(),
     },
     required: {
       type: Boolean,
       default: true,
+    },
+    // A coordinator (leader) always belongs to exactly one municipality: the
+    // municipality is required and is always the emitted anchor. The other
+    // levels can still be chosen and are kept alongside it.
+    municipalityOnly: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -102,6 +114,15 @@ export default {
       const federalStates = this.$store.state.federalState.federalStates || [];
       return [...federalStates].sort((a, b) => a.title.localeCompare(b.title));
     },
+    currentLevels() {
+      const idOrNull = item => (item ? item.id : null);
+      return {
+        federalStateId: idOrNull(this.federalStateModel),
+        landkreisId: idOrNull(this.landkreisModel),
+        municipalityId: idOrNull(this.municipalityModel),
+        locationId: idOrNull(this.locationModel),
+      };
+    },
     pathParts() {
       return [this.federalStateModel, this.landkreisModel, this.municipalityModel, this.locationModel]
         .filter(Boolean)
@@ -114,6 +135,9 @@ export default {
       handler() {
         if (this.dataLoaded) this.hydrateFromAnchor();
       },
+    },
+    municipalityOnly() {
+      if (this.dataLoaded) this.hydrateFromAnchor();
     },
   },
   methods: {
@@ -132,43 +156,69 @@ export default {
     findLocation(id) {
       return (this.$store.state.location.locations || []).find(l => l.id === id) || null;
     },
-    // Fills in the anchor's own field and its ancestors, but only where a
-    // field is still empty - never overrides a choice the user already made
-    // (e.g. a municipality that spans several landkreise keeps whichever
-    // district the user picked, instead of snapping to the first parent).
+    // The single candidate of an ancestor lookup, or null when there is none or
+    // more than one - an ambiguous parent is left for the admin to choose.
+    onlyOne(list) {
+      const ids = (list || []).map(item => this.idOf(item));
+      return ids.length === 1 ? ids[0] : null;
+    },
+    // Fills every level that is still empty from the stored `levels`, then from
+    // the anchor and its unambiguous ancestors - never overrides a choice the
+    // user already made (e.g. a municipality that spans several landkreise keeps
+    // whichever district was picked). Emits when this changed what the parent
+    // holds, so the parent always sees exactly what is shown here.
     hydrateFromAnchor() {
-      const { anchorLevel, anchorId } = this.value || {};
-      if (!anchorId) {
+      const { anchorLevel, anchorId, levels } = this.value || {};
+      const hasLevels = !!levels && Object.values(levels).some(Boolean);
+      if (!anchorId && !hasLevels) {
         this.federalStateModel = null;
         this.landkreisModel = null;
         this.municipalityModel = null;
         this.locationModel = null;
         return;
       }
-      if (anchorLevel === "location" && !this.locationModel) {
+      if (levels) {
+        if (!this.federalStateModel && levels.federalStateId) this.federalStateModel = this.findFederalState(levels.federalStateId);
+        if (!this.landkreisModel && levels.landkreisId) this.landkreisModel = this.findLandkreis(levels.landkreisId);
+        if (!this.municipalityModel && levels.municipalityId) this.municipalityModel = this.findMunicipality(levels.municipalityId);
+        if (!this.locationModel && levels.locationId) this.locationModel = this.findLocation(levels.locationId);
+      }
+      if (anchorLevel === "location" && anchorId && !this.locationModel) {
         this.locationModel = this.findLocation(anchorId);
       }
-      if (anchorLevel === "municipality" && !this.municipalityModel) {
+      if (anchorLevel === "municipality" && anchorId && !this.municipalityModel) {
         this.municipalityModel = this.findMunicipality(anchorId);
       }
-      if (anchorLevel === "landkreis" && !this.landkreisModel) {
+      if (anchorLevel === "landkreis" && anchorId && !this.landkreisModel) {
         this.landkreisModel = this.findLandkreis(anchorId);
       }
       if (this.locationModel && !this.municipalityModel) {
-        const muniId = this.idOf((this.$store.getters["location/parentMunicipality"](this.locationModel.id) || [])[0]);
+        const muniId = this.onlyOne(this.$store.getters["location/parentMunicipality"](this.locationModel.id));
         if (muniId) this.municipalityModel = this.findMunicipality(muniId);
       }
       if (this.municipalityModel && !this.landkreisModel) {
-        const lkId = this.idOf((this.$store.getters["municipality/parentLandkreise"](this.municipalityModel.id) || [])[0]);
+        const lkId = this.onlyOne(this.$store.getters["municipality/parentLandkreise"](this.municipalityModel.id));
         if (lkId) this.landkreisModel = this.findLandkreis(lkId);
       }
       if (this.landkreisModel && !this.federalStateModel) {
-        const fsId = this.idOf((this.$store.getters["landkreis/federalStatesOf"](this.landkreisModel.id) || [])[0]);
+        const fsId = this.onlyOne(this.$store.getters["landkreis/federalStatesOf"](this.landkreisModel.id));
         if (fsId) this.federalStateModel = this.findFederalState(fsId);
+      }
+      const anchorIsMunicipality = anchorLevel === "municipality" && anchorId === this.idOf(this.municipalityModel);
+      const levelsChanged = Object.keys(this.currentLevels).some(key => this.currentLevels[key] !== ((levels || {})[key] || null));
+      if (levelsChanged || (this.municipalityOnly && this.municipalityModel && !anchorIsMunicipality)) {
+        this.emitAnchor();
       }
     },
     emitAnchor() {
-      let anchorLevel = null;
+      const levels = this.currentLevels;
+      if (this.municipalityOnly) {
+        if (this.municipalityModel) {
+          this.$emit("input", { anchorLevel: "municipality", anchorId: this.municipalityModel.id, levels });
+        }
+        return;
+      }
+      let anchorLevel = "landkreis";
       let anchorId = null;
       if (this.locationModel) {
         anchorLevel = "location";
@@ -177,10 +227,9 @@ export default {
         anchorLevel = "municipality";
         anchorId = this.municipalityModel.id;
       } else if (this.landkreisModel) {
-        anchorLevel = "landkreis";
         anchorId = this.landkreisModel.id;
       }
-      this.$emit("input", { anchorLevel: anchorLevel || "landkreis", anchorId });
+      this.$emit("input", { anchorLevel, anchorId, levels });
     },
     onFederalStateSelect(item) {
       this.federalStateModel = item;

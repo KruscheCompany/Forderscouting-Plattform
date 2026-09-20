@@ -1404,7 +1404,7 @@
     "financialPlan": "Finanzplan",
     "accessDenied": "Zugriff auf Finanzinformationen verweigert",
     "accessError": "Fehler bei der Überprüfung der Zugriffsberechtigungen",
-    "locations": "Ort",
+    "locations": "Gemeinden",
     "archivedApplications": "Projektearchiv",
     "waitlist": "Projektliste",
     "owner": "Besitzer*in",
@@ -1623,6 +1623,9 @@
   "Dieser Link ist ungültig": {
     "": "Dieser Link ist ungültig."
   },
+  "Die gewählten Ebenen passen nicht zusammen": "Die gewählten Ebenen passen nicht zusammen.",
+  "Bitte weisen Sie dem Benutzer eine Verwaltungsebene zu": "Bitte weisen Sie dem Benutzer eine Verwaltungsebene zu.",
+  "Ein*e Koordinator*in muss einer Verwaltung zugeordnet sein": "Ein*e Koordinator*in muss einer Verwaltung zugeordnet sein.",
   "Es kann nur eine*n Koordinator*in pro Verwaltung geben": {
     "": "Es kann nur eine*n Koordinator*in pro Verwaltung geben."
   },
