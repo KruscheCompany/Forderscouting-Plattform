@@ -4,10 +4,10 @@
       :columns="columns" row-key="name" :hide-bottom="!isInPage && data.length > 0" :hide-header="!isInPage"
       :visible-columns="isInPage ? visibleColumns : ['title']" :filter="filter" :filter-method="filterTable"
       :pagination="{
-        sortBy: 'id',
+        sortBy: 'updatedAt',
         descending: true,
         page: 1,
-        rowsPerPage: isInPage ? 10 : 5,
+        rowsPerPage: isInPage ? 50 : 5,
       }" :rows-per-page-label="$t('Records per page')" :no-data-label="$t('No data')"
       :no-results-label="$t('No results')" ref="table">
       <template v-slot:top>

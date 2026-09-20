@@ -90,6 +90,13 @@
               </p>
             </div>
             <div class="col-12 col-md-9">
+              <div class="row justify-end q-mb-xs">
+                <q-btn flat dense no-caps size="sm" color="primary" class="q-px-sm"
+                  :icon="isAllSelected('federalStates', federalStatesList) ? 'mdi-checkbox-multiple-marked' : 'mdi-checkbox-multiple-blank-outline'"
+                  :label="isAllSelected('federalStates', federalStatesList) ? $t('Clear All') : $t('Select All')"
+                  :disable="federalStatesList.length === 0"
+                  @click="toggleSelectAll('federalStates', federalStatesList)" />
+              </div>
               <q-select outlined dense v-model="form.federalStates" multiple use-chips :options="federalStatesList"
                 option-label="title" class="no-shadow input-radius-6"
                 :placeholder="$t('federalStates.selectFederalStates')"
@@ -104,6 +111,13 @@
               </p>
             </div>
             <div class="col-12 col-md-9">
+              <div class="row justify-end q-mb-xs">
+                <q-btn flat dense no-caps size="sm" color="primary" class="q-px-sm"
+                  :icon="isAllSelected('landkreise', filteredLandkreise) ? 'mdi-checkbox-multiple-marked' : 'mdi-checkbox-multiple-blank-outline'"
+                  :label="isAllSelected('landkreise', filteredLandkreise) ? $t('Clear All') : $t('Select All')"
+                  :disable="!form.federalStates || form.federalStates.length === 0 || filteredLandkreise.length === 0"
+                  @click="toggleSelectAll('landkreise', filteredLandkreise)" />
+              </div>
               <q-select outlined dense v-model="form.landkreise" multiple use-chips
                 :options="filteredLandkreise" option-label="title" class="no-shadow input-radius-6"
                 :placeholder="$t('Select Rural Districts')" options-selected-class="text-primary"
@@ -118,6 +132,13 @@
               </p>
             </div>
             <div class="col-12 col-md-9">
+              <div class="row justify-end q-mb-xs">
+                <q-btn flat dense no-caps size="sm" color="primary" class="q-px-sm"
+                  :icon="isAllSelected('municipalities', filteredMunicipalities) ? 'mdi-checkbox-multiple-marked' : 'mdi-checkbox-multiple-blank-outline'"
+                  :label="isAllSelected('municipalities', filteredMunicipalities) ? $t('Clear All') : $t('Select All')"
+                  :disable="!form.federalStates || form.federalStates.length === 0 || filteredMunicipalities.length === 0"
+                  @click="toggleSelectAll('municipalities', filteredMunicipalities)" />
+              </div>
               <q-select outlined dense v-model="form.municipalities" multiple use-chips
                 :options="filteredMunicipalities" option-label="title" class="no-shadow input-radius-6"
                 :placeholder="$t('Select Municipalities')" options-selected-class="text-primary"
@@ -573,6 +594,12 @@ export default {
     };
   },
   methods: {
+    isAllSelected(field, options) {
+      return options.length > 0 && (this.form[field] || []).length === options.length;
+    },
+    toggleSelectAll(field, options) {
+      this.form[field] = this.isAllSelected(field, options) ? [] : [...options];
+    },
     updateCaption(value, index) {
       this.form.media[index].caption = value;
     },
@@ -892,14 +919,9 @@ export default {
       );
     },
     federalStatesList() {
-      const federalStates = this.$store.state.federalState.federalStates;
-      if (federalStates && federalStates.data) {
-        return federalStates.data.map(item => ({
-          id: item.id,
-          title: item.attributes.title
-        }));
-      }
-      return [];
+      return Array.isArray(this.$store.state.federalState.federalStates)
+        ? this.$store.state.federalState.federalStates
+        : [];
     },
     municipalitiesList() {
       const municipalities = this.$store.state.municipality.municipalities;
@@ -918,7 +940,7 @@ export default {
         return this.form.municipalities || [];
       }
 
-      const selectedFederalStateTitles = this.form.federalStates.map(fs => fs.title);
+      const selectedFederalStateIds = this.form.federalStates.map(fs => fs.id);
       const selectedMunicipalityIds = (this.form.municipalities || []).map(m => m.id);
 
       return this.municipalitiesList.filter(municipality => {
@@ -933,7 +955,7 @@ export default {
         }
 
         return municipality.federalStates.some(fs =>
-          selectedFederalStateTitles.includes(fs.title)
+          selectedFederalStateIds.includes(fs.id)
         );
       });
     },

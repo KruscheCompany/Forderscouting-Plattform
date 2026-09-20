@@ -1,16 +1,16 @@
 <template>
-  <q-dialog @before-show="getStateInfo" v-model="$_options">
+  <q-dialog @before-show="getLocationEntryInfo" v-model="$_options">
     <q-card class="q-pa-md radius-10" style="width: 532px; max-width: 90vw;">
       <div>
         <h6 class="text-center font-24 q-mt-md">
           {{
             !!editingId
-              ? $t("editState")
-              : $t("administrativeAreas.createState")
+              ? $t("editLocationEntry")
+              : $t("administrativeAreas.createLocationEntry")
           }}
         </h6>
         <q-form @submit.prevent="
-          !!editingId ? editState() : createState()
+          !!editingId ? editLocationEntry() : createLocationEntry()
           " class="q-gutter-sm q-px-md q-mb-md">
           <div class="items-center">
             <div class="col-12 col-md-3">
@@ -20,7 +20,7 @@
             </div>
             <div class="col-12 col-md-9">
               <q-input outlined class="no-shadow input-radius-6" v-model="form.title"
-                :rules="[val => !!val || $t('Required')]" :placeholder="$t('administrativeAreas.stateName')" />
+                :rules="[val => !!val || $t('Required')]" :placeholder="$t('administrativeAreas.locationEntryName')" />
             </div>
           </div>
           <div class="items-center q-mb-md">
@@ -83,7 +83,7 @@
 <script>
 import MunicipalitySelect from "components/Municipality/MunicipalitySelect.vue";
 export default {
-  name: "createStateDialog",
+  name: "createLocationEntryDialog",
   props: {
     dialogState: { type: Boolean, default: false },
     editingId: { type: Number, default: null }
@@ -99,16 +99,16 @@ export default {
         federalStates: [],
         landkreise: []
       },
-      state: {},
+      locationEntry: {},
       isLoading: false
     };
   },
   methods: {
-    async createState() {
+    async createLocationEntry() {
       if (!!this.form.title && !!this.form.municipality) {
         this.isLoading = true;
         const res = await this.$store.dispatch(
-          "municipality/createState",
+          "municipality/createLocationEntry",
           {
             title: this.form.title,
             municipality: this.form.municipality,
@@ -128,17 +128,17 @@ export default {
         this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Bitte füllen Sie alle Felder aus") });
       }
     },
-    async editState() {
+    async editLocationEntry() {
       if (!!this.form.title && this.form.municipality && !!this.editingId) {
         if (
-          this.form.title !== this.state.title ||
-          this.form.municipality.id !== this.state.municipality.id ||
-          JSON.stringify(this.form.federalStates) !== JSON.stringify(this.state.federalStates) ||
-          JSON.stringify(this.form.landkreise) !== JSON.stringify(this.state.landkreise)
+          this.form.title !== this.locationEntry.title ||
+          this.form.municipality.id !== this.locationEntry.municipality.id ||
+          JSON.stringify(this.form.federalStates) !== JSON.stringify(this.locationEntry.federalStates) ||
+          JSON.stringify(this.form.landkreise) !== JSON.stringify(this.locationEntry.landkreise)
         ) {
           this.isLoading = true;
           const res = await this.$store.dispatch(
-            "municipality/editState",
+            "municipality/editLocationEntry",
             {
               id: this.editingId,
               title: this.form.title,
@@ -160,33 +160,33 @@ export default {
         }
       }
     },
-    async getStateInfo() {
+    async getLocationEntryInfo() {
       if (!!this.editingId) {
-        const state = this.$store.state.municipality.states.find(
-          mun => {
-            return mun.id === this.editingId;
+        const locationEntry = this.$store.state.location.locations.find(
+          loc => {
+            return loc.id === this.editingId;
           }
         );
-        if (state) {
-          this.state = state;
-          this.form.title = state.title;
+        if (locationEntry) {
+          this.locationEntry = locationEntry;
+          this.form.title = locationEntry.title;
           this.form.municipality = {
-            id: state.municipality.id,
-            title: state.municipality.title
+            id: locationEntry.municipality.id,
+            title: locationEntry.municipality.title
           };
           // Handle federal states - check if they exist and are in array format
-          if (state.federalStates) {
-            if (Array.isArray(state.federalStates)) {
-              this.form.federalStates = state.federalStates.map(fs => fs.id || fs);
+          if (locationEntry.federalStates) {
+            if (Array.isArray(locationEntry.federalStates)) {
+              this.form.federalStates = locationEntry.federalStates.map(fs => fs.id || fs);
             } else {
               this.form.federalStates = [];
             }
           } else {
             this.form.federalStates = [];
           }
-          if (state.landkreise) {
-            if (Array.isArray(state.landkreise)) {
-              this.form.landkreise = state.landkreise.map(lk => lk.id || lk);
+          if (locationEntry.landkreise) {
+            if (Array.isArray(locationEntry.landkreise)) {
+              this.form.landkreise = locationEntry.landkreise.map(lk => lk.id || lk);
             } else {
               this.form.landkreise = [];
             }

@@ -2,6 +2,10 @@ export function setFundings(state, payload) {
   state.fundings = payload
 }
 
+export function setAllFundings(state, payload) {
+  state.allFundings = payload
+}
+
 export function setFundingsWithArchived(state, payload) {
   state.fundings = payload
 }
