@@ -1,5 +1,13 @@
 # Änderungsprotokoll / Changelog
 
+## 6.26.2 — 2026-09-21
+
+### de
+- Bei der Eignungsprüfung wird die Kontakt-E-Mail des Fördermittelgebers jetzt korrekt aus der ausgewählten Förderung übernommen, sodass die Anfrage verschickt werden kann.
+
+### en
+- In the aptitude check, the funding provider's contact email is now correctly picked up from the selected funding program, so the request can be sent.
+
 ## 6.26.1 — 2026-09-21
 
 ### de

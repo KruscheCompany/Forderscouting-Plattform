@@ -4,19 +4,17 @@
       header-class="bg-white text-black" v-model="expandedAptitude">
       <q-card-section>
         <div>
-          <div class="row items-center q-gutter-xs q-mt-xs font-13 text-blue-grey-6" style="min-height: 20px;">
+          <div class="row items-center q-gutter-xs q-mt-xs font-13 text-blue-grey-6">
             <q-spinner v-if="saveState === 'saving'" size="16px" color="blue-grey-6" />
             <q-icon v-else-if="saveState === 'saved'" name="check_circle" color="positive" size="16px" />
             <span v-if="saveState === 'saving'">{{ $t('projectComponents.aptitude.saving') }}</span>
             <span v-else-if="saveState === 'saved'">{{ $t('projectComponents.aptitude.saved') }}</span>
           </div>
           <div class="q-mt-md">
-            <VorpruefungTicketCard type="finanzen" :project-id="createdProjectId"
-              :ticket="ticketByType('finanzen')" :recipient-email="recipientEmail('finanzen')"
-              @ticket-created="loadTickets" />
-            <VorpruefungTicketCard type="personal" :project-id="createdProjectId"
-              :ticket="ticketByType('personal')" :recipient-email="recipientEmail('personal')"
-              @ticket-created="loadTickets" />
+            <VorpruefungTicketCard type="finanzen" :project-id="createdProjectId" :ticket="ticketByType('finanzen')"
+              :recipient-email="recipientEmail('finanzen')" @ticket-created="loadTickets" />
+            <VorpruefungTicketCard type="personal" :project-id="createdProjectId" :ticket="ticketByType('personal')"
+              :recipient-email="recipientEmail('personal')" @ticket-created="loadTickets" />
             <VorpruefungTicketCard type="foerdermittelgeber" :project-id="createdProjectId"
               :ticket="ticketByType('foerdermittelgeber')" :recipient-email="recipientEmail('foerdermittelgeber')"
               @ticket-created="loadTickets" />
@@ -58,6 +56,7 @@ export default {
       saveState: null,
       saveStateTimeout: null,
       vorpruefungTickets: [],
+      fundingProviderEmail: null,
       resetSteps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
         { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: true },
@@ -75,6 +74,7 @@ export default {
   },
   mounted() {
     this.loadTickets();
+    this.resolveFundingProviderEmail();
   },
   beforeDestroy() {
     clearTimeout(this.saveStateTimeout);
@@ -105,8 +105,19 @@ export default {
     recipientEmail(type) {
       if (type === "finanzen") return this.projectData.municipality?.financeContactEmail || null;
       if (type === "personal") return this.projectData.municipality?.personnelContactEmail || null;
-      if (type === "foerdermittelgeber") return this.projectData.fundingGuideline?.[0]?.info?.email || null;
+      if (type === "foerdermittelgeber") return this.fundingProviderEmail;
       return null;
+    },
+    async resolveFundingProviderEmail() {
+      const selectedFunding = (this.projectData.fundingMatches || [])
+        .find(funding => funding.selected && !funding.isFehlanzeige);
+      if (!selectedFunding?.external_id) {
+        this.fundingProviderEmail = null;
+        return;
+      }
+      await this.$store.dispatch("funding/resetSelectedFunding");
+      await this.$store.dispatch("funding/getSpecificFunding", { id: selectedFunding.external_id });
+      this.fundingProviderEmail = this.$store.state.funding.funding?.info?.email || null;
     },
     async loadTickets() {
       this.vorpruefungTickets = await this.$store.dispatch("project/fetchVorpruefungTickets", {
