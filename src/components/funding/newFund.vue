@@ -1000,7 +1000,7 @@ export default {
         if (content.length < 30) return;
         this.taxonomySuggestTimeout = setTimeout(() => {
           this.$store.dispatch("ai/suggestTaxonomy", { content }).catch(() => {});
-        }, 800);
+        }, 1500);
       }
     }
   },

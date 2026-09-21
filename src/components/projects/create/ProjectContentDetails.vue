@@ -277,7 +277,7 @@ export default {
       if (!val || val.length < 30) return;
       this.taxonomySuggestTimeout = setTimeout(() => {
         this.$store.dispatch("ai/suggestTaxonomy", { content: val });
-      }, 800);
+      }, 1500);
     },
   },
   beforeDestroy() {
