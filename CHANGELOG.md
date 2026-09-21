@@ -1,5 +1,13 @@
 # Änderungsprotokoll / Changelog
 
+## 6.26.1 — 2026-09-21
+
+### de
+- Die automatischen Themenvorschläge (KI) beim Ausfüllen längerer Projekt- und Förderbeschreibungen schlagen jetzt seltener fehl.
+
+### en
+- The automatic topic suggestions (AI) while filling in longer project and funding descriptions now fail less often.
+
 ## 6.26.0 — 2026-09-20
 
 ### de
