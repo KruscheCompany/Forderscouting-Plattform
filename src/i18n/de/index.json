@@ -99,7 +99,8 @@
     "path": "Pfad",
     "state": "Bundesland",
     "selectState": "Bundesland auswählen",
-    "town": "Ort / Stadt"
+    "town": "Ort / Stadt",
+    "atLeastOneRequired": "Mindestens eine Ebene auswählen"
   },
   "generalData": {
     "generalData": "Allgemeine Daten",
