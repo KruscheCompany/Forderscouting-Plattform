@@ -9,6 +9,7 @@
       class="no-shadow input-radius-6"
       hide-bottom-space
       :rules="rules"
+      reactive-rules
       @input="onSelect"
     >
       <template v-slot:selected>

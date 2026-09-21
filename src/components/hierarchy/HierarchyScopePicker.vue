@@ -11,6 +11,8 @@
           options-selected-class="text-primary text-weight-600"
           class="no-shadow input-radius-6"
           hide-bottom-space
+          :rules="atLeastOneRules"
+          reactive-rules
           @input="onFederalStateSelect"
         >
           <template v-slot:selected>
@@ -36,7 +38,7 @@
         <LandkreisSelect
           :currentLandkreis="landkreisModel"
           :parentFederalStateId="federalStateModel && federalStateModel.id"
-          :rules="required && !municipalityOnly ? [val => !!val || $t('Required')] : []"
+          :rules="atLeastOneRules"
           @update:landkreis="onLandkreisSelect"
         />
       </label>
@@ -46,7 +48,7 @@
         <MunicipalitySelect
           :currentMunicipality="municipalityModel"
           :parentLandkreisId="landkreisModel && landkreisModel.id"
-          :rules="municipalityOnly ? [val => !!val || $t('Required')] : []"
+          :rules="municipalityOnly ? [val => !!val || $t('Required')] : atLeastOneRules"
           @update:municipality="onMunicipalitySelect"
         />
       </label>
@@ -56,6 +58,7 @@
         <LocationSelect
           :currentLocation="locationModel"
           :parentMunicipalityId="municipalityModel && municipalityModel.id"
+          :rules="atLeastOneRules"
           @update:location="onLocationSelect"
         />
       </label>
@@ -127,6 +130,17 @@ export default {
       return [this.federalStateModel, this.landkreisModel, this.municipalityModel, this.locationModel]
         .filter(Boolean)
         .map(item => item.title);
+    },
+    // Non-leader roles can be scoped to any single level (state, landkreis,
+    // municipality, or location) - not landkreis specifically. Applied to all
+    // four fields so picking any one of them clears the error on the rest.
+    atLeastOneRules() {
+      if (!this.required || this.municipalityOnly) return [];
+      return [
+        () =>
+          !!(this.federalStateModel || this.landkreisModel || this.municipalityModel || this.locationModel) ||
+          this.$t("hierarchyScope.atLeastOneRequired"),
+      ];
     },
   },
   watch: {

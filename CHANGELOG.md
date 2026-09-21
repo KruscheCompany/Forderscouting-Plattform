@@ -1,5 +1,13 @@
 # Änderungsprotokoll / Changelog
 
+## 6.26.3 — 2026-09-21
+
+### de
+- Beim Einladen oder Bearbeiten von Nutzer*innen (außer Koordinator*innen) reicht jetzt die Angabe irgendeiner Ebene – Bundesland, Landkreis, Verwaltung oder Ort. Vorher war zwingend ein Landkreis erforderlich.
+
+### en
+- When inviting or editing users (other than coordinators), providing any one level — federal state, district, administration, or town — is now enough. A district was previously required.
+
 ## 6.26.2 — 2026-09-21
 
 ### de
