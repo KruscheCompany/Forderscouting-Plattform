@@ -1171,7 +1171,8 @@
         "resendSuccess": "Review request resent",
         "gateBlocked": "All three reviews must be answered positively before you can continue.",
         "recipientEmail": "Will be sent to",
-        "recipientMissing": "No contact email on file. Please add one for the municipality/funding provider first."
+        "recipientMissing": "No contact email on file. Please add one for the municipality/funding provider first.",
+        "overrideSuccess": "Pre-check recorded by the administration"
       },
       "description": "Kurzer Aufgabentext (Wie ist das Vorhaben entstanden? In welchem Ausschuss soll darüber entschieden werden? Der Text der Antragsvorlage kann hier eingefügt werden)"
     },

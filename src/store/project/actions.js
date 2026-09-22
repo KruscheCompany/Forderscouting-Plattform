@@ -488,6 +488,49 @@ export async function resendVorpruefungTicket(context, payload) {
   }
 }
 
+export async function overrideVorpruefungTicket(context, payload) {
+  const { id, decisionType, responseText, wantsPhoneCall, wantsOnsiteMeeting, suggestedDates } = payload;
+  try {
+    await api.post(`/api/vorpruefung-tickets/${id}/override`, {
+      decisionType,
+      responseText,
+      wantsPhoneCall,
+      wantsOnsiteMeeting,
+      suggestedDates
+    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("projectComponents.aptitude.vorpruefung.overrideSuccess") },
+        { root: true }
+      );
+    return true;
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
+        { root: true }
+      );
+    return false;
+  }
+}
+
+// Silent on success: the caller (the funding-check step) already tells the user
+// their funding selection changed, and a second toast would just be noise.
+export async function resetVorpruefungTickets(context, payload) {
+  const { projectId } = payload;
+  try {
+    await api.post("/api/vorpruefung-tickets/reset", { project: projectId });
+    return true;
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
+        { root: true }
+      );
+    return false;
+  }
+}
+
 // New action to update local state only
 export function updateLocalProjectState(context, payload) {
   const { data } = payload;
