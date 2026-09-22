@@ -1364,7 +1364,8 @@
     "categories": "Kategorien",
     "applicationProcess": "Arbeitsphase",
     "locations": "Municipalities",
-    "unarchive": "Restore from archive"
+    "unarchive": "Restore from archive",
+    "archive": "Archive"
   },
   "projectIdea": "Antragswege",
   "Request to duplicate a document made by | ": "Antrag auf Vervielfältigung eines Dokuments, gestellt von |",

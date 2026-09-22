@@ -43,8 +43,9 @@ export default {
       type: Object,
       default: null,
     },
-    // Optional: narrows options to this municipality's locations. When
-    // omitted, shows every location (matching today's no-context fallback).
+    // Only honored for admins (see fetchLocations) - a non-admin's own
+    // municipality/landkreis/federalState scope is resolved server-side
+    // regardless of this prop. Omitted for an admin: no filter, all locations.
     parentMunicipalityId: {
       type: Number,
       default: null,
@@ -57,6 +58,7 @@ export default {
   data() {
     return {
       model: this.currentLocation,
+      locations: [],
     };
   },
   methods: {
@@ -67,23 +69,37 @@ export default {
       };
       this.$emit("update:location", location);
     },
+    // Signed-in: the by-municipality endpoint scopes non-admins server-side
+    // automatically (municipalityId is only honored for admins), so this
+    // always returns exactly what the user is allowed to see. Signed-out
+    // (e.g. Register.vue) has no scope to resolve against yet, so it falls
+    // back to the unscoped list.
+    async fetchLocations() {
+      if (this.$store.getters["userCenter/isSignedIn"]) {
+        this.locations = await this.$store.dispatch("location/getLocationsUnder", {
+          municipalityId: this.parentMunicipalityId || undefined,
+        });
+      } else {
+        await this.$store.dispatch("location/getLocations");
+        this.locations = this.$store.state.location.locations || [];
+      }
+    },
   },
   computed: {
     options() {
-      const locations = this.$store.state.location.locations || [];
-      const filtered = this.parentMunicipalityId
-        ? locations.filter((loc) => ((loc.municipality && loc.municipality.id) || loc.municipality) === this.parentMunicipalityId)
-        : locations;
-      return [...filtered].sort((a, b) => a.title.localeCompare(b.title));
+      return [...this.locations].sort((a, b) => a.title.localeCompare(b.title));
     },
   },
   watch: {
     currentLocation(val) {
       this.model = val;
     },
+    parentMunicipalityId() {
+      this.fetchLocations();
+    },
   },
   mounted() {
-    this.$store.dispatch("location/getLocations");
+    this.fetchLocations();
   },
 };
 </script>

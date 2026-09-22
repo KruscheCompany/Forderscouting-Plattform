@@ -35,11 +35,11 @@ export async function getLandkreise(context) {
 }
 
 export async function createLandkreis(context, payload) {
-  const { title, federalStates, municipalities } = payload;
+  const { title, federalStates } = payload;
   if (!!title) {
     try {
       const res = await api.post("/api/landkreise", {
-        data: { title, federalStates, municipalities }
+        data: { title, federalStates }
       });
       context.dispatch(
         "notifications/pushToast",
@@ -59,11 +59,11 @@ export async function createLandkreis(context, payload) {
 }
 
 export async function editLandkreis(context, payload) {
-  const { id, title, federalStates, municipalities } = payload;
+  const { id, title, federalStates } = payload;
   if (!!id && !!title) {
     try {
       const res = await api.put(`/api/landkreise/${id}`, {
-        data: { title, federalStates, municipalities, updatedAt: new Date().toISOString() }
+        data: { title, federalStates, updatedAt: new Date().toISOString() }
       });
       context.dispatch(
         "notifications/pushToast",

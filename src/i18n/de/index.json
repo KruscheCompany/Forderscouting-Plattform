@@ -1421,7 +1421,8 @@
     "alreadyPrioritized": "Diese Projektidee ist bereits priorisiert.",
     "prioritizeSuccess": "Projektidee erfolgreich priorisiert",
     "removePrioritySuccess": "Projektidee erfolgreich aus der Priorisierung entfernt",
-    "unarchive": "Aus dem Archiv wiederherstellen"
+    "unarchive": "Aus dem Archiv wiederherstellen",
+    "archive": "Archivieren"
   },
   "aiFundingCheck": "Fördermittelcheck",
   "AI funding check": "Fördermittelcheck",

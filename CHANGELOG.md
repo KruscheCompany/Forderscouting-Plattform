@@ -1,5 +1,21 @@
 # Änderungsprotokoll / Changelog
 
+## 6.26.5 — 2026-09-22
+
+### de
+- Beim Bearbeiten einer bestehenden Projektidee wurden die Kontaktdaten und die zugeordnete Verwaltung fälschlich durch die Angaben der bearbeitenden Person ersetzt, statt die ursprünglichen Angaben zu behalten. Das ist jetzt behoben.
+
+### en
+- When editing an existing project idea, the contact details and assigned administration were incorrectly replaced with the editing person's own details instead of keeping the original ones. This is now fixed.
+
+## 6.26.4 — 2026-09-22
+
+### de
+- Beim Anlegen oder Bearbeiten von Bundesland, Landkreis, Verwaltung und Ort wird jetzt nur noch die jeweils direkt übergeordnete Ebene abgefragt (z. B. bei einer Verwaltung nur der Landkreis, nicht zusätzlich das Bundesland). Das verhindert widersprüchliche Zuordnungen.
+
+### en
+- When creating or editing a federal state, district, administration, or town, only its direct parent level is now asked for (e.g. an administration only asks for its district, not the federal state as well). This prevents conflicting assignments.
+
 ## 6.26.3 — 2026-09-21
 
 ### de

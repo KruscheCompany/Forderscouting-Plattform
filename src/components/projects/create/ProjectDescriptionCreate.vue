@@ -298,16 +298,21 @@ export default {
           info: {
             ...(this.editing ? this.project.info : {}),
             ...this.form.info,
-            contactName: this.userDetails.fullName,
-            phone: this.userDetails.phone,
-            email: this.user.email,
-            streetNo: this.userDetails.streetNo,
-            postalCode: this.userDetails.postalCode,
+            ...(this.editing
+              ? {}
+              : {
+                  contactName: this.userDetails.fullName,
+                  phone: this.userDetails.phone,
+                  email: this.user.email,
+                  streetNo: this.userDetails.streetNo,
+                  postalCode: this.userDetails.postalCode,
+                }),
           },
-          municipality:
-            (this.userDetails.municipality && this.userDetails.municipality.id) ||
-            this.selectedLandkreisMunicipality ||
-            null,
+          municipality: this.editing
+            ? this.project.municipality?.id
+            : (this.userDetails.municipality && this.userDetails.municipality.id) ||
+              this.selectedLandkreisMunicipality ||
+              null,
           owner: (this.user && this.user.id) || null,
         };
 
