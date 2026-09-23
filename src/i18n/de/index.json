@@ -1197,7 +1197,9 @@
       "errorIgnoreSuggestion": "Fehler beim Ignorieren des Fördervorschlags",
       "addedBadge": "Neu",
       "ignoreDialogTitle": "Vorschlag ignorieren?",
-      "ignoreDialogDetail": "Dieser Fördervorschlag wird endgültig verworfen und Ihnen für dieses Projekt nicht erneut vorgeschlagen."
+      "ignoreDialogDetail": "Dieser Fördervorschlag wird endgültig verworfen und Ihnen für dieses Projekt nicht erneut vorgeschlagen.",
+      "resetWarningTitle": "Durch die geänderte Förderauswahl werden die offenen Fragen neu gestellt und alle Vorprüfungen zurückgesetzt.",
+      "resetWarningDetail": "Bisherige Antworten der Vorprüfungen bleiben im Verlauf erhalten, zählen aber nicht mehr. Sie müssen die Vorprüfungen erneut anfragen."
     },
     "qAndA": {
       "title": "Offene Fragen",
@@ -1227,9 +1229,24 @@
         "suggestedDates": "Terminvorschläge",
         "sendSuccess": "Vorprüfung erfolgreich angefragt",
         "resendSuccess": "Vorprüfung erneut gesendet",
+        "saveSuccess": "Vorprüfungen gespeichert",
         "gateBlocked": "Alle drei Vorprüfungen müssen positiv beantwortet sein, bevor Sie fortfahren können.",
         "recipientEmail": "Wird gesendet an",
-        "recipientMissing": "Keine Kontakt-E-Mail hinterlegt. Bitte zuerst bei der Gemeinde/Fördermittelgeber ergänzen."
+        "recipientMissing": "Keine Kontakt-E-Mail hinterlegt. Bitte zuerst bei der Gemeinde/Fördermittelgeber ergänzen.",
+        "overrideSuccess": "Vorprüfung durch die Administration eingetragen",
+        "override": "Überschreiben",
+        "overrideTitle": "Vorprüfung überschreiben",
+        "overrideHint": "Sie tragen die Entscheidung für die {type} anstelle der prüfenden Person ein. Die prüfende Person wird darüber nicht benachrichtigt.",
+        "overrideSubmit": "Entscheidung eintragen",
+        "reAsk": "Erneut anfragen",
+        "historyTitle": "Verlauf ({count})",
+        "attemptLabel": "{number}. Anfrage",
+        "superseded_resend": "erneut angefragt",
+        "superseded_fundingChanged": "Förderung geändert",
+        "superseded_override": "durch die Administration entschieden",
+        "overriddenBy": "Eingetragen durch die Administration ({user})",
+        "overriddenByUnknown": "Eingetragen durch die Administration",
+        "statusUnanswered": "Unbeantwortet"
       }
     },
     "decision": {
@@ -1421,7 +1438,8 @@
     "alreadyPrioritized": "Diese Projektidee ist bereits priorisiert.",
     "prioritizeSuccess": "Projektidee erfolgreich priorisiert",
     "removePrioritySuccess": "Projektidee erfolgreich aus der Priorisierung entfernt",
-    "unarchive": "Aus dem Archiv wiederherstellen"
+    "unarchive": "Aus dem Archiv wiederherstellen",
+    "archive": "Archivieren"
   },
   "aiFundingCheck": "Fördermittelcheck",
   "AI funding check": "Fördermittelcheck",
@@ -1632,6 +1650,9 @@
   },
   "Failed to create external funding": "Externe Förderung konnte nicht erstellt werden.",
   "Finanzierung nicht gefunden": "Finanzierung nicht gefunden",
+  "Eine positiv beantwortete Vorprüfung kann nicht erneut angefragt werden": {
+    "": "Eine positiv beantwortete Vorprüfung kann nicht erneut angefragt werden."
+  },
   "Für diese Vorprüfung ist keine Kontakt-E-Mail hinterlegt": {
     " Bitte hinterlegen Sie zuerst eine Kontakt-E-Mail für die Gemeinde bzw": {
       " den Fördermittelgeber": {

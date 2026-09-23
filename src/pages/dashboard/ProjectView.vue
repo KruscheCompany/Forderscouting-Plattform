@@ -16,7 +16,8 @@
     <q-stepper v-model="step" header-nav ref="stepper" color="primary" animated class="shadow-2"
       :class="$q.screen.gt.xs ? 'radius-bottom-20' : ''">
       <q-step v-for="(step, index) in steps" :key="index" :name="step.name"
-        :title="$q.screen.gt.xs ? $t(step.title) : ''" :icon="step.icon" :done="step.done" :header-nav="step.done" />
+        :title="$q.screen.gt.xs ? $t(step.title) : ''" :icon="step.icon" :done="step.done && !step.skip"
+        :header-nav="(step.done || step.inProgress) && !step.skip" :color="stepColor(step)" />
     </q-stepper>
     <div v-if="$q.screen.xs && activeStepTitle"
       class="bg-white text-center text-caption text-primary q-py-xs q-px-md radius-bottom-20 shadow-2">
@@ -84,6 +85,7 @@ import DeleteDialog from 'components/data/DeleteDialog.vue';
 import ArchiveDialog from 'components/data/ArchiveDialog.vue';
 import RequestAccessDialog from 'components/data/RequestAccessDialog.vue';
 import DocumentTransferDialog from 'components/DocumentTransferDialog.vue';
+import { landingTabName, landingStepName, stepColor } from 'src/utils/applicationSteps';
 
 export default {
   name: "projectView",
@@ -198,6 +200,7 @@ export default {
     }
   },
   methods: {
+    stepColor,
     handleEditProject(id) {
       this.$router.push({
         path: `/application/process/edit/${id}`,
@@ -257,11 +260,9 @@ export default {
       // Otherwise, disable the tab
       return true;
     },
-    updateStepToFirstOfTab() {
-      // Set the step to the first step of the current tab
-      if (this.steps && this.steps.length > 0) {
-        this.step = this.steps[0].name;
-      }
+    setLandingStep() {
+      const stepName = landingStepName(this.steps);
+      if (stepName) this.step = stepName;
     },
     async getData() {
       this.$q.loading.show();
@@ -269,12 +270,18 @@ export default {
         id: Number(this.$route.params.id || this.$route.params.projectId)
       });
       this.$q.loading.hide();
+
+      const tabName = landingTabName(this.tabs);
+      if (tabName && tabName !== this.tab) {
+        this.tab = tabName;
+      } else {
+        this.setLandingStep();
+      }
     },
   },
   watch: {
     tab() {
-      // When tab changes, update the step to the first step of that tab
-      this.updateStepToFirstOfTab();
+      this.setLandingStep();
     }
   },
   mounted() {
