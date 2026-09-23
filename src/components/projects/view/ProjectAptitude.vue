@@ -25,6 +25,15 @@
               </div>
               <div class="q-mt-xs">{{ ticketByType(type).responseText }}</div>
             </div>
+            <q-expansion-item v-if="historyByType(type).length" dense class="q-pl-lg q-mt-xs"
+              :label="$t('projectComponents.aptitude.vorpruefung.historyTitle', { count: historyByType(type).length })">
+              <div v-for="entry in historyByType(type)" :key="entry.id" class="font-13 text-blue-grey-7 q-mt-xs">
+                {{ $t('projectComponents.aptitude.vorpruefung.attemptLabel', { number: entry.attempt || 1 }) }} &middot;
+                {{ entry.answeredAt ? $t(`projectComponents.aptitude.vorpruefung.status${entry.status === 'positiv' ? 'Positiv' : entry.status === 'negativ' ? 'Negativ' : 'Ruecksprache'}`) : $t('projectComponents.aptitude.vorpruefung.statusUnanswered') }}
+                <template v-if="entry.answeredAt"> &middot; {{ formatDate(entry.answeredAt) }}</template>
+                <div v-if="entry.responseText">{{ entry.responseText }}</div>
+              </div>
+            </q-expansion-item>
           </div>
         </div>
       </q-card-section>
@@ -60,7 +69,15 @@ export default {
   },
   methods: {
     ticketByType(type) {
-      return this.vorpruefungTickets.find(t => t.type === type) || null;
+      return this.vorpruefungTickets.find(t => t.type === type && !t.supersededAt) || null;
+    },
+    historyByType(type) {
+      return this.vorpruefungTickets
+        .filter(t => t.type === type && !!t.supersededAt)
+        .sort((a, b) => (b.attempt || 1) - (a.attempt || 1));
+    },
+    formatDate(value) {
+      return new Date(value).toLocaleDateString('de-DE');
     },
     formatDateTime(value) {
       return new Date(value).toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' });

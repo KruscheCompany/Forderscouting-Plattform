@@ -8,8 +8,8 @@
       <q-btn v-if="!ticket" :disable="!recipientEmail" :loading="sending" unelevated no-caps dense
         color="primary" class="q-px-md"
         :label="$t('projectComponents.aptitude.vorpruefung.send')" @click="send" />
-      <q-btn v-else-if="!ticket.answeredAt" :loading="sending" unelevated no-caps dense outline color="primary"
-        class="q-px-md" :label="$t('projectComponents.aptitude.vorpruefung.resend')" @click="resend" />
+      <q-btn v-else :loading="sending" unelevated no-caps dense outline color="primary"
+        class="q-px-md" :label="resendLabel" @click="resend" />
     </div>
 
     <div v-if="!ticket" class="font-14 q-mt-xs" :class="recipientEmail ? 'text-blue-grey-7' : 'text-negative'">
@@ -33,6 +33,11 @@
 
     <div v-if="ticket && ticket.answeredAt" class="font-14 q-mt-sm">
       <div>{{ statusLabel }}</div>
+      <div v-if="ticket.overriddenAt" class="text-blue-grey-7">
+        {{ ticket.overriddenBy && ticket.overriddenBy.username
+          ? $t('projectComponents.aptitude.vorpruefung.overriddenBy', { user: ticket.overriddenBy.username })
+          : $t('projectComponents.aptitude.vorpruefung.overriddenByUnknown') }}
+      </div>
       <div v-if="ticket.wantsPhoneCall">{{ $t('projectComponents.aptitude.vorpruefung.wantsPhoneCall') }}</div>
       <div v-if="ticket.wantsOnsiteMeeting">{{ $t('projectComponents.aptitude.vorpruefung.wantsOnsiteMeeting') }}</div>
       <div v-if="ticket.suggestedDates && ticket.suggestedDates.length">
@@ -45,6 +50,47 @@
     <q-expansion-item dense :label="$t('projectComponents.aptitude.vorpruefung.notesPlaceholder')" class="q-mt-sm">
       <q-input outlined type="textarea" rows="3" class="no-shadow input-radius-6 q-mt-sm" v-model="notes"
         :disable="!!(ticket && ticket.answeredAt)" @blur="saveNotes" />
+    </q-expansion-item>
+
+    <q-expansion-item v-if="history.length" dense class="q-mt-sm"
+      :label="$t('projectComponents.aptitude.vorpruefung.historyTitle', { count: history.length })">
+      <div v-for="entry in history" :key="entry.id" class="q-mt-sm q-pa-sm radius-6 bg-blue-grey-1">
+        <div class="row items-center no-wrap">
+          <q-icon name="mdi-circle" :color="historyStatusColor(entry)" size="14px" class="q-mr-sm" />
+          <div class="col font-14 text-weight-600">
+            {{ $t('projectComponents.aptitude.vorpruefung.attemptLabel', { number: entry.attempt || 1 }) }}
+          </div>
+          <div class="font-13 text-blue-grey-7">
+            {{ $t(`projectComponents.aptitude.vorpruefung.superseded_${entry.supersededReason}`) }}
+          </div>
+        </div>
+        <div v-if="entry.reviewerContact" class="font-13 text-blue-grey-7 q-pl-lg">
+          {{ $t('projectComponents.aptitude.vorpruefung.recipientEmail') }}: {{ entry.reviewerContact }}
+        </div>
+        <div class="font-13 text-blue-grey-7 q-pl-lg">
+          <template v-if="entry.sentAt">
+            {{ $t('projectComponents.aptitude.vorpruefung.sentOn') }}: {{ formatDate(entry.sentAt) }}
+          </template>
+          <template v-if="entry.answeredAt">
+            &middot; {{ $t('projectComponents.aptitude.vorpruefung.answeredOn') }}: {{ formatDate(entry.answeredAt) }}
+          </template>
+        </div>
+        <div v-if="entry.answeredAt" class="font-14 q-pl-lg q-mt-xs">
+          <div>{{ historyStatusLabel(entry) }}</div>
+          <div v-if="entry.overriddenAt" class="text-blue-grey-7">
+            {{ entry.overriddenBy && entry.overriddenBy.username
+              ? $t('projectComponents.aptitude.vorpruefung.overriddenBy', { user: entry.overriddenBy.username })
+              : $t('projectComponents.aptitude.vorpruefung.overriddenByUnknown') }}
+          </div>
+          <div v-if="entry.wantsPhoneCall">{{ $t('projectComponents.aptitude.vorpruefung.wantsPhoneCall') }}</div>
+          <div v-if="entry.wantsOnsiteMeeting">{{ $t('projectComponents.aptitude.vorpruefung.wantsOnsiteMeeting') }}</div>
+          <div v-if="entry.suggestedDates && entry.suggestedDates.length">
+            {{ $t('projectComponents.aptitude.vorpruefung.suggestedDates') }}:
+            {{ entry.suggestedDates.map(formatDateTime).join(', ') }}
+          </div>
+          <div class="q-mt-xs">{{ entry.responseText }}</div>
+        </div>
+      </div>
     </q-expansion-item>
   </div>
 </template>
@@ -62,9 +108,9 @@ export default {
       type: Number,
       required: true
     },
-    ticket: {
-      type: Object,
-      default: null
+    tickets: {
+      type: Array,
+      default: () => []
     },
     recipientEmail: {
       type: String,
@@ -74,15 +120,29 @@ export default {
   data() {
     return {
       sending: false,
-      notes: this.ticket ? this.ticket.notes || "" : ""
+      notes: ""
     };
   },
   watch: {
-    ticket(newTicket) {
-      this.notes = newTicket ? newTicket.notes || "" : "";
+    ticket: {
+      immediate: true,
+      handler(newTicket) {
+        this.notes = newTicket ? newTicket.notes || "" : "";
+      }
     }
   },
   computed: {
+    ticket() {
+      return this.tickets.find(t => !t.supersededAt) || null;
+    },
+    history() {
+      return this.tickets.filter(t => !!t.supersededAt);
+    },
+    resendLabel() {
+      return this.ticket && this.ticket.answeredAt
+        ? this.$t('projectComponents.aptitude.vorpruefung.reAsk')
+        : this.$t('projectComponents.aptitude.vorpruefung.resend');
+    },
     statusColor() {
       if (!this.ticket.answeredAt) return "orange";
       if (this.ticket.status === "positiv") return "green";
@@ -96,6 +156,17 @@ export default {
     }
   },
   methods: {
+    historyStatusColor(entry) {
+      if (!entry.answeredAt) return "grey-5";
+      if (entry.status === "positiv") return "green";
+      if (entry.status === "ruecksprache") return "orange";
+      return "red";
+    },
+    historyStatusLabel(entry) {
+      if (entry.status === "positiv") return this.$t("projectComponents.aptitude.vorpruefung.statusPositiv");
+      if (entry.status === "negativ") return this.$t("projectComponents.aptitude.vorpruefung.statusNegativ");
+      return this.$t("projectComponents.aptitude.vorpruefung.statusRuecksprache");
+    },
     formatDate(value) {
       return new Date(value).toLocaleDateString("de-DE");
     },

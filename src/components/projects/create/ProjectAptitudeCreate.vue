@@ -11,12 +11,12 @@
             <span v-else-if="saveState === 'saved'">{{ $t('projectComponents.aptitude.saved') }}</span>
           </div>
           <div class="q-mt-md">
-            <VorpruefungTicketCard type="finanzen" :project-id="createdProjectId" :ticket="liveTicketByType('finanzen')"
+            <VorpruefungTicketCard type="finanzen" :project-id="createdProjectId" :tickets="ticketsByType('finanzen')"
               :recipient-email="recipientEmail('finanzen')" @ticket-created="loadTickets" />
-            <VorpruefungTicketCard type="personal" :project-id="createdProjectId" :ticket="liveTicketByType('personal')"
+            <VorpruefungTicketCard type="personal" :project-id="createdProjectId" :tickets="ticketsByType('personal')"
               :recipient-email="recipientEmail('personal')" @ticket-created="loadTickets" />
             <VorpruefungTicketCard type="foerdermittelgeber" :project-id="createdProjectId"
-              :ticket="liveTicketByType('foerdermittelgeber')" :recipient-email="recipientEmail('foerdermittelgeber')"
+              :tickets="ticketsByType('foerdermittelgeber')" :recipient-email="recipientEmail('foerdermittelgeber')"
               @ticket-created="loadTickets" />
           </div>
         </div>
@@ -82,6 +82,11 @@ export default {
   methods: {
     liveTicketByType(type) {
       return this.vorpruefungTickets.find(t => t.type === type && !t.supersededAt) || null;
+    },
+    ticketsByType(type) {
+      return this.vorpruefungTickets
+        .filter(t => t.type === type)
+        .sort((a, b) => (b.attempt || 1) - (a.attempt || 1));
     },
     allReviewsPositive() {
       return ["finanzen", "personal", "foerdermittelgeber"].every(type => {

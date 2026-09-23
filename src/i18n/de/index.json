@@ -1231,7 +1231,15 @@
         "gateBlocked": "Alle drei Vorprüfungen müssen positiv beantwortet sein, bevor Sie fortfahren können.",
         "recipientEmail": "Wird gesendet an",
         "recipientMissing": "Keine Kontakt-E-Mail hinterlegt. Bitte zuerst bei der Gemeinde/Fördermittelgeber ergänzen.",
-        "overrideSuccess": "Vorprüfung durch die Administration eingetragen"
+        "overrideSuccess": "Vorprüfung durch die Administration eingetragen",
+        "reAsk": "Erneut anfragen",
+        "historyTitle": "Verlauf ({count})",
+        "attemptLabel": "{number}. Anfrage",
+        "superseded_resend": "erneut angefragt",
+        "superseded_fundingChanged": "Förderung geändert",
+        "overriddenBy": "Eingetragen durch die Administration ({user})",
+        "overriddenByUnknown": "Eingetragen durch die Administration",
+        "statusUnanswered": "Unbeantwortet"
       }
     },
     "decision": {
