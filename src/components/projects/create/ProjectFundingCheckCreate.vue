@@ -204,6 +204,8 @@
 
       <!-- Warning Dialog for Starting Condition Changes -->
       <StartingConditionWarningDialog :modelValue="showWarningDialog" :loading="isLoading"
+        :title="$t('projectComponents.fundingCheck.resetWarningTitle')"
+        :detail="$t('projectComponents.fundingCheck.resetWarningDetail')"
         @confirm="proceedWithSubmission" @cancel="cancelSubmission" />
 
     </q-expansion-item>
@@ -745,6 +747,16 @@ export default {
           fundingCheckSteps: this.getUpdatedSteps(nullifyQuestions)
         };
 
+        if (nullifyQuestions && this.createdProjectId) {
+          const resetSucceeded = await this.$store.dispatch('project/resetVorpruefungTickets', {
+            projectId: this.createdProjectId
+          });
+          if (!resetSucceeded) {
+            this.isLoading = false;
+            return;
+          }
+        }
+
         // Nullify questions if user proceeded after warning
         if (nullifyQuestions) {
           updateData.questions = null;
@@ -777,17 +789,18 @@ export default {
 
       return currentSteps.map(step => {
         if (step.name === 'fundingCheck') {
-          // Always mark fundingCheck as done when submitting
           return { ...step, done: true };
         } else if (step.name === 'qAndA' && this.selectedCard === 'fehlanzeige') {
           return { ...step, done: false, skip: true };
         } else if (step.name === 'qAndA' && nullifyQuestions) {
-          // Reset qAndA step when nullifying questions
           return { ...step, done: false };
         } else if (step.name === 'qAndA') {
           return { ...step, skip: false };
+        } else if (step.name === 'aptitude' && nullifyQuestions) {
+          // A changed funding programme invalidates every review: finance and
+          // personnel signed off on this project under the previous programme.
+          return { ...step, done: false, inProgress: false };
         }
-        // Keep all other steps as they are
         return { ...step };
       });
     },

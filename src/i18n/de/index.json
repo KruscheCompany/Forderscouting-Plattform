@@ -1197,7 +1197,9 @@
       "errorIgnoreSuggestion": "Fehler beim Ignorieren des Fördervorschlags",
       "addedBadge": "Neu",
       "ignoreDialogTitle": "Vorschlag ignorieren?",
-      "ignoreDialogDetail": "Dieser Fördervorschlag wird endgültig verworfen und Ihnen für dieses Projekt nicht erneut vorgeschlagen."
+      "ignoreDialogDetail": "Dieser Fördervorschlag wird endgültig verworfen und Ihnen für dieses Projekt nicht erneut vorgeschlagen.",
+      "resetWarningTitle": "Durch die geänderte Förderauswahl werden die offenen Fragen neu gestellt und alle Vorprüfungen zurückgesetzt.",
+      "resetWarningDetail": "Bisherige Antworten der Vorprüfungen bleiben im Verlauf erhalten, zählen aber nicht mehr. Sie müssen die Vorprüfungen erneut anfragen."
     },
     "qAndA": {
       "title": "Offene Fragen",

@@ -1140,7 +1140,9 @@
       "errorIgnoreSuggestion": "Error ignoring the funding suggestion",
       "addedBadge": "New",
       "ignoreDialogTitle": "Ignore this suggestion?",
-      "ignoreDialogDetail": "This funding suggestion will be permanently dismissed and won't be suggested again for this project."
+      "ignoreDialogDetail": "This funding suggestion will be permanently dismissed and won't be suggested again for this project.",
+      "resetWarningTitle": "Changing the funding selection re-asks the open questions and resets all pre-checks.",
+      "resetWarningDetail": "Previous pre-check answers are kept in the history but no longer count. You will need to request the pre-checks again."
     },
     "qAndA": {
       "title": "Open Questions & Answers",
