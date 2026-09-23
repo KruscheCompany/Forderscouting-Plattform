@@ -304,6 +304,10 @@ export default {
       }
     },
     async goToNextStep(skip) {
+      // While getSpecificProject refetches, `project` is null and `steps` falls
+      // back to the default template — persisting that would erase progress.
+      if (!this.project) return;
+
       const skipper = skip ? 2 : 1;
       const currentIndex = this.steps.findIndex(s => s.name === this.step);
 

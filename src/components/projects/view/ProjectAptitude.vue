@@ -17,6 +17,7 @@
             </div>
             <div v-if="ticketByType(type) && ticketByType(type).answeredAt" class="font-14 q-pl-lg">
               <div>{{ statusLabel(type) }}</div>
+              <div v-if="ticketByType(type).overriddenAt" class="text-blue-grey-7">{{ overrideLabel(ticketByType(type)) }}</div>
               <div v-if="ticketByType(type).wantsPhoneCall">{{ $t('projectComponents.aptitude.vorpruefung.wantsPhoneCall') }}</div>
               <div v-if="ticketByType(type).wantsOnsiteMeeting">{{ $t('projectComponents.aptitude.vorpruefung.wantsOnsiteMeeting') }}</div>
               <div v-if="ticketByType(type).suggestedDates && ticketByType(type).suggestedDates.length">
@@ -31,6 +32,8 @@
                 {{ $t('projectComponents.aptitude.vorpruefung.attemptLabel', { number: entry.attempt || 1 }) }} &middot;
                 {{ entry.answeredAt ? $t(`projectComponents.aptitude.vorpruefung.status${entry.status === 'positiv' ? 'Positiv' : entry.status === 'negativ' ? 'Negativ' : 'Ruecksprache'}`) : $t('projectComponents.aptitude.vorpruefung.statusUnanswered') }}
                 <template v-if="entry.answeredAt"> &middot; {{ formatDate(entry.answeredAt) }}</template>
+                &middot; {{ $t(`projectComponents.aptitude.vorpruefung.superseded_${entry.supersededReason}`) }}
+                <div v-if="entry.overriddenAt">{{ overrideLabel(entry) }}</div>
                 <div v-if="entry.responseText">{{ entry.responseText }}</div>
               </div>
             </q-expansion-item>
@@ -74,7 +77,12 @@ export default {
     historyByType(type) {
       return this.vorpruefungTickets
         .filter(t => t.type === type && !!t.supersededAt)
-        .sort((a, b) => (b.attempt || 1) - (a.attempt || 1));
+        .sort((a, b) => b.id - a.id);
+    },
+    overrideLabel(ticket) {
+      return ticket.overriddenBy && ticket.overriddenBy.username
+        ? this.$t('projectComponents.aptitude.vorpruefung.overriddenBy', { user: ticket.overriddenBy.username })
+        : this.$t('projectComponents.aptitude.vorpruefung.overriddenByUnknown');
     },
     formatDate(value) {
       return new Date(value).toLocaleDateString('de-DE');

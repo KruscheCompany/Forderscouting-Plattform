@@ -236,6 +236,17 @@ export default {
         this.showWarningDialog = false;
         this.startingConditionReset = true;
 
+        if (this.project?.id) {
+          const resetSucceeded = await this.$store.dispatch('project/resetVorpruefungTickets', {
+            projectId: this.project.id
+          });
+          if (!resetSucceeded) {
+            this.startingConditionReset = false;
+            this.isLoading = false;
+            return;
+          }
+        }
+
         // Reset funding match and open questions, and reset the relevant steps
         this.form = {
           ...this.form,
@@ -252,21 +263,14 @@ export default {
       }
     },
 
-    // Get reset steps - only reset fundingCheck and qAndA, preserve other steps
     getResetSteps() {
-      // Use existing steps from project if available, otherwise use default steps
       const currentSteps = this.project?.fundingCheckSteps || this.resetSteps;
 
       return currentSteps.map(step => {
-        if (step.name === 'fundingCheck') {
-          // Reset fundingCheck step
-          return { ...step, done: false };
-        } else if (step.name === 'qAndA') {
-          // Reset qAndA step
-          return { ...step, done: false };
+        if (['fundingCheck', 'qAndA', 'aptitude'].includes(step.name)) {
+          return { ...step, done: false, inProgress: false };
         }
-        // Keep all other steps (aptitude, decision) as they are
-        return { ...step };
+        return { ...step, inProgress: false };
       });
     },
 
@@ -329,6 +333,12 @@ export default {
           });
         }
         const projectId = res.data.id;
+
+        if (this.startingConditionReset) {
+          await this.$store.dispatch('project/updateLocalProjectState', {
+            data: { fundingCheckSteps: projectData.fundingCheckSteps }
+          });
+        }
 
         // Check if the response indicates success
         if (res && res.data && projectId) {

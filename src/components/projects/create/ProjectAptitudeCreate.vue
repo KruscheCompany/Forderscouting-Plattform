@@ -86,7 +86,7 @@ export default {
     ticketsByType(type) {
       return this.vorpruefungTickets
         .filter(t => t.type === type)
-        .sort((a, b) => (b.attempt || 1) - (a.attempt || 1));
+        .sort((a, b) => b.id - a.id);
     },
     allReviewsPositive() {
       return ["finanzen", "personal", "foerdermittelgeber"].every(type => {

@@ -1651,6 +1651,9 @@
   },
   "Failed to create external funding": "Failed to create external funding",
   "Finanzierung nicht gefunden": "Funding not found",
+  "Eine positiv beantwortete Vorprüfung kann nicht erneut angefragt werden": {
+    "": "A preliminary review that was answered positively cannot be requested again."
+  },
   "Für diese Vorprüfung ist keine Kontakt-E-Mail hinterlegt": {
     " Bitte hinterlegen Sie zuerst eine Kontakt-E-Mail für die Gemeinde bzw": {
       " den Fördermittelgeber": {

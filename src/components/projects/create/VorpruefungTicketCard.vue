@@ -188,20 +188,27 @@ export default {
     },
     async send() {
       this.sending = true;
-      const created = await this.$store.dispatch("project/createVorpruefungTicket", {
-        projectId: this.projectId,
-        type: this.type,
-        notes: this.notes
-      });
-      this.sending = false;
+      let created;
+      try {
+        created = await this.$store.dispatch("project/createVorpruefungTicket", {
+          projectId: this.projectId,
+          type: this.type,
+          notes: this.notes
+        });
+      } finally {
+        this.sending = false;
+      }
       if (created) {
         this.$emit("ticket-created");
       }
     },
     async resend() {
       this.sending = true;
-      await this.$store.dispatch("project/resendVorpruefungTicket", { id: this.ticket.id });
-      this.sending = false;
+      try {
+        await this.$store.dispatch("project/resendVorpruefungTicket", { id: this.ticket.id });
+      } finally {
+        this.sending = false;
+      }
       this.$emit("ticket-created");
     },
     async saveNotes() {
