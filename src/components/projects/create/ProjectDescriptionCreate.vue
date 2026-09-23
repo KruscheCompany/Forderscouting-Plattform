@@ -236,6 +236,17 @@ export default {
         this.showWarningDialog = false;
         this.startingConditionReset = true;
 
+        if (this.project?.id) {
+          const resetSucceeded = await this.$store.dispatch('project/resetVorpruefungTickets', {
+            projectId: this.project.id
+          });
+          if (!resetSucceeded) {
+            this.startingConditionReset = false;
+            this.isLoading = false;
+            return;
+          }
+        }
+
         // Reset funding match and open questions, and reset the relevant steps
         this.form = {
           ...this.form,
@@ -252,21 +263,14 @@ export default {
       }
     },
 
-    // Get reset steps - only reset fundingCheck and qAndA, preserve other steps
     getResetSteps() {
-      // Use existing steps from project if available, otherwise use default steps
       const currentSteps = this.project?.fundingCheckSteps || this.resetSteps;
 
       return currentSteps.map(step => {
-        if (step.name === 'fundingCheck') {
-          // Reset fundingCheck step
-          return { ...step, done: false };
-        } else if (step.name === 'qAndA') {
-          // Reset qAndA step
-          return { ...step, done: false };
+        if (['fundingCheck', 'qAndA', 'aptitude'].includes(step.name)) {
+          return { ...step, done: false, inProgress: false };
         }
-        // Keep all other steps (aptitude, decision) as they are
-        return { ...step };
+        return { ...step, inProgress: false };
       });
     },
 
@@ -298,16 +302,21 @@ export default {
           info: {
             ...(this.editing ? this.project.info : {}),
             ...this.form.info,
-            contactName: this.userDetails.fullName,
-            phone: this.userDetails.phone,
-            email: this.user.email,
-            streetNo: this.userDetails.streetNo,
-            postalCode: this.userDetails.postalCode,
+            ...(this.editing
+              ? {}
+              : {
+                  contactName: this.userDetails.fullName,
+                  phone: this.userDetails.phone,
+                  email: this.user.email,
+                  streetNo: this.userDetails.streetNo,
+                  postalCode: this.userDetails.postalCode,
+                }),
           },
-          municipality:
-            (this.userDetails.municipality && this.userDetails.municipality.id) ||
-            this.selectedLandkreisMunicipality ||
-            null,
+          municipality: this.editing
+            ? this.project.municipality?.id
+            : (this.userDetails.municipality && this.userDetails.municipality.id) ||
+              this.selectedLandkreisMunicipality ||
+              null,
           owner: (this.user && this.user.id) || null,
         };
 
@@ -323,7 +332,15 @@ export default {
             projectData,
           });
         }
-        const projectId = res.data.id;
+        // The store has already shown the error.
+        if (!res) return;
+        const projectId = res.data && res.data.id;
+
+        if (this.startingConditionReset) {
+          await this.$store.dispatch('project/updateLocalProjectState', {
+            data: { fundingCheckSteps: projectData.fundingCheckSteps }
+          });
+        }
 
         // Check if the response indicates success
         if (res && res.data && projectId) {

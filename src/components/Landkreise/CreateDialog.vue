@@ -32,21 +32,9 @@
             <div class="col-12 col-md-9">
               <q-select outlined multiple use-chips class="no-shadow input-radius-6" v-model="form.federalStates"
                 :options="federalStatesOptions" option-value="id"
-                :option-label="opt => opt.attributes ? opt.attributes.title : ''" emit-value map-options
+                option-label="title" emit-value map-options
                 :rules="[val => (!!val && val.length > 0) || $t('Required')]"
                 :placeholder="$t('administrativeAreas.selectFederalStates')" />
-            </div>
-          </div>
-          <div class="items-center">
-            <div class="col-12 col-md-3">
-              <p class="font-14 no-margin">
-                {{ $t("landkreise.selectMunicipalities") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <q-select outlined multiple use-chips class="no-shadow input-radius-6" v-model="form.municipalities"
-                :options="municipalitiesOptions" option-value="id" option-label="title" emit-value map-options
-                :placeholder="$t('landkreise.selectMunicipalities')" />
             </div>
           </div>
           <div class="row q-col-gutter-sm q-mt-md">
@@ -79,8 +67,7 @@ export default {
     return {
       form: {
         title: "",
-        federalStates: [],
-        municipalities: []
+        federalStates: []
       },
       landkreis: {},
       isLoading: false
@@ -94,8 +81,7 @@ export default {
           "landkreis/createLandkreis",
           {
             title: this.form.title,
-            federalStates: this.form.federalStates,
-            municipalities: this.form.municipalities
+            federalStates: this.form.federalStates
           }
         );
         this.isLoading = false;
@@ -113,8 +99,7 @@ export default {
           {
             id: this.editingId,
             title: this.form.title,
-            federalStates: this.form.federalStates,
-            municipalities: this.form.municipalities
+            federalStates: this.form.federalStates
           }
         );
         this.isLoading = false;
@@ -134,20 +119,15 @@ export default {
           this.landkreis = landkreis;
           this.form.title = landkreis.title;
           this.form.federalStates = [...(landkreis.federalStates || [])];
-          this.form.municipalities = [...(landkreis.municipalities || [])];
         }
       }
     },
     resetForm() {
       this.form.title = "";
       this.form.federalStates = [];
-      this.form.municipalities = [];
     },
     loadFederalStates() {
       this.$store.dispatch("federalState/getFederalStates");
-    },
-    loadMunicipalities() {
-      this.$store.dispatch("municipality/getSimplifiedMunicipalities");
     }
   },
   computed: {
@@ -166,15 +146,10 @@ export default {
         return Array.isArray(federalStatesResponse.data) ? federalStatesResponse.data : [];
       }
       return Array.isArray(federalStatesResponse) ? federalStatesResponse : [];
-    },
-    municipalitiesOptions() {
-      const municipalities = this.$store.state.municipality.municipalitiesSimplified;
-      return Array.isArray(municipalities) ? municipalities : [];
     }
   },
   mounted() {
     this.loadFederalStates();
-    this.loadMunicipalities();
   }
 };
 </script>

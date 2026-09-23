@@ -46,7 +46,7 @@
                 class="suggestion-accept-btn" @click="acceptSuggestion" />
               <q-btn outline no-caps :label="$t('projectComponents.fundingCheck.ignoreSuggestion')"
                 class="suggestion-ignore-btn" @click="showIgnoreDialog = true" />
-              <a v-if="currentSuggestion.external_id" href="#" class="suggestion-view-link"
+              <a v-if="fundingExists(currentSuggestion.external_id)" href="#" class="suggestion-view-link"
                 @click.prevent="openFundingLink(currentSuggestion.external_id)">
                 {{ $t('projectComponents.fundingCheck.viewGuideline') }} ↗
               </a>
@@ -121,7 +121,7 @@
                   <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
                     :style="{ color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white' }"
                     @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
-                    :disabled="!funding.external_id" />
+                    :disabled="!fundingExists(funding.external_id)" />
                 </div>
 
                 <!-- Spacer to push title to bottom -->
@@ -204,6 +204,8 @@
 
       <!-- Warning Dialog for Starting Condition Changes -->
       <StartingConditionWarningDialog :modelValue="showWarningDialog" :loading="isLoading"
+        :title="$t('projectComponents.fundingCheck.resetWarningTitle')"
+        :detail="$t('projectComponents.fundingCheck.resetWarningDetail')"
         @confirm="proceedWithSubmission" @cancel="cancelSubmission" />
 
     </q-expansion-item>
@@ -525,6 +527,13 @@ export default {
       return null;
     },
 
+    // A match can point at a funding that was since deleted, archived or
+    // unpublished; its page would only fail to load, so the link is disabled.
+    fundingExists(externalId) {
+      if (!externalId) return false;
+      return this.scopedFundings.some(f => f.id === parseInt(externalId));
+    },
+
     // The API already scopes /api/fundings to what this user may see, so a match is
     // kept only if its funding is in that list - no client-side hierarchy check.
     filterFundingsByUserData(aiMatches) {
@@ -535,7 +544,7 @@ export default {
         if (!match.external_id) {
           return false;
         }
-        return this.scopedFundings.some(f => f.id === parseInt(match.external_id));
+        return this.fundingExists(match.external_id);
       });
     },
 
@@ -672,6 +681,7 @@ export default {
       const newMatch = {
         title: suggestion.title,
         score: suggestion.score,
+        _id: suggestion.vendorMatchId,
         external_id: suggestion.external_id,
         reasoning: suggestion.reasoning,
         isSuggestion: true
@@ -745,6 +755,16 @@ export default {
           fundingCheckSteps: this.getUpdatedSteps(nullifyQuestions)
         };
 
+        if (nullifyQuestions && this.createdProjectId) {
+          const resetSucceeded = await this.$store.dispatch('project/resetVorpruefungTickets', {
+            projectId: this.createdProjectId
+          });
+          if (!resetSucceeded) {
+            this.isLoading = false;
+            return;
+          }
+        }
+
         // Nullify questions if user proceeded after warning
         if (nullifyQuestions) {
           updateData.questions = null;
@@ -755,10 +775,19 @@ export default {
           data: updateData
         });
 
+        if (!response) {
+          this.isLoading = false;
+          return;
+        }
+
+        this.$store.dispatch('project/updateLocalProjectState', {
+          data: { fundingCheckSteps: updateData.fundingCheckSteps }
+        });
+
         // Emit success event
         this.$emit('funding-submitted', {
           fundingMatches: fundingMatchesWithSelection,
-          noneSelected: this.selectedCard === 'fehlanzeige'
+          noneSelected: this.selectedCards.includes('fehlanzeige')
         });
 
       } catch (error) {
@@ -777,17 +806,18 @@ export default {
 
       return currentSteps.map(step => {
         if (step.name === 'fundingCheck') {
-          // Always mark fundingCheck as done when submitting
           return { ...step, done: true };
-        } else if (step.name === 'qAndA' && this.selectedCard === 'fehlanzeige') {
+        } else if (step.name === 'qAndA' && this.selectedCards.includes('fehlanzeige')) {
           return { ...step, done: false, skip: true };
         } else if (step.name === 'qAndA' && nullifyQuestions) {
-          // Reset qAndA step when nullifying questions
-          return { ...step, done: false };
+          return { ...step, done: false, skip: false };
         } else if (step.name === 'qAndA') {
           return { ...step, skip: false };
+        } else if (step.name === 'aptitude' && nullifyQuestions) {
+          // A changed funding programme invalidates every review: finance and
+          // personnel signed off on this project under the previous programme.
+          return { ...step, done: false, inProgress: false };
         }
-        // Keep all other steps as they are
         return { ...step };
       });
     },

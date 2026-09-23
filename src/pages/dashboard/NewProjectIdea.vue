@@ -82,7 +82,7 @@
                 <div class="col-12">
                   <LocationSelect :currentLocation="form.location"
                     :parentMunicipalityId="ownMunicipalityId"
-                    :rules="[(val) => !!val || $t('Required')]"
+                    :rules="[(val) => !!(val && val.id) || $t('Required')]"
                     @update:location="updateLocation" />
                 </div>
               </div>

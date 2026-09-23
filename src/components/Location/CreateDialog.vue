@@ -35,32 +35,6 @@
                 :rules="[val => (!!val && !!val.id) || $t('Required')]" />
             </div>
           </div>
-          <div class="items-center q-mb-lg">
-            <div class="col-12 col-md-3">
-              <p class="font-14 no-margin">
-                {{ $t("administrativeAreas.selectFederalStates") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <q-select outlined multiple use-chips class="no-shadow input-radius-6" v-model="form.federalStates"
-                :options="federalStatesOptions" option-value="id"
-                :option-label="opt => opt.attributes ? opt.attributes.title : ''" emit-value map-options
-                :placeholder="$t('administrativeAreas.selectFederalStates')"
-                :rules="[val => (val && val.length > 0) || $t('Required')]" />
-            </div>
-          </div>
-          <div class="items-center q-mb-lg">
-            <div class="col-12 col-md-3">
-              <p class="font-14 no-margin">
-                {{ $t("administrativeAreas.selectLandkreise") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <q-select outlined multiple use-chips class="no-shadow input-radius-6" v-model="form.landkreise"
-                :options="landkreiseOptions" option-value="id" option-label="title" emit-value map-options
-                :placeholder="$t('administrativeAreas.selectLandkreise')" />
-            </div>
-          </div>
           <div class="row q-col-gutter-sm">
             <div class="col">
               <q-btn :label="$t('category&Keyword.cancel')" outline v-close-popup size="16px" color="primary" no-caps
@@ -95,9 +69,7 @@ export default {
     return {
       form: {
         title: "",
-        municipality: { id: null, title: "" },
-        federalStates: [],
-        landkreise: []
+        municipality: { id: null, title: "" }
       },
       locationEntry: {},
       isLoading: false
@@ -111,9 +83,7 @@ export default {
           "municipality/createLocationEntry",
           {
             title: this.form.title,
-            municipality: this.form.municipality,
-            federalStates: this.form.federalStates,
-            landkreise: this.form.landkreise
+            municipality: this.form.municipality
           }
         );
         this.isLoading = false;
@@ -121,8 +91,6 @@ export default {
           this.$_options = false;
           this.form.title = "";
           this.form.municipality = { id: null, title: "" };
-          this.form.federalStates = [];
-          this.form.landkreise = [];
         }
       } else {
         this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Bitte füllen Sie alle Felder aus") });
@@ -132,9 +100,7 @@ export default {
       if (!!this.form.title && this.form.municipality && !!this.editingId) {
         if (
           this.form.title !== this.locationEntry.title ||
-          this.form.municipality.id !== this.locationEntry.municipality.id ||
-          JSON.stringify(this.form.federalStates) !== JSON.stringify(this.locationEntry.federalStates) ||
-          JSON.stringify(this.form.landkreise) !== JSON.stringify(this.locationEntry.landkreise)
+          this.form.municipality.id !== this.locationEntry.municipality.id
         ) {
           this.isLoading = true;
           const res = await this.$store.dispatch(
@@ -142,9 +108,7 @@ export default {
             {
               id: this.editingId,
               title: this.form.title,
-              municipality: this.form.municipality.id,
-              federalStates: this.form.federalStates,
-              landkreise: this.form.landkreise
+              municipality: this.form.municipality.id
             }
           );
           this.isLoading = false;
@@ -152,8 +116,6 @@ export default {
             this.$_options = false;
             this.form.title = "";
             this.form.municipality = { id: null, title: "" };
-            this.form.federalStates = [];
-            this.form.landkreise = [];
           }
         } else {
           this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("Bitte wählen Sie einen anderen Titel oder anderen Ort aus") });
@@ -174,47 +136,11 @@ export default {
             id: locationEntry.municipality.id,
             title: locationEntry.municipality.title
           };
-          // Handle federal states - check if they exist and are in array format
-          if (locationEntry.federalStates) {
-            if (Array.isArray(locationEntry.federalStates)) {
-              this.form.federalStates = locationEntry.federalStates.map(fs => fs.id || fs);
-            } else {
-              this.form.federalStates = [];
-            }
-          } else {
-            this.form.federalStates = [];
-          }
-          if (locationEntry.landkreise) {
-            if (Array.isArray(locationEntry.landkreise)) {
-              this.form.landkreise = locationEntry.landkreise.map(lk => lk.id || lk);
-            } else {
-              this.form.landkreise = [];
-            }
-          } else {
-            this.form.landkreise = [];
-          }
         }
       }
     },
-    loadFederalStates() {
-      this.$store.dispatch("federalState/getFederalStates");
-    },
-    loadLandkreise() {
-      this.$store.dispatch("landkreis/getLandkreise");
-    },
     handleMunicipalitySelected(municipality) {
       this.form.municipality = municipality;
-      const fullMunicipality = this.$store.state.municipality.municipalities.find(
-        mun => mun.id === municipality.id
-      );
-      if (fullMunicipality) {
-        this.form.federalStates = Array.isArray(fullMunicipality.federalStates)
-          ? fullMunicipality.federalStates.map(fs => fs.id || fs)
-          : [];
-        this.form.landkreise = Array.isArray(fullMunicipality.landkreise)
-          ? fullMunicipality.landkreise.map(lk => lk.id || lk)
-          : [];
-      }
     }
   },
   computed: {
@@ -225,44 +151,9 @@ export default {
       set: function (val) {
         this.form.title = "";
         this.form.municipality = 0;
-        this.form.federalStates = [];
-        this.form.landkreise = [];
         this.$emit("update", val);
       }
-    },
-    federalStatesOptions() {
-      const federalStatesResponse = this.$store.state.federalState.federalStates;
-      // Check if the response has a data property (Strapi format)
-      if (federalStatesResponse && federalStatesResponse.data) {
-        const federalStates = federalStatesResponse.data;
-        if (!Array.isArray(federalStates)) {
-          return [];
-        }
-        return federalStates;
-      }
-      // Fallback for direct array format
-      if (Array.isArray(federalStatesResponse)) {
-        return federalStatesResponse;
-      }
-      return [];
-    },
-    landkreiseOptions() {
-      const landkreise = this.$store.state.landkreis.landkreise;
-      if (!Array.isArray(landkreise)) {
-        return [];
-      }
-      const sorted = [...landkreise].sort((a, b) => a.title.localeCompare(b.title));
-      if (!this.form.federalStates.length) {
-        return sorted;
-      }
-      return sorted.filter(lk =>
-        (lk.federalStates || []).some(fsId => this.form.federalStates.includes(fsId))
-      );
     }
-  },
-  mounted() {
-    this.loadFederalStates();
-    this.loadLandkreise();
   }
 };
 </script>

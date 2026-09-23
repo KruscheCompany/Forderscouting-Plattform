@@ -70,7 +70,7 @@ export async function tempMunicipality(context, payload) {
 
 export async function createMunicipality(context, payload) {
   const {
-    title, location, federalStates, landkreise,
+    title, location, landkreise,
     financeContactEmail, financeContactFirstName, financeContactLastName,
     personnelContactEmail, personnelContactFirstName, personnelContactLastName
   } = payload;
@@ -80,7 +80,6 @@ export async function createMunicipality(context, payload) {
         data: {
           title,
           verwaltungssitz: location,
-          federalStates: federalStates || [],
           landkreise: landkreise || [],
           financeContactEmail: financeContactEmail || null,
           financeContactFirstName: financeContactFirstName || null,
@@ -109,15 +108,13 @@ export async function createMunicipality(context, payload) {
 }
 
 export async function createLocationEntry(context, payload) {
-  const { title, municipality, federalStates, landkreise } = payload;
+  const { title, municipality } = payload;
   if (!!title && !!municipality) {
     try {
       const res = await api.post("/api/locations", {
         data: {
           title,
-          municipality: municipality.id,
-          federalStates: federalStates || [],
-          landkreise: landkreise || []
+          municipality: municipality.id
         }
       });
       context.dispatch(
@@ -139,7 +136,7 @@ export async function createLocationEntry(context, payload) {
 
 export async function editMunicipality(context, payload) {
   const {
-    id, title, location, federalStates, landkreise,
+    id, title, location, landkreise,
     financeContactEmail, financeContactFirstName, financeContactLastName,
     personnelContactEmail, personnelContactFirstName, personnelContactLastName
   } = payload;
@@ -149,7 +146,6 @@ export async function editMunicipality(context, payload) {
         data: {
           title,
           verwaltungssitz: location,
-          federalStates: federalStates || [],
           landkreise: landkreise || [],
           financeContactEmail: financeContactEmail || null,
           financeContactFirstName: financeContactFirstName || null,
@@ -180,15 +176,13 @@ export async function editMunicipality(context, payload) {
 }
 
 export async function editLocationEntry(context, payload) {
-  const { id, title, municipality, federalStates, landkreise } = payload;
+  const { id, title, municipality } = payload;
   if (!!id && !!title && !!municipality) {
     try {
       const res = await api.put(`/api/locations/${id}`, {
         data: {
           title,
           municipality,
-          federalStates: federalStates || [],
-          landkreise: landkreise || [],
           updatedAt: new Date().toISOString()
         }
       });

@@ -37,19 +37,6 @@
           <div class="items-center">
             <div class="col-12 col-md-3">
               <p class="font-14 no-margin">
-                {{ $t("administrativeAreas.selectFederalStates") }}
-              </p>
-            </div>
-            <div class="col-12 col-md-9">
-              <q-select outlined multiple use-chips class="no-shadow input-radius-6" v-model="form.federalStates"
-                :options="federalStatesOptions" option-value="id"
-                :option-label="opt => opt.attributes ? opt.attributes.title : ''" emit-value map-options
-                :placeholder="$t('administrativeAreas.selectFederalStates')" />
-            </div>
-          </div>
-          <div class="items-center">
-            <div class="col-12 col-md-3">
-              <p class="font-14 no-margin">
                 {{ $t("administrativeAreas.selectLandkreise") }}
               </p>
             </div>
@@ -156,7 +143,6 @@ export default {
       form: {
         title: "",
         location: "",
-        federalStates: [],
         landkreise: [],
         financeContactEmail: "",
         financeContactFirstName: "",
@@ -178,7 +164,6 @@ export default {
           {
             title: this.form.title,
             location: this.form.location,
-            federalStates: this.form.federalStates,
             landkreise: this.form.landkreise,
             financeContactEmail: this.form.financeContactEmail,
             financeContactFirstName: this.form.financeContactFirstName,
@@ -193,7 +178,6 @@ export default {
           this.$_options = false;
           this.form.title = "";
           this.form.location = "";
-          this.form.federalStates = [];
           this.form.landkreise = [];
         }
       }
@@ -203,7 +187,6 @@ export default {
         if (
           this.form.title !== this.municipality.title ||
           this.form.location !== this.municipality.verwaltungssitz ||
-          JSON.stringify(this.form.federalStates) !== JSON.stringify(this.municipality.federalStates) ||
           JSON.stringify(this.form.landkreise) !== JSON.stringify(this.municipality.landkreise) ||
           this.form.financeContactEmail !== this.municipality.financeContactEmail ||
           this.form.financeContactFirstName !== this.municipality.financeContactFirstName ||
@@ -219,7 +202,6 @@ export default {
               id: this.editingId,
               title: this.form.title,
               location: this.form.location,
-              federalStates: this.form.federalStates,
               landkreise: this.form.landkreise,
               financeContactEmail: this.form.financeContactEmail,
               financeContactFirstName: this.form.financeContactFirstName,
@@ -234,7 +216,6 @@ export default {
             this.$_options = false;
             this.form.title = "";
             this.form.location = "";
-            this.form.federalStates = [];
             this.form.landkreise = [];
           }
         } else {
@@ -259,16 +240,6 @@ export default {
           this.form.personnelContactEmail = municipality.personnelContactEmail || "";
           this.form.personnelContactFirstName = municipality.personnelContactFirstName || "";
           this.form.personnelContactLastName = municipality.personnelContactLastName || "";
-          // Handle federal states - check if they exist and are in array format
-          if (municipality.federalStates) {
-            if (Array.isArray(municipality.federalStates)) {
-              this.form.federalStates = municipality.federalStates.map(fs => fs.id || fs);
-            } else {
-              this.form.federalStates = [];
-            }
-          } else {
-            this.form.federalStates = [];
-          }
           if (municipality.landkreise) {
             if (Array.isArray(municipality.landkreise)) {
               this.form.landkreise = municipality.landkreise.map(lk => lk.id || lk);
@@ -280,9 +251,6 @@ export default {
           }
         }
       }
-    },
-    loadFederalStates() {
-      this.$store.dispatch("federalState/getFederalStates");
     },
     loadLandkreise() {
       this.$store.dispatch("landkreis/getLandkreise");
@@ -296,7 +264,6 @@ export default {
       set: function (val) {
         this.form.title = "";
         this.form.location = "";
-        this.form.federalStates = [];
         this.form.landkreise = [];
         this.form.financeContactEmail = "";
         this.form.financeContactFirstName = "";
@@ -307,38 +274,15 @@ export default {
         this.$emit("update", val);
       }
     },
-    federalStatesOptions() {
-      const federalStatesResponse = this.$store.state.federalState.federalStates;
-      // Check if the response has a data property (Strapi format)
-      if (federalStatesResponse && federalStatesResponse.data) {
-        const federalStates = federalStatesResponse.data;
-        if (!Array.isArray(federalStates)) {
-          return [];
-        }
-        return federalStates;
-      }
-      // Fallback for direct array format
-      if (Array.isArray(federalStatesResponse)) {
-        return federalStatesResponse;
-      }
-      return [];
-    },
     landkreiseOptions() {
       const landkreise = this.$store.state.landkreis.landkreise;
       if (!Array.isArray(landkreise)) {
         return [];
       }
-      const sorted = [...landkreise].sort((a, b) => a.title.localeCompare(b.title));
-      if (!this.form.federalStates.length) {
-        return sorted;
-      }
-      return sorted.filter(lk =>
-        (lk.federalStates || []).some(fsId => this.form.federalStates.includes(fsId))
-      );
+      return [...landkreise].sort((a, b) => a.title.localeCompare(b.title));
     }
   },
   mounted() {
-    this.loadFederalStates();
     this.loadLandkreise();
   }
 };

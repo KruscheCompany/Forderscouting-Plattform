@@ -488,6 +488,53 @@ export async function resendVorpruefungTicket(context, payload) {
   }
 }
 
+// Records the decision for the project's current review of that type, whether
+// it is still pending, already declined, or was never requested at all.
+export async function overrideVorpruefungTicket(context, payload) {
+  const { projectId, type, decisionType, responseText, wantsPhoneCall, wantsOnsiteMeeting, suggestedDates } = payload;
+  try {
+    await api.post("/api/vorpruefung-tickets/override", {
+      project: projectId,
+      type,
+      decisionType,
+      responseText,
+      wantsPhoneCall,
+      wantsOnsiteMeeting,
+      suggestedDates
+    });
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "positive", title: i18n.t("projectComponents.aptitude.vorpruefung.overrideSuccess") },
+        { root: true }
+      );
+    return true;
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
+        { root: true }
+      );
+    return false;
+  }
+}
+
+// Silent on success: the caller (the funding-check step) already tells the user
+// their funding selection changed, and a second toast would just be noise.
+export async function resetVorpruefungTickets(context, payload) {
+  const { projectId } = payload;
+  try {
+    await api.post("/api/vorpruefung-tickets/reset", { project: projectId });
+    return true;
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
+        { root: true }
+      );
+    return false;
+  }
+}
+
 // New action to update local state only
 export function updateLocalProjectState(context, payload) {
   const { data } = payload;
@@ -516,8 +563,12 @@ export function updateLocalProjectState(context, payload) {
 }
 
 export async function getSpecificProject(context, payload) {
-  context.commit("setSpecificProject", null);
   const { id } = payload;
+  // A refetch of the project already on screen keeps it until the fresh copy
+  // arrives; blanking it would let a save in that window run against defaults.
+  if (!context.state.project || context.state.project.id !== id) {
+    context.commit("setSpecificProject", null);
+  }
   if (id) {
     try {
       const res = await api.get(`/api/projects/${id}`);
