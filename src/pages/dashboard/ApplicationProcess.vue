@@ -316,8 +316,13 @@ export default {
           updatedSteps[currentIndex + 1].skip = false;
         }
 
+        // Exactly one step may be in progress. The user can navigate back to an
+        // earlier done step and resubmit it, which would otherwise leave the
+        // step they had actually reached still flagged — and landing picks the
+        // first flagged step in array order, not the furthest one.
+        updatedSteps.forEach(step => { step.inProgress = false; });
+
         updatedSteps[currentIndex].done = true;
-        updatedSteps[currentIndex].inProgress = false;
 
         const targetIndex = currentIndex + skipper;
         if (updatedSteps[targetIndex]) {
@@ -652,10 +657,14 @@ export default {
       }
 
       let nextIndex = lastDoneIndex + 1;
-      while (nextIndex < this.steps.length - 1 && this.steps[nextIndex].skip) {
+      while (nextIndex < this.steps.length && this.steps[nextIndex].skip) {
         nextIndex += 1;
       }
-      this.step = this.steps[Math.min(nextIndex, this.steps.length - 1)].name;
+      // Every remaining step skipped means there is no next step to land on;
+      // fall back to the last done one rather than a step that renders nothing.
+      this.step = nextIndex < this.steps.length
+        ? this.steps[nextIndex].name
+        : this.steps[lastDoneIndex].name;
     },
 
 
