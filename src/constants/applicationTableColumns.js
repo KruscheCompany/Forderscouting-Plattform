@@ -3,6 +3,7 @@
 // vertically even though each table renders its own independently-sized
 // <table> with different row content.
 export const APPLICATION_TABLE_COLUMN_WIDTHS = {
+  action: "72px",
   updatedAt: "132px",
   location: "190px",
   applicationProcess: "210px",

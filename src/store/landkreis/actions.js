@@ -28,18 +28,18 @@ export async function getLandkreise(context) {
     console.error("error :>> ", error);
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
 }
 
 export async function createLandkreis(context, payload) {
-  const { title, federalStates, municipalities } = payload;
+  const { title, federalStates } = payload;
   if (!!title) {
     try {
       const res = await api.post("/api/landkreise", {
-        data: { title, federalStates, municipalities }
+        data: { title, federalStates }
       });
       context.dispatch(
         "notifications/pushToast",
@@ -50,7 +50,7 @@ export async function createLandkreis(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -59,11 +59,11 @@ export async function createLandkreis(context, payload) {
 }
 
 export async function editLandkreis(context, payload) {
-  const { id, title, federalStates, municipalities } = payload;
+  const { id, title, federalStates } = payload;
   if (!!id && !!title) {
     try {
       const res = await api.put(`/api/landkreise/${id}`, {
-        data: { title, federalStates, municipalities, updatedAt: new Date().toISOString() }
+        data: { title, federalStates, updatedAt: new Date().toISOString() }
       });
       context.dispatch(
         "notifications/pushToast",
@@ -74,7 +74,7 @@ export async function editLandkreis(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -96,7 +96,7 @@ export async function deleteLandkreis(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;

@@ -40,7 +40,7 @@
                   {{ $t("myDataHome.projectIdeaBtn") }}
                 </p>
               </q-tab>
-              <q-tab class="q-mr-lg radius-6 border-yellow" name="fundings">
+              <q-tab v-if="isAdmin" class="q-mr-lg radius-6 border-yellow" name="fundings">
                 <p class="font-14 text-weight-600 no-margin">
                   {{ $t("myDataHome.fundingsBtn") }}
                 </p>
@@ -444,7 +444,7 @@ export default {
         this.$store.dispatch("project/getProjectIdeas");
         this.$store.commit("project/setSpecificProject", null);
       } else if (tab == "fundings") {
-        this.$store.dispatch("funding/getFundings");
+        this.$store.dispatch("funding/getAllFundings");
         this.$store.commit("funding/setSpecificFunding", null);
       }
     },
@@ -598,12 +598,7 @@ export default {
             }).length > 0
           });
       }
-      const fundings = !!this.$store.state.funding.fundings &&
-        this.$store.state.funding.fundings.filter((item) => {
-          return item.owner.id == this.loggedInUser.id || item.editors.filter((editor) => {
-            return editor.id == this.loggedInUser.id
-          }).length > 0
-        });
+      const fundings = this.$store.state.funding.allFundings;
       if (!fundings) return fundings;
       if (this.eligibilityFilter === "eligible") {
         return fundings.filter(item => item.applicationEligible === true);

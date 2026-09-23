@@ -95,6 +95,13 @@
     "contactUser": "Do you want your contact details to be visible to users?",
     "saveChanges": "Save Changes"
   },
+  "hierarchyScope": {
+    "path": "Path",
+    "state": "Federal State",
+    "selectState": "Select Federal State",
+    "town": "Town / City",
+    "atLeastOneRequired": "Select at least one level"
+  },
   "generalData": {
     "generalData": "General Data",
     "currentPassword": "Current Password",
@@ -102,7 +109,7 @@
     "repeatPassword": "Repeat Password",
     "transferData": "Transfer Data",
     "deleteGeneralData": "Delete General Data",
-    "selectUser": "Select User ",
+    "selectUser": "Select User",
     "saveChanges": "Save Changes",
     "resetPassword": "Reset Password",
     "forgotPassword": "Forgot Password",
@@ -146,7 +153,7 @@
     "fundingsBtn": "Fundings",
     "checkListBtn": "Implementation Checklist",
     "importFundingBtn": "Import Funding",
-    "applicationProcessBtn": "Application process"
+    "applicationProcessBtn": "Antragsweg"
   },
   "fundingsInfo": {
     "current": "Current funding information",
@@ -223,7 +230,7 @@
     "removeBookmark": "Remove from Bookmarks",
     "archive": "Archive",
     "delete": "Delete",
-    "bookmark": "Bookmark"
+    "bookmark": "Merken"
   },
   "myNetworkHome": {
     "myNetwork": "My Network",
@@ -258,7 +265,7 @@
     "noLinksSet": "No links set",
     "type": "Type",
     "visibility": "Visibility",
-    "generalInformation": "General information"
+    "generalInformation": "Allgemeine Infos"
   },
   "category&Keyword": {
     "category": "Category",
@@ -273,7 +280,7 @@
     "titleOfKeyword": "New Keyword/Tag",
     "categoryInputLabel": "Title of Category",
     "keywordInputLabel": "Title of Keyword/Tag",
-    "save": "Save ",
+    "save": "Save",
     "cancel": "Cancel",
     "edit": "Edit",
     "delete": "Delete",
@@ -291,20 +298,23 @@
     "deleteCategorey": "Delete Category",
     "deleteKeyword": "Delete Keyword/Tag",
     "editKeyword/Tag": "Edit Keyword/Tag",
-    "tags": "Tags"
+    "tags": "Schlagwörter"
   },
   "administrativeAreas": {
     "createAdministration": "Create Administration",
-    "administrationName": "Administration ",
+    "administrationName": "Administration",
     "federalState": "Federal State",
+    "administrationSeat": "Registered Seat",
     "dataSets": "Data Sets",
     "projectCoordinator": "Project Coordinators",
     "view": "View",
     "edit": "Edit",
     "delete": "Delete",
-    "createState": "Create State",
-    "stateName": "State Name",
-    "statesOverview": "States Overview",
+    "createLocationEntry": "Create Location",
+    "locationEntryName": "Location Name",
+    "locationEntriesOverview": "Villages & Cities",
+    "locationEntryNote": "Note: this page manages villages & cities, referred to internally in the system as \"Ort\".",
+    "locationEntryTitle": "Location",
     "selectFederalStates": "Select Federal States",
     "selectLandkreise": "Select Landkreise",
     "financeContactEmail": "Finance contact email",
@@ -312,7 +322,10 @@
     "financeContactLastName": "Finance contact last name",
     "personnelContactEmail": "Personnel contact email",
     "personnelContactFirstName": "Personnel contact first name",
-    "personnelContactLastName": "Personnel contact last name"
+    "personnelContactLastName": "Personnel contact last name",
+    "createState": "Create State",
+    "stateName": "State Name",
+    "statesOverview": "States Overview"
   },
   "federalStates": {
     "overview": "Federal States Overview",
@@ -320,7 +333,7 @@
     "federalStateName": "Federal State",
     "edit": "Edit",
     "delete": "Delete",
-    "selectFederalStates": "Select federal states"
+    "selectFederalStates": "Bundesländer auswählen"
   },
   "landkreise": {
     "overview": "Landkreise Overview",
@@ -497,8 +510,8 @@
     "saveDraft": "Save Draft",
     "publish": "Publish",
     "financialPlan": "Financial Plan",
-    "editDraft": "Edit draft",
-    "timeline": "Timeline"
+    "editDraft": "Dokument bearbeiten",
+    "timeline": "Zeitplan"
   },
   "userSelector": {
     "title": "Select User"
@@ -511,8 +524,9 @@
     "noResults": "No results",
     "searchPlaceholder": "Search categories",
     "fixedListHint": "Categories are a fixed list.",
-    "hintWithSelection": "Filled = selected, tap to remove.",
-    "hintEmpty": "No category selected yet."
+    "hintWithSelection": "Dashed = AI suggestion, tap to accept. Filled = selected, tap to remove.",
+    "hintEmpty": "No category selected yet.",
+    "aiTag": "AI"
   },
   "tagsSelector": {
     "title": "Select Tag",
@@ -540,12 +554,12 @@
   "links": {
     "linkAdd": "Add link"
   },
-  "fundingOpen": "Permanently open",
-  "applicationEligible": "Application eligible",
-  "additionalInfo": "Additional information",
+  "fundingOpen": "Funding Open",
+  "applicationEligible": "Application Eligible",
+  "additionalInfo": "additionalinfo",
   "fundingCalls": {
-    "label": "Funding calls",
-    "addCall": "Add call"
+    "label": "Label",
+    "addCall": "Add Call"
   },
   "Label": "Label",
   "projectIdeaPlaceholder": {
@@ -567,15 +581,15 @@
     "descripeProjectStartingCondition": "Starting Condition",
     "describeProjectGoals": "Describe Project Goals",
     "costPosition": "Cost Position",
-    "esitimatedCost": "Estimated Cost (in €) ",
+    "esitimatedCost": "Estimated Cost (in €)",
     "selectGuidelines": "Select Funding Guidelines",
     "link": "Add Link",
     "plannedStartDate": "Start date",
     "plannedEndDate": "End date",
     "selectFiles": "Select Files",
     "uploads": "Uploads",
-    "visibility": "This document is available for viewing to all users.",
-    "describeProjectTimeline": "Timeline documentation",
+    "visibility": "Dieses Dokument steht allen Benutzern zur Ansicht zur Verfügung.",
+    "describeProjectTimeline": "Skizzieren Sie den Zeitplan",
     "describeProjectDocumentation": "Project documentation"
   },
   "visibility": {
@@ -618,14 +632,24 @@
     "roleAdmin": "Admin",
     "roleUser": "User",
     "roleGuest": "Guest",
-    "roleLeader": "Coordinator"
+    "roleLeader": "Coordinator",
+    "person": "Person",
+    "scope": "Scope",
+    "inviteUserHint": "They get an email with a link that is valid for 7 days.",
+    "roleHint": "decides what they are allowed to do",
+    "scopeHint": "decides which projects are visible",
+    "clearScope": "Reset scope",
+    "roleAdminDesc": "Manages the whole platform, invites users and changes roles.",
+    "roleLeaderDesc": "Coordinates projects within the administration, prioritises initiatives and invites volunteers.",
+    "roleUserDesc": "Creates project ideas, edits them and submits funding applications within their own administration.",
+    "roleGuestDesc": "Can view projects and funding without making changes."
   },
   "Sent": "Sent",
   "NotSent": "Not Sent",
   "Search": "Search",
   "noUsers": "No users",
   "noGuests": "No Guests",
-  "editState": "Edit State",
+  "editLocationEntry": "Edit Location",
   "addEditors": "Add Editors",
   "Implementation checklist": "Implementation Checklist",
   "NoCategories": "No Categories",
@@ -651,11 +675,11 @@
   "A new tag suggestion needs review": "A new tag suggestion needs review",
   "Your suggested tag was approved": "Your suggested tag was approved",
   "Your suggested tag was rejected": "Your suggested tag was rejected",
-  "Request to edit a document made by | ": "Request to edit a document made by | ",
-  "Request to view a document made by | ": "Request to view a document made by | ",
-  "Comment to a funding made by | ": "Comment to a funding made by | ",
-  "Funding opportunity expires | ": "Funding opportunity expires | ",
-  "New funding suggestions for | ": "New funding suggestions for | ",
+  "Request to edit a document made by | ": "Request to edit a document made by |",
+  "Request to view a document made by | ": "Request to view a document made by |",
+  "Comment to a funding made by | ": "Comment to a funding made by |",
+  "Funding opportunity expires | ": "Funding opportunity expires |",
+  "New funding suggestions for | ": "New funding suggestions for |",
   "New Comment on Funding": "New Comment on Funding",
   "says": "says",
   "Select Data": "Select Data",
@@ -756,8 +780,8 @@
   "viewEmail": "Details of email sent to user group",
   "userGroups": {
     "Users": "Users",
-    "Guest Users": "Guest Users",
-    "Administrators": "Administrators",
+    "Guest Users": "Gäste",
+    "Administrators": "Admins",
     "Municipality Leaders": "Municipality Leaders"
   },
   "Recipient": "Recipient",
@@ -766,8 +790,8 @@
   "edit": "Edit",
   "duplicate": "Duplicate",
   "archive": "Archive",
-  "deleteState": "Delete State",
-  "deleteStateMessage": "Are you sure you want to delete this state? This action cannot be undone.",
+  "deleteLocationEntry": "Delete Location",
+  "deleteLocationEntryMessage": "Are you sure you want to delete this location? This action cannot be undone.",
   "editFederalState": "Edit Federal State",
   "deleteFederalState": "Delete Federal State",
   "deleteFederalStateMessage": "Are you sure you want to delete this federal state? This action cannot be undone.",
@@ -1102,7 +1126,7 @@
       "matchingLoading": "AI is searching for matching funding guidelines...",
       "dragToReorder": "Drag to reorder",
       "dragHint": "Tip: Drag the cards by the handle to change their order.",
-      "Project funding comparison": "Project funding comparison",
+      "Project funding comparison": "Projektbeschreibung-Fördermittel-Check",
       "newSuggestionTitle": "New AI funding suggestion",
       "match": "match",
       "suggestionRankHint": "would rank #{rank} of {total}",
@@ -1116,7 +1140,9 @@
       "errorIgnoreSuggestion": "Error ignoring the funding suggestion",
       "addedBadge": "New",
       "ignoreDialogTitle": "Ignore this suggestion?",
-      "ignoreDialogDetail": "This funding suggestion will be permanently dismissed and won't be suggested again for this project."
+      "ignoreDialogDetail": "This funding suggestion will be permanently dismissed and won't be suggested again for this project.",
+      "resetWarningTitle": "Changing the funding selection re-asks the open questions and resets all pre-checks.",
+      "resetWarningDetail": "Previous pre-check answers are kept in the history but no longer count. You will need to request the pre-checks again."
     },
     "qAndA": {
       "title": "Open Questions & Answers",
@@ -1145,11 +1171,26 @@
         "suggestedDates": "Suggested dates",
         "sendSuccess": "Review requested successfully",
         "resendSuccess": "Review request resent",
+        "saveSuccess": "Pre-checks saved",
         "gateBlocked": "All three reviews must be answered positively before you can continue.",
         "recipientEmail": "Will be sent to",
-        "recipientMissing": "No contact email on file. Please add one for the municipality/funding provider first."
+        "recipientMissing": "No contact email on file. Please add one for the municipality/funding provider first.",
+        "overrideSuccess": "Pre-check recorded by the administration",
+        "override": "Override",
+        "overrideTitle": "Override pre-check",
+        "overrideHint": "You are recording the decision for the {type} on the reviewer's behalf. The reviewer will not be notified.",
+        "overrideSubmit": "Record decision",
+        "reAsk": "Ask again",
+        "historyTitle": "History ({count})",
+        "attemptLabel": "Request {number}",
+        "superseded_resend": "asked again",
+        "superseded_fundingChanged": "funding changed",
+        "superseded_override": "decided by the administration",
+        "overriddenBy": "Recorded by the administration ({user})",
+        "overriddenByUnknown": "Recorded by the administration",
+        "statusUnanswered": "Unanswered"
       },
-      "description": "Short task text (Who had the idea? How was the idea developed? What is the context in the municipality/city?)"
+      "description": "Kurzer Aufgabentext (Wie ist das Vorhaben entstanden? In welchem Ausschuss soll darüber entschieden werden? Der Text der Antragsvorlage kann hier eingefügt werden)"
     },
     "decision": {
       "title": "Basic decision",
@@ -1193,20 +1234,20 @@
         "Uploads": "Uploads",
         "Links": "Links"
       },
-      "financialPlanDescription": "Short task text",
-      "timelineDescription": "Short task text",
-      "uploadsDescription": "Short task text"
+      "financialPlanDescription": "Kurzer Aufgabentext",
+      "timelineDescription": "Kurzer Aufgabentext",
+      "uploadsDescription": "Kurzer Aufgabentext"
     },
     "taskPlan": {
-      "title": "Task planning",
-      "newTaskPlaceholder": "Enter new task",
-      "description": "Short task text - Which method was used to plan tasks? Which tasks were planned?"
+      "title": "Aufgabenplanung",
+      "newTaskPlaceholder": "Neue Aufgabe eingeben",
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Aufgaben geplant? Welche Aufgaben wurden geplant?"
     },
     "siteVisit": {
-      "title": "Site visit",
-      "descriptionPlaceholder": "Enter description of the site visit",
-      "description": "Short task text",
-      "noContent": "No description of the site visit available"
+      "title": "Begehung",
+      "descriptionPlaceholder": "Beschreibung der Begehung eingeben",
+      "description": "Kurzer Aufgabentext",
+      "noContent": "Keine Beschreibung der Begehung verfügbar"
     },
     "goalsAndRequirements": {
       "title": "Define goals and requirements",
@@ -1214,11 +1255,11 @@
       "noContent": "No goals and requirements defined"
     },
     "guidelineContentCheck": {
-      "title": "Guideline check (content and formalities) long version",
-      "description": "Short task text - Please don't forget the content and formal comparison with the long version of the guideline. Here you can document important passages with page numbers",
-      "noContent": "No description of the guideline check available",
+      "title": "Förderrichtlinien-Check (Langfassung)",
+      "description": "Kurzer Aufgabentext - Bitte vergesst den inhaltlichen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
+      "noContent": "Keine Beschreibung des Richtlinien-Checks verfügbar",
       "uploadsTitle": "Uploads",
-      "uploadsDescription": "Here you can upload files that you used as part of the guideline check (e.g. excerpts from the guideline, information sheets, application forms etc.)",
+      "uploadsDescription": "Hier können Sie Dateien hochladen, die Sie im Rahmen des Richtlinien-Checks verwendet haben (z.B. Auszüge aus der Richtlinie, Merkblätter, Antragsformulare etc.)",
       "bulletPointTitle": "Information on the application process (long version XFLB - application part)",
       "documents": "Documents",
       "procedure": "Procedure",
@@ -1226,30 +1267,50 @@
       "applicationCost": "Application costs"
     },
     "applicationDecision": {
-      "title": "Application decision",
-      "description": "Upload files (application decision, minutes excerpt)",
-      "noFilesUploaded": "No files uploaded"
+      "title": "Antragsbeschluss",
+      "description": "Dateien hochladen (Antragsbeschluss, Protokollauszug)",
+      "noFilesUploaded": "Keine Dateien hochgeladen"
     },
     "submissionSigning": {
-      "title": "Signing & Application submission",
-      "selectionLabel": "Upload project application documents",
-      "pendingDecision": "Application decision pending",
-      "sentToFunding": "sent to funding",
-      "sentToFundingBody": "Application submitted to the funding body",
-      "grantNotice": "Grant notice",
-      "rejectionNotice": "Rejection notice",
-      "noSelectionError": "Please make a decision on the application",
-      "successMessage": "Notice successfully saved",
-      "errorMessage": "Error saving the notice"
+      "title": "Unterzeichnung & Antragsstellung",
+      "selectionLabel": "Upload Projektantragsunterlagen",
+      "pendingDecision": "Antragsentscheidung ausstehend",
+      "sentToFunding": "Sent To Funding",
+      "sentToFundingBody": "Antrag bei der Förderstelle eingereicht",
+      "grantNotice": "Zuwendungsbescheid",
+      "rejectionNotice": "Ablehnungsbescheid",
+      "noSelectionError": "Bitte treffen Sie eine Entscheidung über den Antrag",
+      "successMessage": "Bescheid erfolgreich gespeichert",
+      "errorMessage": "Fehler beim Speichern des Bescheids"
     },
     "documentsCoordination": {
-      "title": "Project documents coordination",
-      "description": "Short task text",
-      "noContent": "No description of the project documents coordination available"
+      "title": "Abstimmung Projektunterlagen",
+      "description": "Kurzer Aufgabentext",
+      "noContent": "Keine Beschreibung der Abstimmung der Projektunterlagen verfügbar"
     },
     "financingCheck": {
-      "title": "Financing check",
+      "title": "Finanzierungs-Check",
       "noContent": "No financing plan provided"
+    },
+    "goals": {
+      "title": "Ziele definieren",
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Ziele definiert? Welche Ziele wurden definiert?",
+      "noContent": "Keine Ziele definiert"
+    },
+    "requirements": {
+      "title": "Anforderungen definieren",
+      "description": "Kurzer Aufgabentext - Mit welcher Methode wurden Anforderungen definiert? Welche Anforderungen wurden definiert?",
+      "noContent": "Keine Anforderungen definiert"
+    },
+    "guidelineFormCheck": {
+      "title": "Förderrichtlinien-Check (Langfassung)",
+      "bulletPointTitle": "Infos zur Antragsstellung (Langfassung XFLB - Part Antragstellung)",
+      "description": "Kurzer Aufgabentext - Bitte vergesst den formalen Abgleich mit der Richtlinien-Langfassung nicht. Hier könnt ihr wichtige Passagen mit Seitenzahl dokumentieren",
+      "documents": "Dokumente",
+      "procedure": "Verfahrensablauf",
+      "applicationDeadline": "Antragsfrist",
+      "applicationCost": "Beantragungskosten",
+      "noContent": "No Content Yet"
     }
   },
   "reviewPage": {
@@ -1298,7 +1359,7 @@
     "accessError": "Error checking access permissions",
     "noFinancialData": "No financial data available",
     "financialPlan": "Financial Plan",
-    "title": "Title",
+    "title": "Titel",
     "archivedApplications": "Archived Applications",
     "waitlist": "Wait List",
     "owner": "Owner",
@@ -1314,156 +1375,159 @@
     "alreadyPrioritized": "This project idea is already prioritised.",
     "prioritizeSuccess": "Project idea prioritised successfully",
     "removePrioritySuccess": "Project idea removed from the priority list",
-    "municipalities": "Administrative areas",
+    "municipalities": "Verwaltung",
     "status": "Status",
-    "investive": "Investive/ non-investive",
-    "categories": "Categories",
-    "applicationProcess": "Application process",
-    "locations": "Location",
-    "unarchive": "Restore from archive"
+    "investive": "investiv/ nicht investiv",
+    "categories": "Kategorien",
+    "applicationProcess": "Arbeitsphase",
+    "locations": "Municipalities",
+    "unarchive": "Restore from archive",
+    "archive": "Archive"
   },
-  "projectIdea": "Project ideas",
-  "Request to duplicate a document made by | ": "Request to duplicate a document made by | ",
-  "confirm": "Confirm",
-  "adminstrationLocation": "Administration location",
-  "editAdministration": "Edit administration",
-  "deleteAdministration": "Delete administration",
-  "deleteAdministrationMessage": "Do you really want to delete this administration? This action cannot be undone.",
-  "approve": "Approve",
-  "Add Files": "Add Files",
-  "Select Files": "Select Files",
-  "funding provider": "Funding provider",
-  "Contact person": "Contact person",
-  "Funding goal": "Funding goal",
-  "What is funded?": "What is funded?",
-  "What is not funded?": "What is not funded?",
-  "Who will be funded?": "Who will be funded?",
-  "Conditions for Applicants": "Conditions for Applicants",
-  "Funding rates": "Funding rate(s)",
-  "Own contribution": "Own contribution",
-  "Accumulability": "Accumulability",
-  "Basis for assessment": "Basis for assessment",
-  "Funding Period": "Funding Period",
-  "Notes to the funding period": "Notes on the funding period",
-  "Link to project ideas (optional)": "Link to project ideas (optional)",
-  "Link to implementation checklist (optional)": "Link to implementation checklist (optional)",
-  "Links to the fundings": "Links to the fundings",
-  "official title": "Official title of the funding provider",
-  "Name, Surname": "Name, Surname",
+  "projectIdea": "Antragswege",
+  "Request to duplicate a document made by | ": "Antrag auf Vervielfältigung eines Dokuments, gestellt von |",
+  "confirm": "Bestätigen",
+  "adminstrationLocation": "Verwaltungsstandort",
+  "editAdministration": "Verwaltung bearbeiten",
+  "deleteAdministration": "Verwaltung löschen",
+  "deleteAdministrationMessage": "Wollen Sie diese Verwaltung wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
+  "approve": "Genehmigen",
+  "Add Files": "Dateien auswählen",
+  "Select Files": "Dateien auswählen",
+  "funding provider": "Fördermittelgeber*in",
+  "Contact person": "Ansprechpartner*in",
+  "Funding goal": "Ziel der Förderung",
+  "What is funded?": "Fördergegenstand",
+  "What is not funded?": "Ausschlusskriterien",
+  "Who will be funded?": "Fördernehmende",
+  "Conditions for Applicants": "Voraussetzungen",
+  "Funding rates": "Förderquote(n)",
+  "Own contribution": "Eigenanteil",
+  "Accumulability": "Kumulierbarkeit",
+  "Basis for assessment": "Antragsstellung",
+  "Funding Period": "Programmlaufzeit",
+  "Notes to the funding period": "Weitere Informationen",
+  "Link to project ideas (optional)": "Link zu Antragsweg (optional)",
+  "Link to implementation checklist (optional)": "Link zu Antragsweg (optional)",
+  "Links to the fundings": "Links zu den Förderrichtlinien",
+  "official title": "Offizieller Titel des Fördermittelgebers",
+  "Name, Surname": "Name, Nachname",
   "Street, Nr": {
-    "": "Street, Nr."
+    "": "Straße, Hausnr."
   },
-  "Postal Code, City": "Postal Code, City",
-  "Telefon": "Telephone",
-  "Add funding rate": "Add funding rate",
-  "Yes": "Yes",
-  "No": "No",
-  "would like to access document": "would like to access document",
-  "Description": "Description:",
-  "This website uses Cookies": "This website uses Cookies",
-  "essential": "Essential Cookies",
-  "userPrefrence": "User preferences",
-  "essenitialDesc": "These cookies are necessary for the proper functioning of our website and cannot be switched off in our systems. They are usually only set in response to actions made by you which amount to a request for services, such as setting your privacy preferences, logging in or filling in forms. You can set your browser to block these cookies or to alert you about them, but some parts of the website will not work as a result. These cookies do not store any personally identifiable information.",
-  "userPrefrenceDesc": "These cookies are used to store your preferences and settings for our website. They are not essential for the website to function and you can opt out of them at any time. This includes your language setting, dark mode and logging out without confirmation.",
-  "acceptMyPrefrences": "Accept my preferences",
-  "acceptEssentials": "Accept essentials",
-  "You don't have access to this Project Idea": "You don't have access to this Project Idea",
-  "You don't have access to this Funding": "You don't have access to this Funding",
-  "You don't have access to this Checklist": "You don't have access to this Checklist",
-  "Would you like to request a duplication?": "Would you like to request a duplication?",
-  "Would you like to request view access?": "Would you like to request view access?",
-  "Would you like to request edit access?": "Would you like to request edit access?",
-  "Would you like to request null access?": "Would you like to request null access?",
-  "Select Municipality": "Select Municipality",
-  "No User": "No User",
-  "fundingScoutingPlatform": "Funding Scouting Platform",
-  "warningMessage": "The changes you made will result in a reset.",
-  "warningMessageDetail": "The changes you made will result in a reset of all subsequent steps.",
-  "warningMessageAction": "This action cannot be undone.",
-  "Cancel": "Cancel",
-  "Continue": "Continue",
-  "Projektidee erfolgreich bearbeitet": "Project idea successfully edited",
-  "aiFundingCheck": "AI funding check",
-  "AI funding check": "AI funding check",
-  "Zuwendungsbescheid": "Grant notice",
-  "Ablehnungsbescheid": "Rejection notice",
-  "In Bearbeitung": "In progress",
-  "application": "Application submission",
+  "Postal Code, City": "PLZ, Ort",
+  "Telefon": "Telefon",
+  "Add funding rate": "Förderquote hinzufügen",
+  "Yes": "Ja",
+  "No": "Nein",
+  "would like to access document": "möchte auf das Dokument zugreifen",
+  "Description": "Beschreibung:",
+  "This website uses Cookies": "Diese Webseite verwendet Cookies",
+  "essential": "Essentielle Cookies",
+  "userPrefrence": "Benutzereinstellungen",
+  "essenitialDesc": "Diese Cookies sind für das ordnungsgemäße Funktionieren unserer Webseite erforderlich und können in unseren Systemen nicht abgeschaltet werden. Sie werden in der Regel nur als Reaktion auf von Ihnen durchgeführte Aktionen gesetzt, wie das Einstellen Ihrer Datenschutzeinstellungen, das Einloggen oder das Ausfüllen von Formularen oder wenn sie unerlässlich sind, um eine von Ihnen angeforderte Dienstleistung zu erbringen. Sie können nicht gegen diese Cookies widersprechen. Sie können Ihren Browser so einstellen, dass er diese Cookies blockiert oder Sie darauf hinweist. Wenn Sie dies tun, werden einige Teile der Webseite nicht funktionieren. Diese Cookies speichern keine persönlich identifizierbaren Informationen.",
+  "userPrefrenceDesc": "Diese Cookies werden verwendet, um Ihre Präferenzen und Einstellungen für unsere Webseite zu speichern. Sie sind für das Funktionieren der Webseite nicht wesentlich und Sie können sie jederzeit abwählen. Dazu gehören Ihre Spracheinstellung, der dunkle Modus und das Abmelden ohne Bestätigung.",
+  "acceptMyPrefrences": "Meine Auswahl bestätigen",
+  "acceptEssentials": "Essentials akzeptieren",
+  "You don't have access to this Project Idea": "Sie haben keinen Zugang zu diesem Antragsweg",
+  "You don't have access to this Funding": "Sie haben keinen Zugang zu dieser Förderrichtlinien",
+  "You don't have access to this Checklist": "Sie haben keinen Zugang zu diesem Antragsweg",
+  "Would you like to request a duplication?": "Möchten Sie eine Vervielfältigung anfordern?",
+  "Would you like to request view access?": "Möchten Sie den Zugang zur Ansicht beantragen?",
+  "Would you like to request edit access?": "Möchten Sie Bearbeitungsrechte beantragen?",
+  "Would you like to request null access?": "Möchten Sie null-Zugriff beantragen?",
+  "Select Municipality": "Wählen Sie eine Verwaltung",
+  "No User": "Kein*e Benutzer*in",
+  "fundingScoutingPlatform": "Projektkompass",
+  "warningMessage": "Durch die Änderungen an der Projektbeschreibung werden der KI-Fördermittelcheck und die offenen Fragen aktualisiert.",
+  "warningMessageDetail": "Alle weiteren Daten im Antragsweg bleiben bestehen und können überschrieben werden.",
+  "warningMessageAction": "Diese Aktion kann nicht rückgängig gemacht werden.",
+  "Cancel": "Abbrechen",
+  "Continue": "Fortfahren",
+  "Projektidee erfolgreich bearbeitet": "Antragsweg erfolgreich bearbeitet",
+  "aiFundingCheck": "KI-Fördermittelcheck",
+  "AI funding check": "KI-Fördermittelcheck",
+  "Zuwendungsbescheid": "Zuwendungsbescheid",
+  "Ablehnungsbescheid": "Ablehnungsbescheid",
+  "In Bearbeitung": "In Bearbeitung",
+  "application": "Antragsstellung",
   "Application": "Application submission",
-  "projectDevelopment": "Project development",
-  "Project development": "Project development",
-  "Project Description": "Needs assessment project description",
-  "Funding Check": "Funding guideline check",
-  "Open Questions": "Open Questions",
-  "Aptitude": "Aptitude test",
-  "Basic decision": "Basic decision",
-  "Publish": "Save",
-  "Erstelldatum": "Creation date",
-  "Speicherdatum": "Save date",
-  "task plan": "Task plan",
-  "site visit": "if applicable, site visit",
+  "projectDevelopment": "Projektentwicklung",
+  "Project development": "Projektentwicklung",
+  "Project Description": "Projektbeschreibung (Bedarf)",
+  "Funding Check": "Förderrichtlinien-Check",
+  "Open Questions": "Offene Fragen",
+  "Aptitude": "Eignungsprüfung",
+  "Basic decision": "Grundsatzbeschluss",
+  "Publish": "speichern",
+  "Erstelldatum": "Erstelldatum",
+  "Speicherdatum": "Speicherdatum",
+  "task plan": "Aufgabenplan",
+  "site visit": "Begehung (optional)",
   "Goals and requirements": "Define goals and requirements",
-  "Guideline Check (Content)": "Guideline Check (Content and formalities)",
-  "Financing Check": "Financing Check",
-  "Project Documents Coordination": "Project documents coordination",
-  "Application Decision": "Application decision",
-  "Submission & Signing": "Submission & Signing",
-  "Application process completed successfully": "Application process completed successfully",
-  "No decision was made on the application": "No decision was made on the application",
-  "Project successfully created": "Project successfully created",
-  "updatedAt": "Save date",
+  "Guideline Check (Content)": "Förderrichtlinien-Check (Inhalt)",
+  "Financing Check": "Finanzierungs-Check",
+  "Project Documents Coordination": "Abstimmung Projektunterlagenn",
+  "Application Decision": "Antragsbeschluss",
+  "Submission & Signing": "Unterzeichnung/Antragseinreichung",
+  "Application process completed successfully": "Antragsweg erfolgreich abgeschlossen",
+  "No decision was made on the application": "Es wurde keine Entscheidung über den Antrag getroffen",
+  "Project successfully created": "Projekt erfolgreich erstellt",
+  "updatedAt": "Speicherdatum",
   "Home": "Home",
-  "Data Overview": "Data Overview",
+  "Data Overview": "Funding Quick Info & Project Checks",
   "Project Dashboard": "Project Dashboard",
   "My Watchlist": "My Watchlist",
   "Categories & Keywords/Tags": "Categories & Keywords/Tags",
   "User Administration": "User Administration",
   "User Administation": "User Administration",
   "Federal States": "Federal States",
+  "Landkreise": "Regional Districts",
   "My Network": "My Network",
   "User Data": "User Data",
-  "Email Center": "Email Center",
-  "States": "Municipalities",
-  "Administrative areas": "Administrative areas",
+  "Email Center": "Message Center",
+  "Locations": "Villages & Cities",
+  "Administrative areas": "Municipal Administrations",
   "Details for the Administration": "Details for the Administration",
   "Statistics & Archive": "Statistics & Archive",
   "Translations": "Translations",
-  "Edit Project Dashboard": "Edit Project Dashboard",
-  "Details of the project Idea": "Details of the project Idea",
-  "Notifications": "Notifications",
-  "My Data": "My Data",
-  "My Community Data": "My Community Data",
+  "Edit Project Dashboard": "Edit Projekt Dashboard",
+  "Details of the project Idea": "Details zur Projektidee",
+  "Notifications": "Benachrichtigungen",
+  "My Data": "Meine Daten",
+  "My Community Data": "Meine Gemeinschaftsdaten",
   "Settings": "Settings",
-  "New Project Ideas": "New Project Ideas",
-  "Edit project Idea": "Edit project Idea",
-  "New Funding": "New Funding",
-  "Edit Funding": "Edit Funding",
-  "Details of the Funding": "Details of the Funding",
-  "New Implementation checklist": "New Implementation checklist",
-  "Details of the Implementation checklist": "Details of the Implementation checklist",
-  "Edit Checklist": "Edit Checklist",
+  "New Project Ideas": "Neue Projektideen",
+  "Edit project Idea": "Projektidee bearbeiten",
+  "New Funding": "Neue Fördermittel",
+  "Edit Funding": "Fördermittel bearbeiten",
+  "Details of the Funding": "Einzelheiten der Fördermittel",
+  "New Implementation checklist": "Neue Umsetzungscheckliste",
+  "Details of the Implementation checklist": "Einzelheiten der Checkliste für die Umsetzung",
+  "Edit Checklist": "Umsetzungscheckliste bearbeiten",
   "help": {
-    "fundingProvider": "Name of the institution or authority offering the funding.",
-    "contactPerson": "Contact person for questions regarding the funding.",
-    "inviteEditor": "Users who are allowed to edit this funding.",
-    "contactDetails": "Address, phone and email of the funding body.",
-    "categories": "Topics and categories of this funding.",
+    "fundingProvider": "Name der Institution oder Behörde, die die Förderung anbietet.",
+    "contactPerson": "Ansprechpartner*in für Rückfragen zur Förderung.",
+    "inviteEditor": "Benutzer*innen, die diese Förderung bearbeiten dürfen.",
+    "contactDetails": "Adresse, Telefon und E‑Mail der Förderstelle.",
+    "categories": "Themen und Kategorien dieser Förderung.",
     "tags": "Keywords for better discoverability.",
-    "fundingGoal": "Purpose or objective of the funding.",
-    "whatIsFunded": "Which measures or expenses are eligible for funding.",
-    "whatIsNotFunded": "Which measures or costs are excluded.",
+    "fundingGoal": "Welche Ziele werden gefördert?",
+    "whatIsFunded": "Welche Maßnahmen bzw. Ausgaben sind förderfähig?",
+    "whatIsNotFunded": "Welche Maßnahmen bzw. Ausgaben sind ausgeschlossen?",
     "whoWillBeFunded": "Which target groups or organizations are eligible.",
-    "conditionsForApplicants": "Requirements and criteria for applicants.",
+    "conditionsForApplicants": "Die Langfassung einer Förderrichtlinie ist immer maßgebend für die Antragseinreichung. Es gibt keinen Rechtsanspruch auf Förderung.",
     "fundingRates": "Available funding rates and their conditions.",
     "ownContribution": "Required own contribution in percent.",
-    "accumulability": "Whether this funding can be combined with others.",
-    "linksToFundings": "References to related funding programs.",
-    "basisForAssessment": "Criteria or basis of assessment for decisions.",
+    "accumulability": "Können andere Förderrichtlinien kombiniert werden?",
+    "linksToFundings": "Verweise auf verwandte Förderprogramme.",
+    "basisForAssessment": "Verfahren, Bewertungsgrundlagen usw.",
     "fundingPeriod": "Time frame for applications and project implementation.",
-    "notesToFundingPeriod": "Further notes on deadlines or timeframes.",
+    "notesToFundingPeriod": "Weitere Hinweise zu Fristen, Zeitrahmen usw.",
     "projectLinks": "External links to the guideline or application documents.",
     "uploads": "Uploaded files for the funding (e.g. guidelines, forms).",
-    "projectContent": "Linked project ideas, examples and notes."
+    "projectContent": "Verknüpfte Projektideen, Beispiele und Hinweise.",
+    "Create Missing Translations": "Create Missing Translations"
   },
   "Bundesland erfolgreich hinzugefügt": "Federal state successfully added",
   "Bundesland erfolgreich aktualisiert": "Federal state successfully updated",
@@ -1525,6 +1589,8 @@
   "An Error Has Happened": "An Error Has Happened",
   "Select Municipalities": "Select Municipalities",
   "Select Rural Districts": "Select Rural Districts",
+  "Select All": "Select All",
+  "Clear All": "Clear All",
   "Der Zugang zu archivierten Dokumenten ist nicht möglich": "Access to archived documents is not possible",
   "Generating PDF...": "Generating PDF...",
   "Project successfully updated": "Project successfully updated",
@@ -1543,5 +1609,248 @@
   "Create Missing Translations": "Create Missing Translations",
   "notificationsPageLabel": "Notifications",
   "myDataPageLabel": "My Data",
-  "Translation Management": "Translation Management"
+  "Translation Management": "Translation Management",
+  "editState": "Edit State",
+  "deleteState": "Delete State",
+  "deleteStateMessage": "Are you sure you want to delete this state? This action cannot be undone.",
+  "goals": "Zieledefinition",
+  "requirements": "Anforderungsdefinition",
+  "Guideline Check (Formalities)": "Förderrichtlinien-Check (Formalitäten)",
+  "States": "Gemeinden & Städte",
+  "At least one input field must be provided": "At least one input field must be provided",
+  "At least one matching field must be provided": "At least one matching field must be provided",
+  "Title is required": "Title is required",
+  "Content is required": "Content is required",
+  "Benutzer hat keinen Eintrag": "User has no entry",
+  "Bitte geben Sie eine Antwort ein": {
+    "": "Please enter a response."
+  },
+  "Bitte wählen Sie eine Entscheidung aus": {
+    "": "Please select a decision."
+  },
+  "Bitte wählen Sie eine Gemeinde aus, um die Priorisierung anzuzeigen": {
+    "": "Please select a municipality to view the prioritization."
+  },
+  "Datei nicht gefunden": "File not found",
+  "Diese Projektidee gehört nicht zu Ihrer Gemeinde": {
+    "": "This project idea does not belong to your municipality."
+  },
+  "Diese Projektidee ist bereits priorisiert": {
+    "": "This project idea is already prioritized."
+  },
+  "Dieser Link ist ungültig, abgelaufen oder wurde bereits beantwortet": {
+    "": "This link is invalid, expired, or has already been answered."
+  },
+  "Dieser Link ist ungültig": {
+    "": "This link is invalid."
+  },
+  "Die gewählten Ebenen passen nicht zusammen": "The selected levels do not belong together.",
+  "Bitte weisen Sie dem Benutzer eine Verwaltungsebene zu": "Please assign an administrative level to the user.",
+  "Ein*e Koordinator*in muss einer Verwaltung zugeordnet sein": "A coordinator must be assigned to an administration.",
+  "Es kann nur eine*n Koordinator*in pro Verwaltung geben": {
+    "": "There can only be one coordinator per administration."
+  },
+  "Failed to create external funding": "Failed to create external funding",
+  "Finanzierung nicht gefunden": "Funding not found",
+  "Eine positiv beantwortete Vorprüfung kann nicht erneut angefragt werden": {
+    "": "A preliminary review that was answered positively cannot be requested again."
+  },
+  "Für diese Vorprüfung ist keine Kontakt-E-Mail hinterlegt": {
+    " Bitte hinterlegen Sie zuerst eine Kontakt-E-Mail für die Gemeinde bzw": {
+      " den Fördermittelgeber": {
+        "": "No contact email is set for this preliminary review. Please set a contact email for the municipality or funding provider first."
+      }
+    }
+  },
+  "Für diese Vorprüfung ist weiterhin keine Kontakt-E-Mail hinterlegt": {
+    "": "No contact email is set for this preliminary review yet."
+  },
+  "Invalid type": {
+    "": "Invalid type."
+  },
+  "Kann nicht löschen": {
+    " Es gibt Benutzer, die mit diesem Landkreis verbunden sind": {
+      "": "Cannot delete. There are users linked to this rural district."
+    },
+    " Es gibt Benutzer, die mit dieser Gemeinde verbunden sind": {
+      "": "Cannot delete. There are users linked to this municipality."
+    }
+  },
+  "Kein Landkreis gefunden": "No rural district found",
+  "Keine Gemeinde gefunden": "No municipality found",
+  "Missing fundingId in request path": "Missing fundingId in request path",
+  "Mit diesem Konto sind Daten verknüpft": {
+    " Übertragen Sie diese Daten zuerst": {
+      "": "Data is linked to this account. Transfer this data first."
+    }
+  },
+  "No file was uploaded": {
+    " Please provide a file in the \"data\" or \"file\" field": {
+      "": "No file was uploaded. Please provide a file in the \"data\" or \"file\" field."
+    }
+  },
+  "Nur Administrator*innen können den Wartungsmodus ändern": {
+    "": "Only administrators can change maintenance mode."
+  },
+  "Nur Administrator*innen können einen Systemhinweis veröffentlichen": {
+    "": "Only administrators can publish a system notice."
+  },
+  "Nur Administrator*innen können einen Systemhinweis zurückziehen": {
+    "": "Only administrators can withdraw a system notice."
+  },
+  "Nur die Gemeindeleitung darf Priorisierungen entfernen": {
+    "": "Only the municipality lead may remove prioritizations."
+  },
+  "Nur die Gemeindeleitung darf Projektideen archivieren": {
+    "": "Only the municipality lead may archive project ideas."
+  },
+  "Nur die Gemeindeleitung darf Projektideen priorisieren": {
+    "": "Only the municipality lead may prioritize project ideas."
+  },
+  "Nur die Gemeindeleitung darf die Reihenfolge ändern": {
+    "": "Only the municipality lead may change the order."
+  },
+  "Project ID is required": "Project ID is required",
+  "Project not found": "Project not found",
+  "Projekt nicht gefunden": {
+    "": "Project not found."
+  },
+  "Projekt oder neuer Besitzer nicht gefunden": "Project or new owner not found",
+  "Projekt und Typ sind erforderlich": {
+    "": "Project and type are required."
+  },
+  "Projekt-ID fehlt oder ist ungültig": {
+    "": "Project ID is missing or invalid."
+  },
+  "Projekt-ID fehlt": {
+    "": "Project ID is missing."
+  },
+  "Reihenfolge fehlt": {
+    "": "Order is missing."
+  },
+  "Sie dürfen diese Merkliste nicht löschen": {
+    "": "You are not allowed to delete this watchlist entry."
+  },
+  "Sie haben diesen Artikel bereits in Ihrer Merkliste": {
+    "": "You already have this item in your watchlist."
+  },
+  "Sie haben keine Erlaubnis": {
+    "": "You do not have permission."
+  },
+  "Sie können diese Projektidee nicht duplizieren": "You cannot duplicate this project idea",
+  "Sie können für diesen Benutzer keinen Eintrag erstellen": {
+    "": "You cannot create an entry for this user."
+  },
+  "Sie können kein anderes Konto als Ihr eigenes löschen": {
+    "": "You cannot delete an account other than your own."
+  },
+  "Sie können keine Daten an eine andere Verwaltung als Ihre eigene übertragen": "You cannot transfer data to an administration other than your own",
+  "Sie können keine Daten an sich selbst übertragen": {
+    " Und/oder der Benutzer, zu dem Sie übertragen, existiert nicht": {
+      "": "You cannot transfer data to yourself. And/or the user you're transferring to does not exist."
+    }
+  },
+  "Sie sind nicht berechtigt, Priorisierungen zu entfernen": {
+    " Keine Gemeinde zugewiesen": {
+      "": "You are not authorized to remove prioritizations. No municipality assigned."
+    }
+  },
+  "Sie sind nicht berechtigt, Projektideen zu priorisieren": {
+    " Keine Gemeinde zugewiesen": {
+      "": "You are not authorized to prioritize project ideas. No municipality assigned."
+    }
+  },
+  "Sie sind nicht berechtigt, auf archivierte Projektideen zuzugreifen": {
+    "": "You are not authorized to access archived project ideas.",
+    " Keine Gemeinde zugewiesen": {
+      "": "You are not authorized to access archived project ideas. No municipality assigned."
+    }
+  },
+  "Sie sind nicht berechtigt, auf diese Finanzierungen zuzugreifen": {
+    " Keine Gemeinde zugewiesen": {
+      "": "You are not authorized to access these fundings. No municipality assigned."
+    }
+  },
+  "Sie sind nicht berechtigt, auf diese Projekte zuzugreifen": {
+    " Keine Gemeinde zugewiesen": {
+      "": "You are not authorized to access these projects. No municipality assigned."
+    }
+  },
+  "Sie sind nicht berechtigt, auf diese Standorte zuzugreifen": {
+    " Keine Gemeinde zugewiesen": {
+      "": "You are not authorized to access these locations. No municipality assigned."
+    }
+  },
+  "Sie sind nicht berechtigt, die Priorisierung anzuzeigen": {
+    " Keine Gemeinde zugewiesen": {
+      "": "You are not authorized to view the prioritization. No municipality assigned."
+    }
+  },
+  "Sie sind nicht berechtigt, die Reihenfolge zu ändern": {
+    " Keine Gemeinde zugewiesen": {
+      "": "You are not authorized to change the order. No municipality assigned."
+    }
+  },
+  "Sie sind nicht berechtigt, diese Aktion durchzuführen": "You are not authorized to perform this action",
+  "Sie sind nicht berechtigt, diese Anfrage anzunehmen": {
+    "": "You are not authorized to accept this request."
+  },
+  "Sie sind nicht berechtigt, diese Finanzierungsdetails einzusehen": "You are not authorized to view these funding details",
+  "Sie sind nicht berechtigt, diese Finanzierungsdetails zu bearbeiten": "You are not authorized to edit these funding details",
+  "Sie sind nicht berechtigt, diese Priorisierung zu entfernen": {
+    "": "You are not authorized to remove this prioritization."
+  },
+  "Sie sind nicht berechtigt, diese Projektdetails anzuzeigen": "You are not authorized to view these project details",
+  "Sie sind nicht berechtigt, diese Projektdetails zu bearbeiten": "You are not authorized to edit these project details",
+  "Sie sind nicht berechtigt, diese Projektidee zu archivieren": {
+    "": "You are not authorized to archive this project idea.",
+    " Keine Gemeinde zugewiesen": {
+      "": "You are not authorized to archive this project idea. No municipality assigned."
+    }
+  },
+  "Sie sind nicht berechtigt, diese Reihenfolge zu setzen": {
+    "": "You are not authorized to set this order."
+  },
+  "Sie sind nicht berechtigt, diese Vorprüfung erneut zu senden": {
+    "": "You are not authorized to resend this preliminary review."
+  },
+  "Sie sind nicht berechtigt, diese Vorprüfung zu bearbeiten": {
+    "": "You are not authorized to edit this preliminary review."
+  },
+  "Sie sind nicht berechtigt, diese Vorprüfungen einzusehen": {
+    "": "You are not authorized to view these preliminary reviews."
+  },
+  "Sie sind nicht berechtigt, dieses Projekt zu löschen": "You are not authorized to delete this project",
+  "Sie sind nicht berechtigt, für dieses Projekt eine Vorprüfung anzufragen": {
+    "": "You are not authorized to request a preliminary review for this project."
+  },
+  "Ungültige Entscheidung": {
+    "": "Invalid decision."
+  },
+  "Ungültiges Token": "Invalid token",
+  "Uploaded file is invalid or cannot be accessed": "Uploaded file is invalid or cannot be accessed",
+  "Vorprüfung nicht gefunden": {
+    "": "Preliminary review not found."
+  },
+  "You can't update this entry for this user": {
+    "": "You can't update this entry for this user."
+  },
+  "linkUrl muss eine http(s)-URL sein": {
+    "": "linkUrl must be an http(s) URL."
+  },
+  "you are not allowed here": {
+    "": "you are not allowed here."
+  },
+  "A request to join the platform with email {email} already exists": {
+    "": "A request to join the platform with email {email} already exists."
+  },
+  "Request to {type} this document already exists": {
+    "": "Request to {type} this document already exists."
+  },
+  "File size exceeds maximum allowed size of {mb} MB": "File size exceeds maximum allowed size of {mb} MB",
+  "An internal error occurred": {
+    " Please try again later": {
+      "": "An internal error occurred. Please try again later."
+    }
+  }
 }

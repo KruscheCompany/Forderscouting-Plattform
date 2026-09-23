@@ -17,6 +17,7 @@
             </div>
             <div v-if="ticketByType(type) && ticketByType(type).answeredAt" class="font-14 q-pl-lg">
               <div>{{ statusLabel(type) }}</div>
+              <div v-if="ticketByType(type).overriddenAt" class="text-blue-grey-7">{{ overrideLabel(ticketByType(type)) }}</div>
               <div v-if="ticketByType(type).wantsPhoneCall">{{ $t('projectComponents.aptitude.vorpruefung.wantsPhoneCall') }}</div>
               <div v-if="ticketByType(type).wantsOnsiteMeeting">{{ $t('projectComponents.aptitude.vorpruefung.wantsOnsiteMeeting') }}</div>
               <div v-if="ticketByType(type).suggestedDates && ticketByType(type).suggestedDates.length">
@@ -25,6 +26,17 @@
               </div>
               <div class="q-mt-xs">{{ ticketByType(type).responseText }}</div>
             </div>
+            <q-expansion-item v-if="historyByType(type).length" dense class="q-pl-lg q-mt-xs"
+              :label="$t('projectComponents.aptitude.vorpruefung.historyTitle', { count: historyByType(type).length })">
+              <div v-for="entry in historyByType(type)" :key="entry.id" class="font-13 text-blue-grey-7 q-mt-xs">
+                {{ $t('projectComponents.aptitude.vorpruefung.attemptLabel', { number: entry.attempt || 1 }) }} &middot;
+                {{ entry.answeredAt ? $t(`projectComponents.aptitude.vorpruefung.status${entry.status === 'positiv' ? 'Positiv' : entry.status === 'negativ' ? 'Negativ' : 'Ruecksprache'}`) : $t('projectComponents.aptitude.vorpruefung.statusUnanswered') }}
+                <template v-if="entry.answeredAt"> &middot; {{ formatDate(entry.answeredAt) }}</template>
+                &middot; {{ $t(`projectComponents.aptitude.vorpruefung.superseded_${entry.supersededReason}`) }}
+                <div v-if="entry.overriddenAt">{{ overrideLabel(entry) }}</div>
+                <div v-if="entry.responseText">{{ entry.responseText }}</div>
+              </div>
+            </q-expansion-item>
           </div>
         </div>
       </q-card-section>
@@ -60,7 +72,20 @@ export default {
   },
   methods: {
     ticketByType(type) {
-      return this.vorpruefungTickets.find(t => t.type === type) || null;
+      return this.vorpruefungTickets.find(t => t.type === type && !t.supersededAt) || null;
+    },
+    historyByType(type) {
+      return this.vorpruefungTickets
+        .filter(t => t.type === type && !!t.supersededAt)
+        .sort((a, b) => b.id - a.id);
+    },
+    overrideLabel(ticket) {
+      return ticket.overriddenBy && ticket.overriddenBy.username
+        ? this.$t('projectComponents.aptitude.vorpruefung.overriddenBy', { user: ticket.overriddenBy.username })
+        : this.$t('projectComponents.aptitude.vorpruefung.overriddenByUnknown');
+    },
+    formatDate(value) {
+      return new Date(value).toLocaleDateString('de-DE');
     },
     formatDateTime(value) {
       return new Date(value).toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' });

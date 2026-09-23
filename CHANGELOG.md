@@ -1,5 +1,173 @@
 # Änderungsprotokoll / Changelog
 
+## 6.28.0 — 2026-09-23
+
+### de
+- Administratorinnen und Administratoren können eine Vorprüfung jetzt direkt eintragen, ohne vorher eine Anfrage zu senden. Die Schaltfläche „Überschreiben" steht neben „Anfrage senden". Auch nach einer Ablehnung oder einer Bitte um Rücksprache lässt sich die Vorprüfung so eintragen; die frühere Rückmeldung bleibt im Verlauf.
+- Vorprüfungen anfragen und interne Notizen bearbeiten können nur noch Projektverantwortliche, Bearbeiterinnen und Bearbeiter sowie die Administration. Personen mit reiner Leseberechtigung sehen nur die Ergebnisse.
+- Pro Projekt kann jede Vorprüfung nur noch eine offene Anfrage haben, auch wenn zwei Personen gleichzeitig senden.
+- Ein begonnener, noch nicht abgeschlossener Schritt ist in der Schrittleiste jetzt orange markiert. Auch die Projektansicht öffnet diesen Schritt direkt und lässt ihn anklicken; über „Bearbeiten" geht es von dort in denselben Schritt.
+- Schlägt das Speichern eines Schritts fehl, bleibt die Seite jetzt beim aktuellen Schritt, statt trotzdem weiterzuspringen.
+- Mehrfaches schnelles Klicken auf „speichern" oder ein Schrittwechsel während des Speicherns führt nicht mehr dazu, dass das falsche Formular gespeichert wird.
+- Die Auswahl „Fehlanzeige" im Fördermittelcheck überspringt jetzt wie vorgesehen den Schritt „Offene Fragen".
+- Für übernommene Förderempfehlungen werden die offenen Fragen jetzt korrekt geladen.
+- Der Link zum Öffnen einer Förderung im Fördermittelcheck ist jetzt deaktiviert, wenn die Förderung nicht mehr verfügbar ist, etwa weil sie gelöscht oder archiviert wurde.
+- Ein Projekt lässt sich nur noch mit einem ausgewählten Ort speichern. Statt eines Serverfehlers erscheint ein Hinweis, einen Ort auszuwählen.
+- Projekte mit unvollständigen Kontaktangaben lassen sich wieder öffnen.
+
+### en
+- Administrators can now record a pre-check directly, without sending a request first. The "Override" button sits next to "Send request". This also works after a rejection or a request for a meeting; the earlier response stays in the history.
+- Only project owners, editors and administrators can now request pre-checks and edit their internal notes. People with read-only access see the results only.
+- Each pre-check can now have only one open request per project, even if two people send one at the same moment.
+- A step that was started but not finished is now marked orange in the step bar. The project view also opens that step directly and lets you click it, and "Edit" from there takes you to the same step.
+- If saving a step fails, the page now stays on the current step instead of moving on anyway.
+- Clicking "save" several times in a row, or switching steps while saving, no longer saves the wrong form.
+- Choosing "no match" in the funding check now skips the "Open questions" step as intended.
+- Open questions now load correctly for funding recommendations that were accepted from a suggestion.
+- In the funding check, the link to open a funding is now disabled when that funding is no longer available, for example because it was deleted or archived.
+- A project can now only be saved with a location selected. Instead of a server error, you are asked to choose one.
+- Projects with incomplete contact details can be opened again.
+
+## 6.27.0 — 2026-09-23
+
+### de
+- Der Schritt „Vorprüfungen" merkt sich jetzt, dass er begonnen wurde: Wer ein Projekt später wieder öffnet, landet direkt dort und nicht mehr beim vorherigen Schritt.
+- Die Vorprüfungen lassen sich jetzt speichern, auch wenn noch nicht alle Rückmeldungen da sind. Zum nächsten Schritt geht es weiterhin erst, wenn alle drei Vorprüfungen positiv beantwortet wurden.
+- Zu jeder Vorprüfung gibt es jetzt einen Verlauf. Frühere Rückmeldungen – auch Ablehnungen samt Begründung und Datum – bleiben sichtbar, und nach einer Ablehnung oder einer Bitte um Rücksprache kann eine Vorprüfung erneut angefragt werden. Nur die jeweils neueste Rückmeldung zählt.
+- Wird eine Vorprüfung erneut angefragt, weist die E-Mail die prüfende Person darauf hin, dass sie bereits eine Rückmeldung gegeben hat. Bei einem gewechselten Fördermittelgeber erhält die neue Ansprechperson stattdessen eine neutrale Anfrage.
+- Administratorinnen und Administratoren können eine offene Vorprüfung selbst eintragen. Das Formular entspricht genau dem der prüfenden Person; der Eintrag wird im Verlauf als durch die Administration erfolgt gekennzeichnet.
+- Wird die Förderauswahl geändert, werden alle Vorprüfungen zurückgesetzt und müssen neu angefragt werden. Die bisherigen Rückmeldungen bleiben im Verlauf erhalten.
+
+### en
+- The "Pre-checks" step now remembers that it was started: reopening a project takes you straight there instead of back to the previous step.
+- Pre-checks can now be saved even while some responses are still outstanding. Moving on to the next step still requires all three pre-checks to be answered positively.
+- Every pre-check now has a history. Earlier responses — including rejections with their reason and date — stay visible, and after a rejection or a request for a meeting, a pre-check can be requested again. Only the most recent response counts.
+- When a pre-check is requested again, the email tells the reviewer they have already given a response. If the funding provider changed, the new contact receives a neutral request instead.
+- Administrators can record an open pre-check themselves. The form is exactly the one the reviewer sees, and the entry is marked in the history as made by the administration.
+- Changing the funding selection now resets all pre-checks, which then have to be requested again. Previous responses are kept in the history.
+
+## 6.26.5 — 2026-09-22
+
+### de
+- Beim Bearbeiten einer bestehenden Projektidee wurden die Kontaktdaten und die zugeordnete Verwaltung fälschlich durch die Angaben der bearbeitenden Person ersetzt, statt die ursprünglichen Angaben zu behalten. Das ist jetzt behoben.
+
+### en
+- When editing an existing project idea, the contact details and assigned administration were incorrectly replaced with the editing person's own details instead of keeping the original ones. This is now fixed.
+
+## 6.26.4 — 2026-09-22
+
+### de
+- Beim Anlegen oder Bearbeiten von Bundesland, Landkreis, Verwaltung und Ort wird jetzt nur noch die jeweils direkt übergeordnete Ebene abgefragt (z. B. bei einer Verwaltung nur der Landkreis, nicht zusätzlich das Bundesland). Das verhindert widersprüchliche Zuordnungen.
+
+### en
+- When creating or editing a federal state, district, administration, or town, only its direct parent level is now asked for (e.g. an administration only asks for its district, not the federal state as well). This prevents conflicting assignments.
+
+## 6.26.3 — 2026-09-21
+
+### de
+- Beim Einladen oder Bearbeiten von Nutzer*innen (außer Koordinator*innen) reicht jetzt die Angabe irgendeiner Ebene – Bundesland, Landkreis, Verwaltung oder Ort. Vorher war zwingend ein Landkreis erforderlich.
+
+### en
+- When inviting or editing users (other than coordinators), providing any one level — federal state, district, administration, or town — is now enough. A district was previously required.
+
+## 6.26.2 — 2026-09-21
+
+### de
+- Bei der Eignungsprüfung wird die Kontakt-E-Mail des Fördermittelgebers jetzt korrekt aus der ausgewählten Förderung übernommen, sodass die Anfrage verschickt werden kann.
+
+### en
+- In the aptitude check, the funding provider's contact email is now correctly picked up from the selected funding program, so the request can be sent.
+
+## 6.26.1 — 2026-09-21
+
+### de
+- Die automatischen Themenvorschläge (KI) beim Ausfüllen längerer Projekt- und Förderbeschreibungen schlagen jetzt seltener fehl.
+
+### en
+- The automatic topic suggestions (AI) while filling in longer project and funding descriptions now fail less often.
+
+## 6.26.0 — 2026-09-20
+
+### de
+- Bei Nutzer*innen bleiben jetzt alle zugewiesenen Ebenen (Bundesland, Landkreis, Verwaltung und Ort) gespeichert – nicht mehr nur eine. So ist eindeutig, welches Bundesland oder welcher Landkreis gemeint ist, wenn eine Verwaltung zu mehreren gehört. Beim Speichern wird geprüft, dass die gewählten Ebenen zusammenpassen.
+- In der Förderprüfung und bei der Auswahl von Förderungen im Projekt werden nur noch Förderungen angezeigt, die zu Ihren zugewiesenen Ebenen passen. Die Förder-Kurzinfos auf dem Dashboard und in der Datenübersicht bleiben für alle sichtbar.
+- Wenn Sie einem Landkreis zugeordnet sind und eine Projektidee anlegen, zeigt die Ortsauswahl jetzt nur die Orte der gewählten Verwaltung – vorher wurden alle Orte angeboten.
+- Die Förderprüfung mit KI-Vorschlägen blendet passende Förderungen nicht mehr fälschlich aus.
+- Koordinator*innen werden beim Einladen und Bearbeiten immer genau einer Verwaltung zugeordnet. Die Prüfung „nur eine Koordination pro Verwaltung" gilt jetzt auch beim Einladen.
+- In den Projekttabellen erscheint der Hinweistext beim Darüberfahren nur noch bei längeren Texten.
+- Beim erneuten Öffnen des Einladungsdialogs werden Verwaltung und Ort der vorherigen Einladung nicht mehr übernommen.
+- Neu angelegte, geänderte oder gelöschte Orte erscheinen sofort in allen Ortsauswahlen, ohne die Seite neu zu laden.
+
+### en
+- Users now keep all of their assigned levels (federal state, district, administration and town) instead of just one. This makes it clear which federal state or district is meant when an administration belongs to several. When saving, the chosen levels are checked to make sure they fit together.
+- In the funding check and when selecting funding programs in a project, you now only see programs that match your assigned levels. The funding short-infos on the dashboard and in the data overview stay visible to everyone.
+- If you are assigned to a district and create a project idea, the location field now only offers the locations of the selected administration – previously every location was offered.
+- The funding check with AI suggestions no longer wrongly hides matching funding programs.
+- Coordinators are now always assigned to exactly one administration when invited or edited. The "only one coordinator per administration" check now also applies when inviting.
+- In the project tables, the hover text now only appears for longer texts.
+- When you reopen the invitation dialog, the administration and town from the previous invitation are no longer carried over.
+- Newly created, changed or deleted towns now appear in every town picker right away, without reloading the page.
+
+## 6.25.1 — 2026-09-20
+
+### de
+- Förder-Kurzinfos werden jetzt allen Nutzer:innen angezeigt, unabhängig davon, wer sie angelegt hat, und die zuletzt gespeicherten stehen oben in der Liste.
+
+### en
+- Funding short-info entries are now shown to all users, no matter who created them, with the most recently saved ones listed first.
+
+## 6.25.0 — 2026-09-13
+
+### de
+- Die Verwaltungsseite für Orte heißt jetzt "Orte" (vorher "Gemeinden/States" mit uneinheitlicher Bezeichnung je nach Sprache) und ist unter einer neuen, klareren Adresse erreichbar. Der alte Link funktioniert weiterhin.
+
+### en
+- The admin page for managing villages/towns is now consistently labeled "Locations" in both languages (it previously showed the English label "States", which was incorrect) and lives at a new, clearer address. The old link still works.
+
+## 6.24.0 — 2026-09-13
+
+### de
+- Die Ortsauswahl in den persönlichen Daten sowie beim Anlegen und Bearbeiten einer Projektidee wurde vereinheitlicht: Sie wählen den Ort jetzt aus einer echten Liste aus, statt ihn frei einzutippen.
+
+### en
+- The location field in personal data, and when creating or editing a project idea, now uses the same unified picker: you select the village/town from a real list instead of typing it freely.
+
+## 6.23.0 — 2026-09-12
+
+### de
+- Förderungen, die nur für einen Landkreis oder ein Bundesland freigegeben sind, werden jetzt korrekt allen Verwaltungen darunter angezeigt – vorher waren sie nur für die eigene Verwaltung sichtbar.
+
+### en
+- Funding programs released only for a district or federal state are now correctly shown to every administration within it — previously they were only visible to their own administration.
+
+## 6.22.0 — 2026-09-12
+
+### de
+- Beim Einladen oder Bearbeiten einer Person muss jetzt nur noch **ein** Bereich ausgewählt werden (Landkreis, Verwaltung oder Ort) – die übergeordneten und untergeordneten Bereiche werden automatisch angezeigt.
+- Für Ehrenamtliche (Gäste) wird beim Einladen/Bearbeiten nur noch der Ort abgefragt, keine Verwaltung oder Landkreis mehr.
+- Bei der Registrierung als Gast wird jetzt nur noch der Ort ausgewählt, nicht mehr zusätzlich die Verwaltung.
+
+### en
+- When inviting or editing a person, only **one** region needs to be selected now (Landkreis, Administration, or Location) – the related broader and narrower regions are shown automatically.
+- For volunteers (guests), invite/edit now only asks for their city, not an administration or district.
+- Guest self-registration now only asks for a city/location, not an administration.
+
+## 6.21.1 — 2026-09-12
+
+### de
+- Beim Anlegen oder Bearbeiten einer Verwaltung muss der Verwaltungssitz jetzt nicht mehr eindeutig sein – zwei Verwaltungen können denselben Amtssitz haben.
+
+### en
+- When creating or editing an administration, the office location no longer needs to be unique — two administrations can now share the same office town.
+
+## 6.21.0 — 2026-09-12
+
+### de
+- Die rote Markierung an der Benachrichtigungs-Glocke zeigt jetzt nur noch neue, ungesehene Benachrichtigungen an. Sobald Sie die Benachrichtigungsseite geöffnet haben, verschwindet die Zahl, bis wieder etwas Neues eintrifft — auch auf anderen Geräten und nach erneutem Anmelden.
+
+### en
+- The red marker on the notification bell now only counts new, unseen notifications. Once you've opened the notifications page, the number clears until something new arrives — even on other devices and after logging back in.
+
 ## 6.20.2 — 2026-08-25
 
 ### de

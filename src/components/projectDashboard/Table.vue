@@ -21,7 +21,7 @@
       :no-results-label="$t('No results')" ref="table">
       <template v-slot:header="props">
         <q-tr class="tableHeader" :props="props">
-          <q-th v-if="isLeader" auto-width />
+          <q-th v-if="isLeader || isAdmin" :style="{ width: actionColumnWidth }" />
           <q-th v-for="col in props.cols" :key="col.name" :props="props" :style="col.headerStyle" class="font-14 text-black">
             {{ col.label }}
           </q-th>
@@ -32,9 +32,13 @@
       <template v-slot:body="props">
         <q-tr :props="props">
 
-          <q-td v-if="isLeader" auto-width class="text-center">
-            <q-btn size="md" color="blue" round dense flat icon="mdi-star-outline"
-              :title="$t('ProjectDashboard.prioritize')" @click.stop="prioritizeRow(props.row)" />
+          <q-td v-if="isLeader || isAdmin" :style="{ width: actionColumnWidth }" class="text-center">
+            <div class="row items-center justify-center no-wrap">
+              <q-btn v-if="isLeader" size="md" color="blue" round dense flat icon="mdi-star-outline"
+                :title="$t('ProjectDashboard.prioritize')" @click.stop="prioritizeRow(props.row)" />
+              <q-btn size="md" color="blue" round dense flat icon="inventory" :loading="archivingId === props.row.id"
+                :title="$t('ProjectDashboard.archive')" @click.stop="archiveRow(props.row)" />
+            </div>
           </q-td>
           <q-td @click="view(props.row)" v-for="col in props.cols" :key="col.name" :props="props" :style="col.style"
             class="font-14 cursor-pointer">
@@ -55,13 +59,13 @@
               </q-badge>
             </template>
             <template v-else>
-              <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
+              <q-tooltip v-if="col.value && col.value.length > (col.name === 'location' ? 15 : 48)" anchor="bottom left" self="top left"
                 content-style="font-size: 14px">
                 {{ col.value }}
               </q-tooltip>
               {{
-                col.value && col.value.length > 125
-                  ? col.value.substring(0, 125) + "..."
+                col.value && col.value.length > (col.name === 'location' ? 15 : 125)
+                  ? col.value.substring(0, col.name === 'location' ? 15 : 125) + "..."
                   : col.value
               }}
             </template>
@@ -115,6 +119,7 @@ export default {
       requestDialog: false,
       filter: "",
       projectId: null,
+      archivingId: null,
     };
   },
   methods: {
@@ -168,6 +173,14 @@ export default {
     },
     async prioritizeRow(row) {
       await this.$store.dispatch("project/addToPriorityList", { id: row.id });
+      this.getProjects();
+      this.updateDashboardStats();
+    },
+
+    async archiveRow(row) {
+      this.archivingId = row.id;
+      await this.$store.dispatch("project/archiveProjectIdea", { id: row.id });
+      this.archivingId = null;
       this.getProjects();
       this.updateDashboardStats();
     },
@@ -321,6 +334,9 @@ export default {
     },
     expandColumnWidth() {
       return COLUMN_WIDTHS.expand;
+    },
+    actionColumnWidth() {
+      return COLUMN_WIDTHS.action;
     },
     isAdmin() {
       return this.$store.getters["userCenter/isAdmin"];

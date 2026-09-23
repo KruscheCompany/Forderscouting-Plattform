@@ -46,7 +46,7 @@
                 class="suggestion-accept-btn" @click="acceptSuggestion" />
               <q-btn outline no-caps :label="$t('projectComponents.fundingCheck.ignoreSuggestion')"
                 class="suggestion-ignore-btn" @click="showIgnoreDialog = true" />
-              <a v-if="currentSuggestion.external_id" href="#" class="suggestion-view-link"
+              <a v-if="fundingExists(currentSuggestion.external_id)" href="#" class="suggestion-view-link"
                 @click.prevent="openFundingLink(currentSuggestion.external_id)">
                 {{ $t('projectComponents.fundingCheck.viewGuideline') }} ↗
               </a>
@@ -121,7 +121,7 @@
                   <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
                     :style="{ color: !selectedCards.includes(index) ? getFundingCardStyle(funding.score).color : 'white' }"
                     @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
-                    :disabled="!funding.external_id" />
+                    :disabled="!fundingExists(funding.external_id)" />
                 </div>
 
                 <!-- Spacer to push title to bottom -->
@@ -204,6 +204,8 @@
 
       <!-- Warning Dialog for Starting Condition Changes -->
       <StartingConditionWarningDialog :modelValue="showWarningDialog" :loading="isLoading"
+        :title="$t('projectComponents.fundingCheck.resetWarningTitle')"
+        :detail="$t('projectComponents.fundingCheck.resetWarningDetail')"
         @confirm="proceedWithSubmission" @cancel="cancelSubmission" />
 
     </q-expansion-item>
@@ -282,18 +284,20 @@ export default {
       return this.userDetails?.municipality || null;
     },
 
-    // Get user's landkreis (mutually exclusive with municipality)
     userLandkreis() {
       return this.userDetails?.landkreis || null;
     },
 
-    // Get user's federal states from municipality or landkreis
+    // The federal state the admin assigned wins over the ones derived from the
+    // municipality or landkreis, which may span several.
     userFederalStates() {
+      if (this.userDetails?.federalState) return [this.userDetails.federalState];
       return this.userMunicipality?.federalStates || this.userLandkreis?.federalStates || [];
     },
 
-    // Get all fundings from store
-    allFundings() {
+    // The fundings the API scoped to this user (not the unscoped
+    // funding.allFundings list used by the dashboard and overview)
+    scopedFundings() {
       const fundings = this.$store.state.funding.fundings;
       if (fundings) {
         return fundings;
@@ -523,39 +527,24 @@ export default {
       return null;
     },
 
-    // Filter fundings by user's municipality and federal states
+    // A match can point at a funding that was since deleted, archived or
+    // unpublished; its page would only fail to load, so the link is disabled.
+    fundingExists(externalId) {
+      if (!externalId) return false;
+      return this.scopedFundings.some(f => f.id === parseInt(externalId));
+    },
+
+    // The API already scopes /api/fundings to what this user may see, so a match is
+    // kept only if its funding is in that list - no client-side hierarchy check.
     filterFundingsByUserData(aiMatches) {
       if (this.isAdmin) {
         return aiMatches;
       }
-      const userFederalStateIds = this.userFederalStates.map(fs => fs.id);
-
       return aiMatches.filter(match => {
-        // 1. Check if match has external_id
         if (!match.external_id) {
           return false;
         }
-
-        // 2. Find the funding in store by external_id
-        const funding = this.allFundings.find(f => f.id === parseInt(match.external_id));
-
-        // If funding not found in store, exclude it
-        if (!funding) {
-          return false;
-        }
-
-        // 3a. Check if funding has federalStates
-        const fundingFederalStates = funding.federalStates || [];
-
-        if (fundingFederalStates.length === 0) {
-          return false;
-        }
-
-        // 3c. Check if ALL user's federal states are in funding's federal states
-        const hasAllFederalStatesMatch = userFederalStateIds.every(userFsId =>
-          fundingFederalStates.some(fundingFs => fundingFs.id === userFsId)
-        );
-        return hasAllFederalStatesMatch;
+        return this.fundingExists(match.external_id);
       });
     },
 
@@ -692,6 +681,7 @@ export default {
       const newMatch = {
         title: suggestion.title,
         score: suggestion.score,
+        _id: suggestion.vendorMatchId,
         external_id: suggestion.external_id,
         reasoning: suggestion.reasoning,
         isSuggestion: true
@@ -765,6 +755,16 @@ export default {
           fundingCheckSteps: this.getUpdatedSteps(nullifyQuestions)
         };
 
+        if (nullifyQuestions && this.createdProjectId) {
+          const resetSucceeded = await this.$store.dispatch('project/resetVorpruefungTickets', {
+            projectId: this.createdProjectId
+          });
+          if (!resetSucceeded) {
+            this.isLoading = false;
+            return;
+          }
+        }
+
         // Nullify questions if user proceeded after warning
         if (nullifyQuestions) {
           updateData.questions = null;
@@ -775,10 +775,19 @@ export default {
           data: updateData
         });
 
+        if (!response) {
+          this.isLoading = false;
+          return;
+        }
+
+        this.$store.dispatch('project/updateLocalProjectState', {
+          data: { fundingCheckSteps: updateData.fundingCheckSteps }
+        });
+
         // Emit success event
         this.$emit('funding-submitted', {
           fundingMatches: fundingMatchesWithSelection,
-          noneSelected: this.selectedCard === 'fehlanzeige'
+          noneSelected: this.selectedCards.includes('fehlanzeige')
         });
 
       } catch (error) {
@@ -797,17 +806,18 @@ export default {
 
       return currentSteps.map(step => {
         if (step.name === 'fundingCheck') {
-          // Always mark fundingCheck as done when submitting
           return { ...step, done: true };
-        } else if (step.name === 'qAndA' && this.selectedCard === 'fehlanzeige') {
+        } else if (step.name === 'qAndA' && this.selectedCards.includes('fehlanzeige')) {
           return { ...step, done: false, skip: true };
         } else if (step.name === 'qAndA' && nullifyQuestions) {
-          // Reset qAndA step when nullifying questions
-          return { ...step, done: false };
+          return { ...step, done: false, skip: false };
         } else if (step.name === 'qAndA') {
           return { ...step, skip: false };
+        } else if (step.name === 'aptitude' && nullifyQuestions) {
+          // A changed funding programme invalidates every review: finance and
+          // personnel signed off on this project under the previous programme.
+          return { ...step, done: false, inProgress: false };
         }
-        // Keep all other steps as they are
         return { ...step };
       });
     },

@@ -140,16 +140,10 @@
           </p>
         </div>
         <div class="col-12 col-md-9">
-          <!-- <q-input
-            outlined
-            class="no-shadow input-radius-6"
-            v-model="form.location"
-            :rules="[]"
-          /> -->
-
-          <MunicipalityCities
-          :currentMunicipality="form.location"
-          @update:city="form.location = $event"
+          <LocationSelect
+            :currentLocation="form.assignedLocation"
+            :parentMunicipalityId="ownMunicipalityId"
+            @update:location="form.assignedLocation = $event"
           />
         </div>
       </div>
@@ -212,11 +206,11 @@
 </template>
 
 <script>
-import MunicipalityCities from "components/Municipality/MunicipalityCities.vue";
+import LocationSelect from "components/hierarchy/LocationSelect.vue";
 export default {
   name: "personalDataTab",
   components: {
-    MunicipalityCities
+    LocationSelect
   },
   data() {
     return {
@@ -227,7 +221,7 @@ export default {
         landkreis: "",
         email: "",
         telephone: "",
-        location: "",
+        assignedLocation: null,
         streetNo: "",
         postalCode: "",
         contactPrivacy: false
@@ -258,8 +252,13 @@ export default {
         (!!this.userDetails && this.userDetails.fullName) || "";
       this.form.telephone =
         (!!this.userDetails && this.userDetails.phone) || "";
-      this.form.location =
-        (!!this.userDetails && this.userDetails.location) || "";
+      this.form.assignedLocation =
+        (!!this.userDetails &&
+          (this.userDetails.assignedLocation ||
+            (this.userDetails.location
+              ? { id: null, title: this.userDetails.location }
+              : null))) ||
+        null;
       this.form.administration =
         (!!this.userDetails &&
           !!this.userDetails.municipality &&
@@ -300,7 +299,10 @@ export default {
               data: {
                 fullName: this.form.fullName,
                 phone: this.form.telephone,
-                location: this.form.location,
+                location: this.form.assignedLocation?.title || "",
+                assignedLocation: this.form.assignedLocation?.id
+                  ? { id: this.form.assignedLocation.id }
+                  : null,
                 streetNo: this.form.streetNo,
                 postalCode: this.form.postalCode,
                 contactPrivacy: this.form.contactPrivacy
@@ -353,6 +355,12 @@ export default {
         !!this.$store.state.userCenter.user &&
         this.$store.state.userCenter.user.user
       );
+    },
+    isAdmin() {
+      return this.$store.getters["userCenter/isAdmin"];
+    },
+    ownMunicipalityId() {
+      return (!this.isAdmin && this.userDetails?.municipality?.id) || null;
     }
   }
 };

@@ -21,7 +21,7 @@
           <q-icon name="logout" />
         </q-item-section>
         <q-item-section>
-          Logout
+          {{ $t("logout") }}
         </q-item-section>
       </q-item>
     </q-list>
@@ -64,7 +64,7 @@ export default {
 
       if (link.path == "/watchlist")
         this.$router.push({
-          path: "/watchlist?tab=all"
+          path: "/watchlist?tab=projectIdeas"
         });
       else if (link.path == "/catkeytags")
         this.$router.push({

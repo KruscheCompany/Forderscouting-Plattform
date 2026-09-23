@@ -4,21 +4,15 @@
       header-class="bg-white text-black" v-model="expandedAptitude">
       <q-card-section>
         <div>
-          <div class="row items-center q-gutter-xs q-mt-xs font-13 text-blue-grey-6" style="min-height: 20px;">
+          <div class="row items-center q-gutter-xs q-mt-xs font-13 text-blue-grey-6">
             <q-spinner v-if="saveState === 'saving'" size="16px" color="blue-grey-6" />
             <q-icon v-else-if="saveState === 'saved'" name="check_circle" color="positive" size="16px" />
             <span v-if="saveState === 'saving'">{{ $t('projectComponents.aptitude.saving') }}</span>
             <span v-else-if="saveState === 'saved'">{{ $t('projectComponents.aptitude.saved') }}</span>
           </div>
           <div class="q-mt-md">
-            <VorpruefungTicketCard type="finanzen" :project-id="createdProjectId"
-              :ticket="ticketByType('finanzen')" :recipient-email="recipientEmail('finanzen')"
-              @ticket-created="loadTickets" />
-            <VorpruefungTicketCard type="personal" :project-id="createdProjectId"
-              :ticket="ticketByType('personal')" :recipient-email="recipientEmail('personal')"
-              @ticket-created="loadTickets" />
-            <VorpruefungTicketCard type="foerdermittelgeber" :project-id="createdProjectId"
-              :ticket="ticketByType('foerdermittelgeber')" :recipient-email="recipientEmail('foerdermittelgeber')"
+            <VorpruefungTicketCard v-for="type in ticketTypes" :key="type" :type="type" :project-id="createdProjectId"
+              :tickets="ticketsByType(type)" :recipient-email="recipientEmail(type)" :can-edit="canEdit"
               @ticket-created="loadTickets" />
           </div>
         </div>
@@ -58,6 +52,7 @@ export default {
       saveState: null,
       saveStateTimeout: null,
       vorpruefungTickets: [],
+      fundingProviderEmail: null,
       resetSteps: [
         { name: 'project', title: 'Project Description', icon: 'description', done: true },
         { name: 'fundingCheck', title: 'Funding Check', icon: 'monetization_on', done: true },
@@ -67,6 +62,20 @@ export default {
       ]
     };
   },
+  computed: {
+    ticketTypes() {
+      return ["finanzen", "personal", "foerdermittelgeber"];
+    },
+    // Mirrors the backend rule: only admins, the owner and editors may request
+    // reviews or edit their notes; readers only see the outcome.
+    canEdit() {
+      if (this.$store.getters["userCenter/isAdmin"]) return true;
+      const userId = this.$store.state.userCenter.user?.user?.id;
+      if (!userId) return false;
+      const { owner, editors } = this.projectData;
+      return (owner && owner.id === userId) || (editors || []).some(editor => editor.id === userId);
+    }
+  },
   watch: {
     currentTab(newTab) {
       // Expand the section if the current tab is 'aptitude'
@@ -75,13 +84,25 @@ export default {
   },
   mounted() {
     this.loadTickets();
+    this.resolveFundingProviderEmail();
   },
   beforeDestroy() {
     clearTimeout(this.saveStateTimeout);
   },
   methods: {
-    ticketByType(type) {
-      return this.vorpruefungTickets.find(t => t.type === type) || null;
+    liveTicketByType(type) {
+      return this.vorpruefungTickets.find(t => t.type === type && !t.supersededAt) || null;
+    },
+    ticketsByType(type) {
+      return this.vorpruefungTickets
+        .filter(t => t.type === type)
+        .sort((a, b) => b.id - a.id);
+    },
+    allReviewsPositive() {
+      return this.ticketTypes.every(type => {
+        const ticket = this.liveTicketByType(type);
+        return !!ticket && ticket.status === "positiv";
+      });
     },
     async saveAptitude() {
       if (this.aptitude === this.savedAptitude) return;
@@ -105,54 +126,66 @@ export default {
     recipientEmail(type) {
       if (type === "finanzen") return this.projectData.municipality?.financeContactEmail || null;
       if (type === "personal") return this.projectData.municipality?.personnelContactEmail || null;
-      if (type === "foerdermittelgeber") return this.projectData.fundingGuideline?.[0]?.info?.email || null;
+      if (type === "foerdermittelgeber") return this.fundingProviderEmail;
       return null;
+    },
+    async resolveFundingProviderEmail() {
+      const selectedFunding = (this.projectData.fundingMatches || [])
+        .find(funding => funding.selected && !funding.isFehlanzeige);
+      if (!selectedFunding?.external_id) {
+        this.fundingProviderEmail = null;
+        return;
+      }
+      await this.$store.dispatch("funding/resetSelectedFunding");
+      await this.$store.dispatch("funding/getSpecificFunding", { id: selectedFunding.external_id });
+      this.fundingProviderEmail = this.$store.state.funding.funding?.info?.email || null;
     },
     async loadTickets() {
       this.vorpruefungTickets = await this.$store.dispatch("project/fetchVorpruefungTickets", {
         projectId: this.createdProjectId
       });
-      const allGreen = ["finanzen", "personal", "foerdermittelgeber"].every(type => {
-        const t = this.ticketByType(type);
-        return t && t.status === "positiv";
-      });
-      this.$emit("tickets-updated", allGreen);
     },
-    // Get updated steps with aptitude marked as done
-    getUpdatedSteps() {
-      // Use existing steps from projectData if available, otherwise use default steps
+    getUpdatedSteps(allPositive) {
       const currentSteps = this.projectData.fundingCheckSteps || this.resetSteps;
 
       return currentSteps.map(step => {
         if (step.name === 'aptitude') {
-          // Mark aptitude as done when submitting
-          return { ...step, done: true };
+          return { ...step, done: allPositive, inProgress: !allPositive };
         }
-        // Keep all other steps as they are
         return { ...step };
       });
     },
 
     async submitAptitude() {
-      const allGreen = ["finanzen", "personal", "foerdermittelgeber"].every(type => {
-        const t = this.ticketByType(type);
-        return t && t.status === "positiv";
-      });
-      if (!allGreen) {
-        this.$store.dispatch("notifications/pushToast", { kind: "warning", title: this.$t("projectComponents.aptitude.vorpruefung.gateBlocked") });
-        return;
-      }
+      const allPositive = this.allReviewsPositive();
 
-      await this.$store.dispatch('project/simpleUpdateProjectIdea', {
+      const result = await this.$store.dispatch('project/simpleUpdateProjectIdea', {
         data: {
           id: this.createdProjectId,
           details: {
             id: this.projectData.details.id,
             aptitude: this.aptitude
           },
-          fundingCheckSteps: this.getUpdatedSteps()
+          fundingCheckSteps: this.getUpdatedSteps(allPositive)
         }
       });
+      if (result === false) return;
+
+      this.savedAptitude = this.aptitude;
+
+      this.$store.dispatch("notifications/pushToast", {
+        kind: "positive",
+        title: this.$t("projectComponents.aptitude.vorpruefung.saveSuccess")
+      });
+
+      if (!allPositive) {
+        this.$store.dispatch("notifications/pushToast", {
+          kind: "warning",
+          title: this.$t("projectComponents.aptitude.vorpruefung.gateBlocked")
+        });
+        return;
+      }
+
       this.$emit("aptitude-submitted", this.aptitude);
     }
   }

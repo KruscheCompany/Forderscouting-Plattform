@@ -7,7 +7,9 @@
       :options="landkreise"
       options-selected-class="text-primary text-weight-600"
       class="no-shadow input-radius-6"
+      hide-bottom-space
       :rules="rules"
+      reactive-rules
       @input="onSelect"
     >
       <template v-slot:selected>
@@ -41,6 +43,12 @@ export default {
       type: Object,
       default: null,
     },
+    // Optional: narrows options to landkreise spanning this federal state.
+    // When omitted, shows every landkreis (matching today's no-context fallback).
+    parentFederalStateId: {
+      type: Number,
+      default: null,
+    },
     rules: {
       type: Array,
       default: () => [],
@@ -62,7 +70,9 @@ export default {
   },
   computed: {
     landkreise() {
-      const landkreise = this.$store.state.landkreis.landkreise;
+      const landkreise = this.parentFederalStateId
+        ? this.$store.getters["federalState/landkreiseUnder"](this.parentFederalStateId)
+        : this.$store.state.landkreis.landkreise;
       return Array.isArray(landkreise)
         ? [...landkreise].sort((a, b) => a.title.localeCompare(b.title))
         : [];

@@ -10,7 +10,7 @@
             <div class="row">
               <p class="label">{{ $t("DetailsAdministration.location") }}:</p>
               <p class="q-ml-lg">
-                {{ !!municipality && municipality.location }}
+                {{ !!municipality && municipality.verwaltungssitz }}
               </p>
             </div>
             <div class="row">

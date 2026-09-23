@@ -8,7 +8,20 @@ export async function getFundings(context) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
+        { root: true }
+      );
+  }
+}
+
+export async function getAllFundings(context) {
+  try {
+    const res = await api.get("/api/fundings?allLocations=true");
+    context.commit("setAllFundings", res.data);
+  } catch (error) {
+    context.dispatch(
+        "notifications/pushToast",
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -21,7 +34,7 @@ export async function getFundingsWithArchived(context) {
   } catch (error) {
     context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
   }
@@ -64,7 +77,7 @@ export async function createNewFunding(context, payload) {
       console.log("error.response", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -96,7 +109,7 @@ export async function uploadFiles(context, payload) {
       console.log("files error.response", error.response);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       // return false;
@@ -129,7 +142,7 @@ export async function uploadMedia(context, payload) {
           console.log("media error.response", error.response);
           context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
         }
@@ -152,7 +165,7 @@ export async function deleteFilesAndMedia(context, payload) {
         console.log("files error.response", error.response);
         context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
         // return false;
@@ -261,7 +274,7 @@ export async function editFunding(context, payload) {
       console.error("error", error);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -281,7 +294,7 @@ export async function getSpecificFunding(context, payload) {
       console.log("error", error);
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
     }
@@ -319,7 +332,7 @@ export async function requestAccess(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -342,10 +355,11 @@ export async function archiveFunding(context, payload) {
       );
       context.commit("archiveFunding");
       context.dispatch("getFundings");
+      context.dispatch("getAllFundings");
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -370,7 +384,7 @@ export async function addToWatchlist(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -396,7 +410,7 @@ export async function addComment(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -419,7 +433,7 @@ export async function removeFromWatchlist(context, payload) {
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
@@ -439,10 +453,11 @@ export async function deleteFunding(context, payload) {
         { root: true }
       );
       context.dispatch("getFundings");
+      context.dispatch("getAllFundings");
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
-        { kind: "negative", title: error.response.data.error.message },
+        { kind: "negative", title: i18n.t(error.response.data.error.message) },
         { root: true }
       );
       return false;
