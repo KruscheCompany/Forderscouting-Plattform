@@ -8,7 +8,7 @@
       <q-btn v-if="!ticket" :disable="!recipientEmail" :loading="sending" unelevated no-caps dense
         color="primary" class="q-px-md"
         :label="$t('projectComponents.aptitude.vorpruefung.send')" @click="send" />
-      <q-btn v-else :loading="sending" unelevated no-caps dense outline color="primary"
+      <q-btn v-else-if="canResend" :loading="sending" unelevated no-caps dense outline color="primary"
         class="q-px-md" :label="resendLabel" @click="resend" />
     </div>
 
@@ -56,7 +56,7 @@
       :label="$t('projectComponents.aptitude.vorpruefung.historyTitle', { count: history.length })">
       <div v-for="entry in history" :key="entry.id" class="q-mt-sm q-pa-sm radius-6 bg-blue-grey-1">
         <div class="row items-center no-wrap">
-          <q-icon name="mdi-circle" :color="historyStatusColor(entry)" size="14px" class="q-mr-sm" />
+          <q-icon name="mdi-circle" :color="statusColorFor(entry, 'grey-5')" size="14px" class="q-mr-sm" />
           <div class="col font-14 text-weight-600">
             {{ $t('projectComponents.aptitude.vorpruefung.attemptLabel', { number: entry.attempt || 1 }) }}
           </div>
@@ -76,7 +76,7 @@
           </template>
         </div>
         <div v-if="entry.answeredAt" class="font-14 q-pl-lg q-mt-xs">
-          <div>{{ historyStatusLabel(entry) }}</div>
+          <div>{{ statusLabelFor(entry) }}</div>
           <div v-if="entry.overriddenAt" class="text-blue-grey-7">
             {{ entry.overriddenBy && entry.overriddenBy.username
               ? $t('projectComponents.aptitude.vorpruefung.overriddenBy', { user: entry.overriddenBy.username })
@@ -143,28 +143,28 @@ export default {
         ? this.$t('projectComponents.aptitude.vorpruefung.reAsk')
         : this.$t('projectComponents.aptitude.vorpruefung.resend');
     },
+    canResend() {
+      if (!this.ticket) return false;
+      if (!this.ticket.answeredAt) return true;
+      return this.ticket.status !== "positiv";
+    },
     statusColor() {
-      if (!this.ticket.answeredAt) return "orange";
-      if (this.ticket.status === "positiv") return "green";
-      if (this.ticket.status === "ruecksprache") return "orange";
-      return "red";
+      return this.statusColorFor(this.ticket, "orange");
     },
     statusLabel() {
-      if (this.ticket.status === "positiv") return this.$t("projectComponents.aptitude.vorpruefung.statusPositiv");
-      if (this.ticket.status === "negativ") return this.$t("projectComponents.aptitude.vorpruefung.statusNegativ");
-      return this.$t("projectComponents.aptitude.vorpruefung.statusRuecksprache");
+      return this.statusLabelFor(this.ticket);
     }
   },
   methods: {
-    historyStatusColor(entry) {
-      if (!entry.answeredAt) return "grey-5";
-      if (entry.status === "positiv") return "green";
-      if (entry.status === "ruecksprache") return "orange";
+    statusColorFor(ticket, unansweredColor) {
+      if (!ticket.answeredAt) return unansweredColor;
+      if (ticket.status === "positiv") return "green";
+      if (ticket.status === "ruecksprache") return "orange";
       return "red";
     },
-    historyStatusLabel(entry) {
-      if (entry.status === "positiv") return this.$t("projectComponents.aptitude.vorpruefung.statusPositiv");
-      if (entry.status === "negativ") return this.$t("projectComponents.aptitude.vorpruefung.statusNegativ");
+    statusLabelFor(ticket) {
+      if (ticket.status === "positiv") return this.$t("projectComponents.aptitude.vorpruefung.statusPositiv");
+      if (ticket.status === "negativ") return this.$t("projectComponents.aptitude.vorpruefung.statusNegativ");
       return this.$t("projectComponents.aptitude.vorpruefung.statusRuecksprache");
     },
     formatDate(value) {
