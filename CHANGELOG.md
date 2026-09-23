@@ -1,5 +1,23 @@
 # Änderungsprotokoll / Changelog
 
+## 6.27.0 — 2026-09-23
+
+### de
+- Der Schritt „Vorprüfungen" merkt sich jetzt, dass er begonnen wurde: Wer ein Projekt später wieder öffnet, landet direkt dort und nicht mehr beim vorherigen Schritt.
+- Die Vorprüfungen lassen sich jetzt speichern, auch wenn noch nicht alle Rückmeldungen da sind. Zum nächsten Schritt geht es weiterhin erst, wenn alle drei Vorprüfungen positiv beantwortet wurden.
+- Zu jeder Vorprüfung gibt es jetzt einen Verlauf. Frühere Rückmeldungen – auch Ablehnungen samt Begründung und Datum – bleiben sichtbar, und nach einer Ablehnung oder einer Bitte um Rücksprache kann eine Vorprüfung erneut angefragt werden. Nur die jeweils neueste Rückmeldung zählt.
+- Wird eine Vorprüfung erneut angefragt, weist die E-Mail die prüfende Person darauf hin, dass sie bereits eine Rückmeldung gegeben hat. Bei einem gewechselten Fördermittelgeber erhält die neue Ansprechperson stattdessen eine neutrale Anfrage.
+- Administratorinnen und Administratoren können eine offene Vorprüfung selbst eintragen. Das Formular entspricht genau dem der prüfenden Person; der Eintrag wird im Verlauf als durch die Administration erfolgt gekennzeichnet.
+- Wird die Förderauswahl geändert, werden alle Vorprüfungen zurückgesetzt und müssen neu angefragt werden. Die bisherigen Rückmeldungen bleiben im Verlauf erhalten.
+
+### en
+- The "Pre-checks" step now remembers that it was started: reopening a project takes you straight there instead of back to the previous step.
+- Pre-checks can now be saved even while some responses are still outstanding. Moving on to the next step still requires all three pre-checks to be answered positively.
+- Every pre-check now has a history. Earlier responses — including rejections with their reason and date — stay visible, and after a rejection or a request for a meeting, a pre-check can be requested again. Only the most recent response counts.
+- When a pre-check is requested again, the email tells the reviewer they have already given a response. If the funding provider changed, the new contact receives a neutral request instead.
+- Administrators can record an open pre-check themselves. The form is exactly the one the reviewer sees, and the entry is marked in the history as made by the administration.
+- Changing the funding selection now resets all pre-checks, which then have to be requested again. Previous responses are kept in the history.
+
 ## 6.26.5 — 2026-09-22
 
 ### de
