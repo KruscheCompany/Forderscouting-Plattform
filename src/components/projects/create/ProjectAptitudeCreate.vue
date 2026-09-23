@@ -11,12 +11,12 @@
             <span v-else-if="saveState === 'saved'">{{ $t('projectComponents.aptitude.saved') }}</span>
           </div>
           <div class="q-mt-md">
-            <VorpruefungTicketCard type="finanzen" :project-id="createdProjectId" :ticket="ticketByType('finanzen')"
+            <VorpruefungTicketCard type="finanzen" :project-id="createdProjectId" :ticket="liveTicketByType('finanzen')"
               :recipient-email="recipientEmail('finanzen')" @ticket-created="loadTickets" />
-            <VorpruefungTicketCard type="personal" :project-id="createdProjectId" :ticket="ticketByType('personal')"
+            <VorpruefungTicketCard type="personal" :project-id="createdProjectId" :ticket="liveTicketByType('personal')"
               :recipient-email="recipientEmail('personal')" @ticket-created="loadTickets" />
             <VorpruefungTicketCard type="foerdermittelgeber" :project-id="createdProjectId"
-              :ticket="ticketByType('foerdermittelgeber')" :recipient-email="recipientEmail('foerdermittelgeber')"
+              :ticket="liveTicketByType('foerdermittelgeber')" :recipient-email="recipientEmail('foerdermittelgeber')"
               @ticket-created="loadTickets" />
           </div>
         </div>
@@ -80,8 +80,14 @@ export default {
     clearTimeout(this.saveStateTimeout);
   },
   methods: {
-    ticketByType(type) {
-      return this.vorpruefungTickets.find(t => t.type === type) || null;
+    liveTicketByType(type) {
+      return this.vorpruefungTickets.find(t => t.type === type && !t.supersededAt) || null;
+    },
+    allReviewsPositive() {
+      return ["finanzen", "personal", "foerdermittelgeber"].every(type => {
+        const ticket = this.liveTicketByType(type);
+        return !!ticket && ticket.status === "positiv";
+      });
     },
     async saveAptitude() {
       if (this.aptitude === this.savedAptitude) return;
@@ -123,47 +129,49 @@ export default {
       this.vorpruefungTickets = await this.$store.dispatch("project/fetchVorpruefungTickets", {
         projectId: this.createdProjectId
       });
-      const allGreen = ["finanzen", "personal", "foerdermittelgeber"].every(type => {
-        const t = this.ticketByType(type);
-        return t && t.status === "positiv";
-      });
-      this.$emit("tickets-updated", allGreen);
+      this.$emit("tickets-updated", this.allReviewsPositive());
     },
-    // Get updated steps with aptitude marked as done
-    getUpdatedSteps() {
-      // Use existing steps from projectData if available, otherwise use default steps
+    getUpdatedSteps(allPositive) {
       const currentSteps = this.projectData.fundingCheckSteps || this.resetSteps;
 
       return currentSteps.map(step => {
         if (step.name === 'aptitude') {
-          // Mark aptitude as done when submitting
-          return { ...step, done: true };
+          return { ...step, done: allPositive, inProgress: !allPositive };
         }
-        // Keep all other steps as they are
         return { ...step };
       });
     },
 
     async submitAptitude() {
-      const allGreen = ["finanzen", "personal", "foerdermittelgeber"].every(type => {
-        const t = this.ticketByType(type);
-        return t && t.status === "positiv";
-      });
-      if (!allGreen) {
-        this.$store.dispatch("notifications/pushToast", { kind: "warning", title: this.$t("projectComponents.aptitude.vorpruefung.gateBlocked") });
-        return;
-      }
+      const allPositive = this.allReviewsPositive();
 
-      await this.$store.dispatch('project/simpleUpdateProjectIdea', {
+      const result = await this.$store.dispatch('project/simpleUpdateProjectIdea', {
         data: {
           id: this.createdProjectId,
           details: {
             id: this.projectData.details.id,
             aptitude: this.aptitude
           },
-          fundingCheckSteps: this.getUpdatedSteps()
+          fundingCheckSteps: this.getUpdatedSteps(allPositive)
         }
       });
+      if (result === false) return;
+
+      this.savedAptitude = this.aptitude;
+
+      this.$store.dispatch("notifications/pushToast", {
+        kind: "positive",
+        title: this.$t("projectComponents.aptitude.vorpruefung.saveSuccess")
+      });
+
+      if (!allPositive) {
+        this.$store.dispatch("notifications/pushToast", {
+          kind: "warning",
+          title: this.$t("projectComponents.aptitude.vorpruefung.gateBlocked")
+        });
+        return;
+      }
+
       this.$emit("aptitude-submitted", this.aptitude);
     }
   }

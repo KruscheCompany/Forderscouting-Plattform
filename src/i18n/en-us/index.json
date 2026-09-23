@@ -1169,6 +1169,7 @@
         "suggestedDates": "Suggested dates",
         "sendSuccess": "Review requested successfully",
         "resendSuccess": "Review request resent",
+        "saveSuccess": "Pre-checks saved",
         "gateBlocked": "All three reviews must be answered positively before you can continue.",
         "recipientEmail": "Will be sent to",
         "recipientMissing": "No contact email on file. Please add one for the municipality/funding provider first.",

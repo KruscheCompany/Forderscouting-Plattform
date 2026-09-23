@@ -126,7 +126,7 @@
     <div class="q-mt-lg q-mb-xl">
       <q-card class="shadow-1 radius-20 bg-white q-pa-lg">
         <div class="row justify-center">
-          <q-btn :loading="isLoading" :disable="step === 'aptitude' && !aptitudeGateOpen" @click="manageSubmit"
+          <q-btn :loading="isLoading" @click="manageSubmit"
             size="16px" color="primary" class="text-white q-px-xl q-py-sm full-width" no-caps
             :label="$t('Publish')" />
         </div>

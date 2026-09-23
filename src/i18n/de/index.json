@@ -1227,6 +1227,7 @@
         "suggestedDates": "Terminvorschläge",
         "sendSuccess": "Vorprüfung erfolgreich angefragt",
         "resendSuccess": "Vorprüfung erneut gesendet",
+        "saveSuccess": "Vorprüfungen gespeichert",
         "gateBlocked": "Alle drei Vorprüfungen müssen positiv beantwortet sein, bevor Sie fortfahren können.",
         "recipientEmail": "Wird gesendet an",
         "recipientMissing": "Keine Kontakt-E-Mail hinterlegt. Bitte zuerst bei der Gemeinde/Fördermittelgeber ergänzen.",
