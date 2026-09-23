@@ -14,7 +14,7 @@
         :class="$q.screen.gt.xs ? 'radius-bottom-20' : ''">
         <q-step v-for="(step, index) in steps" :key="index" :name="step.name"
           :title="$q.screen.gt.xs ? $t(step.title) : ''" :icon="step.icon" :done="step.done && !step.skip"
-          :header-nav="step.done && !step.skip" active-color="yellow" />
+          :header-nav="(step.done || step.inProgress) && !step.skip" active-color="yellow" />
       </q-stepper>
       <div v-if="$q.screen.xs && activeStepTitle"
         class="bg-white text-center text-caption text-primary q-py-xs q-px-md radius-bottom-20 shadow-2">
@@ -308,7 +308,6 @@ export default {
       const currentIndex = this.steps.findIndex(s => s.name === this.step);
 
       if (currentIndex < this.steps.length - 1) {
-        // Create a deep copy of the steps to avoid direct state mutation
         const updatedSteps = JSON.parse(JSON.stringify(this.steps));
 
         if (skipper > 1) {
@@ -317,38 +316,43 @@ export default {
           updatedSteps[currentIndex + 1].skip = false;
         }
 
-        // Mark current step as done in our copy
         updatedSteps[currentIndex].done = true;
+        updatedSteps[currentIndex].inProgress = false;
 
-        // Update only the local store state using our new action
-        if (this.tab === 'aiFundingCheck') {
-          await this.$store.dispatch('project/updateLocalProjectState', {
-            data: {
-              fundingCheckSteps: updatedSteps
-            }
-          });
-          // Update form with the updated steps
-          this.form = { ...this.form, fundingCheckSteps: updatedSteps };
-        } else if (this.tab === 'projectDevelopment') {
-          await this.$store.dispatch('project/updateLocalProjectState', {
-            data: {
-              projectDevelopmentSteps: updatedSteps
-            }
-          });
-          // Update form with the updated steps
-          this.form = { ...this.form, projectDevelopmentSteps: updatedSteps };
-        } else if (this.tab === 'application') {
-          await this.$store.dispatch('project/updateLocalProjectState', {
-            data: {
-              projectApplicationSteps: updatedSteps
-            }
-          });
-          // Update form with the updated steps
-          this.form = { ...this.form, projectApplicationSteps: updatedSteps };
+        const targetIndex = currentIndex + skipper;
+        if (updatedSteps[targetIndex]) {
+          updatedSteps[targetIndex].inProgress = true;
         }
 
-        // After store is updated, move to the next step
-        this.step = this.steps[currentIndex + skipper].name;
+        await this.persistSteps(updatedSteps);
+
+        this.step = this.steps[targetIndex].name;
+      }
+    },
+
+    stepsKeyForTab() {
+      if (this.tab === 'aiFundingCheck') return 'fundingCheckSteps';
+      if (this.tab === 'projectDevelopment') return 'projectDevelopmentSteps';
+      if (this.tab === 'application') return 'projectApplicationSteps';
+      return null;
+    },
+
+    // Step state has to survive a reload, otherwise an in-progress step is
+    // forgotten the moment the user navigates away. The local store keeps the
+    // UI in sync within the session; the API call is what makes it durable.
+    async persistSteps(updatedSteps) {
+      const key = this.stepsKeyForTab();
+      if (!key) return;
+
+      await this.$store.dispatch('project/updateLocalProjectState', {
+        data: { [key]: updatedSteps }
+      });
+      this.form = { ...this.form, [key]: updatedSteps };
+
+      if (this.createdProjectId) {
+        await this.$store.dispatch('project/simpleUpdateProjectIdea', {
+          data: { id: this.createdProjectId, [key]: updatedSteps }
+        });
       }
     },
     async goToNextTab() {
@@ -631,17 +635,27 @@ export default {
     setActiveStepBasedOnCompletion() {
       if (!this.steps || !this.steps.length) return;
 
-      // Find the last done step without modifying the original array
-      const stepsReversed = [...this.steps].reverse();
-      const lastDoneStep = stepsReversed.find(step => step.done === true);
-
-      // If found a done step, set it as current
-      if (lastDoneStep) {
-        this.step = lastDoneStep.name;
-      } else {
-        // If no done step is found, set the first step
-        this.step = this.steps[0].name;
+      const inProgress = this.steps.find(step => step.inProgress && !step.skip);
+      if (inProgress) {
+        this.step = inProgress.name;
+        return;
       }
+
+      let lastDoneIndex = -1;
+      this.steps.forEach((step, index) => {
+        if (step.done) lastDoneIndex = index;
+      });
+
+      if (lastDoneIndex === -1) {
+        this.step = this.steps[0].name;
+        return;
+      }
+
+      let nextIndex = lastDoneIndex + 1;
+      while (nextIndex < this.steps.length - 1 && this.steps[nextIndex].skip) {
+        nextIndex += 1;
+      }
+      this.step = this.steps[Math.min(nextIndex, this.steps.length - 1)].name;
     },
 
 
