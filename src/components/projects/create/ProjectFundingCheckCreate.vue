@@ -767,6 +767,12 @@ export default {
           data: updateData
         });
 
+        if (response) {
+          this.$store.dispatch('project/updateLocalProjectState', {
+            data: { fundingCheckSteps: updateData.fundingCheckSteps }
+          });
+        }
+
         // Emit success event
         this.$emit('funding-submitted', {
           fundingMatches: fundingMatchesWithSelection,
