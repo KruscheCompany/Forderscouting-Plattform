@@ -1,5 +1,33 @@
 # Änderungsprotokoll / Changelog
 
+## 6.28.0 — 2026-09-23
+
+### de
+- Administratorinnen und Administratoren können eine Vorprüfung jetzt direkt eintragen, ohne vorher eine Anfrage zu senden. Die Schaltfläche „Überschreiben" steht neben „Anfrage senden". Auch nach einer Ablehnung oder einer Bitte um Rücksprache lässt sich die Vorprüfung so eintragen; die frühere Rückmeldung bleibt im Verlauf.
+- Vorprüfungen anfragen und interne Notizen bearbeiten können nur noch Projektverantwortliche, Bearbeiterinnen und Bearbeiter sowie die Administration. Personen mit reiner Leseberechtigung sehen nur die Ergebnisse.
+- Pro Projekt kann jede Vorprüfung nur noch eine offene Anfrage haben, auch wenn zwei Personen gleichzeitig senden.
+- Ein begonnener, noch nicht abgeschlossener Schritt ist in der Schrittleiste jetzt orange markiert. Auch die Projektansicht öffnet diesen Schritt direkt und lässt ihn anklicken; über „Bearbeiten" geht es von dort in denselben Schritt.
+- Schlägt das Speichern eines Schritts fehl, bleibt die Seite jetzt beim aktuellen Schritt, statt trotzdem weiterzuspringen.
+- Mehrfaches schnelles Klicken auf „speichern" oder ein Schrittwechsel während des Speicherns führt nicht mehr dazu, dass das falsche Formular gespeichert wird.
+- Die Auswahl „Fehlanzeige" im Fördermittelcheck überspringt jetzt wie vorgesehen den Schritt „Offene Fragen".
+- Für übernommene Förderempfehlungen werden die offenen Fragen jetzt korrekt geladen.
+- Der Link zum Öffnen einer Förderung im Fördermittelcheck ist jetzt deaktiviert, wenn die Förderung nicht mehr verfügbar ist, etwa weil sie gelöscht oder archiviert wurde.
+- Ein Projekt lässt sich nur noch mit einem ausgewählten Ort speichern. Statt eines Serverfehlers erscheint ein Hinweis, einen Ort auszuwählen.
+- Projekte mit unvollständigen Kontaktangaben lassen sich wieder öffnen.
+
+### en
+- Administrators can now record a pre-check directly, without sending a request first. The "Override" button sits next to "Send request". This also works after a rejection or a request for a meeting; the earlier response stays in the history.
+- Only project owners, editors and administrators can now request pre-checks and edit their internal notes. People with read-only access see the results only.
+- Each pre-check can now have only one open request per project, even if two people send one at the same moment.
+- A step that was started but not finished is now marked orange in the step bar. The project view also opens that step directly and lets you click it, and "Edit" from there takes you to the same step.
+- If saving a step fails, the page now stays on the current step instead of moving on anyway.
+- Clicking "save" several times in a row, or switching steps while saving, no longer saves the wrong form.
+- Choosing "no match" in the funding check now skips the "Open questions" step as intended.
+- Open questions now load correctly for funding recommendations that were accepted from a suggestion.
+- In the funding check, the link to open a funding is now disabled when that funding is no longer available, for example because it was deleted or archived.
+- A project can now only be saved with a location selected. Instead of a server error, you are asked to choose one.
+- Projects with incomplete contact details can be opened again.
+
 ## 6.27.0 — 2026-09-23
 
 ### de

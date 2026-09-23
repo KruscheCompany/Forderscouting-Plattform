@@ -5,7 +5,7 @@
       <div class="col font-16 text-weight-600">
         {{ $t(`projectComponents.aptitude.vorpruefung.${type}`) }}
       </div>
-      <q-btn v-if="!ticket" :disable="!recipientEmail" :loading="sending" unelevated no-caps dense
+      <q-btn v-if="!ticket && canEdit" :disable="!recipientEmail" :loading="sending" unelevated no-caps dense
         color="primary" class="q-px-md"
         :label="$t('projectComponents.aptitude.vorpruefung.send')" @click="send" />
       <q-btn v-else-if="canResend" :loading="sending" unelevated no-caps dense outline color="primary"
@@ -24,13 +24,16 @@
       </template>
     </div>
 
-    <div v-if="ticket && ticket.sentAt" class="font-14 text-blue-grey-7 q-mt-xs">
+    <div v-if="ticket && (ticket.sentAt || ticket.answeredAt)" class="font-14 text-blue-grey-7 q-mt-xs">
       <template v-if="ticket.reviewerContact">
         {{ $t('projectComponents.aptitude.vorpruefung.recipientEmail') }}: {{ ticket.reviewerContact }}<br />
       </template>
-      {{ $t('projectComponents.aptitude.vorpruefung.sentOn') }}: {{ formatDate(ticket.sentAt) }}
+      <template v-if="ticket.sentAt">
+        {{ $t('projectComponents.aptitude.vorpruefung.sentOn') }}: {{ formatDate(ticket.sentAt) }}
+      </template>
+      <template v-if="ticket.sentAt && ticket.answeredAt">&middot;</template>
       <template v-if="ticket.answeredAt">
-        &middot; {{ $t('projectComponents.aptitude.vorpruefung.answeredOn') }}: {{ formatDate(ticket.answeredAt) }}
+        {{ $t('projectComponents.aptitude.vorpruefung.answeredOn') }}: {{ formatDate(ticket.answeredAt) }}
       </template>
     </div>
 
@@ -52,7 +55,7 @@
 
     <q-expansion-item dense :label="$t('projectComponents.aptitude.vorpruefung.notesPlaceholder')" class="q-mt-sm">
       <q-input outlined type="textarea" rows="3" class="no-shadow input-radius-6 q-mt-sm" v-model="notes"
-        :disable="!!(ticket && ticket.answeredAt)" @blur="saveNotes" />
+        :disable="!canEdit || !!(ticket && ticket.answeredAt)" @blur="saveNotes" />
     </q-expansion-item>
 
     <q-expansion-item v-if="history.length" dense class="q-mt-sm"
@@ -74,8 +77,9 @@
           <template v-if="entry.sentAt">
             {{ $t('projectComponents.aptitude.vorpruefung.sentOn') }}: {{ formatDate(entry.sentAt) }}
           </template>
+          <template v-if="entry.sentAt && entry.answeredAt">&middot;</template>
           <template v-if="entry.answeredAt">
-            &middot; {{ $t('projectComponents.aptitude.vorpruefung.answeredOn') }}: {{ formatDate(entry.answeredAt) }}
+            {{ $t('projectComponents.aptitude.vorpruefung.answeredOn') }}: {{ formatDate(entry.answeredAt) }}
           </template>
         </div>
         <div v-if="entry.answeredAt" class="font-14 q-pl-lg q-mt-xs">
@@ -96,7 +100,7 @@
       </div>
     </q-expansion-item>
 
-    <VorpruefungOverrideDialog v-if="ticket" :modelValue="showOverrideDialog" :ticket-id="ticket.id" :type="type"
+    <VorpruefungOverrideDialog v-if="canOverride" :modelValue="showOverrideDialog" :project-id="projectId" :type="type"
       @update:modelValue="showOverrideDialog = $event" @overridden="$emit('ticket-created')" />
   </div>
 </template>
@@ -124,6 +128,10 @@ export default {
     recipientEmail: {
       type: String,
       default: null
+    },
+    canEdit: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -154,7 +162,7 @@ export default {
         : this.$t('projectComponents.aptitude.vorpruefung.resend');
     },
     canResend() {
-      if (!this.ticket) return false;
+      if (!this.ticket || !this.canEdit) return false;
       if (!this.ticket.answeredAt) return true;
       return this.ticket.status !== "positiv";
     },
@@ -164,8 +172,11 @@ export default {
     statusLabel() {
       return this.statusLabelFor(this.ticket);
     },
+    // Admins may record a decision without asking anyone, as long as the
+    // review is not already positive.
     canOverride() {
-      return this.$store.getters["userCenter/isAdmin"] && !!this.ticket && !this.ticket.answeredAt;
+      if (!this.$store.getters["userCenter/isAdmin"]) return false;
+      return !(this.ticket && this.ticket.answeredAt && this.ticket.status === "positiv");
     }
   },
   methods: {
@@ -212,7 +223,7 @@ export default {
       this.$emit("ticket-created");
     },
     async saveNotes() {
-      if (this.ticket && !this.ticket.answeredAt) {
+      if (this.canEdit && this.ticket && !this.ticket.answeredAt) {
         await this.$store.dispatch("project/updateVorpruefungTicketNotes", {
           id: this.ticket.id,
           notes: this.notes

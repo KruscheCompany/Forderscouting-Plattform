@@ -11,12 +11,8 @@
             <span v-else-if="saveState === 'saved'">{{ $t('projectComponents.aptitude.saved') }}</span>
           </div>
           <div class="q-mt-md">
-            <VorpruefungTicketCard type="finanzen" :project-id="createdProjectId" :tickets="ticketsByType('finanzen')"
-              :recipient-email="recipientEmail('finanzen')" @ticket-created="loadTickets" />
-            <VorpruefungTicketCard type="personal" :project-id="createdProjectId" :tickets="ticketsByType('personal')"
-              :recipient-email="recipientEmail('personal')" @ticket-created="loadTickets" />
-            <VorpruefungTicketCard type="foerdermittelgeber" :project-id="createdProjectId"
-              :tickets="ticketsByType('foerdermittelgeber')" :recipient-email="recipientEmail('foerdermittelgeber')"
+            <VorpruefungTicketCard v-for="type in ticketTypes" :key="type" :type="type" :project-id="createdProjectId"
+              :tickets="ticketsByType(type)" :recipient-email="recipientEmail(type)" :can-edit="canEdit"
               @ticket-created="loadTickets" />
           </div>
         </div>
@@ -66,6 +62,20 @@ export default {
       ]
     };
   },
+  computed: {
+    ticketTypes() {
+      return ["finanzen", "personal", "foerdermittelgeber"];
+    },
+    // Mirrors the backend rule: only admins, the owner and editors may request
+    // reviews or edit their notes; readers only see the outcome.
+    canEdit() {
+      if (this.$store.getters["userCenter/isAdmin"]) return true;
+      const userId = this.$store.state.userCenter.user?.user?.id;
+      if (!userId) return false;
+      const { owner, editors } = this.projectData;
+      return (owner && owner.id === userId) || (editors || []).some(editor => editor.id === userId);
+    }
+  },
   watch: {
     currentTab(newTab) {
       // Expand the section if the current tab is 'aptitude'
@@ -89,7 +99,7 @@ export default {
         .sort((a, b) => b.id - a.id);
     },
     allReviewsPositive() {
-      return ["finanzen", "personal", "foerdermittelgeber"].every(type => {
+      return this.ticketTypes.every(type => {
         const ticket = this.liveTicketByType(type);
         return !!ticket && ticket.status === "positiv";
       });
@@ -134,7 +144,6 @@ export default {
       this.vorpruefungTickets = await this.$store.dispatch("project/fetchVorpruefungTickets", {
         projectId: this.createdProjectId
       });
-      this.$emit("tickets-updated", this.allReviewsPositive());
     },
     getUpdatedSteps(allPositive) {
       const currentSteps = this.projectData.fundingCheckSteps || this.resetSteps;

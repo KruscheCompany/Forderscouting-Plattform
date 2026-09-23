@@ -1185,6 +1185,7 @@
         "attemptLabel": "Request {number}",
         "superseded_resend": "asked again",
         "superseded_fundingChanged": "funding changed",
+        "superseded_override": "decided by the administration",
         "overriddenBy": "Recorded by the administration ({user})",
         "overriddenByUnknown": "Recorded by the administration",
         "statusUnanswered": "Unanswered"

@@ -14,7 +14,8 @@
         :class="$q.screen.gt.xs ? 'radius-bottom-20' : ''">
         <q-step v-for="(step, index) in steps" :key="index" :name="step.name"
           :title="$q.screen.gt.xs ? $t(step.title) : ''" :icon="step.icon" :done="step.done && !step.skip"
-          :header-nav="(step.done || step.inProgress) && !step.skip" active-color="yellow" />
+          :header-nav="(step.done || step.inProgress) && !step.skip && !isBusy" :color="stepColor(step)"
+          active-color="yellow" />
       </q-stepper>
       <div v-if="$q.screen.xs && activeStepTitle"
         class="bg-white text-center text-caption text-primary q-py-xs q-px-md radius-bottom-20 shadow-2">
@@ -44,8 +45,7 @@
         :project="form" :current-tab="step" class="q-my-md" />
 
       <ProjectAptitudeCreate ref="aptitudeRef" v-if="step === 'aptitude'" :created-project-id="createdProjectId"
-        :project-data="form" :current-tab="step" class="q-my-md" @aptitude-submitted="handleAptitudeSubmitted"
-        @tickets-updated="val => (aptitudeGateOpen = val)" />
+        :project-data="form" :current-tab="step" class="q-my-md" @aptitude-submitted="handleAptitudeSubmitted" />
 
       <ProjectViewAptitude
         v-if="step !== 'project' && step !== 'fundingCheck' && step !== 'qAndA' && step !== 'aptitude'" :project="form"
@@ -126,7 +126,7 @@
     <div class="q-mt-lg q-mb-xl">
       <q-card class="shadow-1 radius-20 bg-white q-pa-lg">
         <div class="row justify-center">
-          <q-btn :loading="isLoading" @click="manageSubmit"
+          <q-btn :loading="isBusy" @click="manageSubmit"
             size="16px" color="primary" class="text-white q-px-xl q-py-sm full-width" no-caps
             :label="$t('Publish')" />
         </div>
@@ -163,6 +163,7 @@ import ProjectViewAptitude from 'src/components/projects/view/ProjectAptitude.vu
 import ProjectViewDecision from 'src/components/projects/view/ProjectDecision.vue';
 import ProjectViewTaskPlan from 'src/components/projects/view/ProjectTaskPlan.vue';
 import ProjectViewSiteVisit from 'src/components/projects/view/ProjectSiteVisit.vue';
+import { landingTabName, landingStepName, stepColor } from 'src/utils/applicationSteps';
 
 
 export default {
@@ -201,7 +202,7 @@ export default {
       tab: 'aiFundingCheck',
       secondaryTab: 'project',
       isLoading: false,
-      aptitudeGateOpen: false,
+      isAdvancing: false,
       createdProjectId: null, // Store the project ID after creation
       form: {}, // Store project data for passing to child components
       fundingCheckSteps: [
@@ -226,6 +227,9 @@ export default {
     };
   },
   computed: {
+    isBusy() {
+      return this.isLoading || this.isAdvancing;
+    },
     project() {
       return this.$store.getters["project/getProject"];
     },
@@ -280,6 +284,7 @@ export default {
   },
 
   methods: {
+    stepColor,
     shouldDisableTab(index) {
       // First tab is never disabled
       if (index === 0) return false;
@@ -303,40 +308,50 @@ export default {
         this.step = this.steps[currentIndex - 1].name;
       }
     },
+    // Resolves to whether the page moved on, so callers can stop when the step
+    // state could not be saved.
     async goToNextStep(skip) {
       // While getSpecificProject refetches, `project` is null and `steps` falls
       // back to the default template — persisting that would erase progress.
-      if (!this.project) return;
+      if (!this.project) return false;
 
       const skipper = skip ? 2 : 1;
       const currentIndex = this.steps.findIndex(s => s.name === this.step);
 
-      if (currentIndex < this.steps.length - 1) {
-        const updatedSteps = JSON.parse(JSON.stringify(this.steps));
+      if (currentIndex === -1 || currentIndex >= this.steps.length - 1) return false;
 
-        if (skipper > 1) {
-          updatedSteps[currentIndex + 1].skip = true;
-        } else {
-          updatedSteps[currentIndex + 1].skip = false;
-        }
+      const updatedSteps = JSON.parse(JSON.stringify(this.steps));
 
-        // Exactly one step may be in progress. The user can navigate back to an
-        // earlier done step and resubmit it, which would otherwise leave the
-        // step they had actually reached still flagged — and landing picks the
-        // first flagged step in array order, not the furthest one.
-        updatedSteps.forEach(step => { step.inProgress = false; });
+      updatedSteps[currentIndex + 1].skip = skipper > 1;
 
-        updatedSteps[currentIndex].done = true;
+      // Exactly one step may be in progress. The user can navigate back to an
+      // earlier done step and resubmit it, which would otherwise leave the
+      // step they had actually reached still flagged — and landing picks the
+      // first flagged step in array order, not the furthest one.
+      updatedSteps.forEach(step => { step.inProgress = false; });
 
-        const targetIndex = currentIndex + skipper;
-        if (updatedSteps[targetIndex]) {
-          updatedSteps[targetIndex].inProgress = true;
-        }
+      updatedSteps[currentIndex].done = true;
 
-        await this.persistSteps(updatedSteps);
-
-        this.step = this.steps[targetIndex].name;
+      // Skipping from the second-to-last step leaves nothing after the skipped
+      // one, so the current step is completed without moving anywhere.
+      const target = updatedSteps[currentIndex + skipper];
+      if (target) {
+        target.inProgress = true;
       }
+
+      this.isAdvancing = true;
+      let saved;
+      try {
+        saved = await this.persistSteps(updatedSteps);
+      } finally {
+        this.isAdvancing = false;
+      }
+      if (!saved) return false;
+
+      if (target) {
+        this.step = target.name;
+      }
+      return true;
     },
 
     stepsKeyForTab() {
@@ -351,18 +366,20 @@ export default {
     // UI in sync within the session; the API call is what makes it durable.
     async persistSteps(updatedSteps) {
       const key = this.stepsKeyForTab();
-      if (!key) return;
+      if (!key) return false;
+
+      if (this.createdProjectId) {
+        const saved = await this.$store.dispatch('project/simpleUpdateProjectIdea', {
+          data: { id: this.createdProjectId, [key]: updatedSteps }
+        });
+        if (!saved) return false;
+      }
 
       await this.$store.dispatch('project/updateLocalProjectState', {
         data: { [key]: updatedSteps }
       });
       this.form = { ...this.form, [key]: updatedSteps };
-
-      if (this.createdProjectId) {
-        await this.$store.dispatch('project/simpleUpdateProjectIdea', {
-          data: { id: this.createdProjectId, [key]: updatedSteps }
-        });
-      }
+      return true;
     },
     async goToNextTab() {
       const currentIndex = this.tabs.findIndex(t => t.name === this.tab);
@@ -469,12 +486,12 @@ export default {
         }
       }
 
-      // Move to next step
-      await this.goToNextStep(noneSelected);
+      const moved = await this.goToNextStep(noneSelected);
+      if (!moved) return;
 
       if (!noneSelected && (!noChange || this.project.questions === null)) {
         // Get all selected fundings instead of just one
-        const selectedFundings = data.fundingMatches.filter(funding => funding.selected);
+        const selectedFundings = data.fundingMatches.filter(funding => funding.selected && funding._id);
 
         // Call the API for each selected funding
         for (const funding of selectedFundings) {
@@ -516,7 +533,20 @@ export default {
         this.form = { ...this.form, ...JSON.parse(JSON.stringify(this.project)) };
       }
     },
+    // One save at a time: a second click (or a step switch mid-save) would
+    // otherwise run against a form the first save is still replacing.
     async manageSubmit() {
+      if (this.isBusy) return;
+      this.isLoading = true;
+      try {
+        await this.submitCurrentStep();
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async submitCurrentStep() {
+      // The current step's form mounts a tick after `step` changes.
+      await this.$nextTick();
       if (this.step === 'project') {
         await this.$refs.projectDescriptionRef.submitProject(this.steps);
       }
@@ -610,68 +640,16 @@ export default {
     },
 
     setActiveTabBasedOnCompletion() {
-      if (!this.tabs || !this.tabs.length) return;
-
-      // Find the last completed tab
-      let lastCompletedTabIndex = -1;
-      for (let i = 0; i < this.tabs.length; i++) {
-        if (this.tabs[i].done) {
-          lastCompletedTabIndex = i;
-        }
-      }
-
-      // If we found a completed tab, set the next one as active
-      if (lastCompletedTabIndex !== -1) {
-        const nextTabIndex = lastCompletedTabIndex + 1;
-
-        // Make sure we don't go beyond the available tabs
-        if (nextTabIndex < this.tabs.length) {
-          // Set the next tab as the active one
-          this.tab = this.tabs[nextTabIndex].name;
-        } else {
-          // If all tabs are done, just set the last one as active
-          this.tab = this.tabs[lastCompletedTabIndex].name;
-        }
-      } else {
-        // If no tab is done, set the first one as active
-        this.tab = this.tabs[0].name;
-      }
-
-      // After setting the tab, update the step based on current steps
+      const tabName = landingTabName(this.tabs);
+      if (!tabName) return;
+      this.tab = tabName;
       this.setActiveStepBasedOnCompletion();
     },
 
     setActiveStepBasedOnCompletion() {
-      if (!this.steps || !this.steps.length) return;
-
-      const inProgress = this.steps.find(step => step.inProgress && !step.skip);
-      if (inProgress) {
-        this.step = inProgress.name;
-        return;
-      }
-
-      let lastDoneIndex = -1;
-      this.steps.forEach((step, index) => {
-        if (step.done) lastDoneIndex = index;
-      });
-
-      if (lastDoneIndex === -1) {
-        this.step = this.steps[0].name;
-        return;
-      }
-
-      let nextIndex = lastDoneIndex + 1;
-      while (nextIndex < this.steps.length && this.steps[nextIndex].skip) {
-        nextIndex += 1;
-      }
-      // Every remaining step skipped means there is no next step to land on;
-      // fall back to the last done one rather than a step that renders nothing.
-      this.step = nextIndex < this.steps.length
-        ? this.steps[nextIndex].name
-        : this.steps[lastDoneIndex].name;
+      const stepName = landingStepName(this.steps);
+      if (stepName) this.step = stepName;
     },
-
-
   },
   mounted() {
     this.$store.dispatch("ai/resetTaxonomySuggestions");

@@ -1243,6 +1243,7 @@
         "attemptLabel": "{number}. Anfrage",
         "superseded_resend": "erneut angefragt",
         "superseded_fundingChanged": "Förderung geändert",
+        "superseded_override": "durch die Administration entschieden",
         "overriddenBy": "Eingetragen durch die Administration ({user})",
         "overriddenByUnknown": "Eingetragen durch die Administration",
         "statusUnanswered": "Unbeantwortet"

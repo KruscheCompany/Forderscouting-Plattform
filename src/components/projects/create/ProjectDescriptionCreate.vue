@@ -332,7 +332,9 @@ export default {
             projectData,
           });
         }
-        const projectId = res.data.id;
+        // The store has already shown the error.
+        if (!res) return;
+        const projectId = res.data && res.data.id;
 
         if (this.startingConditionReset) {
           await this.$store.dispatch('project/updateLocalProjectState', {

@@ -33,9 +33,9 @@ export default {
       type: Boolean,
       default: false
     },
-    ticketId: {
+    projectId: {
       type: Number,
-      default: null
+      required: true
     },
     type: {
       type: String,
@@ -66,7 +66,8 @@ export default {
       let ok = false;
       try {
         ok = await this.$store.dispatch("project/overrideVorpruefungTicket", {
-          id: this.ticketId,
+          projectId: this.projectId,
+          type: this.type,
           ...payload
         });
       } finally {

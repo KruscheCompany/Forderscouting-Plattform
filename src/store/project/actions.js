@@ -488,10 +488,14 @@ export async function resendVorpruefungTicket(context, payload) {
   }
 }
 
+// Records the decision for the project's current review of that type, whether
+// it is still pending, already declined, or was never requested at all.
 export async function overrideVorpruefungTicket(context, payload) {
-  const { id, decisionType, responseText, wantsPhoneCall, wantsOnsiteMeeting, suggestedDates } = payload;
+  const { projectId, type, decisionType, responseText, wantsPhoneCall, wantsOnsiteMeeting, suggestedDates } = payload;
   try {
-    await api.post(`/api/vorpruefung-tickets/${id}/override`, {
+    await api.post("/api/vorpruefung-tickets/override", {
+      project: projectId,
+      type,
       decisionType,
       responseText,
       wantsPhoneCall,
@@ -559,8 +563,12 @@ export function updateLocalProjectState(context, payload) {
 }
 
 export async function getSpecificProject(context, payload) {
-  context.commit("setSpecificProject", null);
   const { id } = payload;
+  // A refetch of the project already on screen keeps it until the fresh copy
+  // arrives; blanking it would let a save in that window run against defaults.
+  if (!context.state.project || context.state.project.id !== id) {
+    context.commit("setSpecificProject", null);
+  }
   if (id) {
     try {
       const res = await api.get(`/api/projects/${id}`);
