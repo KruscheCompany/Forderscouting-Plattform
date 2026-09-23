@@ -10,6 +10,9 @@
         :label="$t('projectComponents.aptitude.vorpruefung.send')" @click="send" />
       <q-btn v-else-if="canResend" :loading="sending" unelevated no-caps dense outline color="primary"
         class="q-px-md" :label="resendLabel" @click="resend" />
+      <q-btn v-if="canOverride" flat no-caps dense color="primary" class="q-ml-sm"
+        icon="mdi-shield-account" :label="$t('projectComponents.aptitude.vorpruefung.override')"
+        @click="showOverrideDialog = true" />
     </div>
 
     <div v-if="!ticket" class="font-14 q-mt-xs" :class="recipientEmail ? 'text-blue-grey-7' : 'text-negative'">
@@ -92,12 +95,18 @@
         </div>
       </div>
     </q-expansion-item>
+
+    <VorpruefungOverrideDialog v-if="ticket" :modelValue="showOverrideDialog" :ticket-id="ticket.id" :type="type"
+      @update:modelValue="showOverrideDialog = $event" @overridden="$emit('ticket-created')" />
   </div>
 </template>
 
 <script>
+import VorpruefungOverrideDialog from "src/components/dialogs/VorpruefungOverrideDialog.vue";
+
 export default {
   name: "VorpruefungTicketCard",
+  components: { VorpruefungOverrideDialog },
   props: {
     type: {
       type: String,
@@ -120,7 +129,8 @@ export default {
   data() {
     return {
       sending: false,
-      notes: ""
+      notes: "",
+      showOverrideDialog: false
     };
   },
   watch: {
@@ -153,6 +163,9 @@ export default {
     },
     statusLabel() {
       return this.statusLabelFor(this.ticket);
+    },
+    canOverride() {
+      return this.$store.getters["userCenter/isAdmin"] && !!this.ticket && !this.ticket.answeredAt;
     }
   },
   methods: {
