@@ -1,5 +1,19 @@
 # Änderungsprotokoll / Changelog
 
+## 6.28.1 — 2026-09-28
+
+### de
+- Archivierte Förderungen werden jetzt für alle Nutzerinnen und Nutzer korrekt angezeigt, unabhängig vom Antragsstellungs-Status.
+- Die Liste der archivierten Projektideen aktualisiert sich jetzt sofort, nachdem eine Projektidee archiviert wurde.
+- Die Standardanzahl an Zeilen pro Seite in der Datenübersicht wurde von 50 auf 20 reduziert.
+- Kleinere Layout-Korrekturen bei den Schaltflächen in der Prioritäts- und Archiv-Tabelle.
+
+### en
+- Archived funding records now display correctly for all users, regardless of application-eligibility status.
+- The list of archived project ideas now refreshes immediately after a project idea is archived.
+- The default number of rows per page in the data overview was reduced from 50 to 20.
+- Minor layout fixes to the buttons in the priority and archive tables.
+
 ## 6.28.0 — 2026-09-23
 
 ### de
