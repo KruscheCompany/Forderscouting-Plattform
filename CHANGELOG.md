@@ -1,5 +1,13 @@
 # Änderungsprotokoll / Changelog
 
+## 6.28.2 — 2026-09-28
+
+### de
+- Ein Fehler wurde behoben, durch den sich niemand mehr anmelden konnte.
+
+### en
+- Fixed a bug that prevented anyone from logging in.
+
 ## 6.28.1 — 2026-09-28
 
 ### de
