@@ -7,7 +7,7 @@
         sortBy: 'updatedAt',
         descending: true,
         page: 1,
-        rowsPerPage: isInPage ? 50 : 5,
+        rowsPerPage: isInPage ? 20 : 5,
       }" :rows-per-page-label="$t('Records per page')" :no-data-label="$t('No data')"
       :no-results-label="$t('No results')" ref="table">
       <template v-slot:top>
@@ -799,6 +799,11 @@ export default {
   mounted() {
     this.getData();
 
+    const rowsPerPageResetDone = localStorage.getItem("rowsPerPage20ResetDone") !== null;
+    if (!rowsPerPageResetDone) {
+      localStorage.setItem("rowsPerPage20ResetDone", "true");
+    }
+
     if (localStorage.getItem("filters") !== null) {
       const savedFilters = JSON.parse(localStorage.getItem("filters"));
 
@@ -816,7 +821,11 @@ export default {
       setTimeout(() => {
         this.$refs.table.setPagination({
           page: savedFilters.page || 1,
-          rowsPerPage: savedFilters.rowsPerPage != null ? savedFilters.rowsPerPage : 10,
+          rowsPerPage: rowsPerPageResetDone
+            ? savedFilters.rowsPerPage != null
+              ? savedFilters.rowsPerPage
+              : 10
+            : 20,
         });
       }, 100);
     }

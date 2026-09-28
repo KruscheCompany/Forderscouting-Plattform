@@ -32,10 +32,12 @@
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td :style="{ width: actionColumnWidth }" class="text-center">
-            <q-btn size="md" color="blue" round dense flat icon="unarchive" :loading="unarchivingId === props.row.id"
-              @click.stop="unarchiveRow(props.row)">
-              <q-tooltip>{{ $t('ProjectDashboard.unarchive') }}</q-tooltip>
-            </q-btn>
+            <div class="row items-center justify-center no-wrap">
+              <q-btn size="md" color="blue" round dense flat icon="unarchive" :loading="unarchivingId === props.row.id"
+                @click.stop="unarchiveRow(props.row)">
+                <q-tooltip>{{ $t('ProjectDashboard.unarchive') }}</q-tooltip>
+              </q-btn>
+            </div>
           </q-td>
           <q-td v-for="col in props.cols" :key="col.name" :props="props" :style="col.style" class="font-14">
             <template v-if="col.name === 'applicationProcess'">

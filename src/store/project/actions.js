@@ -691,6 +691,7 @@ export async function archiveProjectIdea(context, payload) {
       );
       context.commit("archiveProject");
       context.dispatch("getProjectIdeas");
+      context.dispatch("getArchivedProjects");
     } catch (error) {
       context.dispatch(
         "notifications/pushToast",
