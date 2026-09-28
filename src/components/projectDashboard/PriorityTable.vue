@@ -52,8 +52,9 @@
             @dragstart="onRowDragStart(props.row)" @dragover.prevent @drop="onRowDrop(props.row)">
             <q-td v-if="isLeader" :style="{ width: actionColumnWidth }" class="text-center">
               <div class="row items-center justify-center no-wrap">
-                <q-icon name="mdi-drag" size="sm" :class="isSorted ? 'text-grey-5' : 'drag-handle cursor-pointer'" />
-                <q-btn flat dense round size="sm" icon="close" color="grey-8"
+                <q-btn flat dense round size="md" icon="mdi-drag" color="grey-8" :ripple="false"
+                  :class="isSorted ? 'text-grey-5' : 'drag-handle cursor-pointer'" />
+                <q-btn flat dense round size="md" icon="close" color="grey-8"
                   :title="$t('ProjectDashboard.removeFromPriorityList')" @click.stop="remove(props.row)" />
               </div>
             </q-td>

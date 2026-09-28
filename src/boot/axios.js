@@ -6,6 +6,25 @@ import { i18n } from "boot/i18n";
 const api = axios.create({
   baseURL: process.env.VUE_APP_MAIN_URL
 });
+
+// One id per browser tab, used purely to correlate BE log lines into a single
+// user flow (login -> GETs -> a failed save -> retry) without FE analytics
+// tooling. Re-read (not cached) on every request so a cleared sessionStorage
+// (e.g. logout) naturally starts a new one on the next call instead of
+// silently merging a new login into the previous session's id.
+const SESSION_ID_KEY = "amt-viot-session-id";
+function getSessionId() {
+  try {
+    let id = sessionStorage.getItem(SESSION_ID_KEY);
+    if (!id) {
+      id = crypto.randomUUID();
+      sessionStorage.setItem(SESSION_ID_KEY, id);
+    }
+    return id;
+  } catch (e) {
+    return null;
+  }
+}
 Vue.prototype.$axios = axios;
 // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
 //       so you won't necessarily have to import axios in each vue file
@@ -42,6 +61,10 @@ export default ({ app, store, router }) => {
       }
     }
     config.headers["Accept-Language"] = i18n.locale === "en-us" ? "en" : "de";
+    const sessionId = getSessionId();
+    if (sessionId) {
+      config.headers["X-Session-Id"] = sessionId;
+    }
     return config;
   });
 
