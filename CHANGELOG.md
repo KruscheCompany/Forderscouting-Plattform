@@ -1,5 +1,15 @@
 # Änderungsprotokoll / Changelog
 
+## 6.28.5 — 2026-10-02
+
+### de
+- Sie werden nicht mehr unerwartet abgemeldet, wenn Sie eine Aktion ausführen, für die Ihnen die Berechtigung fehlt (z. B. Archivieren, Bearbeiten oder Priorisieren). Stattdessen erscheint eine Meldung und Sie bleiben angemeldet.
+- Eine Abmeldung erfolgt nur noch, wenn Ihre Sitzung tatsächlich abgelaufen ist.
+
+### en
+- You are no longer logged out unexpectedly when you try an action you don't have permission for (e.g. archiving, editing or prioritizing). A message is shown instead and you stay logged in.
+- You are only logged out when your session has actually expired.
+
 ## 6.28.4 — 2026-10-02
 
 ### de
