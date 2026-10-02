@@ -1,5 +1,15 @@
 # Änderungsprotokoll / Changelog
 
+## 6.28.4 — 2026-10-02
+
+### de
+- Die Benutzerliste lädt wieder zuverlässig. Zuvor konnte ein Benutzer, dessen Einladung nicht vollständig abgeschlossen wurde, die gesamte Liste blockieren.
+- Wenn das Versenden einer Einladung fehlschlägt, wird der Benutzer nicht mehr halb angelegt: Die Einladung kann danach direkt erneut verschickt werden.
+
+### en
+- The user list loads reliably again. Previously, a user whose invitation was not fully completed could block the entire list.
+- If sending an invitation fails, the user is no longer left half-created: the invitation can be sent again right away.
+
 ## 6.28.3 — 2026-10-02
 
 ### de
