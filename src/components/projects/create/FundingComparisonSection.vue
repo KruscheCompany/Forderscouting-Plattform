@@ -129,6 +129,8 @@
 </template>
 
 <script>
+import { api } from 'boot/axios';
+
 export default {
   name: 'FundingComparisonSection',
   props: {
@@ -143,13 +145,13 @@ export default {
   },
   data() {
     return {
-      fundingDetails: {}, // Cache for funding details
+      fundingDetails: {}, // external_id -> funding, or null if it could not be loaded
     };
   },
+  created() {
+    this.pendingFetches = new Set();
+  },
   computed: {
-    funding() {
-      return this.$store.state.funding.funding;
-    },
     isVisible() {
       // Check if there's a regular funding card selected (not fehlanzeige)
       return this.selectedCards && this.selectedCards.length > 0 &&
@@ -215,69 +217,32 @@ export default {
       // Format date as dd.mm.yyyy
       return new Date(date).toLocaleDateString('de-DE');
     },
-    async fetchFundingDetails(index) {
-      if (!this.fundingMatches[index]) {
-        return null;
+    async fetchFundingDetails(externalId) {
+      if (!externalId || externalId in this.fundingDetails || this.pendingFetches.has(externalId)) {
+        return;
       }
-
-      // Check if we've already fetched this funding's details
-      if (this.fundingDetails[index]) {
-        return this.fundingDetails[index];
-      }
-
+      this.pendingFetches.add(externalId);
+      let details = null;
       try {
-        // Reset store and fetch funding details
-        await this.$store.dispatch('funding/resetSelectedFunding');
-        const fundingId = this.fundingMatches[index].external_id;
-
-        // Call the store action to get specific funding data
-        await this.$store.dispatch('funding/getSpecificFunding', { id: fundingId });
-
-        // Store the funding details in our cache
-        this.fundingDetails[index] = this.$store.state.funding.funding;
-
-        return this.fundingDetails[index];
+        const res = await api.get(`/api/fundings/${externalId}`);
+        details = res.data;
       } catch (error) {
-        console.error(`Error fetching details for funding at index ${index}:`, error);
-        return null;
+        // deleted/archived fundings can still be matched by the AI; cache the miss so it is requested once
+      } finally {
+        this.pendingFetches.delete(externalId);
       }
+      this.fundingDetails = { ...this.fundingDetails, [externalId]: details };
     },
     getFundingDetails(index) {
-      // Return cached funding if available
-      if (this.fundingDetails[index]) {
-        return this.fundingDetails[index];
-      }
-
-      // Add a flag to prevent repeated API calls for the same index
-      if (!this.fundingDetails[`${index}_loading`]) {
-        this.fundingDetails[`${index}_loading`] = true;
-        this.fetchFundingDetails(index).finally(() => {
-          this.fundingDetails[`${index}_loading`] = false;
-        });
-      }
-
-      // Return current store value in meantime
-      return this.funding;
+      const externalId = this.fundingMatches[index]?.external_id;
+      return externalId ? this.fundingDetails[externalId] : null;
     }
   },
   watch: {
     selectedCardNumbers: {
       immediate: true,
-      async handler(newSelectedCards) {
-        // Prefetch details for all selected cards sequentially to avoid overloading
-        if (newSelectedCards && newSelectedCards.length > 0) {
-          for (const index of newSelectedCards) {
-            // Skip if already in cache or currently loading
-            if (!this.fundingDetails[index] && !this.fundingDetails[`${index}_loading`]) {
-              this.fundingDetails[`${index}_loading`] = true;
-              try {
-                await this.fetchFundingDetails(index);
-              } finally {
-                this.fundingDetails[`${index}_loading`] = false;
-              }
-            }
-          }
-        }
+      handler(newSelectedCards) {
+        newSelectedCards.forEach(index => this.fetchFundingDetails(this.fundingMatches[index]?.external_id));
       }
     }
   }

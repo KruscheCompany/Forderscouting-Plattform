@@ -78,9 +78,7 @@ export default {
     },
     visibilityText() {
       const visibility = this.project.visibility;
-      if (visibility === "only for me") {
-        return this.$t("visibility.onlyMe");
-      } else if (visibility === "all users") {
+      if (visibility === "all users") {
         return this.$t("visibility.allUsers");
       } else if (visibility === "listed only") {
         return this.$t("visibility.listedOnly");

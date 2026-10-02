@@ -206,9 +206,7 @@ export default {
       return "";
     },
     visibilityText() {
-      if (this.project.visibility === "only for me") {
-        return this.$t("visibility.onlyMe");
-      } else if (this.project.visibility === "all users") {
+      if (this.project.visibility === "all users") {
         return this.$t("visibility.allUsers");
       } else if (this.project.visibility === "listed only") {
         return this.$t("visibility.listedOnly");
