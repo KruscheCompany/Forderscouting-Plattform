@@ -600,6 +600,12 @@
     "listedOnly": "nur aufgelistet",
     "docListedOnly": "Dieses Dokument ist nur für gelistete Benutzer*innen sichtbar"
   },
+  "systemNotices": {
+    "projectVisibilityListed": {
+      "title": "Sichtbarkeit „nur intern sichtbar“ entfällt für Projekte",
+      "message": "Projekte können nicht mehr „nur intern sichtbar“ sein. Bisher private Projekte sind jetzt „nur gelistet“: Sie erscheinen in den Listen aller Nutzer*innen, ihr Inhalt ist aber weiterhin nur nach einer Zugriffsanfrage einsehbar."
+    }
+  },
   "draftButton": {
     "editAsDraft": "Entwurf bearbeiten",
     "saveAsDraft": "Entwurf speichern"

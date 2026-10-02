@@ -46,7 +46,9 @@
                               : $t("Your suggested tag was rejected")
                             : noti.typeOfNoti == "fundingSuggestions"
                               ? $t("New funding suggestions for | ")
-                              : ""
+                              : noti.typeOfNoti == "systemNotice"
+                                ? $t(`systemNotices.${noti.key}.title`)
+                                : ""
               }}
 
               <span class="text-blue">{{
@@ -77,7 +79,9 @@
                           ? noti.title
                           : noti.typeOfNoti == "fundingSuggestions"
                             ? `${(noti.suggestions || []).length} ${$t('notificationsUser.newSuggestions')}`
-                            : ""
+                            : noti.typeOfNoti == "systemNotice"
+                              ? $t(`systemNotices.${noti.key}.message`)
+                              : ""
               }}
             </p>
           </div>
@@ -248,6 +252,10 @@ export default {
           this.data[item].forEach((group) => {
             data.push({ ...group, typeOfNoti: "fundingSuggestions" });
           });
+        } else if (item === "systemNotices") {
+          this.data[item].forEach((notice) => {
+            data.push({ ...notice, typeOfNoti: "systemNotice" });
+          });
         }
       }
       data.sort((a, b) => {
@@ -277,6 +285,7 @@ export default {
       else if (type == "requests") return "person_add";
       else if (type == "tagPendingApproval" || type == "tagReviewDecision") return "sell";
       else if (type == "fundingSuggestions") return "lightbulb";
+      else if (type == "systemNotice") return "campaign";
     },
     async view(noti, isFunding = false) {
       if (noti.typeOfNoti == "fundingComments" && isFunding) {
@@ -427,6 +436,15 @@ export default {
             console.error("Error marking funding suggestions as read:", error);
             this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.$t("notificationsUser.markAsReadError") });
           }
+          this.getData();
+          break;
+        case "systemNotice":
+          await this.$api.post("/api/read-notifications", {
+            data: {
+              user: this.loggedInUser.id,
+              system_notice: noti.id,
+            },
+          });
           this.getData();
           break;
         default:

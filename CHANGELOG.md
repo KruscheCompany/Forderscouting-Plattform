@@ -1,5 +1,15 @@
 # Änderungsprotokoll / Changelog
 
+## 6.29.0 — 2026-10-02
+
+### de
+- Die Sichtbarkeit „nur intern sichtbar“ gibt es für Projekte nicht mehr. Bisher private Projekte sind jetzt „nur gelistet“: Sie erscheinen in den Listen aller Nutzer*innen, ihr Inhalt ist aber weiterhin nur nach einer Zugriffsanfrage einsehbar.
+- Über diese Änderung informiert ein neuer Hinweis unter „Benachrichtigungen“, den Sie als gelesen markieren können.
+
+### en
+- The visibility "Only for me" no longer exists for projects. Projects that were private are now "Listed only": they appear in every user's lists, but their content can only be viewed after an access request.
+- A new notice under "Notifications" explains this change; you can mark it as read.
+
 ## 6.28.7 — 2026-10-02
 
 ### de

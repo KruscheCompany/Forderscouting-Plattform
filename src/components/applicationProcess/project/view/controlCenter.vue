@@ -33,13 +33,11 @@
                 <p class="font-14 no-margin text-blue-grey-10">{{ $t("projectContent.visibility") }}</p>
                 <p class="font-16 q-mt-xs q-mb-none text-weight-600 ">
                   {{
-                    project.visibility === "only for me"
-                      ? $t("visibility.onlyMe")
-                      : project.visibility === "all users"
-                        ? $t("visibility.allUsers")
-                        : project.visibility === "listed only"
-                          ? $t("visibility.listedOnly")
-                          : ""
+                    project.visibility === "all users"
+                      ? $t("visibility.allUsers")
+                      : project.visibility === "listed only"
+                        ? $t("visibility.listedOnly")
+                        : ""
                   }}
                 </p>
               </div>

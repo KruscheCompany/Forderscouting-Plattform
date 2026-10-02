@@ -600,6 +600,12 @@
     "listedOnly": "Listed only",
     "docListedOnly": "This Document is visible only for listed users"
   },
+  "systemNotices": {
+    "projectVisibilityListed": {
+      "title": "Visibility \"Only for me\" has been removed for projects",
+      "message": "Projects can no longer be set to \"Only for me\". Projects that were private are now \"Listed only\": they appear in every user's lists, but their content can only be viewed after an access request."
+    }
+  },
   "draftButton": {
     "editAsDraft": "Edit as Draft",
     "saveAsDraft": "Save as Draft"
