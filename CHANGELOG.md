@@ -1,5 +1,13 @@
 # Änderungsprotokoll / Changelog
 
+## 6.30.1 — 2026-10-02
+
+### de
+- Behoben: Auf dem Projekt-Dashboard stehen die Spalten der drei Tabellen (Priorisierte Projekte, Projektliste, Projektarchiv) jetzt exakt untereinander, auch wenn Titel oder Gemeinden unterschiedlich lang sind.
+
+### en
+- Fixed: on the project dashboard, the columns of the three tables (prioritised projects, project list, project archive) now line up exactly, even when titles or municipalities differ in length.
+
 ## 6.30.0 — 2026-10-02
 
 ### de

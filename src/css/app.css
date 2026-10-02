@@ -213,6 +213,10 @@
   box-shadow: none;
 }
 
+.application-table table {
+  table-layout: fixed;
+}
+
 .q-field__control.bg-transparent {
   box-shadow: none !important;
 }

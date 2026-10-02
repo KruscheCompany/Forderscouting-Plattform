@@ -32,7 +32,7 @@
         <p class="text-blue-grey-7 font-14 q-mt-sm q-mb-none">{{ $t("ProjectDashboard.noPrioritizedProjects") }}</p>
       </div>
 
-      <q-table v-else flat class="pagination-no-shadow" :class="filtersExpanded ? 'yellowBg' : ''"
+      <q-table v-else flat class="pagination-no-shadow application-table" :class="filtersExpanded ? 'yellowBg' : ''"
         :data="filteredList" :columns="columns"
         row-key="id" :table-style="{ tableLayout: 'fixed' }" :pagination.sync="pagination"
         :rows-per-page-label="$t('Records per page')"
