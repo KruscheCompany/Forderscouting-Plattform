@@ -1,12 +1,13 @@
-// Fixed pixel widths shared by the project-dashboard tables
-// (Table.vue, PriorityTable.vue, ArchivedTable.vue) so their columns line up
-// vertically even though each table renders its own independently-sized
-// <table> with different row content.
+// Column widths shared by the project-dashboard tables
+// (Table.vue, PriorityTable.vue, ArchivedTable.vue). They are percentages of
+// the table width (tables use table-layout: fixed and all sit in the same
+// container), so columns line up vertically across tables and the table never
+// overflows horizontally. The title column takes the remaining width.
 export const APPLICATION_TABLE_COLUMN_WIDTHS = {
-  action: "104px",
-  updatedAt: "132px",
-  location: "190px",
-  applicationProcess: "210px",
-  status: "210px",
-  expand: "64px",
+  action: "9%",
+  updatedAt: "10%",
+  location: "14%",
+  applicationProcess: "15%",
+  status: "15%",
+  expand: "5%",
 };

@@ -59,15 +59,11 @@
               </q-badge>
             </template>
             <template v-else>
-              <q-tooltip v-if="col.value && col.value.length > (col.name === 'location' ? 15 : 48)" anchor="bottom left" self="top left"
+              <q-tooltip v-if="col.value && ['title', 'location'].includes(col.name)" anchor="bottom left" self="top left"
                 content-style="font-size: 14px">
                 {{ col.value }}
               </q-tooltip>
-              {{
-                col.value && col.value.length > (col.name === 'location' ? 15 : 125)
-                  ? col.value.substring(0, col.name === 'location' ? 15 : 125) + "..."
-                  : col.value
-              }}
+              {{ col.value }}
             </template>
           </q-td>
           <q-td :style="{ width: expandColumnWidth }" class="text-center">

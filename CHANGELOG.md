@@ -1,5 +1,17 @@
 # Änderungsprotokoll / Changelog
 
+## 6.28.3 — 2026-10-02
+
+### de
+- Die Tabellen im Projekt-Dashboard müssen nicht mehr seitlich gescrollt werden: Die Spalten passen sich der Bildschirmbreite an.
+- Lange Titel und Gemeindenamen werden mit „…“ gekürzt; der vollständige Text erscheint beim Darüberfahren mit der Maus.
+- Die Spalten stehen in allen Tabellen (Priorität, Warteliste, Archiv) jetzt genau untereinander, auch für Administratoren.
+
+### en
+- The project dashboard tables no longer need horizontal scrolling: columns now adapt to the screen width.
+- Long titles and municipality names are shortened with "…"; the full text appears when hovering over it.
+- Columns now line up exactly across all tables (priority, waitlist, archive), including for administrators.
+
 ## 6.28.2 — 2026-09-28
 
 ### de
