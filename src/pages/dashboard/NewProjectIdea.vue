@@ -111,13 +111,11 @@
                 <template v-slot:selected>
                   <template v-if="form.visibility">
                     {{
-                      form.visibility === "only for me"
-                        ? $t("visibility.onlyMe")
-                        : form.visibility === "all users"
-                          ? $t("visibility.allUsers")
-                          : form.visibility === "listed only"
-                            ? $t("visibility.listedOnly")
-                            : ""
+                      form.visibility === "all users"
+                        ? $t("visibility.allUsers")
+                        : form.visibility === "listed only"
+                          ? $t("visibility.listedOnly")
+                          : ""
                     }}
                   </template>
                   <template v-else>
@@ -129,13 +127,11 @@
               </q-select>
               <p class="font-16 q-mb-none q-mt-md text-grey">
                 {{
-                  form.visibility === "only for me"
-                    ? $t("visibility.docOnlyMe")
-                    : form.visibility === "all users"
-                      ? $t("visibility.docAllUsers")
-                      : form.visibility === "listed only"
-                        ? $t("visibility.docListedOnly")
-                        : ""
+                  form.visibility === "all users"
+                    ? $t("visibility.docAllUsers")
+                    : form.visibility === "listed only"
+                      ? $t("visibility.docListedOnly")
+                      : ""
                 }}
               </p>
             </div>
@@ -735,10 +731,6 @@ export default {
     },
     visibilityOptions() {
       return [
-        {
-          value: "only for me",
-          label: this.$t("visibility.onlyMe"),
-        },
         {
           value: "all users",
           label: this.$t("visibility.allUsers"),

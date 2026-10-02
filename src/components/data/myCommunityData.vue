@@ -407,10 +407,7 @@ export default {
     },
     data() {
       return this.tab == "projectIdeas"
-        ? !!this.$store.state.project.projects &&
-        this.$store.state.project.projects.filter((item) => {
-          return item.visibility != "only for me"
-        })
+        ? this.$store.state.project.projects || false
         : !!this.$store.state.funding.fundings &&
         this.$store.state.funding.fundings.filter((item) => {
           return item.visibility != "only for me"
