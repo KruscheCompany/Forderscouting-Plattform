@@ -10,7 +10,7 @@
       </q-item-section>
     </template>
 
-    <q-table flat class="pagination-no-shadow" :class="filtersExpanded ? 'yellowBg' : ''"
+    <q-table flat class="pagination-no-shadow application-table" :class="filtersExpanded ? 'yellowBg' : ''"
       :data="archivedProjects" :columns="columns"
       row-key="id" :loading="loading" :table-style="{ tableLayout: 'fixed' }" :pagination="{
         sortBy: 'updatedAt',
