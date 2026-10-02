@@ -33,7 +33,7 @@
                 <q-btn flat dense round size="lg" icon="mdi-arrow-top-right-thin-circle-outline"
                   :style="{ color: !selectedFundingIndices.includes(index) ? getFundingCardStyle(funding.score).color : 'white' }"
                   @click.stop="openFundingLink(funding.external_id)" class="funding-link-btn"
-                  :disabled="!funding.external_id" />
+                  :disabled="!fundingExists(funding.external_id)" />
               </div>
 
               <!-- Spacer to push title to bottom -->
@@ -115,6 +115,9 @@ export default {
         .map((funding, index) => funding.selected ? index : -1)
         .filter(index => index !== -1);
     },
+    scopedFundings() {
+      return this.$store.state.funding.fundings || [];
+    },
     hasFehlanzeige() {
       return this.project &&
         this.project.fundingMatches &&
@@ -127,7 +130,14 @@ export default {
       this.expandedFundingCheck = newTab === "fundingCheck";
     }
   },
+  mounted() {
+    this.$store.dispatch('funding/getFundings');
+  },
   methods: {
+    fundingExists(externalId) {
+      if (!externalId) return false;
+      return this.scopedFundings.some(f => f.id === parseInt(externalId));
+    },
     getFundingCardStyle(score) {
       const pct = score * 100;
       if (pct >= 90) return { background: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)', color: 'white' };

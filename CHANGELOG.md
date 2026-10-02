@@ -1,5 +1,23 @@
 # Änderungsprotokoll / Changelog
 
+## 6.28.7 — 2026-10-02
+
+### de
+- Behoben: In der Fördermittelprüfung konnte der Vergleich ausgewählter Förderprogramme (nur für Admins sichtbar) endlos neu laden, wenn ein ausgewähltes Programm nicht mehr existiert. Der Vergleich lädt jetzt stabil.
+- In der Projektansicht ist der Link zu einem Förderprogramm deaktiviert, wenn das Programm nicht mehr existiert oder nicht zugänglich ist.
+
+### en
+- Fixed: in the funding check, the comparison of selected funding programmes (visible to admins) could keep reloading endlessly when a selected programme no longer exists. The comparison now loads reliably.
+- In the project view, the link to a funding programme is now disabled when the programme no longer exists or isn't accessible.
+
+## 6.28.6 — 2026-10-02
+
+### de
+- Förderprogramme ohne zugewiesene Region (Bundesland, Landkreis oder Gemeinde) werden Nutzerinnen und Nutzern nicht mehr angezeigt. Dadurch erscheinen in der Fördermittelprüfung keine Programme mehr, die nicht zur eigenen Region gehören.
+
+### en
+- Funding programmes without an assigned region (federal state, district or municipality) are no longer shown to users. This stops programmes that don't belong to your region from appearing in the funding check.
+
 ## 6.28.5 — 2026-10-02
 
 ### de
