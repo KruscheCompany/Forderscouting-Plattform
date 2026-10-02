@@ -1,5 +1,15 @@
 # Änderungsprotokoll / Changelog
 
+## 6.30.0 — 2026-10-02
+
+### de
+- Admins können beim Erstellen und Bearbeiten einer Projektidee die Gemeinde festlegen, der das Projekt zugeordnet ist. Das Feld ist durchsuchbar: Einfach tippen, um die Liste zu filtern. Beim Erstellen ist die eigene Gemeinde vorausgewählt, beim Bearbeiten die aktuelle Gemeinde des Projekts.
+- Wird die Gemeinde geändert, muss der Ort neu ausgewählt werden.
+
+### en
+- Admins can now choose the municipality a project is assigned to when creating or editing a project idea. The field is searchable: just type to filter the list. When creating, your own municipality is preselected; when editing, the project's current municipality is shown.
+- If the municipality is changed, the location needs to be selected again.
+
 ## 6.29.0 — 2026-10-02
 
 ### de
