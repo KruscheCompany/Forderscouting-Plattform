@@ -34,15 +34,29 @@ Vue.prototype.$api = api;
 //       so you can easily perform requests against your app's API
 
 export default ({ app, store, router }) => {
-  // Helper function to perform logout
-  const performLogout = (reason) => {
+  const performLogout = reason => {
     console.warn(reason);
+    store.dispatch("userCenter/logout");
+  };
 
-    // Clear session storage
-    sessionStorage.clear();
-
-    // Redirect to home page
-    router.push({ path: "/" });
+  // The BE also answers 401 for permission/business denials, so a 401 alone
+  // doesn't prove the JWT is dead. Ask /users/me (bypassing the interceptors)
+  // and only treat a 401 there as an expired session. Concurrent 401s share
+  // one check.
+  let tokenCheck = null;
+  const isTokenRejected = token => {
+    if (!tokenCheck) {
+      tokenCheck = axios
+        .get(`${api.defaults.baseURL}/api/users/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(() => false)
+        .catch(err => !!err.response && err.response.status === 401)
+        .finally(() => {
+          tokenCheck = null;
+        });
+    }
+    return tokenCheck;
   };
 
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -74,39 +88,13 @@ export default ({ app, store, router }) => {
       // Return successful responses as-is
       return response;
     },
-    error => {
-      // Handle response errors
-      if (error.response) {
-        const { status, data } = error.response;
+    async error => {
+      const token = store.state.userCenter.user && store.state.userCenter.user.jwt;
+      const isLogin = error.config && error.config.url === "/api/auth/local";
 
-        // Only handle auth errors if user is currently signed in to avoid infinite loops
-        if (store.getters["userCenter/isSignedIn"]) {
-
-          // Handle 401 Unauthorized responses
-          if (status === 401) {
-            // Check if it's a Strapi v4 error format
-            if (data && data.error &&
-                (data.error.name === "UnauthorizedError" ||
-                 data.error.status === 401 ||
-                 data.error.message === "Missing or invalid credentials")) {
-
-              performLogout("Token expired or invalid, logging out user");
-            }
-          }
-
-          // Handle 403 Forbidden responses (token might be valid but insufficient permissions)
-          else if (status === 403) {
-            if (data && data.error) {
-              // For 403, only logout if it's clearly a token-related issue
-              if (data.error.message &&
-                  (data.error.message.toLowerCase().includes("token") ||
-                   data.error.message.toLowerCase().includes("authentication") ||
-                   data.error.message.toLowerCase().includes("jwt"))) {
-
-                performLogout("Authentication token issue, logging out user");
-              }
-            }
-          }
+      if (error.response && error.response.status === 401 && token && !isLogin) {
+        if (await isTokenRejected(token)) {
+          performLogout("Token expired or invalid, logging out user");
         }
       }
 

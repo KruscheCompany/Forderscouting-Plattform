@@ -28,12 +28,19 @@
                   : !!userDetails && userDetails.fullName
                   " disable />
             </div>
-            <div class="col-12 col-md-6" v-if="needsMunicipalityPicker">
-              <q-select outlined dense class="no-shadow input-radius-6" v-model="selectedLandkreisMunicipality"
-                :options="landkreisMunicipalityOptions" option-value="id" option-label="title" emit-value map-options
+            <div class="col-12 col-md-6" v-if="isAdmin || needsMunicipalityPicker">
+              <q-select outlined dense use-input hide-selected fill-input input-debounce="0"
+                class="no-shadow input-radius-6" v-model="selectedMunicipality"
+                :options="filteredMunicipalityOptions" option-value="id" option-label="title" emit-value map-options
                 :rules="[(val) => !!val || $t('Required')]"
                 :placeholder="$t('projectComponents.generalInfo.municipalityPlaceholder')"
-                @input="$emit('update:selected-municipality', $event)" />
+                @filter="filterMunicipalities" @input="onMunicipalityInput">
+                <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey">{{ $t("No results") }}</q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
             </div>
             <div class="col-12 col-md-6" v-else>
               <q-input outlined dense disable class="no-shadow input-radius-6 disabledClass"
@@ -109,13 +116,11 @@
             <template v-slot:selected>
               <template v-if="localForm.visibility">
                 {{
-                  localForm.visibility === "only for me"
-                    ? $t("visibility.onlyMe")
-                    : localForm.visibility === "all users"
-                      ? $t("visibility.allUsers")
-                      : localForm.visibility === "listed only"
-                        ? $t("visibility.listedOnly")
-                        : ""
+                  localForm.visibility === "all users"
+                    ? $t("visibility.allUsers")
+                    : localForm.visibility === "listed only"
+                      ? $t("visibility.listedOnly")
+                      : ""
                 }}
               </template>
               <template v-else>
@@ -127,13 +132,11 @@
           </q-select>
           <p class="font-16 q-mt-none q-mb-md text-grey">
             {{
-              localForm.visibility === "only for me"
-                ? $t("visibility.docOnlyMe")
-                : localForm.visibility === "all users"
-                  ? $t("visibility.docAllUsers")
-                  : localForm.visibility === "listed only"
-                    ? $t("visibility.docListedOnly")
-                    : ""
+              localForm.visibility === "all users"
+                ? $t("visibility.docAllUsers")
+                : localForm.visibility === "listed only"
+                  ? $t("visibility.docListedOnly")
+                  : ""
             }}
           </p>
         </div>
@@ -185,7 +188,8 @@ export default {
       },
       isLoading: false,
       dataLoaded: true,
-      selectedLandkreisMunicipality: null,
+      selectedMunicipality: null,
+      municipalityFilter: "",
     };
   },
   computed: {
@@ -195,14 +199,26 @@ export default {
     needsMunicipalityPicker() {
       return !this.project && !this.userDetails?.municipality && !!this.userDetails?.landkreis;
     },
-    landkreisMunicipalityOptions() {
-      return this.userDetails?.landkreis?.municipalities || [];
+    isAdmin() {
+      return this.$store.getters["userCenter/isAdmin"];
+    },
+    municipalityOptions() {
+      return this.isAdmin
+        ? this.$store.state.municipality.municipalitiesSimplified
+        : this.userDetails?.landkreis?.municipalities || [];
+    },
+    filteredMunicipalityOptions() {
+      const needle = this.municipalityFilter.toLowerCase();
+      return needle
+        ? this.municipalityOptions.filter((m) => m.title.toLowerCase().includes(needle))
+        : this.municipalityOptions;
     },
     ownMunicipalityId() {
+      if (this.isAdmin) return this.selectedMunicipality;
       return (
         (this.project
           ? this.project.municipality?.id
-          : this.userDetails?.municipality?.id || this.selectedLandkreisMunicipality) || null
+          : this.userDetails?.municipality?.id || this.selectedMunicipality) || null
       );
     },
 
@@ -221,16 +237,12 @@ export default {
     },
     visibilityOptions() {
       return [
-        { label: this.$t("visibility.onlyMe"), value: "only for me" },
         { label: this.$t("visibility.allUsers"), value: "all users" },
         { label: this.$t("visibility.listedOnly"), value: "listed only" },
       ];
     },
   },
   watch: {
-    selectedLandkreisMunicipality() {
-      this.updateLocation(null);
-    },
     currentTab(newTab) {
       this.expanded = newTab === "project";
     },
@@ -239,6 +251,19 @@ export default {
     getCurrentFormData() {
       // Method to be called by parent to get current form data
       return this.localForm;
+    },
+    setSelectedMunicipality(id) {
+      this.selectedMunicipality = id;
+      this.$emit("update:selected-municipality", id);
+    },
+    onMunicipalityInput(id) {
+      this.setSelectedMunicipality(id);
+      this.updateLocation(null);
+    },
+    filterMunicipalities(val, update) {
+      update(() => {
+        this.municipalityFilter = val;
+      });
     },
     updateLocation(location) {
       this.localForm.location = location;
@@ -278,6 +303,16 @@ export default {
         municipality: formData.municipality || "",
         editors: formData.editors || [],
       };
+      if (this.isAdmin) this.setSelectedMunicipality(formData.municipality?.id || null);
+    }
+  },
+  mounted() {
+    if (!this.isAdmin) return;
+    if (!this.municipalityOptions.length) {
+      this.$store.dispatch("municipality/getSimplifiedMunicipalities");
+    }
+    if (!this.project && this.userDetails?.municipality?.id) {
+      this.setSelectedMunicipality(this.userDetails.municipality.id);
     }
   },
 }

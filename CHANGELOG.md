@@ -1,5 +1,75 @@
 # Änderungsprotokoll / Changelog
 
+## 6.30.0 — 2026-10-02
+
+### de
+- Admins können beim Erstellen und Bearbeiten einer Projektidee die Gemeinde festlegen, der das Projekt zugeordnet ist. Das Feld ist durchsuchbar: Einfach tippen, um die Liste zu filtern. Beim Erstellen ist die eigene Gemeinde vorausgewählt, beim Bearbeiten die aktuelle Gemeinde des Projekts.
+- Wird die Gemeinde geändert, muss der Ort neu ausgewählt werden.
+
+### en
+- Admins can now choose the municipality a project is assigned to when creating or editing a project idea. The field is searchable: just type to filter the list. When creating, your own municipality is preselected; when editing, the project's current municipality is shown.
+- If the municipality is changed, the location needs to be selected again.
+
+## 6.29.0 — 2026-10-02
+
+### de
+- Die Sichtbarkeit „nur intern sichtbar“ gibt es für Projekte nicht mehr. Bisher private Projekte sind jetzt „nur gelistet“: Sie erscheinen in den Listen aller Nutzer*innen, ihr Inhalt ist aber weiterhin nur nach einer Zugriffsanfrage einsehbar.
+- Über diese Änderung informiert ein neuer Hinweis unter „Benachrichtigungen“, den Sie als gelesen markieren können.
+
+### en
+- The visibility "Only for me" no longer exists for projects. Projects that were private are now "Listed only": they appear in every user's lists, but their content can only be viewed after an access request.
+- A new notice under "Notifications" explains this change; you can mark it as read.
+
+## 6.28.7 — 2026-10-02
+
+### de
+- Behoben: In der Fördermittelprüfung konnte der Vergleich ausgewählter Förderprogramme (nur für Admins sichtbar) endlos neu laden, wenn ein ausgewähltes Programm nicht mehr existiert. Der Vergleich lädt jetzt stabil.
+- In der Projektansicht ist der Link zu einem Förderprogramm deaktiviert, wenn das Programm nicht mehr existiert oder nicht zugänglich ist.
+
+### en
+- Fixed: in the funding check, the comparison of selected funding programmes (visible to admins) could keep reloading endlessly when a selected programme no longer exists. The comparison now loads reliably.
+- In the project view, the link to a funding programme is now disabled when the programme no longer exists or isn't accessible.
+
+## 6.28.6 — 2026-10-02
+
+### de
+- Förderprogramme ohne zugewiesene Region (Bundesland, Landkreis oder Gemeinde) werden Nutzerinnen und Nutzern nicht mehr angezeigt. Dadurch erscheinen in der Fördermittelprüfung keine Programme mehr, die nicht zur eigenen Region gehören.
+
+### en
+- Funding programmes without an assigned region (federal state, district or municipality) are no longer shown to users. This stops programmes that don't belong to your region from appearing in the funding check.
+
+## 6.28.5 — 2026-10-02
+
+### de
+- Sie werden nicht mehr unerwartet abgemeldet, wenn Sie eine Aktion ausführen, für die Ihnen die Berechtigung fehlt (z. B. Archivieren, Bearbeiten oder Priorisieren). Stattdessen erscheint eine Meldung und Sie bleiben angemeldet.
+- Eine Abmeldung erfolgt nur noch, wenn Ihre Sitzung tatsächlich abgelaufen ist.
+
+### en
+- You are no longer logged out unexpectedly when you try an action you don't have permission for (e.g. archiving, editing or prioritizing). A message is shown instead and you stay logged in.
+- You are only logged out when your session has actually expired.
+
+## 6.28.4 — 2026-10-02
+
+### de
+- Die Benutzerliste lädt wieder zuverlässig. Zuvor konnte ein Benutzer, dessen Einladung nicht vollständig abgeschlossen wurde, die gesamte Liste blockieren.
+- Wenn das Versenden einer Einladung fehlschlägt, wird der Benutzer nicht mehr halb angelegt: Die Einladung kann danach direkt erneut verschickt werden.
+
+### en
+- The user list loads reliably again. Previously, a user whose invitation was not fully completed could block the entire list.
+- If sending an invitation fails, the user is no longer left half-created: the invitation can be sent again right away.
+
+## 6.28.3 — 2026-10-02
+
+### de
+- Die Tabellen im Projekt-Dashboard müssen nicht mehr seitlich gescrollt werden: Die Spalten passen sich der Bildschirmbreite an.
+- Lange Titel und Gemeindenamen werden mit „…“ gekürzt; der vollständige Text erscheint beim Darüberfahren mit der Maus.
+- Die Spalten stehen in allen Tabellen (Priorität, Warteliste, Archiv) jetzt genau untereinander, auch für Administratoren.
+
+### en
+- The project dashboard tables no longer need horizontal scrolling: columns now adapt to the screen width.
+- Long titles and municipality names are shortened with "…"; the full text appears when hovering over it.
+- Columns now line up exactly across all tables (priority, waitlist, archive), including for administrators.
+
 ## 6.28.2 — 2026-09-28
 
 ### de

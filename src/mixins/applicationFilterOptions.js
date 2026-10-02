@@ -26,11 +26,11 @@ export default {
     },
     stepBadgeStyle() {
       const maxLen = Math.max(...this.applicationStepOptions.map(o => (o.title || '').length));
-      return { minWidth: (maxLen * 7.5 + 40) + 'px', justifyContent: 'center' };
+      return { minWidth: `min(${maxLen * 7.5 + 40}px, 100%)`, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', justifyContent: 'center' };
     },
     statusBadgeStyle() {
       const maxLen = Math.max(...this.statusOptions.map(o => (o.title || '').length));
-      return { minWidth: (maxLen * 7.5 + 40) + 'px', justifyContent: 'center' };
+      return { minWidth: `min(${maxLen * 7.5 + 40}px, 100%)`, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', justifyContent: 'center' };
     },
   },
 };
