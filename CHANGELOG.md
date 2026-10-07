@@ -1,5 +1,23 @@
 # Änderungsprotokoll / Changelog
 
+## 6.30.3 — 2026-10-07
+
+### de
+- Behoben: Im Förderscouting beim Anlegen eines Projekts zeigt die Zusammenfassung unter den Förderrichtlinien jetzt immer die Förderrichtlinie an, die Sie angeklickt haben. Bisher konnte stattdessen eine andere Förderrichtlinie erscheinen, zum Beispiel wenn Sie Karten verschoben haben oder wenn für Ihre Gemeinde nicht alle Vorschläge angezeigt werden.
+
+### en
+- Fixed: in the funding check when creating a project, the summary below the funding guidelines now always shows the guideline you clicked. Previously a different guideline could appear instead, for example after moving cards around or when not all suggestions are shown for your municipality.
+
+## 6.30.2 — 2026-10-07
+
+### de
+- Behoben: Die Vorprüfung beim Fördermittelgeber lässt sich bei neu angelegten Projekten wieder anfragen. Bisher erschien die Meldung, es sei keine Kontakt-E-Mail hinterlegt, obwohl die ausgewählte Förderrichtlinie eine hinterlegt hat. Die Anfrage geht jetzt an die Kontaktadresse der im Förderscouting ausgewählten Förderrichtlinie; bei mehreren ausgewählten Förderrichtlinien an die erste.
+- Behoben: Auf der Prüfseite für Fördermittelgeber, Finanzen und Personal wird bei neu angelegten Projekten jetzt auch die ausgewählte Förderrichtlinie angezeigt.
+
+### en
+- Fixed: the pre-check with the funding provider can be requested again for newly created projects. Previously a message said that no contact email was set, even though the selected funding guideline has one. The request now goes to the contact address of the funding guideline selected in the funding check; if several guidelines are selected, to the first one.
+- Fixed: the review page opened by funding providers, finance and personnel now also shows the selected funding guideline for newly created projects.
+
 ## 6.30.1 — 2026-10-02
 
 ### de
