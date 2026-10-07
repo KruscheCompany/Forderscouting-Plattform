@@ -138,6 +138,11 @@ export default {
       type: Array,
       default: () => []
     },
+    // The list the cards index into; selectedCards are positions in this array
+    matches: {
+      type: Array,
+      default: () => []
+    },
     projectData: {
       type: Object,
       default: () => ({})
@@ -158,14 +163,16 @@ export default {
         this.selectedCards.some(card => typeof card === 'number');
     },
     fundingMatches() {
-      // Get the funding matches from the project data or from the store
-      return !!this.projectData.fundingMatches && this.projectData.fundingMatches.length > 0
-        ? this.projectData.fundingMatches.filter(funding => !funding.isFehlanzeige)
-        : this.$store.getters['ai/getFundingMatches'] || [];
+      return this.matches;
     },
     selectedCardNumbers() {
       // Filter to get only numeric indices (exclude 'fehlanzeige')
       return this.selectedCards.filter(card => typeof card === 'number');
+    },
+    selectedExternalIds() {
+      return this.selectedCardNumbers
+        .map(index => this.fundingMatches[index]?.external_id)
+        .filter(Boolean);
     }
   },
   methods: {
@@ -239,10 +246,10 @@ export default {
     }
   },
   watch: {
-    selectedCardNumbers: {
+    selectedExternalIds: {
       immediate: true,
-      handler(newSelectedCards) {
-        newSelectedCards.forEach(index => this.fetchFundingDetails(this.fundingMatches[index]?.external_id));
+      handler(externalIds) {
+        externalIds.forEach(externalId => this.fetchFundingDetails(externalId));
       }
     }
   }
