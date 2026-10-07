@@ -200,7 +200,7 @@
       </div>
 
       <!-- Funding Comparison Section Component -->
-      <FundingComparisonSection :selectedCards="selectedCards" :projectData="projectData" />
+      <FundingComparisonSection :selectedCards="selectedCards" :matches="orderedMatches" :projectData="projectData" />
 
       <!-- Warning Dialog for Starting Condition Changes -->
       <StartingConditionWarningDialog :modelValue="showWarningDialog" :loading="isLoading"
