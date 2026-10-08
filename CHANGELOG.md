@@ -1,5 +1,21 @@
 # Änderungsprotokoll / Changelog
 
+## 6.31.1 — 2026-10-08
+
+### de
+- Geändert: Die Datenübersicht zeigt standardmäßig zuerst die Projekte und danach die Förderungen an. Innerhalb beider Gruppen steht der zuletzt geänderte Eintrag oben.
+
+### en
+- Changed: the data overview now lists projects first and fundings after them by default. Within each group, the most recently updated entry comes first.
+
+## 6.31.0 — 2026-10-08
+
+### de
+- Neu: Auf der Prüfseite für Fördermittelgeber, Finanzen und Personal werden jetzt nur noch die im Förderscouting ausgewählten Förderrichtlinien angezeigt. Zu jeder ausgewählten Förderrichtlinie sehen Sie die Förderquote, den Eigenanteil und ob andere Förderrichtlinien kombiniert werden können. Das gilt auch für den PDF-Download.
+
+### en
+- New: the review page opened by funding providers, finance and personnel now shows only the funding guidelines selected in the funding check. For each selected guideline you see the funding rate, the own contribution and whether other funding guidelines can be combined. This also applies to the PDF download.
+
 ## 6.30.3 — 2026-10-07
 
 ### de
