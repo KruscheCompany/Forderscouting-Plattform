@@ -53,7 +53,7 @@
             </div>
             <q-card-section class="details-stack">
               <ProjectContentDetails :project="project" current-tab="project" />
-              <ProjectFundingCheck :project="project" current-tab="fundingCheck" />
+              <ReviewSelectedFundings :fundings="selectedFundings" />
               <ProjectQAndA :project="project" current-tab="qAndA" />
 
               <q-btn outline no-caps color="primary" class="q-mt-sm no-print" :label="$t('reviewPage.downloadPdf')"
@@ -82,7 +82,8 @@
       </template>
     </div>
 
-    <ReviewProjectPrint v-if="project" :project="project" :ticket="ticket" :status-text="bannerText" />
+    <ReviewProjectPrint v-if="project" :project="project" :ticket="ticket" :selected-fundings="selectedFundings"
+      :status-text="bannerText" />
   </q-page>
 </template>
 
@@ -90,13 +91,13 @@
 import { api } from "boot/axios";
 import ReviewProjectPrint from "src/components/projects/view/ReviewProjectPrint.vue";
 import ProjectContentDetails from "src/components/projects/view/ProjectContentDetails.vue";
-import ProjectFundingCheck from "src/components/projects/view/ProjectFundingCheck.vue";
+import ReviewSelectedFundings from "src/components/projects/view/ReviewSelectedFundings.vue";
 import ProjectQAndA from "src/components/projects/view/ProjectQAndA.vue";
 import VorpruefungDecisionForm from "src/components/projects/VorpruefungDecisionForm.vue";
 
 export default {
   name: "ReviewProject",
-  components: { ReviewProjectPrint, ProjectContentDetails, ProjectFundingCheck, ProjectQAndA, VorpruefungDecisionForm },
+  components: { ReviewProjectPrint, ProjectContentDetails, ReviewSelectedFundings, ProjectQAndA, VorpruefungDecisionForm },
   data() {
     return {
       loading: true,
@@ -106,6 +107,7 @@ export default {
       submitted: false,
       submitting: false,
       project: null,
+      selectedFundings: [],
       ticket: null,
       submittedDecision: null
     };
@@ -158,6 +160,7 @@ export default {
         const res = await api.get(`/api/vorpruefung-tickets/by-token/${this.$route.params.token}`);
         const data = res.data;
         this.project = data.project;
+        this.selectedFundings = data.selectedFundings || [];
         this.ticket = data.ticket;
         this.alreadyAnswered = !!data.alreadyAnswered;
         if (this.alreadyAnswered) {

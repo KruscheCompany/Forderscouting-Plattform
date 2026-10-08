@@ -4,7 +4,7 @@
       :columns="columns" row-key="name" :hide-bottom="!isInPage && data.length > 0" :hide-header="!isInPage"
       :visible-columns="isInPage ? visibleColumns : ['title']" :filter="filter" :filter-method="filterTable"
       :pagination="{
-        sortBy: 'updatedAt',
+        sortBy: 'type',
         descending: true,
         page: 1,
         rowsPerPage: isInPage ? 20 : 5,
@@ -779,6 +779,12 @@ export default {
           align: "left",
           field: (row) => this.$t(row.type),
           sortable: true,
+          sort: (a, b, rowA, rowB) => {
+            if (rowA.type !== rowB.type) {
+              return rowA.type < rowB.type ? -1 : 1;
+            }
+            return new Date(rowA.updatedAt) - new Date(rowB.updatedAt);
+          },
         },
         {
           name: "user",
