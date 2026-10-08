@@ -24,23 +24,31 @@
     </table>
 
     <h2>{{ $t('projectComponents.fundingCheck.title') }}</h2>
-    <table v-if="fundingMatches.length" class="funding-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>{{ $t('reviewPage.projectDetailsLabel') }}</th>
-          <th>Score</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(funding, index) in fundingMatches" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ funding.title }}</td>
-          <td>{{ (funding.score * 100).toFixed(2) }}%</td>
-        </tr>
-      </tbody>
-    </table>
-    <p v-else>{{ $t('projectComponents.fundingCheck.noFundingData') }}</p>
+    <section v-for="funding in selectedFundings" :key="funding.id || funding.title">
+      <h3>{{ funding.title }}</h3>
+      <table class="meta-table">
+        <tbody>
+          <tr>
+            <th>{{ $t('Funding rates') }}</th>
+            <td>
+              <template v-if="funding.rates && funding.rates.length">
+                <div v-for="rate in funding.rates" :key="rate.id">{{ rate.amount || '' }}% {{ stripHtml(rate.content || '') }}</div>
+              </template>
+              <template v-else>{{ $t('projectComponents.contentDetailsView.notSpecified') }}</template>
+            </td>
+          </tr>
+          <tr>
+            <th>{{ $t('Own contribution') }}</th>
+            <td>{{ funding.ownContribution ? formatOwnContribution(funding.ownContribution) : $t('projectComponents.contentDetailsView.notSpecified') }}</td>
+          </tr>
+          <tr>
+            <th>{{ $t('help.accumulability') }}</th>
+            <td>{{ typeof funding.accumulability === 'boolean' ? (funding.accumulability ? $t('Yes') : $t('No')) : $t('projectComponents.contentDetailsView.notSpecified') }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <p v-if="!selectedFundings.length">{{ $t('projectComponents.fundingCheck.noFundingData') }}</p>
 
     <h2>{{ $t('projectContent.projectContent') }}</h2>
 
@@ -128,6 +136,10 @@ export default {
       type: Object,
       default: null
     },
+    selectedFundings: {
+      type: Array,
+      default: () => []
+    },
     statusText: {
       type: String,
       default: ""
@@ -136,9 +148,6 @@ export default {
   computed: {
     fundingProgramTitle() {
       return this.project?.fundingGuideline?.[0]?.title || null;
-    },
-    fundingMatches() {
-      return (this.project.fundingMatches || []).filter(funding => !funding.isFehlanzeige);
     },
     startingCondition() {
       return (this.project.details && this.project.details.startingCondition) ||
@@ -193,6 +202,10 @@ export default {
     }
   },
   methods: {
+    formatOwnContribution(value) {
+      const text = String(value);
+      return text.includes("%") ? text : `${text}%`;
+    },
     formatDate(value) {
       return new Date(value).toLocaleDateString("de-DE");
     },
