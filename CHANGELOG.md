@@ -1,5 +1,13 @@
 # Änderungsprotokoll / Changelog
 
+## 6.31.2 — 2026-10-21
+
+### de
+- Behoben: Ein Projekt lässt sich jetzt auch dann speichern, wenn ein ausgewähltes Schlagwort in der Zwischenzeit von einer Administratorin oder einem Administrator abgelehnt wurde. Bisher erschien eine Fehlermeldung und das Speichern schlug fehl, bis die Seite neu geladen wurde. Das abgelehnte Schlagwort wird nun einfach nicht mitgespeichert.
+
+### en
+- Fixed: a project can now be saved even if one of its selected keywords was rejected by an admin in the meantime. Previously an error appeared and saving failed until the page was reloaded. The rejected keyword is now simply left out.
+
 ## 6.31.1 — 2026-10-08
 
 ### de
