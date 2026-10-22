@@ -64,27 +64,48 @@ describe("municipalityOptions", () => {
 });
 
 describe("pruneSelection", () => {
+  const landkreise = rootState.landkreis.landkreise;
+
   it("drops 69 and its Landkreis when Rheinland-Pfalz is deselected", () => {
     expect(
-      pruneSelection({ stateIds: [2], landkreisIds: [3, 20], municipalityIds: [69, 200], getters })
+      pruneSelection({ stateIds: [2], landkreisIds: [3, 20], municipalityIds: [69, 200], landkreise })
     ).toEqual({ landkreisIds: [20], municipalityIds: [200] });
   });
 
   it("keeps 69 while Rheinland-Pfalz stays selected", () => {
     expect(
-      pruneSelection({ stateIds: [1], landkreisIds: [3], municipalityIds: [69], getters })
+      pruneSelection({ stateIds: [1], landkreisIds: [3], municipalityIds: [69], landkreise })
     ).toEqual({ landkreisIds: [3], municipalityIds: [69] });
   });
 
   it("keeps a municipality that is still under another selected state", () => {
     expect(
-      pruneSelection({ stateIds: [2], landkreisIds: [], municipalityIds: [300], getters })
+      pruneSelection({ stateIds: [2], landkreisIds: [], municipalityIds: [300], landkreise })
     ).toEqual({ landkreisIds: [], municipalityIds: [300] });
   });
 
-  it("clears everything when no state is selected", () => {
+  it("clears everything placed in the hierarchy when no state is selected", () => {
     expect(
-      pruneSelection({ stateIds: [], landkreisIds: [3], municipalityIds: [69], getters })
+      pruneSelection({ stateIds: [], landkreisIds: [3], municipalityIds: [69], landkreise })
     ).toEqual({ landkreisIds: [], municipalityIds: [] });
+  });
+
+  it("prunes nothing while the Landkreise are not loaded", () => {
+    expect(
+      pruneSelection({ stateIds: [2], landkreisIds: [3], municipalityIds: [69], landkreise: [] })
+    ).toEqual({ landkreisIds: [3], municipalityIds: [69] });
+  });
+
+  it("keeps a municipality that has no known Landkreis", () => {
+    expect(
+      pruneSelection({ stateIds: [2], landkreisIds: [], municipalityIds: [999], landkreise })
+    ).toEqual({ landkreisIds: [], municipalityIds: [999] });
+  });
+
+  it("keeps a Landkreis without a known state", () => {
+    const withOrphan = [...landkreise, { id: 50, federalStates: [], municipalities: [777] }];
+    expect(
+      pruneSelection({ stateIds: [2], landkreisIds: [50], municipalityIds: [777], landkreise: withOrphan })
+    ).toEqual({ landkreisIds: [50], municipalityIds: [777] });
   });
 });

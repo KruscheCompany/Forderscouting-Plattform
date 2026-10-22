@@ -1,4 +1,4 @@
-import { relationId } from "src/store/hierarchyHelpers";
+import { hasRelation, relationId } from "src/store/hierarchyHelpers";
 
 // Getters return either id arrays or record arrays depending on the module.
 const idsOf = (entries) => (entries || []).map(relationId);
@@ -7,14 +7,6 @@ function municipalityIdsUnderStates(stateIds, getters) {
   const ids = new Set();
   stateIds.forEach((stateId) => {
     idsOf(getters["federalState/municipalitiesUnderState"](stateId)).forEach((id) => ids.add(id));
-  });
-  return ids;
-}
-
-function landkreisIdsUnderStates(stateIds, getters) {
-  const ids = new Set();
-  stateIds.forEach((stateId) => {
-    idsOf(getters["federalState/landkreiseUnder"](stateId)).forEach((id) => ids.add(id));
   });
   return ids;
 }
@@ -37,12 +29,29 @@ export function municipalityOptions({ stateIds, landkreisIds, getters, municipal
     .sort((a, b) => a.title.localeCompare(b.title));
 }
 
-// Selected Landkreise / municipalities that no longer lie under any selected state.
-export function pruneSelection({ stateIds, landkreisIds, municipalityIds, getters }) {
-  const validLandkreise = landkreisIdsUnderStates(stateIds, getters);
-  const validMunicipalities = municipalityIdsUnderStates(stateIds, getters);
+// An id is dropped only when the loaded hierarchy positively places it outside
+// every selected state; ids with no known parent are kept so a late-loading or
+// incomplete store never silently widens a funding's audience.
+function placedOutside(parentStateLists, selectedStates) {
+  return (
+    parentStateLists.length > 0 &&
+    parentStateLists.every((states) => states.length > 0 && !states.some((id) => selectedStates.has(id)))
+  );
+}
+
+export function pruneSelection({ stateIds, landkreisIds, municipalityIds, landkreise }) {
+  const selectedStates = new Set(stateIds);
+  const records = landkreise || [];
+  const stateIdsOf = (lk) => idsOf(lk.federalStates);
+
   return {
-    landkreisIds: landkreisIds.filter((id) => validLandkreise.has(id)),
-    municipalityIds: municipalityIds.filter((id) => validMunicipalities.has(id))
+    landkreisIds: landkreisIds.filter((id) => {
+      const lk = records.find((r) => r.id === id);
+      return !(lk && placedOutside([stateIdsOf(lk)], selectedStates));
+    }),
+    municipalityIds: municipalityIds.filter((id) => {
+      const parents = records.filter((lk) => hasRelation(lk.municipalities, id));
+      return !placedOutside(parents.map(stateIdsOf), selectedStates);
+    })
   };
 }

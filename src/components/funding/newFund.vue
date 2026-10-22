@@ -606,11 +606,14 @@ export default {
     pruneTargets() {
       // @input fires before v-model has written the new value back
       this.$nextTick(() => {
+        const { landkreise } = this.$store.state.landkreis;
+        const { municipalities } = this.$store.state.municipality;
+        if (!(landkreise || []).length || !(municipalities || []).length) return;
         const pruned = pruneSelection({
           stateIds: this.form.federalStates.map(fs => fs.id),
           landkreisIds: this.form.landkreise.map(lk => lk.id),
           municipalityIds: this.form.municipalities.map(m => m.id),
-          getters: this.$store.getters
+          landkreise
         });
         this.form.landkreise = this.form.landkreise.filter(lk => pruned.landkreisIds.includes(lk.id));
         this.form.municipalities = this.form.municipalities.filter(m => pruned.municipalityIds.includes(m.id));
