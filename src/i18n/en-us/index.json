@@ -92,6 +92,7 @@
     "administration": "Administration",
     "telephone": "Telephone",
     "location": "Location",
+    "administrationPath": "Administrative path",
     "contactUser": "Do you want your contact details to be visible to users?",
     "saveChanges": "Save Changes"
   },

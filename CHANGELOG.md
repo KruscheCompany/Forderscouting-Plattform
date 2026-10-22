@@ -1,5 +1,19 @@
 # Änderungsprotokoll / Changelog
 
+## 6.32.0 — 2026-10-22
+
+### de
+- Behoben: Landesförderungen und der Fördercheck funktionieren jetzt auch dann, wenn Ihre Verwaltung nur über ihren Landkreis mit dem Bundesland verbunden ist. Bisher konnte der Fördercheck melden, die Bundesländer seien nicht eingerichtet.
+- Geändert: Im Profil kann der Ort nur noch aus Ihrer eigenen Verwaltung (oder Ihrem Landkreis) gewählt werden. Gäste sehen ihren Ort, können ihn aber nicht ändern.
+- Geändert: In der Benutzerverwaltung wird ein*e Benutzer*in genau einer Verwaltung (oder einem Landkreis) zugeordnet. Bundesland und Landkreis werden daraus automatisch angezeigt.
+- Geändert: Verwaltungen, die zu mehreren Landkreisen gehören, zeigen jetzt alle ihre Landkreise an.
+
+### en
+- Fixed: federal-state fundings and the funding check now also work when your administration is linked to its federal state only through its district. Previously the funding check could report that the federal states were not set up.
+- Changed: in the profile, the location can now only be chosen from your own administration (or district). Guests can see their location but cannot change it.
+- Changed: in user administration, a user is assigned to exactly one administration (or district). Federal state and district are shown automatically from it.
+- Changed: administrations that belong to several districts now show all of them.
+
 ## 6.31.2 — 2026-10-21
 
 ### de
