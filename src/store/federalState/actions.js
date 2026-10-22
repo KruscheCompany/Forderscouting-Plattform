@@ -3,7 +3,7 @@ import { i18n } from "boot/i18n";
 
 export async function getFederalStates(context) {
   try {
-    const res = await api.get("/api/federal-states");
+    const res = await api.get("/api/federal-states?pagination[pageSize]=100");
     // Default core controller (no custom find() override), so the response is
     // Strapi's raw REST envelope ({data:[{id,attributes:{...}}], meta}) - flatten
     // it here, once, so every consumer reads plain {id,title} objects, matching

@@ -3,7 +3,7 @@ import { i18n } from "boot/i18n";
 
 export async function getLandkreise(context) {
   try {
-    const res = await api.get("/api/landkreise?populate=federalStates,municipalities");
+    const res = await api.get("/api/landkreise?populate=federalStates,municipalities&pagination[pageSize]=100");
     const raw = Array.isArray(res.data?.data)
       ? res.data.data
       : Array.isArray(res.data)
