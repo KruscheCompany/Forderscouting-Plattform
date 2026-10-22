@@ -181,8 +181,8 @@ export default {
         username: "",
         email: "",
         role: "",
-        // "assign one, infer the rest" - scope is used for every role except
-        // guest, which is location-only (see form.assignedLocation).
+        // Scope holds the anchor (municipality or landkreis) for every role
+        // except guest, which is location-only (see form.assignedLocation).
         scope: emptyScope(),
         assignedLocation: null,
         categories: []
