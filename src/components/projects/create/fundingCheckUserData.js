@@ -8,3 +8,8 @@ export function validateFundingCheckUser(userDetails) {
 
   return { hasMunicipality, hasFederalStates, isValid: hasMunicipality && hasFederalStates };
 }
+
+// Session data stored before the API returned `resolved` has to be refreshed once.
+export function needsUserDetailsRefresh(userDetails) {
+  return !!userDetails && !userDetails.resolved;
+}

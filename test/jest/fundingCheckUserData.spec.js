@@ -1,4 +1,4 @@
-import { validateFundingCheckUser } from "components/projects/create/fundingCheckUserData";
+import { validateFundingCheckUser, needsUserDetailsRefresh } from "components/projects/create/fundingCheckUserData";
 
 describe("validateFundingCheckUser", () => {
   it("accepts a municipality user whose resolved federal states are set", () => {
@@ -51,5 +51,19 @@ describe("validateFundingCheckUser", () => {
       hasFederalStates: false,
       isValid: false
     });
+  });
+});
+
+describe("needsUserDetailsRefresh", () => {
+  it("is true when stored user details predate resolved", () => {
+    expect(needsUserDetailsRefresh({ municipality: { id: 5 } })).toBe(true);
+  });
+
+  it("is false once resolved is present, even with no federal states", () => {
+    expect(needsUserDetailsRefresh({ resolved: { federalStates: [] } })).toBe(false);
+  });
+
+  it("is false without user details", () => {
+    expect(needsUserDetailsRefresh(null)).toBe(false);
   });
 });

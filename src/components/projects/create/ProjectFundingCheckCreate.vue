@@ -4,7 +4,7 @@
       header-class="bg-white text-black" v-model="expandedFundingCheck">
 
       <!-- Error Banner for Missing User Data -->
-      <div v-if="!userDataValidation.isValid" class="q-pa-md">
+      <div v-if="!userDataValidation.isValid && !userDataValidation.pending" class="q-pa-md">
         <q-banner class="bg-negative text-black" rounded>
           <template v-slot:avatar>
             <q-icon name="warning" color="black" />
@@ -217,7 +217,7 @@ import { mapGetters } from 'vuex';
 import draggable from 'vuedraggable';
 import StartingConditionWarningDialog from 'src/components/dialogs/StartingConditionWarningDialog.vue';
 import FundingComparisonSection from 'src/components/projects/create/FundingComparisonSection.vue';
-import { validateFundingCheckUser } from 'src/components/projects/create/fundingCheckUserData';
+import { validateFundingCheckUser, needsUserDetailsRefresh } from 'src/components/projects/create/fundingCheckUserData';
 
 export default {
   name: "ProjectFundingCheckCreate",
@@ -244,6 +244,7 @@ export default {
   data() {
     return {
       expandedFundingCheck: this.currentTab === 'fundingCheck',
+      refreshingUserDetails: false,
       selectedCards: [], // Array to store multiple selected cards
       selectedFunding: null,
       hoveredCard: null,
@@ -298,6 +299,7 @@ export default {
         isValid,
         hasMunicipality,
         hasFederalStates,
+        pending: this.refreshingUserDetails,
         errorMessage: this.getUserDataErrorMessage(hasMunicipality, hasFederalStates)
       };
     },
@@ -532,9 +534,19 @@ export default {
       });
     },
 
+    async refreshUserDetailsIfStale() {
+      if (!needsUserDetailsRefresh(this.userDetails)) return;
+      this.refreshingUserDetails = true;
+      try {
+        await this.$store.dispatch('userCenter/getUserDetails');
+      } finally {
+        this.refreshingUserDetails = false;
+      }
+    },
+
     // Show error notification if user data is invalid
     showUserDataError() {
-      if (!this.userDataValidation.isValid) {
+      if (!this.userDataValidation.isValid && !this.userDataValidation.pending) {
         this.$store.dispatch("notifications/pushToast", { kind: "negative", title: this.userDataValidation.errorMessage });
       }
     },
@@ -952,19 +964,21 @@ export default {
     },
   },
 
-  created() {
+  async created() {
     // Seed orderedMatches/visibleCount for drag&drop and the "show more" reveal
     this.syncOrderedMatches(this.fundingMatches);
+
+    // Started in created so the first render already knows a refresh is pending
+    await this.refreshUserDetailsIfStale();
+
+    if (this.expandedFundingCheck && !this.userDataValidation.isValid) {
+      this.showUserDataError();
+    }
   },
 
   mounted() {
     // Load all fundings when component mounts
     this.$store.dispatch('funding/getFundings');
-
-    // Show error if user data is invalid and tab is active
-    if (this.expandedFundingCheck && !this.userDataValidation.isValid) {
-      this.showUserDataError();
-    }
 
     this.fetchPendingSuggestions();
   }
