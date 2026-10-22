@@ -98,6 +98,7 @@
                   @click="toggleSelectAll('federalStates', federalStatesList)" />
               </div>
               <q-select outlined dense v-model="form.federalStates" multiple use-chips :options="federalStatesList"
+                @input="pruneTargets"
                 option-label="title" class="no-shadow input-radius-6"
                 :placeholder="$t('federalStates.selectFederalStates')"
                 :rules="[val => (val && val.length > 0) || $t('Required')]" options-selected-class="text-primary">
@@ -524,6 +525,7 @@ import FundingCalls from "src/components/funding/FundingCalls.vue";
 import Links from "src/components/projects/create/Links.vue";
 import ImageDialog from "components/ImageDialog.vue";
 import htmlSanitizer from "src/mixins/htmlSanitizer.js";
+import { municipalityOptions, pruneSelection } from "src/components/funding/fundingTargets";
 
 export default {
   name: "newFund",
@@ -599,6 +601,20 @@ export default {
     },
     toggleSelectAll(field, options) {
       this.form[field] = this.isAllSelected(field, options) ? [] : [...options];
+      if (field !== "municipalities") this.pruneTargets();
+    },
+    pruneTargets() {
+      // @input fires before v-model has written the new value back
+      this.$nextTick(() => {
+        const pruned = pruneSelection({
+          stateIds: this.form.federalStates.map(fs => fs.id),
+          landkreisIds: this.form.landkreise.map(lk => lk.id),
+          municipalityIds: this.form.municipalities.map(m => m.id),
+          getters: this.$store.getters
+        });
+        this.form.landkreise = this.form.landkreise.filter(lk => pruned.landkreisIds.includes(lk.id));
+        this.form.municipalities = this.form.municipalities.filter(m => pruned.municipalityIds.includes(m.id));
+      });
     },
     updateCaption(value, index) {
       this.form.media[index].caption = value;
@@ -923,41 +939,24 @@ export default {
         ? this.$store.state.federalState.federalStates
         : [];
     },
-    municipalitiesList() {
-      const municipalities = this.$store.state.municipality.municipalities;
-      if (municipalities) {
-        return municipalities.map(item => ({
-          id: item.id,
-          title: item.title,
-          federalStates: item.federalStates || []
-        }));
-      }
-      return [];
-    },
     filteredMunicipalities() {
+      const selectedMunicipalities = this.form.municipalities || [];
       if (!this.form.federalStates || this.form.federalStates.length === 0) {
         // If no federal states selected, only show already-selected municipalities
-        return this.form.municipalities || [];
+        return selectedMunicipalities;
       }
 
-      const selectedFederalStateIds = this.form.federalStates.map(fs => fs.id);
-      const selectedMunicipalityIds = (this.form.municipalities || []).map(m => m.id);
-
-      return this.municipalitiesList.filter(municipality => {
-        // Always include already-selected municipalities
-        if (selectedMunicipalityIds.includes(municipality.id)) {
-          return true;
-        }
-
-        // Include municipalities that match the selected federal states
-        if (!municipality.federalStates || municipality.federalStates.length === 0) {
-          return false;
-        }
-
-        return municipality.federalStates.some(fs =>
-          selectedFederalStateIds.includes(fs.id)
-        );
+      const options = municipalityOptions({
+        stateIds: this.form.federalStates.map(fs => fs.id),
+        landkreisIds: (this.form.landkreise || []).map(lk => lk.id),
+        getters: this.$store.getters,
+        municipalities: this.$store.state.municipality.municipalities
       });
+      const optionIds = options.map(m => m.id);
+      return [
+        ...options.map(({ id, title }) => ({ id, title })),
+        ...selectedMunicipalities.filter(m => !optionIds.includes(m.id))
+      ];
     },
     landkreiseList() {
       const landkreise = this.$store.state.landkreis.landkreise;
