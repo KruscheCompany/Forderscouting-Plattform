@@ -217,6 +217,7 @@ import { mapGetters } from 'vuex';
 import draggable from 'vuedraggable';
 import StartingConditionWarningDialog from 'src/components/dialogs/StartingConditionWarningDialog.vue';
 import FundingComparisonSection from 'src/components/projects/create/FundingComparisonSection.vue';
+import { validateFundingCheckUser } from 'src/components/projects/create/fundingCheckUserData';
 
 export default {
   name: "ProjectFundingCheckCreate",
@@ -279,22 +280,6 @@ export default {
       return this.$store.state.userCenter.user?.userDetails || null;
     },
 
-    // Get user's municipality
-    userMunicipality() {
-      return this.userDetails?.municipality || null;
-    },
-
-    userLandkreis() {
-      return this.userDetails?.landkreis || null;
-    },
-
-    // The federal state the admin assigned wins over the ones derived from the
-    // municipality or landkreis, which may span several.
-    userFederalStates() {
-      if (this.userDetails?.federalState) return [this.userDetails.federalState];
-      return this.userMunicipality?.federalStates || this.userLandkreis?.federalStates || [];
-    },
-
     // The fundings the API scoped to this user (not the unscoped
     // funding.allFundings list used by the dashboard and overview)
     scopedFundings() {
@@ -307,11 +292,10 @@ export default {
 
     // Check if user has required data
     userDataValidation() {
-      const hasMunicipality = !!this.userMunicipality || !!this.userLandkreis;
-      const hasFederalStates = this.userFederalStates && this.userFederalStates.length > 0;
+      const { isValid, hasMunicipality, hasFederalStates } = validateFundingCheckUser(this.userDetails);
 
       return {
-        isValid: hasMunicipality && hasFederalStates,
+        isValid,
         hasMunicipality,
         hasFederalStates,
         errorMessage: this.getUserDataErrorMessage(hasMunicipality, hasFederalStates)
