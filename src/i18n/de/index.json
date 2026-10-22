@@ -92,6 +92,7 @@
     "administration": "Verwaltung",
     "telephone": "Telefon",
     "location": "Ort",
+    "administrationPath": "Verwaltungsebene",
     "contactUser": "Möchten Sie, dass Ihre Kontaktdaten für Benutzer*innen sichtbar sind?",
     "saveChanges": "Änderungen speichern"
   },

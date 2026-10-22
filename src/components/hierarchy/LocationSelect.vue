@@ -7,6 +7,7 @@
       :options="options"
       options-selected-class="text-primary text-weight-600"
       class="no-shadow input-radius-6"
+      :clearable="clearable"
       hide-bottom-space
       :rules="rules"
       reactive-rules
@@ -54,6 +55,15 @@ export default {
       type: Array,
       default: () => [],
     },
+    clearable: {
+      type: Boolean,
+      default: false,
+    },
+    // Narrows the fetched list client-side, e.g. to the Orte a profile may use.
+    optionFilter: {
+      type: Function,
+      default: null,
+    },
   },
   data() {
     return {
@@ -63,6 +73,10 @@ export default {
   },
   methods: {
     onSelect(value) {
+      if (!value) {
+        this.$emit("update:location", null);
+        return;
+      }
       const location = {
         id: value.id,
         title: value.title,
@@ -87,7 +101,8 @@ export default {
   },
   computed: {
     options() {
-      return [...this.locations].sort((a, b) => a.title.localeCompare(b.title));
+      const locations = this.optionFilter ? this.optionFilter(this.locations) : this.locations;
+      return [...locations].sort((a, b) => a.title.localeCompare(b.title));
     },
   },
   watch: {
