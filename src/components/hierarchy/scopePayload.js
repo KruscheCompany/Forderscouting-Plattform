@@ -109,3 +109,20 @@ export function pathLabel(groups) {
     .filter(Boolean)
     .join(" › ");
 }
+
+const ROLE_BY_TYPE = { authenticated: "user", guest: "guest", leader: "leader" };
+
+// The whole edit-dialog form for a stored user, built from scratch so nothing
+// from a previously opened user (e.g. a guest's location) can carry over.
+export function userToForm(user) {
+  const detail = user.user_detail || {};
+  const location = detail.assignedLocation;
+  return {
+    username: user.username,
+    email: user.email,
+    role: ROLE_BY_TYPE[user.role.type] || "admin",
+    scope: userDetailToScope(detail),
+    assignedLocation: location ? { id: location.id, title: location.title } : null,
+    categories: detail.categories || []
+  };
+}

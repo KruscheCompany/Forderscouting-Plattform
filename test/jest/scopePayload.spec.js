@@ -6,7 +6,8 @@ import {
   reconcileSelection,
   filtersForAnchor,
   pathGroups,
-  pathLabel
+  pathLabel,
+  userToForm
 } from "components/hierarchy/scopePayload";
 
 // state 1 <- landkreis 10 <- muni 100; state 2 <- landkreis 20 <- muni 200;
@@ -204,5 +205,43 @@ describe("pathGroups and pathLabel", () => {
   it("pathLabel joins parents with / and levels with ›, skipping empty levels", () => {
     expect(pathLabel([["A", "B"], [], ["C"]])).toBe("A / B › C");
     expect(pathLabel([[], [], []])).toBe("");
+  });
+});
+
+describe("userToForm", () => {
+  const guestWithoutLocation = {
+    username: "b",
+    email: "b@x.de",
+    role: { type: "guest" },
+    user_detail: { assignedLocation: null, categories: [] }
+  };
+
+  it("a guest without a location gets none, whatever the dialog held before", () => {
+    const previous = { assignedLocation: { id: 9, title: "Husum" } };
+    const form = { ...previous, ...userToForm(guestWithoutLocation) };
+    expect(form.assignedLocation).toBeNull();
+  });
+
+  it("copies the location of a guest that has one", () => {
+    const user = {
+      ...guestWithoutLocation,
+      user_detail: { assignedLocation: { id: 9, title: "Husum", municipality: { id: 1 } } }
+    };
+    expect(userToForm(user).assignedLocation).toEqual({ id: 9, title: "Husum" });
+  });
+
+  it("maps role types and builds the anchor-only scope", () => {
+    const user = {
+      username: "a",
+      email: "a@x.de",
+      role: { type: "authenticated" },
+      user_detail: { municipality: { id: 69 }, landkreis: { id: 3 }, federalState: { id: 2 } }
+    };
+    const form = userToForm(user);
+    expect(form.role).toBe("user");
+    expect(form.scope).toEqual({ anchorLevel: "municipality", anchorId: 69 });
+    expect(form.categories).toEqual([]);
+    expect(userToForm({ ...user, role: { type: "leader" } }).role).toBe("leader");
+    expect(userToForm({ ...user, role: { type: "admin" } }).role).toBe("admin");
   });
 });

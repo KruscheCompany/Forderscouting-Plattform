@@ -155,7 +155,7 @@
 import TransferDialog from "components/user/settings/TransferDialog.vue";
 import deleteDataDialog from "components/user/settings/deleteDataDialog.vue";
 import HierarchyScopePicker from "components/hierarchy/HierarchyScopePicker.vue";
-import { emptyScope, scopeToUserPayload, userDetailToScope } from "components/hierarchy/scopePayload";
+import { emptyScope, scopeToUserPayload, userToForm } from "components/hierarchy/scopePayload";
 import LocationSelect from "components/hierarchy/LocationSelect.vue";
 import Categories from "components/projects/create/Categories.vue";
 export default {
@@ -205,18 +205,7 @@ export default {
           return (!!user && user.id) === this.userId;
         });
         this.currentUser = currentUser;
-        this.form.username = currentUser.username;
-        this.form.email = currentUser.email;
-        this.form.scope = userDetailToScope(currentUser.user_detail);
-        if (currentUser.user_detail.assignedLocation) {
-          this.form.assignedLocation = {
-            id: currentUser.user_detail.assignedLocation.id,
-            title: currentUser.user_detail.assignedLocation.title
-          };
-        }
-        this.form.role =
-          currentUser.role.type === "authenticated" ? "user" : currentUser.role.type === "guest" ? "guest" : currentUser.role.type === "leader" ? "leader" : "admin";
-        this.form.categories = currentUser.user_detail.categories || [];
+        this.form = userToForm(currentUser);
       }
     },
     updateUserInformation() {
