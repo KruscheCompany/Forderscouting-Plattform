@@ -50,20 +50,36 @@ describe("personalDataPayload", () => {
     contactPrivacy: false
   };
 
-  it("sends no assignedLocation key for a guest", () => {
-    const payload = personalDataPayload(form, true);
+  it("sends neither location nor assignedLocation for a guest", () => {
+    const payload = personalDataPayload(form, true, 1);
     expect("assignedLocation" in payload).toBe(false);
+    expect("location" in payload).toBe(false);
     expect(payload).toMatchObject({ fullName: "Max", phone: "123", streetNo: "Hauptstr. 1", postalCode: "25813" });
   });
 
-  it("sends the chosen Ort as { id } for a non-guest", () => {
+  it("sends no assignedLocation when a non-guest's Ort is unchanged", () => {
+    const payload = personalDataPayload(form, false, 2);
+    expect("assignedLocation" in payload).toBe(false);
+    expect(payload.phone).toBe("123");
+  });
+
+  it("sends the new Ort as { id } when a non-guest changed it", () => {
+    expect(personalDataPayload(form, false, 1).assignedLocation).toEqual({ id: 2 });
+  });
+
+  it("sends the Ort as { id } when a non-guest sets one for the first time", () => {
     expect(personalDataPayload(form, false).assignedLocation).toEqual({ id: 2 });
   });
 
-  it("sends null for a non-guest who cleared the Ort", () => {
-    const payload = personalDataPayload({ ...form, assignedLocation: null }, false);
+  it("sends null when a non-guest cleared the Ort", () => {
+    const payload = personalDataPayload({ ...form, assignedLocation: null }, false, 2);
     expect(payload.assignedLocation).toBeNull();
     expect(payload.location).toBe("");
+  });
+
+  it("sends nothing for an Ort that was empty and stays empty", () => {
+    const payload = personalDataPayload({ ...form, assignedLocation: null }, false, null);
+    expect("assignedLocation" in payload).toBe(false);
   });
 });
 

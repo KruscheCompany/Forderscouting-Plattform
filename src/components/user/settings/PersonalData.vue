@@ -325,7 +325,11 @@ export default {
           const res = await this.$store.dispatch(
             "userCenter/updatePersonalData",
             {
-              data: personalDataPayload(this.form, this.isGuest)
+              data: personalDataPayload(
+                this.form,
+                this.isGuest,
+                this.userDetails?.assignedLocation?.id
+              )
             }
           );
           this.isLoading = false;

@@ -8,17 +8,23 @@ export function ortOptions(locations, userDetails, isGuest = false) {
   return (locations || []).filter(location => allowed.includes(location.id));
 }
 
-export function personalDataPayload(form, isGuest) {
+// Guests send neither `location` nor `assignedLocation`: both would change
+// what the API treats as their scope. A non-guest's Ort is only sent when it
+// changed, so an unchanged Ort that has since left their scope cannot make
+// an unrelated save fail.
+export function personalDataPayload(form, isGuest, storedLocationId = null) {
   const payload = {
     fullName: form.fullName,
     phone: form.telephone,
-    location: form.assignedLocation?.title || "",
     streetNo: form.streetNo,
     postalCode: form.postalCode,
     contactPrivacy: form.contactPrivacy
   };
-  if (!isGuest) {
-    payload.assignedLocation = form.assignedLocation?.id ? { id: form.assignedLocation.id } : null;
+  if (isGuest) return payload;
+  payload.location = form.assignedLocation?.title || "";
+  const chosenId = form.assignedLocation?.id || null;
+  if (chosenId !== (storedLocationId || null)) {
+    payload.assignedLocation = chosenId ? { id: chosenId } : null;
   }
   return payload;
 }
