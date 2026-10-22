@@ -48,6 +48,12 @@ export default {
       type: Number,
       default: null,
     },
+    // Optional: narrows options to municipalities under this federal state.
+    // A parent landkreis is narrower and takes precedence.
+    parentFederalStateId: {
+      type: Number,
+      default: null,
+    },
     rules: {
       type: Array,
       default: () => [],
@@ -69,9 +75,14 @@ export default {
   },
   computed: {
     municipalities() {
-      const municipalities = this.parentLandkreisId
-        ? this.$store.getters["landkreis/municipalitiesUnder"](this.parentLandkreisId)
-        : this.$store.state.municipality.municipalities || [];
+      const all = this.$store.state.municipality.municipalities || [];
+      let municipalities = all;
+      if (this.parentLandkreisId) {
+        municipalities = this.$store.getters["landkreis/municipalitiesUnder"](this.parentLandkreisId);
+      } else if (this.parentFederalStateId) {
+        const ids = this.$store.getters["federalState/municipalitiesUnderState"](this.parentFederalStateId);
+        municipalities = all.filter((municipality) => ids.includes(municipality.id));
+      }
       return municipalities
         .map((municipality) => {
           return {

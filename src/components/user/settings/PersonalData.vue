@@ -86,6 +86,21 @@
           />
         </div>
       </div>
+      <div v-if="pathText" class="row items-center">
+        <div class="col-12 col-md-3">
+          <p class="font-16 no-margin">
+            {{ $t("personalData.administrationPath") }}
+          </p>
+        </div>
+        <div class="col-12 col-md-9">
+          <q-input
+            disable
+            outlined
+            class="no-shadow input-radius-6"
+            :value="pathText"
+          />
+        </div>
+      </div>
       <div class="row items-center">
         <div class="col-12 col-md-3">
           <p class="font-16 no-margin">
@@ -140,9 +155,18 @@
           </p>
         </div>
         <div class="col-12 col-md-9">
+          <q-input
+            v-if="isGuest"
+            disable
+            outlined
+            class="no-shadow input-radius-6"
+            :value="form.assignedLocation && form.assignedLocation.title"
+          />
           <LocationSelect
+            v-else
+            clearable
             :currentLocation="form.assignedLocation"
-            :parentMunicipalityId="ownMunicipalityId"
+            :optionFilter="filterOrtOptions"
             @update:location="form.assignedLocation = $event"
           />
         </div>
@@ -207,6 +231,8 @@
 
 <script>
 import LocationSelect from "components/hierarchy/LocationSelect.vue";
+import { ortOptions, personalDataPayload, profilePathLabel } from "components/user/settings/profileOrt";
+import { needsUserDetailsRefresh } from "components/projects/create/fundingCheckUserData";
 export default {
   name: "personalDataTab",
   components: {
@@ -277,6 +303,9 @@ export default {
         (!!this.userDetails && this.userDetails.contactPrivacy) || false;
       this.newImg = null;
     },
+    filterOrtOptions(locations) {
+      return ortOptions(locations, this.userDetails, this.isGuest);
+    },
     changeImage() {
       this.$refs.profileImg.pickFiles();
     },
@@ -296,17 +325,11 @@ export default {
           const res = await this.$store.dispatch(
             "userCenter/updatePersonalData",
             {
-              data: {
-                fullName: this.form.fullName,
-                phone: this.form.telephone,
-                location: this.form.assignedLocation?.title || "",
-                assignedLocation: this.form.assignedLocation?.id
-                  ? { id: this.form.assignedLocation.id }
-                  : null,
-                streetNo: this.form.streetNo,
-                postalCode: this.form.postalCode,
-                contactPrivacy: this.form.contactPrivacy
-              }
+              data: personalDataPayload(
+                this.form,
+                this.isGuest,
+                this.userDetails?.assignedLocation?.id
+              )
             }
           );
           this.isLoading = false;
@@ -321,6 +344,9 @@ export default {
   },
   mounted() {
     this.setData();
+    if (needsUserDetailsRefresh(this.userDetails)) {
+      this.$store.dispatch("userCenter/getUserDetails");
+    }
   },
   watch: {
     userDetails: {
@@ -356,11 +382,11 @@ export default {
         this.$store.state.userCenter.user.user
       );
     },
-    isAdmin() {
-      return this.$store.getters["userCenter/isAdmin"];
+    isGuest() {
+      return this.$store.getters["userCenter/isGuest"];
     },
-    ownMunicipalityId() {
-      return (!this.isAdmin && this.userDetails?.municipality?.id) || null;
+    pathText() {
+      return profilePathLabel(this.userDetails);
     }
   }
 };

@@ -11,8 +11,6 @@
           options-selected-class="text-primary text-weight-600"
           class="no-shadow input-radius-6"
           hide-bottom-space
-          :rules="atLeastOneRules"
-          reactive-rules
           @input="onFederalStateSelect"
         >
           <template v-slot:selected>
@@ -38,7 +36,7 @@
         <LandkreisSelect
           :currentLandkreis="landkreisModel"
           :parentFederalStateId="federalStateModel && federalStateModel.id"
-          :rules="atLeastOneRules"
+          :rules="landkreisRules"
           @update:landkreis="onLandkreisSelect"
         />
       </label>
@@ -48,25 +46,16 @@
         <MunicipalitySelect
           :currentMunicipality="municipalityModel"
           :parentLandkreisId="landkreisModel && landkreisModel.id"
-          :rules="municipalityOnly ? [val => !!val || $t('Required')] : atLeastOneRules"
+          :parentFederalStateId="federalStateModel && federalStateModel.id"
+          :rules="municipalityRules"
           @update:municipality="onMunicipalitySelect"
-        />
-      </label>
-
-      <label class="hsp-field">
-        <span class="hsp-field-label">{{ $t("hierarchyScope.town") }}</span>
-        <LocationSelect
-          :currentLocation="locationModel"
-          :parentMunicipalityId="municipalityModel && municipalityModel.id"
-          :rules="atLeastOneRules"
-          @update:location="onLocationSelect"
         />
       </label>
     </div>
 
-    <div v-if="pathParts.length" class="hsp-path">
+    <div v-if="pathText" class="hsp-path">
       <span class="hsp-path-label">{{ $t("hierarchyScope.path") }}</span>
-      <span class="hsp-path-value">{{ pathParts.join(" › ") }}</span>
+      <span class="hsp-path-value">{{ pathText }}</span>
     </div>
   </div>
 </template>
@@ -74,19 +63,24 @@
 <script>
 import LandkreisSelect from "components/Landkreise/LandkreisSelect.vue";
 import MunicipalitySelect from "components/Municipality/MunicipalitySelect.vue";
-import LocationSelect from "components/hierarchy/LocationSelect.vue";
-import { emptyScope } from "components/hierarchy/scopePayload";
+import { relationId } from "src/store/hierarchyHelpers";
+import {
+  emptyScope,
+  selectionToScope,
+  reconcileSelection,
+  filtersForAnchor,
+  pathGroups,
+  pathLabel,
+} from "components/hierarchy/scopePayload";
 
 export default {
   name: "hierarchyScopePicker",
-  components: { LandkreisSelect, MunicipalitySelect, LocationSelect },
+  components: { LandkreisSelect, MunicipalitySelect },
   props: {
-    // v-model: { anchorLevel: 'landkreis'|'municipality'|'location', anchorId: Number|null,
-    //            levels: { federalStateId, landkreisId, municipalityId, locationId } }
-    // The anchor is the most specific chosen level. `levels` holds every chosen
-    // level, because a landkreis or municipality can belong to several parents
-    // and only the stored choice says which one applies. Federal state is kept
-    // as a level but is never the anchor.
+    // v-model: { anchorLevel: 'landkreis'|'municipality', anchorId: Number|null }
+    // Only the anchor is stored: the municipality if chosen, else the landkreis.
+    // The state and landkreis dropdowns narrow the choices; when a municipality
+    // is the anchor they are shown for orientation and are never saved.
     value: {
       type: Object,
       default: () => emptyScope(),
@@ -95,9 +89,8 @@ export default {
       type: Boolean,
       default: true,
     },
-    // A coordinator (leader) always belongs to exactly one municipality: the
-    // municipality is required and is always the emitted anchor. The other
-    // levels can still be chosen and are kept alongside it.
+    // A coordinator (leader) always belongs to exactly one municipality, so the
+    // municipality is required and is the only possible anchor.
     municipalityOnly: {
       type: Boolean,
       default: false,
@@ -108,8 +101,8 @@ export default {
       federalStateModel: null,
       landkreisModel: null,
       municipalityModel: null,
-      locationModel: null,
       dataLoaded: false,
+      lastEmitted: null,
     };
   },
   computed: {
@@ -117,47 +110,65 @@ export default {
       const federalStates = this.$store.state.federalState.federalStates || [];
       return [...federalStates].sort((a, b) => a.title.localeCompare(b.title));
     },
-    currentLevels() {
+    currentSelection() {
       const idOrNull = item => (item ? item.id : null);
       return {
         federalStateId: idOrNull(this.federalStateModel),
         landkreisId: idOrNull(this.landkreisModel),
         municipalityId: idOrNull(this.municipalityModel),
-        locationId: idOrNull(this.locationModel),
       };
     },
-    pathParts() {
-      return [this.federalStateModel, this.landkreisModel, this.municipalityModel, this.locationModel]
-        .filter(Boolean)
-        .map(item => item.title);
+    lookup() {
+      const getters = this.$store.getters;
+      const ids = list => (list || []).map(relationId);
+      const titleOf = (items, id) => {
+        const item = (items || []).find(entry => entry.id === id);
+        return item ? item.title : null;
+      };
+      const { federalState, landkreis, municipality } = this.$store.state;
+      return {
+        landkreiseOfMunicipality: id => ids(getters["municipality/parentLandkreise"](id)),
+        federalStatesOfLandkreis: id => ids(getters["landkreis/federalStatesOf"](id)),
+        federalStatesOfMunicipality: id => getters["municipality/federalStatesOfMunicipality"](id),
+        landkreisIdsUnderState: id => ids(getters["federalState/landkreiseUnder"](id)),
+        municipalityIdsUnderState: id => getters["federalState/municipalitiesUnderState"](id),
+        municipalityIdsUnderLandkreis: id => ids(getters["landkreis/municipalitiesUnder"](id)),
+        title: (level, id) =>
+          titleOf(
+            { federalState: federalState.federalStates, landkreis: landkreis.landkreise, municipality: municipality.municipalities }[level],
+            id
+          ),
+      };
     },
-    // Non-leader roles can be scoped to any single level (state, landkreis,
-    // municipality, or location) - not landkreis specifically. Applied to all
-    // four fields so picking any one of them clears the error on the rest.
-    atLeastOneRules() {
+    pathText() {
+      if (!this.dataLoaded) return "";
+      return pathLabel(pathGroups(this.currentSelection, this.lookup));
+    },
+    // A state alone cannot be saved, so the landkreis or municipality is what
+    // has to be chosen. A leader needs the municipality itself.
+    landkreisRules() {
       if (!this.required || this.municipalityOnly) return [];
       return [
-        () =>
-          !!(this.federalStateModel || this.landkreisModel || this.municipalityModel || this.locationModel) ||
-          this.$t("hierarchyScope.atLeastOneRequired"),
+        () => !!(this.landkreisModel || this.municipalityModel) || this.$t("hierarchyScope.atLeastOneRequired"),
+      ];
+    },
+    municipalityRules() {
+      if (!this.required) return [];
+      if (this.municipalityOnly) return [val => !!val || this.$t("Required")];
+      return [
+        () => !!(this.landkreisModel || this.municipalityModel) || this.$t("hierarchyScope.atLeastOneRequired"),
       ];
     },
   },
   watch: {
-    value: {
-      deep: true,
-      handler() {
-        if (this.dataLoaded) this.hydrateFromAnchor();
-      },
+    value(scope) {
+      if (this.dataLoaded && scope !== this.lastEmitted) this.hydrateFromScope();
     },
     municipalityOnly() {
-      if (this.dataLoaded) this.hydrateFromAnchor();
+      if (this.dataLoaded) this.emitScope();
     },
   },
   methods: {
-    idOf(item) {
-      return item && typeof item === "object" ? item.id : item;
-    },
     findFederalState(id) {
       return (this.$store.state.federalState.federalStates || []).find(fs => fs.id === id) || null;
     },
@@ -167,105 +178,42 @@ export default {
     findMunicipality(id) {
       return (this.$store.state.municipality.municipalities || []).find(m => m.id === id) || null;
     },
-    findLocation(id) {
-      return (this.$store.state.location.locations || []).find(l => l.id === id) || null;
+    setSelection({ federalStateId, landkreisId, municipalityId }) {
+      this.federalStateModel = federalStateId ? this.findFederalState(federalStateId) : null;
+      this.landkreisModel = landkreisId ? this.findLandkreis(landkreisId) : null;
+      this.municipalityModel = municipalityId ? this.findMunicipality(municipalityId) : null;
     },
-    // The single candidate of an ancestor lookup, or null when there is none or
-    // more than one - an ambiguous parent is left for the admin to choose.
-    onlyOne(list) {
-      const ids = (list || []).map(item => this.idOf(item));
-      return ids.length === 1 ? ids[0] : null;
-    },
-    // Fills every level that is still empty from the stored `levels`, then from
-    // the anchor and its unambiguous ancestors - never overrides a choice the
-    // user already made (e.g. a municipality that spans several landkreise keeps
-    // whichever district was picked). Emits when this changed what the parent
-    // holds, so the parent always sees exactly what is shown here.
-    hydrateFromAnchor() {
-      const { anchorLevel, anchorId, levels } = this.value || {};
-      const hasLevels = !!levels && Object.values(levels).some(Boolean);
-      if (!anchorId && !hasLevels) {
-        this.federalStateModel = null;
-        this.landkreisModel = null;
-        this.municipalityModel = null;
-        this.locationModel = null;
+    hydrateFromScope() {
+      const scope = this.value || emptyScope();
+      if (!scope.anchorId) {
+        this.setSelection({});
         return;
       }
-      if (levels) {
-        if (!this.federalStateModel && levels.federalStateId) this.federalStateModel = this.findFederalState(levels.federalStateId);
-        if (!this.landkreisModel && levels.landkreisId) this.landkreisModel = this.findLandkreis(levels.landkreisId);
-        if (!this.municipalityModel && levels.municipalityId) this.municipalityModel = this.findMunicipality(levels.municipalityId);
-        if (!this.locationModel && levels.locationId) this.locationModel = this.findLocation(levels.locationId);
-      }
-      if (anchorLevel === "location" && anchorId && !this.locationModel) {
-        this.locationModel = this.findLocation(anchorId);
-      }
-      if (anchorLevel === "municipality" && anchorId && !this.municipalityModel) {
-        this.municipalityModel = this.findMunicipality(anchorId);
-      }
-      if (anchorLevel === "landkreis" && anchorId && !this.landkreisModel) {
-        this.landkreisModel = this.findLandkreis(anchorId);
-      }
-      if (this.locationModel && !this.municipalityModel) {
-        const muniId = this.onlyOne(this.$store.getters["location/parentMunicipality"](this.locationModel.id));
-        if (muniId) this.municipalityModel = this.findMunicipality(muniId);
-      }
-      if (this.municipalityModel && !this.landkreisModel) {
-        const lkId = this.onlyOne(this.$store.getters["municipality/parentLandkreise"](this.municipalityModel.id));
-        if (lkId) this.landkreisModel = this.findLandkreis(lkId);
-      }
-      if (this.landkreisModel && !this.federalStateModel) {
-        const fsId = this.onlyOne(this.$store.getters["landkreis/federalStatesOf"](this.landkreisModel.id));
-        if (fsId) this.federalStateModel = this.findFederalState(fsId);
-      }
-      const anchorIsMunicipality = anchorLevel === "municipality" && anchorId === this.idOf(this.municipalityModel);
-      const levelsChanged = Object.keys(this.currentLevels).some(key => this.currentLevels[key] !== ((levels || {})[key] || null));
-      if (levelsChanged || (this.municipalityOnly && this.municipalityModel && !anchorIsMunicipality)) {
-        this.emitAnchor();
-      }
+      const municipalityId = scope.anchorLevel === "municipality" ? scope.anchorId : null;
+      const filters = filtersForAnchor(scope, this.currentSelection, this.lookup);
+      this.setSelection({ ...filters, municipalityId });
     },
-    emitAnchor() {
-      const levels = this.currentLevels;
-      if (this.municipalityOnly) {
-        if (this.municipalityModel) {
-          this.$emit("input", { anchorLevel: "municipality", anchorId: this.municipalityModel.id, levels });
-        }
-        return;
-      }
-      let anchorLevel = "landkreis";
-      let anchorId = null;
-      if (this.locationModel) {
-        anchorLevel = "location";
-        anchorId = this.locationModel.id;
-      } else if (this.municipalityModel) {
-        anchorLevel = "municipality";
-        anchorId = this.municipalityModel.id;
-      } else if (this.landkreisModel) {
-        anchorId = this.landkreisModel.id;
-      }
-      this.$emit("input", { anchorLevel, anchorId, levels });
+    emitScope() {
+      const scope = selectionToScope(this.currentSelection, this.municipalityOnly);
+      this.lastEmitted = scope;
+      this.$emit("input", scope);
+    },
+    applySelection(selection) {
+      const scope = selectionToScope(selection, this.municipalityOnly);
+      const filters = filtersForAnchor(scope, selection, this.lookup);
+      this.setSelection({ ...selection, ...filters });
+      this.emitScope();
     },
     onFederalStateSelect(item) {
-      this.federalStateModel = item;
-      this.landkreisModel = null;
-      this.municipalityModel = null;
-      this.locationModel = null;
-      this.emitAnchor();
+      const selection = { ...this.currentSelection, federalStateId: item ? item.id : null };
+      this.applySelection(reconcileSelection(selection, "federalState", this.lookup));
     },
     onLandkreisSelect(item) {
-      this.landkreisModel = item;
-      this.municipalityModel = null;
-      this.locationModel = null;
-      this.emitAnchor();
+      const selection = { ...this.currentSelection, landkreisId: item ? item.id : null };
+      this.applySelection(reconcileSelection(selection, "landkreis", this.lookup));
     },
     onMunicipalitySelect(item) {
-      this.municipalityModel = item;
-      this.locationModel = null;
-      this.emitAnchor();
-    },
-    onLocationSelect(item) {
-      this.locationModel = item;
-      this.emitAnchor();
+      this.applySelection({ ...this.currentSelection, municipalityId: item ? item.id : null });
     },
   },
   async mounted() {
@@ -273,10 +221,9 @@ export default {
       this.$store.dispatch("federalState/getFederalStates"),
       this.$store.dispatch("landkreis/getLandkreise"),
       this.$store.dispatch("municipality/getMunicipalities"),
-      this.$store.dispatch("location/getLocations"),
     ]);
     this.dataLoaded = true;
-    this.hydrateFromAnchor();
+    this.hydrateFromScope();
   },
 };
 </script>

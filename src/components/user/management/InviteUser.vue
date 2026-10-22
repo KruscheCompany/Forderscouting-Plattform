@@ -149,8 +149,8 @@ export default {
       form: {
         username: "",
         role: "",
-        // "assign one, infer the rest" - scope is used for every role except
-        // Guest, which is location-only (see form.assignedLocation).
+        // Scope holds the anchor (municipality or landkreis) for every role
+        // except Guest, which is location-only (see form.assignedLocation).
         scope: emptyScope(),
         assignedLocation: null,
         categories: [],
@@ -259,7 +259,7 @@ export default {
         // Start from a clean scope every time the dialog opens, so a previous
         // guest conversion's municipality/location cannot leak into a plain invite.
         this.form.scope = this.guestMunicipality?.id
-          ? { anchorLevel: "municipality", anchorId: this.guestMunicipality.id, levels: null }
+          ? { anchorLevel: "municipality", anchorId: this.guestMunicipality.id }
           : emptyScope();
         this.form.assignedLocation = null;
         // guestLocation is the legacy free-text city from a guest-request - best-effort
