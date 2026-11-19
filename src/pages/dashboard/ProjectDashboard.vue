@@ -27,7 +27,7 @@
       :selected-application-steps="selectedApplicationSteps" :selected-status="selectedStatus"
       :selected-locations="selectedLocations" :selected-investive="selectedInvestive"
       :selected-categories="selectedCategories" :tags-keywords="tagsKeywords" />
-    <archivedProjectsTable v-if="isLeader || isAdmin" @unarchived="onProjectUnarchived" :search="search"
+    <archivedProjectsTable @unarchived="onProjectUnarchived" :search="search"
       :filters-expanded="filtersExpanded" :selected-municipalities="selectedMunicipalities"
       :selected-application-steps="selectedApplicationSteps" :selected-status="selectedStatus"
       :selected-locations="selectedLocations" :selected-investive="selectedInvestive"
@@ -67,9 +67,6 @@ export default {
   computed: {
     isAdmin() {
       return this.$store.getters["userCenter/isAdmin"];
-    },
-    isLeader() {
-      return this.$store.getters["userCenter/isLeader"];
     },
     categoryOptions() {
       return this.$store.state.category.categoriesSimplified;

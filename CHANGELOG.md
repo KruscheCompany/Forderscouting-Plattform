@@ -1,5 +1,13 @@
 # Änderungsprotokoll / Changelog
 
+## 6.32.1 — 2026-11-19
+
+### de
+- Geändert: Die Tabelle "Archivierte Anträge" im Projekt-Dashboard ist jetzt für alle Benutzer*innen und Gäste sichtbar, nicht mehr nur für Gemeindeleitung und Administration. Sie zeigt nur Projekte, die Sie auch sonst sehen dürfen. Wiederherstellen können weiterhin nur Gemeindeleitung und Administration.
+
+### en
+- Changed: the "Archived applications" table on the project dashboard is now visible to all users and guests, not just municipal leaders and administrators. It only lists projects you could otherwise see. Only municipal leaders and administrators can still restore a project.
+
 ## 6.32.0 — 2026-10-22
 
 ### de

@@ -1,6 +1,6 @@
 <template>
   <q-tr class="financial-plan-container" v-show="visible">
-    <q-td colspan="100%">
+    <q-td :colspan="colspan">
       <div class="text-left q-pa-md">
         <template v-if="financialPlan && financialPlan.costAndFinance">
           <div class="financial-grid">
@@ -29,6 +29,7 @@ export default {
   name: "FinancialPlanRow",
   props: {
     visible: { type: Boolean, default: false },
+    colspan: { type: Number, default: 1 },
     financialPlan: { type: Object, default: null },
     fundingMatches: { type: Array, default: () => [] },
     externalId: { type: [String, Number], default: null },

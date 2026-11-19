@@ -90,6 +90,7 @@
             </q-td>
           </q-tr>
           <FinancialPlanRow :visible="isExpanded(props.row)" :financial-plan="getFinancialPlan(props.row)"
+            :colspan="props.cols.length + (isLeader || isAdmin ? 2 : 1)"
             :funding-matches="props.row.project.fundingMatches" :external-id="props.row.project.external_id" />
         </template>
       </q-table>
