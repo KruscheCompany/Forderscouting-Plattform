@@ -21,7 +21,7 @@
       :no-results-label="$t('No results')" ref="table">
       <template v-slot:header="props">
         <q-tr class="tableHeader" :props="props">
-          <q-th :style="{ width: actionColumnWidth }" />
+          <q-th v-if="canUnarchive" :style="{ width: actionColumnWidth }" />
           <q-th v-for="col in props.cols" :key="col.name" :props="props" :style="col.headerStyle" class="font-14 text-black">
             {{ col.label }}
           </q-th>
@@ -31,7 +31,7 @@
 
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td :style="{ width: actionColumnWidth }" class="text-center">
+          <q-td v-if="canUnarchive" :style="{ width: actionColumnWidth }" class="text-center">
             <div class="row items-center justify-center no-wrap">
               <q-btn size="md" color="blue" round dense flat icon="unarchive" :loading="unarchivingId === props.row.id"
                 @click.stop="unarchiveRow(props.row)">
@@ -70,6 +70,7 @@
           </q-td>
         </q-tr>
         <FinancialPlanRow :visible="isExpanded(props.row)" :financial-plan="getFinancialPlan(props.row)"
+          :colspan="props.cols.length + (canUnarchive ? 2 : 1)"
           :funding-matches="props.row.fundingMatches" :external-id="props.row.external_id" />
       </template>
     </q-table>
@@ -116,6 +117,12 @@ export default {
     },
     isAdmin() {
       return this.$store.getters["userCenter/isAdmin"];
+    },
+    isLeader() {
+      return this.$store.getters["userCenter/isLeader"];
+    },
+    canUnarchive() {
+      return this.isAdmin || this.isLeader;
     },
     expandColumnWidth() {
       return COLUMN_WIDTHS.expand;

@@ -72,6 +72,7 @@
           </q-td>
         </q-tr>
         <FinancialPlanRow :visible="isExpanded(props.row)" :financial-plan="getFinancialPlan(props.row)"
+          :colspan="props.cols.length + (isLeader || isAdmin ? 2 : 1)"
           :funding-matches="props.row.fundingMatches" :external-id="props.row.external_id" />
       </template>
 
