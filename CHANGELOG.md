@@ -5,10 +5,12 @@
 ### de
 - Behoben: Die Projektbeschreibung lässt sich wieder speichern, auch wenn Sie nicht die Gemeindeleitung sind. Bisher erschien die Meldung "Nur die Gemeindeleitung darf Projektideen archivieren", obwohl gar nicht archiviert werden sollte. Das Archivieren bleibt weiterhin der Gemeindeleitung und der Administration vorbehalten.
 - Behoben: Der gewählte Ort (Dorf) eines Projekts wird jetzt auch für Gemeindeleitung und normale Benutzer*innen gespeichert. Bisher wurde er beim Speichern stillschweigend verworfen, sodass im Projekt kein Ort gesetzt war. Wählbar sind nur Orte Ihrer eigenen Verwaltung.
+- Behoben: Im Fördercheck zeigt "Aktualisieren" jetzt die neu gefundenen Förderprogramme an. Bisher blieb die zuvor gespeicherte Ansicht stehen, bei Projekten mit gewählter "Fehlanzeige" also eine leere Liste.
 
 ### en
 - Fixed: the project description can be saved again even if you are not the municipal leader. Previously the message "Only the municipal leader may archive project ideas" appeared even though nothing was being archived. Archiving remains reserved for the municipal leader and administrators.
 - Fixed: the selected location (village) of a project is now saved for municipal leaders and regular users too. Previously it was silently discarded on save, leaving the project without a location. Only locations of your own administration can be chosen.
+- Fixed: in the funding check, "Refresh" now shows the newly found funding programmes. Previously the previously saved view stayed in place, so projects with "No suitable funding" selected kept showing an empty list.
 
 ## 6.32.1 — 2026-11-19
 
