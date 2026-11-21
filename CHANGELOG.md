@@ -1,5 +1,15 @@
 # Änderungsprotokoll / Changelog
 
+## 6.32.3 — 2026-11-21
+
+### de
+- Geändert: "Förderquote(n)" und "Eigenanteil" sind in der Förderung wieder ganz normale Textfelder, in die Sie frei schreiben können. Die getrennten Felder für Prozent und Inhalt sowie "Förderquote hinzufügen" entfallen. Bei bestehenden Förderungen wurden die bisherigen Angaben übernommen: Jede frühere Förderquote steht als eigene Zeile (z. B. "50 % – Kommunen"), und beim Eigenanteil wurde das Prozentzeichen ergänzt, wo es bisher nur angezeigt wurde.
+- Geändert: In der Ansicht einer Förderung entfällt im Bereich "Kategorien" der erklärende Text, der aus der Projektprüfung übernommen wurde und dort nicht passte.
+
+### en
+- Changed: "Funding rate(s)" and "Own contribution" are plain free-text fields again in a funding. The separate percentage and content fields and "Add funding rate" are gone. For existing fundings the previous entries were carried over: each former funding rate appears on its own line (e.g. "50 % – Municipalities"), and for own contribution the percent sign was added where it had only been displayed before.
+- Changed: in the funding view, the "Categories" section no longer shows the explanatory text that was copied over from the project check and did not fit here.
+
 ## 6.32.2 — 2026-11-20
 
 ### de
