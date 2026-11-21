@@ -30,16 +30,11 @@
         <tbody>
           <tr>
             <th>{{ $t('Funding rates') }}</th>
-            <td>
-              <template v-if="funding.rates && funding.rates.length">
-                <div v-for="rate in funding.rates" :key="rate.id">{{ rate.amount || '' }}% {{ stripHtml(rate.content || '') }}</div>
-              </template>
-              <template v-else>{{ $t('projectComponents.contentDetailsView.notSpecified') }}</template>
-            </td>
+            <td class="pre-line">{{ funding.fundingRates || $t('projectComponents.contentDetailsView.notSpecified') }}</td>
           </tr>
           <tr>
             <th>{{ $t('Own contribution') }}</th>
-            <td>{{ funding.ownContribution ? formatOwnContribution(funding.ownContribution) : $t('projectComponents.contentDetailsView.notSpecified') }}</td>
+            <td class="pre-line">{{ funding.ownContribution || $t('projectComponents.contentDetailsView.notSpecified') }}</td>
           </tr>
           <tr>
             <th>{{ $t('help.accumulability') }}</th>
@@ -202,10 +197,6 @@ export default {
     }
   },
   methods: {
-    formatOwnContribution(value) {
-      const text = String(value);
-      return text.includes("%") ? text : `${text}%`;
-    },
     formatDate(value) {
       return new Date(value).toLocaleDateString("de-DE");
     },
@@ -290,5 +281,8 @@ export default {
     width: 220px;
     background: #f4f4f4;
   }
+}
+.pre-line {
+  white-space: pre-line;
 }
 </style>
