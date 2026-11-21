@@ -218,6 +218,7 @@ import draggable from 'vuedraggable';
 import StartingConditionWarningDialog from 'src/components/dialogs/StartingConditionWarningDialog.vue';
 import FundingComparisonSection from 'src/components/projects/create/FundingComparisonSection.vue';
 import { validateFundingCheckUser, needsUserDetailsRefresh } from 'src/components/projects/create/fundingCheckUserData';
+import { pickFundingMatches } from 'src/components/projects/create/fundingMatchSource';
 
 export default {
   name: "ProjectFundingCheckCreate",
@@ -253,6 +254,7 @@ export default {
       topSetSize: 12,
       enterDelayBase: 0, // count of tiles already visible before the most recent reveal, so stagger delay resets per batch instead of growing forever
       isRefreshing: false,
+      hasRefreshedMatches: false,
       isSubmitting: false,
       showWarningDialog: false,
       isLoading: false,
@@ -306,26 +308,13 @@ export default {
 
     // Filter funding matches based on user's municipality and federal states
     fundingMatches() {
-      // If project has saved funding matches, use them
-      if (this.projectData.fundingMatches && this.projectData.fundingMatches.length > 0) {
-        return this.projectData.fundingMatches.filter(funding => !funding.isFehlanzeige);
-      }
-
-      // Get matches from AI
-      const aiMatches = this.getFundingMatches;
-      // If no AI matches, return empty array
-      if (!aiMatches || aiMatches.length === 0) {
-        return [];
-      }
-
-      // Validate user data
-      if (!this.userDataValidation.isValid) {
-        console.log('User data is invalid');
-        return [];
-      }
-
-      // Filter matches
-      return this.filterFundingsByUserData(aiMatches);
+      return pickFundingMatches({
+        saved: this.projectData.fundingMatches,
+        aiMatches: this.getFundingMatches,
+        refreshed: this.hasRefreshedMatches,
+        userValid: this.userDataValidation.isValid,
+        filterAiMatches: this.filterFundingsByUserData
+      });
     },
 
     isLoadingMatches() {
@@ -620,6 +609,7 @@ export default {
           finances
         });
 
+        this.hasRefreshedMatches = true;
         this.$store.dispatch("notifications/pushToast", { kind: "positive", title: this.$t('projectComponents.fundingCheck.successRefresh') });
 
       } catch (error) {

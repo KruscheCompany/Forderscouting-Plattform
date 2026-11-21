@@ -291,8 +291,9 @@ export default {
         // created now - at save/publish time - not the moment they're selected in the form.
         this.form.tags = await this.$store.dispatch("tag/resolvePendingTags", this.form.tags);
 
+        const { archived, ...loadedProject } = this.editing ? this.project || {} : {};
         const projectData = {
-          ...(this.editing ? this.project : {}),
+          ...loadedProject,
           ...this.form,
           published: true,
           details: {

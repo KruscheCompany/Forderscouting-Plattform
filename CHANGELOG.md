@@ -1,5 +1,27 @@
 # Änderungsprotokoll / Changelog
 
+## 6.32.3 — 2026-11-21
+
+### de
+- Geändert: "Förderquote(n)" und "Eigenanteil" sind in der Förderung wieder ganz normale Textfelder, in die Sie frei schreiben können. Die getrennten Felder für Prozent und Inhalt sowie "Förderquote hinzufügen" entfallen. Bei bestehenden Förderungen wurden die bisherigen Angaben übernommen: Jede frühere Förderquote steht als eigene Zeile (z. B. "50 % – Kommunen"), und beim Eigenanteil wurde das Prozentzeichen ergänzt, wo es bisher nur angezeigt wurde.
+- Geändert: In der Ansicht einer Förderung entfällt im Bereich "Kategorien" der erklärende Text, der aus der Projektprüfung übernommen wurde und dort nicht passte.
+
+### en
+- Changed: "Funding rate(s)" and "Own contribution" are plain free-text fields again in a funding. The separate percentage and content fields and "Add funding rate" are gone. For existing fundings the previous entries were carried over: each former funding rate appears on its own line (e.g. "50 % – Municipalities"), and for own contribution the percent sign was added where it had only been displayed before.
+- Changed: in the funding view, the "Categories" section no longer shows the explanatory text that was copied over from the project check and did not fit here.
+
+## 6.32.2 — 2026-11-20
+
+### de
+- Behoben: Die Projektbeschreibung lässt sich wieder speichern, auch wenn Sie nicht die Gemeindeleitung sind. Bisher erschien die Meldung "Nur die Gemeindeleitung darf Projektideen archivieren", obwohl gar nicht archiviert werden sollte. Das Archivieren bleibt weiterhin der Gemeindeleitung und der Administration vorbehalten.
+- Behoben: Der gewählte Ort (Dorf) eines Projekts wird jetzt auch für Gemeindeleitung und normale Benutzer*innen gespeichert. Bisher wurde er beim Speichern stillschweigend verworfen, sodass im Projekt kein Ort gesetzt war. Wählbar sind nur Orte Ihrer eigenen Verwaltung.
+- Behoben: Im Fördercheck zeigt "Aktualisieren" jetzt die neu gefundenen Förderprogramme an. Bisher blieb die zuvor gespeicherte Ansicht stehen, bei Projekten mit gewählter "Fehlanzeige" also eine leere Liste.
+
+### en
+- Fixed: the project description can be saved again even if you are not the municipal leader. Previously the message "Only the municipal leader may archive project ideas" appeared even though nothing was being archived. Archiving remains reserved for the municipal leader and administrators.
+- Fixed: the selected location (village) of a project is now saved for municipal leaders and regular users too. Previously it was silently discarded on save, leaving the project without a location. Only locations of your own administration can be chosen.
+- Fixed: in the funding check, "Refresh" now shows the newly found funding programmes. Previously the previously saved view stayed in place, so projects with "No suitable funding" selected kept showing an empty list.
+
 ## 6.32.1 — 2026-11-19
 
 ### de

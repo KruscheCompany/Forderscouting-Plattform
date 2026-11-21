@@ -74,16 +74,15 @@
       <!-- Fördersätze -->
       <div v-if="hasRatesData" class="print-section page-break">
         <h3 class="section-label">{{ $t("Funding rates") }}</h3>
+        <div v-if="funding.fundingRates" class="section-content pre-line">{{ funding.fundingRates }}</div>
         <div class="rates-table">
-          <div class="rates-row rates-header">
-            <div class="rate-label">Projektförderung bis zu</div>
-            <div class="rate-percentage">Eigenanteil</div>
-            <div class="rate-accumulation">Kumulierbarkeit</div>
+          <div v-if="funding.ownContribution" class="rates-row">
+            <div class="rate-label">{{ $t("Own contribution") }}</div>
+            <div class="rate-value pre-line">{{ funding.ownContribution }}</div>
           </div>
-          <div v-for="(rate, index) in funding.rates" :key="index" class="rates-row">
-            <div class="rate-label">{{ rate.content || 'Projektförderung bis zu' }}</div>
-            <div class="rate-percentage">{{ rate.amount || '0' }}%</div>
-            <div class="rate-accumulation">{{ funding.accumulability ? $t('Yes') : $t('No') }}</div>
+          <div class="rates-row">
+            <div class="rate-label">{{ $t("Accumulability") }}</div>
+            <div class="rate-value">{{ funding.accumulability ? $t('Yes') : $t('No') }}</div>
           </div>
         </div>
       </div>
@@ -174,7 +173,7 @@ export default {
       );
     },
     hasRatesData() {
-      return this.funding.rates && this.funding.rates.length > 0;
+      return !!(this.funding.fundingRates || this.funding.ownContribution);
     },
     hasCategoriesOrTags() {
       return (
@@ -304,23 +303,17 @@ export default {
   page-break-inside: avoid;
 }
 
-.rates-header {
-  font-weight: 600;
-  border-bottom: 2px solid #333;
-}
-
 .rate-label {
-  flex: 2;
-}
-
-.rate-percentage {
-  flex: 0.8;
-  text-align: center;
-}
-
-.rate-accumulation {
   flex: 1;
-  text-align: center;
+  font-weight: 600;
+}
+
+.rate-value {
+  flex: 3;
+}
+
+.pre-line {
+  white-space: pre-line;
 }
 
 // Program Dates
