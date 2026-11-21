@@ -309,7 +309,8 @@
               </p>
             </div>
             <div class="col-12 col-md-9">
-              <FundingRate :editing="!!funding ? funding.rates : []" @update:fundingRate="form.rates = $event" />
+              <q-input outlined type="textarea" autogrow class="no-shadow input-radius-6"
+                v-model="form.fundingRates" :rules="[]" />
             </div>
           </div>
           <div class="row items-center">
@@ -319,7 +320,7 @@
               </p>
             </div>
             <div class="col-12 col-md-9">
-              <q-input outlined dense class="no-shadow input-radius-6 removeArrow" suffix="%" placeholder="0"
+              <q-input outlined type="textarea" autogrow class="no-shadow input-radius-6"
                 v-model="form.ownContribution" :rules="[]" />
             </div>
           </div>
@@ -520,7 +521,6 @@ const { getScrollTarget, setScrollPosition } = scroll;
 import { dateFormatter } from "src/boot/dateFormatter";
 import UserSelect from "components/user/UserSelect.vue";
 import CategorizationCard from "components/projects/create/CategorizationCard.vue";
-import FundingRate from "src/components/funding/FundingRate.vue";
 import FundingCalls from "src/components/funding/FundingCalls.vue";
 import Links from "src/components/projects/create/Links.vue";
 import ImageDialog from "components/ImageDialog.vue";
@@ -533,7 +533,6 @@ export default {
   components: {
     UserSelect,
     CategorizationCard,
-    FundingRate,
     FundingCalls,
     Links,
     ImageDialog
@@ -564,6 +563,7 @@ export default {
           willBeFunded: "",
           condition: ""
         },
+        fundingRates: "",
         ownContribution: "",
         accumulability: false,
         plannedStart: "",
@@ -573,7 +573,6 @@ export default {
         federalStates: [],
         landkreise: [],
         municipalities: [],
-        rates: [],
         links: [],
         categories: [],
         tags: [],

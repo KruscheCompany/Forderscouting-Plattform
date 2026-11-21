@@ -13,18 +13,13 @@
           <div class="selected-funding-grid">
             <div class="selected-funding-label">{{ $t('Funding rates') }}</div>
             <div>
-              <template v-if="funding.rates && funding.rates.length">
-                <div v-for="rate in funding.rates" :key="rate.id" class="rate-row">
-                  <span class="text-weight-bold">{{ rate.amount || '' }}%</span>
-                  <span v-if="rate.content" v-html="sanitizeHtmlStrict(rate.content)"></span>
-                </div>
-              </template>
+              <span v-if="funding.fundingRates" class="pre-line">{{ funding.fundingRates }}</span>
               <span v-else class="text-blue-grey-6">{{ $t('projectComponents.contentDetailsView.notSpecified') }}</span>
             </div>
 
             <div class="selected-funding-label">{{ $t('Own contribution') }}</div>
             <div>
-              <span v-if="funding.ownContribution">{{ formatOwnContribution(funding.ownContribution) }}</span>
+              <span v-if="funding.ownContribution" class="pre-line">{{ funding.ownContribution }}</span>
               <span v-else class="text-blue-grey-6">{{ $t('projectComponents.contentDetailsView.notSpecified') }}</span>
             </div>
 
@@ -43,21 +38,12 @@
 </template>
 
 <script>
-import htmlSanitizer from "src/mixins/htmlSanitizer";
-
 export default {
   name: "ReviewSelectedFundings",
-  mixins: [htmlSanitizer],
   props: {
     fundings: {
       type: Array,
       default: () => []
-    }
-  },
-  methods: {
-    formatOwnContribution(value) {
-      const text = String(value);
-      return text.includes("%") ? text : `${text}%`;
     }
   }
 };
@@ -87,10 +73,8 @@ export default {
   color: #546e7a;
 }
 
-.rate-row {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 4px;
+.pre-line {
+  white-space: pre-line;
 }
 
 @media (max-width: 599px) {
