@@ -51,10 +51,7 @@
               </q-badge>
             </template>
             <template v-else-if="col.name === 'status'">
-              <q-badge :color="getStatusColor(props.row.status)"
-                :class="props.row.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md" :style="statusBadgeStyle">
-                {{ getStatusText(props.row.status) }}
-              </q-badge>
+              <project-status-badge :project="props.row" :badge-style="statusBadgeStyle" />
             </template>
             <template v-else>
               <q-tooltip v-if="col.value && ['title', 'location'].includes(col.name)" anchor="bottom left" self="top left"
@@ -81,6 +78,7 @@
 import { dateFormatter } from "src/boot/dateFormatter";
 import FinancialPlanRow from "components/projectDashboard/FinancialPlanRow.vue";
 import projectStatusLabels from "src/mixins/projectStatusLabels";
+import ProjectStatusBadge from "components/projectDashboard/ProjectStatusBadge.vue";
 import applicationFilterOptions from "src/mixins/applicationFilterOptions";
 import financialPlanExpand from "src/mixins/financialPlanExpand";
 import { APPLICATION_TABLE_COLUMN_WIDTHS as COLUMN_WIDTHS } from "src/constants/applicationTableColumns";
@@ -90,6 +88,7 @@ export default {
   mixins: [projectStatusLabels, applicationFilterOptions, financialPlanExpand],
   components: {
     FinancialPlanRow,
+    ProjectStatusBadge,
   },
   props: {
     search: { type: String, default: "" },

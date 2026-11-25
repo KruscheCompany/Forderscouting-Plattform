@@ -82,10 +82,7 @@
               </q-badge>
             </template>
             <template v-else-if="col.name === 'status'">
-              <q-badge :color="getStatusColor(props.row.project.status)"
-                :class="props.row.project.status === null ? 'text-black' : 'text-white'" class="q-py-sm q-px-md">
-                {{ getStatusText(props.row.project.status) }}
-              </q-badge>
+              <project-status-badge :project="props.row.project" />
             </template>
             <template v-else>
               <q-tooltip v-if="col.value && col.value.length > 48" anchor="bottom left" self="top left"
@@ -172,12 +169,14 @@
 import { dateFormatter } from "src/boot/dateFormatter";
 import DeleteDialog from "components/data/DeleteDialog.vue";
 import RequestAccessDialog from "components/data/RequestAccessDialog.vue";
+import ProjectStatusBadge from "components/projectDashboard/ProjectStatusBadge.vue";
 
 export default {
   name: "watchlists",
   components: {
     DeleteDialog,
-    RequestAccessDialog
+    RequestAccessDialog,
+    ProjectStatusBadge
   },
   data() {
     return {
@@ -462,30 +461,6 @@ export default {
           return 'black'; // Green badge - black text
         default:
           return 'white'; // Default text color
-      }
-    },
-
-    getStatusText(status) {
-      if (status === "sentToFunding") {
-        return this.$t('projectComponents.submissionSigning.sentToFunding');
-      } else if (status === "grantNotice") {
-        return this.$t('Zuwendungsbescheid'); // Granted
-      } else if (status === "rejectionNotice") {
-        return this.$t('Ablehnungsbescheid'); // Rejected
-      } else {
-        return this.$t('In Bearbeitung'); // In progress (null)
-      }
-    },
-
-    getStatusColor(status) {
-      if (status === "grantNotice") {
-        return 'green'; // Granted - green badge
-      } else if (status === "rejectionNotice") {
-        return 'red'; // Rejected - red badge
-      } else if (status === "sentToFunding") {
-        return 'blue'; // Sent to funding - blue badge
-      } else {
-        return 'yellow'; // In progress - yellow badge
       }
     },
   },
