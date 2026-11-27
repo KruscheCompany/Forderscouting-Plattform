@@ -1,5 +1,17 @@
 # Änderungsprotokoll / Changelog
 
+## 6.33.0 — 2026-11-21
+
+### de
+- Neu: In "Unterzeichnung & Antragsstellung" gibt es zusätzlich zum Antragsstatus (in Beantragung, Zuwendungsbescheid, Ablehnungsbescheid) einen eigenen Projektstatus: "In Umsetzung", "Abgeschlossen" oder "Gestoppt/zurückgestellt". Der Projektstatus lässt sich wählen, sobald ein Antragsstatus ausgewählt ist, auch in einem Schritt mit dem Speichern. Der Antragsstatus bleibt dabei erhalten. Der Bereich ist neu gestaltet: zuerst der Antragsstatus, danach der Projektstatus. Bestehende Projekte bleiben unverändert.
+- Neu: Der Projektstatus erscheint überall, wo Status angezeigt werden: in den Tabellen und Filtern des Projekt-Dashboards, in der Übersicht der Projektchecks, in der Merkliste, in der Projektansicht und im Erfolgstrichter der Statistik.
+- Geändert: Projekte mit Zuwendungsbescheid zählen weiterhin als bewilligt (gesicherte Fördermittel, Erfolgsquote), auch wenn sie "In Umsetzung" oder "Abgeschlossen" sind. Ist ein Projekt "Gestoppt/zurückgestellt", wird es wie ein abgelehntes Projekt nicht in die Summen eingerechnet.
+
+### en
+- New: In "Unterzeichnung & Antragsstellung" there is now a separate project status in addition to the application status (in application, grant notice, rejection notice): "In implementation", "Completed" or "Stopped/postponed". The project status can be chosen as soon as an application status is selected, even within a single save. The application status is kept. The section has been redesigned: application status first, then project status. Existing projects stay as they are.
+- New: The project status shows up everywhere statuses are displayed: in the tables and filters of the project dashboard, in the project checks overview, in the watchlist, in the project view and in the statistics success funnel.
+- Changed: Projects with a grant notice still count as granted (secured funding, success rate), even when they are "In implementation" or "Completed". A project that is "Stopped/postponed" is left out of the totals, like a rejected project.
+
 ## 6.32.3 — 2026-11-21
 
 ### de

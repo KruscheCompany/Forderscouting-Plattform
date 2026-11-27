@@ -8,6 +8,9 @@ export default {
         { value: "sentToFunding", title: this.$t('projectComponents.submissionSigning.sentToFunding') },
         { value: "grantNotice", title: this.$t('Zuwendungsbescheid') },
         { value: "rejectionNotice", title: this.$t('Ablehnungsbescheid') },
+        { value: "inImplementation", title: this.$t('projectComponents.submissionSigning.inImplementation') },
+        { value: "completed", title: this.$t('projectComponents.submissionSigning.completed') },
+        { value: "stoppedOrPostponed", title: this.$t('projectComponents.submissionSigning.stoppedOrPostponed') },
         { value: "inProgress", title: this.$t('In Bearbeitung') },
       ];
     },

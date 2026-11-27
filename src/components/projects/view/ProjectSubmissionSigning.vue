@@ -10,26 +10,21 @@
             {{ $t('projectComponents.submissionSigning.selectionLabel') }}
           </h5>
 
-          <div class="row q-col-gutter-md items-center">
+          <div v-if="statusEntries.length === 0" class="row q-col-gutter-md items-center">
             <div class="col-auto">
-              <q-icon
-                :name="submissionStatus === null ? 'help_outline' : (submissionStatus === 'grantNotice' ? 'check' : (submissionStatus === 'sentToFunding' ? 'mdi-send-clock' : 'clear'))"
-                :color="submissionStatus === null ? 'grey' : (submissionStatus === 'rejectionNotice' ? 'red' : 'green')"
-                size="xl" />
+              <q-icon name="help_outline" color="grey" size="xl" />
             </div>
             <div class="col-auto">
-              <span v-if="submissionStatus === null">
-                {{ $t('projectComponents.submissionSigning.pendingDecision') }}
-              </span>
-              <span v-else-if="submissionStatus === 'sentToFunding'">
-                {{ $t('projectComponents.submissionSigning.sentToFunding') }}
-              </span>
-              <span v-else-if="submissionStatus === 'grantNotice'">
-                {{ $t('projectComponents.submissionSigning.grantNotice') }}
-              </span>
-              <span v-else>
-                {{ $t('projectComponents.submissionSigning.rejectionNotice') }}
-              </span>
+              {{ $t('projectComponents.submissionSigning.pendingDecision') }}
+            </div>
+          </div>
+          <div v-for="entry in statusEntries" :key="entry.status" class="row q-col-gutter-md items-center">
+            <div class="col-auto">
+              <q-icon :name="getStatusIcon(entry.status)" :color="entry.color" size="xl" />
+            </div>
+            <div class="col-auto">
+              <div class="text-caption text-grey-7">{{ $t(entry.caption) }}</div>
+              {{ getStatusText(entry.status) }}
             </div>
           </div>
         </div>
@@ -39,8 +34,11 @@
 </template>
 
 <script>
+import projectStatusLabels from "src/mixins/projectStatusLabels";
+
 export default {
   name: "ProjectSubmissionSigning",
+  mixins: [projectStatusLabels],
   props: {
     project: {
       type: Object,
@@ -58,10 +56,24 @@ export default {
     };
   },
   computed: {
-    submissionStatus() {
-      return this.project && this.project.status !== undefined
-        ? this.project.status
-        : null;
+    statusEntries() {
+      const { status, projectStatus } = this.project || {};
+      const entries = [];
+      if (status) {
+        entries.push({
+          status,
+          caption: "projectComponents.submissionSigning.applicationStep",
+          color: status === "rejectionNotice" ? "red" : "green"
+        });
+      }
+      if (projectStatus) {
+        entries.push({
+          status: projectStatus,
+          caption: "projectComponents.submissionSigning.projectStep",
+          color: this.getStatusColor(projectStatus)
+        });
+      }
+      return entries;
     }
   },
   watch: {

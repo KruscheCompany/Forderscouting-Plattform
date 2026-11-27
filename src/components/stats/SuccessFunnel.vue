@@ -79,28 +79,50 @@ export default {
           value: this.funnel.rejectionNotice || 0,
           color: "#c9a0a0",
         },
+        {
+          key: "inImplementation",
+          label: this.$t("Statistics.marketing.funnel.inImplementation"),
+          value: this.funnel.inImplementation || 0,
+          color: "#2f4aa8",
+        },
+        {
+          key: "completed",
+          label: this.$t("Statistics.marketing.funnel.completed"),
+          value: this.funnel.completed || 0,
+          color: "#0f1a52",
+        },
+        {
+          key: "stoppedOrPostponed",
+          label: this.$t("Statistics.marketing.funnel.stoppedOrPostponed"),
+          value: this.funnel.stoppedOrPostponed || 0,
+          color: "#d4b483",
+        },
       ];
     },
     totalFunnel() {
       return this.stages.reduce((sum, s) => sum + s.value, 0);
     },
+    approved() {
+      return (this.funnel.grantNotice || 0) + (this.funnel.inImplementation || 0) + (this.funnel.completed || 0);
+    },
     decided() {
-      return (this.funnel.sentToFunding || 0) + (this.funnel.grantNotice || 0) + (this.funnel.rejectionNotice || 0);
+      return (this.funnel.sentToFunding || 0) + this.approved + (this.funnel.rejectionNotice || 0);
     },
     successRate() {
-      return this.pct(this.funnel.grantNotice || 0, this.decided);
+      return this.pct(this.approved, this.decided);
     },
     successFormula() {
+      const approvedLabel = this.$t("Statistics.marketing.funnel.approvedIncl");
       return (
-        this.$t("Statistics.marketing.funnel.grantNotice") +
+        approvedLabel +
         " ÷ (" +
         this.$t("Statistics.marketing.funnel.sentToFunding") +
         " + " +
-        this.$t("Statistics.marketing.funnel.grantNotice") +
+        approvedLabel +
         " + " +
         this.$t("Statistics.marketing.funnel.rejectionNotice") +
         ") = " +
-        (this.funnel.grantNotice || 0) +
+        this.approved +
         " ÷ " +
         this.decided
       );
