@@ -1883,5 +1883,16 @@
     " Please try again later": {
       "": "An internal error occurred. Please try again later."
     }
-  }
+  },
+  "Diese Anfrage wurde bereits durch eine neuere ersetzt.": "This request has already been superseded by a newer one.",
+  "Diese Vorprüfung wurde bereits positiv beantwortet.": "This preliminary review has already been answered positively.",
+  "Bitte wählen Sie einen Ort aus": "Please select a location",
+  "Diese Vorprüfung wurde bereits beantwortet.": "This preliminary review has already been answered.",
+  "Bitte weisen Sie dem Benutzer eine Verwaltung oder einen Landkreis zu": "Please assign an administration or a district to the user",
+  "Ein*e Gast muss einem Ort zugeordnet sein": "A guest must be assigned to a location",
+  "Der gewählte Ort liegt nicht in Ihrer Verwaltung": "The selected location is not part of your administration",
+  "Für diese Vorprüfung läuft bereits eine Anfrage.": "A request for this preliminary review is already in progress.",
+  "Nur Administratoren dürfen Vorprüfungen überschreiben.": "Only administrators may override preliminary reviews.",
+  "Sie sind nicht berechtigt, diese Vorprüfungen zurückzusetzen.": "You are not authorized to reset these preliminary reviews.",
+  "Ein Projektstatus kann erst gewählt werden, wenn ein Antragsstatus gesetzt ist.": "A project status can only be selected once an application status has been set."
 }

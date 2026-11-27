@@ -1502,10 +1502,10 @@
   "Project successfully created": "Projekt erfolgreich erstellt",
   "updatedAt": "Speicherdatum",
   "Home": "Home",
-  "Data Overview": "Förder-Kurzinfos & Projektchecks",
+  "Data Overview": "Projektchecks und Förder-Kurzinfos",
   "Project Dashboard": "Projekt-Dashboard",
   "My Watchlist": "Meine Merklisten",
-  "Categories & Keywords/Tags": "Schlagwörter & Kategorien",
+  "Categories & Keywords/Tags": "Kategorien und Schlagwörter",
   "User Administration": "Benutzer*innen-Verwaltung",
   "User Administation": "Benutzer*innen-Verwaltung",
   "Federal States": "Bundesländer",
@@ -1881,5 +1881,16 @@
     " Please try again later": {
       "": "Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
     }
-  }
+  },
+  "Diese Anfrage wurde bereits durch eine neuere ersetzt.": "Diese Anfrage wurde bereits durch eine neuere ersetzt.",
+  "Diese Vorprüfung wurde bereits positiv beantwortet.": "Diese Vorprüfung wurde bereits positiv beantwortet.",
+  "Bitte wählen Sie einen Ort aus": "Bitte wählen Sie einen Ort aus",
+  "Diese Vorprüfung wurde bereits beantwortet.": "Diese Vorprüfung wurde bereits beantwortet.",
+  "Bitte weisen Sie dem Benutzer eine Verwaltung oder einen Landkreis zu": "Bitte weisen Sie dem Benutzer eine Verwaltung oder einen Landkreis zu",
+  "Ein*e Gast muss einem Ort zugeordnet sein": "Ein*e Gast muss einem Ort zugeordnet sein",
+  "Der gewählte Ort liegt nicht in Ihrer Verwaltung": "Der gewählte Ort liegt nicht in Ihrer Verwaltung",
+  "Für diese Vorprüfung läuft bereits eine Anfrage.": "Für diese Vorprüfung läuft bereits eine Anfrage.",
+  "Nur Administratoren dürfen Vorprüfungen überschreiben.": "Nur Administratoren dürfen Vorprüfungen überschreiben.",
+  "Sie sind nicht berechtigt, diese Vorprüfungen zurückzusetzen.": "Sie sind nicht berechtigt, diese Vorprüfungen zurückzusetzen.",
+  "Ein Projektstatus kann erst gewählt werden, wenn ein Antragsstatus gesetzt ist.": "Ein Projektstatus kann erst gewählt werden, wenn ein Antragsstatus gesetzt ist."
 }
